@@ -1,0 +1,50 @@
+template_id: NW_CLEAR_MEDIUM_BRAINY_ACTION
+checks:
+- check_id: 中篇字数_智斗
+  check_name: 总字数应在80000-250000之间
+  dimension_id: business_rule_compliance
+  subcategory_id: range_constraint
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    validation_rules:
+    - rule_id: total_word_count_medium
+      validation_method: word_count_range
+      expected_range:
+      - 80000
+      - 250000
+  weight: 1.0
+  is_critical: true
+- check_id: 情感交付智斗
+  check_name: 实际内容必须是智斗向
+  dimension_id: content_quality
+  subcategory_id: emotional_delivery_match
+  quality_tier: basic
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    recipe_source: creative_intent.json::selected_recipe.reaction_strength
+    validation_rules:
+    - rule_id: brainy_action_tone_delivery
+      description: 配方✷智斗 → 实际内容必须是智斗向（主角依靠智商、逻辑推理、规则利用和观察力解决问题，而非蛮力、系统金手指或超能力碾压；反派具备合理智商和行动逻辑；幽默元素自然融入但不影响逻辑严密性）
+      validation_method: llm_semantic_analysis
+    llm_judge_criteria_file: judge_criteria/emotional_delivery.yaml
+    llm_judge_criteria_section: 情感交付智斗
+  weight: 1.0
+  is_critical: true
+- check_id: 反套路检查
+  check_name: 主角不能是龙傲天或拥有无脑金手指
+  dimension_id: content_quality
+  subcategory_id: character_design_adherence
+  quality_tier: basic
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    validation_rules:
+    - rule_id: anti_cliche_check
+      description: 反套路验证 → 主角不能拥有碾压级能力/系统外挂/天降奇遇等龙傲天元素；反派不能出现智商下线/无脑送人头/自爆弱点等降智表现；情节推进不能依赖巧合、天降贵人或敌人犯蠢
+      validation_method: llm_semantic_analysis
+    llm_judge_criteria_file: judge_criteria/emotional_delivery.yaml
+    llm_judge_criteria_section: 反套路检查
+  weight: 1.0
+  is_critical: false

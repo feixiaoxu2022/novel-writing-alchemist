@@ -1,0 +1,139 @@
+# Check Revisions - 评测方案版本管理
+#
+# 本文件是评测方案（checklist + judge_criteria）的版本记录。
+# 与执行样本（eval_dsv2.jsonl）解耦，可独立高频迭代。
+#
+# 工作流：
+#   1. 修改 unified_scenario_design.yaml 中的 check_list 或 judge_criteria/*.yaml
+#   2. 运行导出命令创建新 revision:
+#      python scripts/sample_generator/main.py --export-check-revision check_revisions/rev_NNN
+#   3. 对已有执行结果跑 recheck:
+#      bash ../scripts/recheck_with_new_checklist.sh \
+#        --agent-results ../evaluation_outputs/xxx \
+#        --revision NNN
+#   4. 在本文件中记录新 revision 和关联的评测批次
+
+latest_revision: "004"
+
+# 绑定的执行样本（checklist从该样本体系生成，data_id与之对齐）
+execution_sample: eval_dsv2.jsonl
+
+revisions:
+  "001":
+    date: "2026-02-10"
+    description: "初始版本，从 eval_dsv2.jsonl 提取"
+    check_count_per_sample: 39
+    check_dimensions:
+      format_compliance: 4
+      business_rule_compliance: 22
+      content_quality: 11
+      memory_management: 2
+    judge_criteria_files:
+      - content_quality_basic.yaml   # v1.3
+      - emotional_delivery.yaml      # v1.0
+    changes: "从 eval_dsv2.jsonl 提取的初始评测方案"
+    status: superseded
+
+  "002":
+    date: "2026-02-10"
+    description: "移除 reaction_strength rule 检查（emotional_tendency_consistency）"
+    check_count_per_sample: 38
+    check_dimensions:
+      format_compliance: 4
+      business_rule_compliance: 21
+      content_quality: 11
+      memory_management: 2
+    judge_criteria_files:
+      - content_quality_basic.yaml   # v1.3
+      - emotional_delivery.yaml      # v1.0
+    changes: |
+      移除 reaction_strength entity_attribute_equals 检查项（7个模板全部删除）
+      原因：tone→↗/↘/✷ 的硬编码映射无法覆盖 y_axis_tags 对反应强度的影响，
+      导致 groundtruth 不准确（3/13样本的期望值存在争议）。
+      情感方向的评测由 emotional_delivery_match semantic 检查项覆盖。
+    status: superseded
+
+  "003":
+    date: "2026-02-11"
+    description: "新增反复结局、后期跑偏检查项 + 设定一致性管理指南必读"
+    check_count_per_sample: 41
+    check_dimensions:
+      format_compliance: 4
+      business_rule_compliance: 22
+      content_quality: 13
+      memory_management: 2
+    judge_criteria_files:
+      - content_quality_basic.yaml   # v1.4 (新增反复结局、后期跑偏section)
+      - emotional_delivery.yaml      # v1.0
+    changes: |
+      新增3个检查项 (38 → 41):
+      1. repeated_endings（反复结局）：检测多次出现"全文完/全书完/后记"标记，表明模型写不动了硬撑
+      2. late_stage_digression（后期跑偏）：检测workspace白名单外的无关文件 + chapters中跑偏内容
+      3. 必须读取CONSISTENCY_MANAGEMENT_GUIDE.md（设定一致性管理指南）
+      
+      checker_execute.py增强：
+      - _check_file_content_raw方法新增白名单文件检查逻辑
+      - 当analysis_target为workspace/且有required_files参数时，先检查白名单
+      
+      check_capability_taxonomy.yaml升级到v2.6
+    status: superseded
+
+  "004":
+    date: "2026-02-12"
+    description: "拆分late_stage_digression + 新增narrative_tone_match(叙事调性匹配)"
+    check_count_per_sample: "40-43"
+    check_dimensions:
+      format_compliance: 4
+      business_rule_compliance: 23
+      content_quality: 14
+      memory_management: 2
+    judge_criteria_files:
+      - content_quality_basic.yaml   # v1.6 (新增叙事调性匹配section)
+      - emotional_delivery.yaml      # v1.0
+    changes: |
+      变更1 - 拆分检查项 (41 → 42):
+      原late_stage_digression(后期跑偏)混合了两类检查：
+      1. workspace白名单文件检查（规则检查）
+      2. chapters后期章节内容跑偏检查（LLM语义检查）
+      
+      拆分原因：阶段一fail后阶段二不执行，导致归因模糊且语义检查能力被浪费。
+      
+      拆分后：
+      - workspace_file_compliance（新增，business_rule_compliance维度）：纯规则检查，验证workspace中无白名单外文件
+      - late_stage_digression（保留，content_quality维度）：纯语义检查，验证chapters后期章节无跑偏内容
+      
+      变更2 - 新增检查项 (42 → 43):
+      narrative_tone_match（叙事调性匹配）：检查文笔风格/叙事语气/修辞手法是否与题材类型匹配。
+      烧脑悬疑应冷硬紧凑，不能写成温情言情调；热血冒险应紧张激燃，不能写成散文体。
+      
+      发现来源：kimi-k2.5的NW_CLEAR_MEDIUM_BRAINY_ACTION_001样本，配方是烧脑规则怪谈，
+      但第5章起文笔急剧转向言情调——大量"泪水夺眶而出""两人的手握在一起""直到永远"。
+      现有emotional_delivery_match无法捕捉此问题（情感方向可能判正确），需独立检查。
+      
+      与现有检查项的区分：
+      - vs emotional_delivery_match：后者检查情感倾向方向（爽/虐/烧脑），本项检查文笔画风
+      - vs genre_fit(advanced)：后者检查题材精致度（做得好不好），本项是底线检查（像不像）
+    status: active
+
+# 评测批次与 revision 的映射关系
+# 格式: 批次目录名 → 使用的 revision 和输出文件名
+evaluation_mapping:
+  # design_v2 的评测批次（目前都使用内嵌在样本中的原始 checklist，等同于 rev_001）
+  test_dsv2_one_20260209_161308_deepseek-v3.2:
+    revision: "001"
+    note: "使用样本内嵌 checklist（等同 rev_001）"
+  test_dsv2_one_20260209_180329_claude-opus-4-5-20251101:
+    revision: "001"
+    note: "使用样本内嵌 checklist（等同 rev_001）"
+  test_dsv2_one_20260209_190506_kimi-k2.5:
+    revision: "001"
+    note: "使用样本内嵌 checklist（等同 rev_001）"
+  test_dsv2_two_20260210_104840_kimi-k2.5:
+    revision: "001"
+    note: "使用样本内嵌 checklist（等同 rev_001）"
+  eval_dsv2_20260210_163424_kimi-k2.5:
+    revision: "001"
+    note: "使用样本内嵌 checklist（等同 rev_001），未跑完"
+  eval_dsv2_20260210_171439_kimi-k2.5:
+    revision: "001"
+    note: "使用样本内嵌 checklist（等同 rev_001），仅跑2个样本"

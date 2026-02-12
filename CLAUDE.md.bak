@@ -1,0 +1,116 @@
+# 小说创作Agent自动评估项目
+
+做小说创作agent的自动评估，并合成数据给LLM做训练。
+
+## 项目结构
+
+```
+novel_writing_alchemist/
+├── design_v1/          # 第一版设计（含BusinessRules、样本、数据池）
+├── design_v2/          # 第二版设计（当前活跃版本）
+│   ├── BusinessRules.md           # 业务规则（即agent system prompt）
+│   ├── unified_scenario_design.yaml  # 场景设计配置
+│   ├── query_pools.yaml           # 查询池
+│   ├── data_pools/                # 数据池（materials/schemas/skills）
+│   ├── samples/                   # 生成的样本文件（勿直接编辑）
+│   └── scripts/sample_generator/  # 样本生成器（修改样本从这里改）
+├── env/                # 评测运行环境
+│   ├── novel_writing_service.py   # MCP工具服务
+│   ├── checker.py                 # checker入口
+│   ├── checker_execute.py         # checker执行逻辑
+│   ├── checker_score.py           # checker评分逻辑
+│   └── servers.json               # MCP服务器配置
+├── evaluation_outputs/ # 评测结果输出（只读参考）
+├── analysis/           # 评测分析脚本和报告
+├── scripts/            # 工具脚本
+├── check_capability_taxonomy.yaml  # 能力评估维度体系
+├── run_test.sh         # 评测执行脚本
+├── viewer/             # 评测结果查看器
+└── docs/               # 文档
+```
+
+## 源文件 vs 输出目录
+
+**评测框架源码**：`mcp-benchmark/open_benchmark`（只改这里）
+**评测框架打包**：`mcp-benchmark/release`（禁止直接修改，需从源头改后重新打包）
+**样本文件**：`design_v*/samples/`（禁止直接修改，需通过 `scripts/sample_generator/` 重新生成）
+**评测输出**：`evaluation_outputs/`（只读参考，不要修改）
+
+## 工作流规则
+
+1. **先读后改**：修改任何文件前，必须先Read该文件。不要基于假设进行编辑。
+2. **先说后做**：执行多步骤修改前，先简要说明计划和涉及的文件，确认方向正确后再动手。
+3. **最小改动**：只做明确要求的修改。不要自行添加维度、特性、权重或额外功能。不确定时，做少不做多。
+4. **纠正即接受**：用户纠正时，立即接受并执行。不要争辩、重复解释原始思路，或需要多轮相同纠正。
+
+## 调试规则
+
+修复bug时：
+1. 先读相关源文件，定位根因
+2. 陈述假设和依据，等待确认
+3. 不要猜测式地轮番尝试不同方案
+
+## 样本修改流程
+
+禁止直接编辑 `samples/` 下的json文件。正确流程：
+1. 修改 `scripts/sample_generator/` 中的生成逻辑
+2. 重新运行生成器
+3. 验证输出一致性
+
+## 输出偏好
+
+- 语言：默认使用中文
+- 格式：默认Markdown，不要用Excel
+- 主要语言：Python、YAML、Markdown
+- 不要做任何形式的截断（字符串、列表、字段），会导致信息丢失
+
+## Git规则
+
+- 禁止 `git add -A` 或 `git add .`，只add具体文件
+- 禁止提交大文件/二进制文件，需先确认
+
+## check_result文件结构
+
+评测输出的check_result JSON文件（如`check_result_v3.json`）内部结构：
+
+```json
+{
+  "check_version": "v3",
+  "sample_id": "NW_ULTRA_SHORT_ANGSTY_001",
+  "check_timestamp": "...",
+  "dimension_scores": {
+    "format_compliance": {...},
+    "business_rule_compliance": {...},
+    "content_quality": {...}
+  },
+  "overall_result": {
+    "status": "...",
+    "total_score": ...,
+    "total_checks": ...,
+    "passed_checks": ...,
+    "failed_checks": ...,
+    "pass_rate": ...
+  },
+  "check_details": {
+    "检查项1": {
+      "description": "检查项名称",
+      "check_type": "semantic_check / entity_attribute_equals / tool_called_with_params / json_schema",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": true,
+      "check_result": "pass / fail / skip",
+      "reason": "简短结论",
+      "details": "LLM judge的完整评判理由（仅semantic_check类型有详细内容）"
+    },
+    "检查项2": {...}
+  },
+  "completion_status": {...}
+}
+```
+
+关键字段说明：
+- `check_details`的key是"检查项N"格式，value是每个检查项的详细结果
+- `check_result`取值：`pass`/`fail`/`skip`
+- `details`字段：rule类型检查通常是简短说明；semantic_check类型包含LLM judge的完整分析文本
+- `subcategory_id`用于和`evaluation_statistics.py`中的映射表关联

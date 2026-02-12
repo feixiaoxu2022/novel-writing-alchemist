@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "characters.schema.json",
+  "title": "小说人物设计",
+  "description": "人物一致性的参考依据，避免角色崩坏",
+  "type": "object",
+  "required": ["main_characters"],
+  "properties": {
+    "main_characters": {
+      "type": "array",
+      "description": "主角/核心角色数组",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "role",
+          "traits",
+          "overt_motivation",
+          "covert_motivation",
+          "secret_fear"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "角色姓名"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["protagonist", "deuteragonist"],
+            "description": "角色类型：protagonist=第一主角，deuteragonist=第二主角"
+          },
+          "identity": {
+            "type": "string",
+            "description": "身份职业/社会角色"
+          },
+          "traits": {
+            "type": "array",
+            "description": "核心性格特质关键词（3-5个）",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 3,
+            "maxItems": 5
+          },
+          "overt_motivation": {
+            "type": "string",
+            "description": "显性动机（表面目标）"
+          },
+          "covert_motivation": {
+            "type": "string",
+            "description": "隐性动机（深层需求）"
+          },
+          "secret_fear": {
+            "type": "string",
+            "description": "秘密恐惧（内心脆弱点）"
+          },
+          "misperception_of_other": {
+            "type": "string",
+            "description": "对其他主角的错位认知"
+          },
+          "hidden_connection": {
+            "type": "string",
+            "description": "与其他角色的隐藏连接"
+          }
+        }
+      }
+    },
+    "supporting_characters": {
+      "type": "array",
+      "description": "配角/次要角色数组",
+      "items": {
+        "type": "object",
+        "required": ["name", "function"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "配角姓名"
+          },
+          "function": {
+            "type": "string",
+            "enum": ["助力", "阻碍", "反转点"],
+            "description": "对主角的作用类型"
+          },
+          "identity": {
+            "type": "string",
+            "description": "配角身份"
+          },
+          "description": {
+            "type": "string",
+            "description": "配角简要描述"
+          }
+        }
+      }
+    },
+    "relationship_dynamics": {
+      "type": "string",
+      "description": "角色关系动态描述"
+    }
+  }
+}

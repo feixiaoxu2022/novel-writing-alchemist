@@ -1,0 +1,167 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "creative_intent.schema.json",
+  "title": "小说创作意图配方",
+  "description": "记录用户需求理解和配方选择结果，作为创作的北极星",
+  "type": "object",
+  "required": ["user_need", "inspiration_state", "extracted_elements", "selected_recipe", "one_sentence_synopsis"],
+  "properties": {
+    "user_need": {
+      "type": "string",
+      "description": "用户的原始输入文本",
+      "minLength": 1
+    },
+    "inspiration_state": {
+      "type": "string",
+      "enum": ["no_inspiration", "vague_inspiration", "clear_inspiration"],
+      "description": "用户创作时的灵感清晰程度"
+    },
+    "extracted_elements": {
+      "type": "object",
+      "description": "从用户输入中提取的创作关键要素",
+      "required": ["emotion_verbs", "scene_elements", "relationship_tension"],
+      "properties": {
+        "emotion_verbs": {
+          "type": "array",
+          "description": "情感动词/核心动作（决定X轴剧情模式）",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "scene_elements": {
+          "type": "array",
+          "description": "场景要素/世界观元素（决定Y轴标签）",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "relationship_tension": {
+          "type": "array",
+          "description": "人物关系张力/冲突来源",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "user_preferences": {
+          "type": "object",
+          "description": "用户的情感偏好和禁忌",
+          "properties": {
+            "desired_emotion": {
+              "type": "string",
+              "description": "期望的情感倾向"
+            },
+            "forbidden": {
+              "type": "array",
+              "description": "明确拒绝的元素",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "selected_recipe": {
+      "type": "object",
+      "description": "用户选定的创作配方（X-Y轴化学反应组合）",
+      "required": [
+        "x_axis_mode_id",
+        "x_axis_mode_name",
+        "y_axis_tags",
+        "reaction_strength",
+        "tension_stars",
+        "forbidden_elements"
+      ],
+      "properties": {
+        "x_axis_mode_id": {
+          "type": "string",
+          "pattern": "^[A-G]\\d{1,2}$",
+          "enum": [
+            "A1", "A2", "A3", "A4", "A5", "A6",
+            "B7", "B8", "B9", "B10", "B11", "B12",
+            "C13", "C14", "C15", "C16", "C17", "C18",
+            "D19", "D20", "D21", "D22", "D23",
+            "E24", "E25", "E26", "E27", "E28",
+            "F29", "F30", "F31", "F32", "F33", "F34",
+            "G35", "G36"
+          ],
+          "description": "普罗蒂36种剧情模式的标识符"
+        },
+        "x_axis_mode_name": {
+          "type": "string",
+          "description": "X轴模式的中文名称"
+        },
+        "y_axis_tags": {
+          "type": "array",
+          "description": "现代网文核心标签（表达载体）",
+          "items": {
+            "type": "string",
+            "enum": [
+              "双向暗恋",
+              "系统流",
+              "无限流",
+              "种田流",
+              "赛博朋克",
+              "规则怪谈",
+              "重生/穿越",
+              "商战权谋",
+              "克苏鲁",
+              "第四天灾",
+              "仙侠修真",
+              "刑侦悬疑"
+            ]
+          },
+          "minItems": 2,
+          "maxItems": 3
+        },
+        "reaction_strength": {
+          "type": "string",
+          "enum": ["↗", "↘", "✷"],
+          "description": "X轴与Y轴的化学反应强度符号"
+        },
+        "tension_stars": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "故事张力指数（1-5星）"
+        },
+        "forbidden_elements": {
+          "type": "array",
+          "description": "避雷红线（创作禁忌元素）",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "x_axis_display": {
+          "type": "string",
+          "description": "X轴模式在故事中的具体显影方式"
+        },
+        "y_axis_combination_effect": {
+          "type": "string",
+          "description": "Y轴标签组合产生的效应描述"
+        },
+        "reaction_formula": {
+          "type": "string",
+          "description": "化学反应公式的一句话描述"
+        },
+        "platform_fit": {
+          "type": "array",
+          "description": "适合发布的平台类型",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "one_sentence_synopsis": {
+      "type": "string",
+      "description": "一句话故事梗概（30-50字）",
+      "minLength": 30,
+      "maxLength": 50
+    }
+  }
+}

@@ -1,0 +1,50 @@
+template_id: NW_CLEAR_MEDIUM_SUSPENSE
+checks:
+- check_id: 中篇字数
+  check_name: 总字数应在80000-250000之间
+  dimension_id: business_rule_compliance
+  subcategory_id: range_constraint
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    validation_rules:
+    - rule_id: total_word_count_medium
+      validation_method: word_count_range
+      expected_range:
+      - 80000
+      - 250000
+  weight: 1.0
+  is_critical: true
+- check_id: 情感交付烧脑
+  check_name: 实际内容必须是烧脑向
+  dimension_id: content_quality
+  subcategory_id: emotional_delivery_match
+  quality_tier: basic
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    recipe_source: creative_intent.json::selected_recipe.reaction_strength
+    validation_rules:
+    - rule_id: suspense_tone_delivery
+      description: 配方✷烧脑 → 实际内容必须是烧脑悬疑向（逻辑推理驱动、多重认知反转、所有谜底揭晓），不能是言情/爽文挂悬疑皮
+      validation_method: llm_semantic_analysis
+    llm_judge_criteria_file: judge_criteria/emotional_delivery.yaml
+    llm_judge_criteria_section: 情感交付烧脑
+  weight: 1.0
+  is_critical: true
+- check_id: 伏笔回收检查
+  check_name: 所有核心谜团和伏笔必须在结尾得到解答
+  dimension_id: content_quality
+  subcategory_id: emotional_delivery_match
+  quality_tier: basic
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    validation_rules:
+    - rule_id: foreshadowing_payoff
+      description: 悬疑小说的核心契约是所有伏笔必须回收，所有谜底必须揭晓。检查内容中提出的核心悬念（密室手法、动机、关键线索）是否在结尾全部得到合理解答，不允许留下未解之谜或用超自然力量草率收场
+      validation_method: llm_semantic_analysis
+    llm_judge_criteria_file: judge_criteria/emotional_delivery.yaml
+    llm_judge_criteria_section: 伏笔回收检查
+  weight: 1.0
+  is_critical: true

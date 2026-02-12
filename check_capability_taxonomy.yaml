@@ -1,0 +1,760 @@
+# Check能力维度分层体系
+# 用于统计和分析模型在不同能力维度上的表现
+
+version: "2.7"
+created_at: "2026-01-29"
+updated_at: "2026-02-12"
+description: "定义check_list检查项的能力维度分层，支持按维度聚合统计和归因分析。v2.7新增叙事调性匹配检查（识别文笔画风与题材类型错位问题）"
+
+# === 三层结构 ===
+# 第一层：能力大类（对应9大核心能力）
+# 第二层：检查类别（更细化的分组）
+# 第三层：具体check_item（unified_scenario_design.yaml中的check_list）
+
+# ============================================
+# 第一层：能力大类
+# ============================================
+
+capability_dimensions:
+
+  # 维度1：格式规范遵循
+  - dimension_id: "format_compliance"
+    dimension_name: "格式规范遵循"
+    core_capability: "Prompt遵循（格式部分）"
+    description: "验证输出文件是否严格遵循JSON Schema、命名规范等格式要求"
+
+    subcategories:
+      - subcategory_id: "json_syntax"
+        subcategory_name: "JSON语法正确性"
+        cn_name: "JSON语法正不正确"
+        sort_order: [0, 2]
+        description: "验证JSON文件的语法正确性（括号、引号、逗号等）"
+        check_types: ["json_schema"]
+
+      - subcategory_id: "structural_integrity"
+        subcategory_name: "结构完整性"
+        cn_name: "JSON文件能不能正常解析、符不符合Schema"
+        sort_order: [0, 1]
+        description: "JSON结构、必需字段完整性验证"
+        check_types: ["json_schema", "entity_attribute_equals"]
+
+      - subcategory_id: "field_naming"
+        subcategory_name: "字段名正确性"
+        cn_name: "字段名是否符合Schema定义"
+        sort_order: [0, 3]
+        description: "验证字段名是否符合Schema定义（如scenes vs scenes_detail）"
+        check_types: ["entity_attribute_equals"]
+
+      - subcategory_id: "field_type"
+        subcategory_name: "字段数据类型正确性"
+        cn_name: "字段数据类型正不正确"
+        sort_order: [0, 4]
+        description: "验证字段值类型是否正确（如对象数组 vs 字符串数组）"
+        check_types: ["entity_attribute_equals"]
+
+      - subcategory_id: "naming_convention"
+        subcategory_name: "命名规范"
+        cn_name: "输出文件的命名规不规范"
+        sort_order: [0, 0]
+        description: "文件路径、文件命名的规范性"
+        check_types: ["entity_attribute_equals", "create_operation_verified"]
+
+  # 维度2：业务规则遵循
+  - dimension_id: "business_rule_compliance"
+    dimension_name: "业务规则遵循"
+    core_capability: "Prompt遵循（业务逻辑部分）"
+    description: "验证是否遵守数量约束、范围约束、枚举合法性等业务规则"
+
+    subcategories:
+      - subcategory_id: "sop_compliance"
+        subcategory_name: "SOP流程遵循"
+        cn_name: "该走HITL确认的环节有没有走"
+        sort_order: [1, 1]
+        description: "验证Agent是否按照规定的工作流程执行，产出过程性文件（如creative_intent.json, characters.json, outline.json, writing_log.md等）。这些文件是Agent执行SOP的证据，而非最终交付物"
+        check_types: ["entity_attribute_equals", "tool_called_with_params"]
+        validation_examples:
+          - "creative_intent.json - 记录用户创作意图和配方选择（阶段2产物）"
+          - "characters.json - 记录人物设计（阶段3产物）"
+          - "outline.json - 记录故事大纲（阶段3产物）"
+          - "writing_log.md - 记录创作日志（阶段4动态更新）"
+          - "HITL交互调用 - 在关键阶段与用户交互（配方选择、写作准备确认等）"
+        note: "区分过程性产出(SOP遵循)和最终交付物(output_completeness)：前者验证流程执行，后者验证成果完整。SOP流程包括文件产出和交互节点两类验证"
+
+      - subcategory_id: "output_completeness"
+        subcategory_name: "交付完整性"
+        cn_name: "该交付的文件类型齐不齐"
+        sort_order: [1, 2]
+        description: "验证最终交付物是否完整（如chapters/目录及其章节文件）。只关注最终成果，不包括过程性文件"
+        check_types: ["entity_attribute_equals"]
+        note: "交付物是任务的最终成果，如小说创作场景中的chapters/目录"
+
+      - subcategory_id: "workspace_file_compliance"
+        subcategory_name: "工作区文件规范"
+        cn_name: "workspace中不能有白名单之外的文件"
+        sort_order: [1, 7]
+        tier_level: "basic"
+        description: "workspace中只能存在白名单内的文件，不能创建额外的无关文件。创建额外文件是Agent未遵守SOP输出规范的表现"
+        check_types: ["file_whitelist_check"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        allowed_files:
+          - "creative_intent.json（必需）"
+          - "characters.json（必需）"
+          - "outline.json（必需）"
+          - "writing_log.md（必需）"
+          - "chapters/目录及其下的chapter_NN.md文件（必需）"
+          - ".hitl_context.json（系统文件）"
+        examples:
+          - "✅ 合格：workspace只有白名单内的文件"
+          - "❌ 不合格：workspace中出现afterword.md、bonus/目录、character_qa.md等额外文件"
+        note: "从原late_stage_digression拆分出来的规则检查部分。原检查项混合了白名单文件检查（规则）和章节内容跑偏检查（语义），拆分后归因更清晰"
+
+      - subcategory_id: "quantity_constraint"
+        subcategory_name: "数量约束"
+        cn_name: "配方参数数量对不对（如Y轴标签要求2-3个）"
+        sort_order: [1, 4]
+        description: "集数、角色数、钩子数、场景数等数量要求"
+        check_types: ["create_operation_verified", "entity_attribute_equals"]
+
+      - subcategory_id: "range_constraint"
+        subcategory_name: "范围约束"
+        cn_name: "总字数在不在要求的范围内"
+        sort_order: [1, 5]
+        description: "字数范围、数组长度范围等区间要求。针对小说创作：验证内容是否遵循用户指定的字数要求（如用户要求3000字开篇则需符合该范围）"
+        check_types: ["entity_attribute_equals", "semantic_check"]
+        note: "篇幅标准来自用户query中的明确要求，无硬编码字数限制。字数范围检查通常使用semantic_check类型"
+
+      - subcategory_id: "enum_validity"
+        subcategory_name: "枚举合法性"
+        cn_name: "配方参数值是否在合法枚举范围内"
+        sort_order: [1, 3]
+        description: "role_type、genre_type等枚举字段值合法性"
+        check_types: ["entity_attribute_equals"]
+
+      - subcategory_id: "emotional_tendency_consistency"
+        subcategory_name: "情感倾向一致性"
+        cn_name: "配方的情感倾向和用户表达的是否一致"
+        sort_order: [1, 8]
+        description: "验证配方设计中reaction_strength与用户明确表达的desired_emotion逻辑一致。如果用户明确要求情感倾向，Agent的配方记录必须匹配"
+        check_types: ["entity_attribute_equals"]
+        validation_examples:
+          - "用户说'希望是爽文' → reaction_strength应该是↗"
+          - "用户说'虐心向' → reaction_strength应该是↘"
+          - "用户说'烧脑' → reaction_strength应该是✷"
+          - "用户说'不要太虐' → forbidden_elements应该包含'过度虐心'"
+        note: "仅验证配方记录的逻辑一致性，不验证实际内容（实际内容由content_quality.basic层的emotional_delivery_match验证）"
+
+      - subcategory_id: "required_skill_reading"
+        subcategory_name: "必需Skill文档读取"
+        cn_name: "开工前有没有先读skill文档"
+        sort_order: [1, 0]
+        description: "验证Agent是否正确读取了业务规则要求的必需skill文档（如配方知识库、命名规范、创作指南等），确保具备完成任务所需的领域知识"
+        check_types: ["tool_called_with_params"]
+        validation_examples:
+          - "SKILL.md（配方知识库）：包含X轴36种模式、Y轴12种标签、化学反应规则，是配方设计的核心依据"
+          - "CHARACTER_NAMING_GUIDE.md（角色命名规范）：提供不同风格（现代/古风/奇幻/科幻）的命名规范和注意事项"
+          - "SHORT_STORY_GUIDE.md（短篇创作指南）：针对短篇创作的三幕结构、物件设计、时间压缩等技巧"
+        note: "检查Agent是否调用read_file工具读取了指定路径的skill文档，不读取这些文档直接创作的行为违反业务规则"
+
+      - subcategory_id: "output_self_validation"
+        subcategory_name: "输出自验证能力"
+        cn_name: "写完JSON后有没有调用bash验证合法性"
+        sort_order: [1, 6]
+        description: "验证Agent是否在产出结构化文件后主动调用工具验证其合法性（如写完JSON后用bash/python验证语法），体现自主质量控制能力"
+        check_types: ["tool_called_with_params"]
+        note: "这是反思与动态调整能力的体现——Agent应当对自己的产出进行验证而非盲目提交"
+
+  # 维度3：长期记忆管理
+  - dimension_id: "memory_management"
+    dimension_name: "长期记忆管理"
+    core_capability: "反思与动态调整 + 复杂上下文理解"
+    description: "验证Agent是否能在长文本创作中主动记录和读取关键信息（writing_log.md），保持前后文一致性和长程规划能力"
+
+    subcategories:
+      - subcategory_id: "log_file_creation"
+        subcategory_name: "创作日志文件创建"
+        cn_name: "有没有创建writing_log记录创作进度"
+        sort_order: [2, 0]
+        description: "验证Agent在超过8000字的创作任务中是否主动创建writing_log.md文件，记录创作进度、已写内容、待办事项等关键信息"
+        check_types: ["entity_attribute_equals"]
+        validation_examples:
+          - "短篇（15000-40000字）：应创建writing_log.md"
+          - "中篇（80000-250000字）：必须创建writing_log.md"
+          - "长篇（400000+字）：必须创建writing_log.md"
+          - "超短篇（<8000字）：不要求writing_log.md"
+        note: "writing_log.md是Agent长期记忆的外化表现，创建该文件表明Agent具备主动记录关键信息的意识"
+
+      - subcategory_id: "log_file_usage"
+        subcategory_name: "创作日志读取使用"
+        cn_name: "续写时有没有先读writing_log了解前文"
+        sort_order: [2, 1]
+        description: "验证Agent是否在创作新章节前读取writing_log.md，了解前文内容和待办事项，避免重复或矛盾"
+        check_types: ["tool_called_with_params"]
+        note: "仅创建不读取的writing_log.md是无效的，真正的长期记忆管理需要'写-读-写'闭环"
+
+  # 维度4：流程交互完整性
+  - dimension_id: "interaction_completeness"
+    dimension_name: "流程交互完整性"
+    core_capability: "多轮对话管理与用户引导"
+    description: "验证是否在关键节点与用户交互、确认流程是否完整"
+
+    subcategories:
+      - subcategory_id: "confirmation_nodes"
+        subcategory_name: "确认节点调用"
+        cn_name: "关键阶段完成后有没有HITL确认"
+        sort_order: [2, 5]
+        description: "关键阶段完成后的HITL确认"
+        check_types: ["tool_called_with_params"]
+
+  # 维度5：内容创作质量
+  - dimension_id: "content_quality"
+    dimension_name: "内容创作质量"
+    core_capability: "结合领域知识的自主规划"
+    description: "验证创作内容是否能交付一个'好的'短剧作品，采用两层评估体系：低质问题（60分线）→ 优质识别（60-80分）"
+
+    # ============================================
+    # 质量层级定义（两层体系）
+    # ============================================
+    quality_tiers:
+      description: "内容质量维度采用两层评估体系，逐层递进筛选"
+
+      tiers:
+        - tier_id: "basic"
+          tier_name: "基础质量检查"
+          score_range: "0-60分（及格线）"
+          description: "主题一致性、角色一致性、人物设定一致性、逻辑硬伤、情感交付匹配度等内容质量底线要求"
+          llm_judge_output: "matched: true/false (true表示达标)"
+          checker_mapping: "matched=false→不合格（0-60分）"
+
+        - tier_id: "advanced"
+          tier_name: "优秀质量检查"
+          score_range: "60-80分（优秀标准）"
+          description: "吸引力、情感力、情感递进、题材契合度等优质特征"
+          llm_judge_output: "matched: true/false (true表示优秀)"
+          checker_mapping: "通过率≥70%→优秀，<70%→合格"
+
+      quality_calculation:
+        - "不合格: basic层有任何失败 → 0-60分"
+        - "合格: basic全过 + advanced通过率<70% → 60-70分"
+        - "优秀: basic全过 + advanced通过率≥70% → 70分以上"
+
+      usage_note: "quality_tier字段仅用于content_quality维度的check_item。其他维度保持标准的二元pass/fail判断。"
+
+    subcategories:
+      # === 基础层（4个）===
+      - subcategory_id: "theme_consistency"
+        subcategory_name: "主题一致性"
+        cn_name: "故事核心主题从头到尾有没有跑偏"
+        sort_order: [3, 20]
+        tier_level: "basic"
+        description: "故事核心主题贯穿始终，不能中途漂移到其他主题（如从复仇故事漂移成商战故事，再漂移成修仙故事）"
+        check_types: ["semantic_check"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        examples:
+          - "✅ 主题一致：开篇复仇→中段追查→高潮对决→结局复仇完成（始终围绕复仇主题）"
+          - "❌ 主题漂移：开篇复仇→中段突然变商战→后段又变修仙（主题完全散了）"
+          - "✅ 允许的子线：复仇故事中有商业手段、权谋布局（这些是实现复仇的方式，不算漂移）"
+
+      - subcategory_id: "main_character_consistency"
+        subcategory_name: "主要角色一致性"
+        cn_name: "前中后主要角色保持一致，主角不能消失或被替换"
+        sort_order: [3, 30]
+        tier_level: "basic"
+        description: "前中后主要角色保持一致，不能前面设计的主角后面丢了，不能突然冒出新的主角（工具人/配角可以阶段性出现）"
+        check_types: ["semantic_check", "cross_file_consistency"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+
+      - subcategory_id: "character_design_adherence"
+        subcategory_name: "人物设计遵循度"
+        cn_name: "正文中角色表现符不符合characters.json的人设"
+        sort_order: [3, 12]
+        tier_level: "basic"
+        description: "正式章节中角色的实际表现必须符合characters.json中设计的人物特点（traits、motivation、background等）。这是检查plan阶段设计与execute阶段实际表现的一致性"
+        check_types: ["semantic_check", "cross_file_consistency"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        examples:
+          - "✅ 符合设计：characters.json定义'沉默寡言、外冷内热' → chapters中确实话少但关键时刻有担当"
+          - "✅ 符合设计：characters.json定义'倔强、细腻、隐忍' → chapters中面对困境坚持、情感细腻、不轻易妥协"
+          - "❌ 不符合设计：characters.json定义'沉默寡言' → chapters中话痨、热情外向"
+          - "❌ 不符合设计：characters.json定义'聪明绝顶' → chapters中表现愚钝、判断力差"
+          - "❌ 不符合设计：characters.json定义动机是'复仇' → chapters中完全不提复仇，只关心赚钱"
+        note: "与character_trait_consistency区分：本项检查plan vs execute（设计文档 vs 实际表现），character_trait_consistency检查execute内部（chapter_01 vs chapter_02）"
+
+      - subcategory_id: "character_presence_in_outline"
+        subcategory_name: "角色大纲规划完整性"
+        cn_name: "设计的主角在大纲中有没有规划"
+        sort_order: [3, 10]
+        tier_level: "basic"
+        description: "characters.json中设计的main_characters必须在outline.json中规划出场，避免Plan阶段就遗漏角色导致后续剧情单薄"
+        check_types: ["entity_attribute_equals"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        validation_method: "规则判断：检查characters.json中每个main_character的name是否在outline.json的文本中出现"
+        examples:
+          - "✅ 合格：characters.json定义了['林羽', '幽灵']，outline.json中都提到了这两个角色"
+          - "❌ 不合格：characters.json定义了['林羽', '幽灵', '苏小满']，但outline.json中只提到了'林羽'和'幽灵'，遗漏了'苏小满'"
+        note: "这是Plan阶段的完整性检查，定位问题：设计了角色但大纲规划时就遗漏了"
+
+      - subcategory_id: "character_presence_in_chapters"
+        subcategory_name: "角色正文出场完整性"
+        cn_name: "设计的主角在正文章节中出没出现"
+        sort_order: [3, 11]
+        tier_level: "basic"
+        description: "characters.json中设计的main_characters必须在chapters/正文中实际出现，避免规划了但Execute阶段遗漏导致剧情单薄"
+        check_types: ["entity_attribute_equals"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        validation_method: "规则判断：检查characters.json中每个main_character的name是否在chapters/*.md的文本中出现"
+        examples:
+          - "✅ 合格：characters.json定义了['林羽', '幽灵']，chapters中都实际出现了这两个角色"
+          - "❌ 不合格：characters.json定义了['林羽', '幽灵', '苏小满']，但chapters中只出现了'林羽'和'幽灵'，'苏小满'完全未出现"
+        note: "这是Execute阶段的完整性检查，定位问题：大纲规划了但实际写作时遗漏了。与character_design_adherence区分：本项检查是否出现（存在性），后者检查表现质量（准确性）"
+
+      - subcategory_id: "character_trait_consistency"
+        subcategory_name: "人物设定一致性"
+        cn_name: "同一角色的性格前后章节有没有变"
+        sort_order: [3, 13]
+        tier_level: "basic"
+        description: "章节之间人物特征（智商、性格、能力等）要保持一致，不能出现角色崩坏。这是检查execute阶段内部的一致性（前后章节之间）"
+        check_types: ["semantic_check", "cross_file_consistency"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        examples:
+          - "✅ 真崩坏：chapter_01聪明绝顶 → chapter_02突然降智（无合理原因）"
+          - "✅ 真崩坏：chapter_01善良温柔 → chapter_02残忍冷血（无铺垫无转折）"
+          - "✅ 真崩坏：chapter_01武功高强 → chapter_02被小喽啰打败（能力设定崩坏）"
+          - "❌ 不算崩坏：谨慎的人被逼急了变莽撞（有情境压力，合理）"
+          - "❌ 不算崩坏：单纯的人经历背叛后变谨慎（有铺垫的性格成长）"
+        note: "与character_design_adherence区分：本项检查execute内部一致性（chapter_01 vs chapter_02），character_design_adherence检查plan vs execute（设计文档 vs 实际表现）"
+
+      - subcategory_id: "logical_contradiction"
+        subcategory_name: "逻辑硬伤"
+        cn_name: "情节有没有逻辑硬伤（死人复活/前后矛盾）"
+        sort_order: [3, 24]
+        tier_level: "basic"
+        description: "无前后矛盾的硬伤（如同一个人前面说病死后面说自杀、同一场景下的地点在相邻两集发生跳跃等）。不包括铺垫不足、细节缺失等合理性问题。Judge输出包含结构化flaws数组，每处硬伤标注type(factual_consistency/worldbuilding_coherence/spatiotemporal_continuity)和severity(critical/major/minor)，用于统计层细分分析"
+        check_types: ["semantic_check", "cross_file_consistency"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        flaw_types:
+          - id: "factual_consistency"
+            name: "客观事实/数量/状态矛盾"
+            description: "时间线数字冲突、物品数量变化、生死判决翻转等可量化的客观事实"
+          - id: "worldbuilding_coherence"
+            name: "世界观/规则体系不自洽"
+            description: "系统设定互斥、能力边界突变、魔法/科技规则冲突等"
+          - id: "spatiotemporal_continuity"
+            name: "时空转换断链"
+            description: "地点无交代跳转、强制事件无故消失、场景连续性断裂等"
+        severity_levels:
+          - id: "critical"
+            name: "核心事实翻转"
+            description: "无法自圆其说（死人复活、判决完全相反）"
+          - id: "major"
+            name: "明确矛盾"
+            description: "缺少任何解释（数值冲突、规则覆盖）"
+          - id: "minor"
+            name: "解释缺失"
+            description: "不绝对矛盾但存在勉强自洽的可能"
+        examples:
+          - "✅ 真硬伤：episode20尸体腐烂 → episode27整容未死（死人复活）"
+          - "✅ 真硬伤：episode10判无期 → episode29判死刑（无解释的判决矛盾）"
+          - "❌ 不算硬伤：商业对手突然变弟弟（铺垫不足但不矛盾）"
+          - "❌ 不算硬伤：背景不清的女子选秀（合理性不足但不矛盾）"
+
+      - subcategory_id: "emotional_delivery_match"
+        subcategory_name: "情感交付匹配度"
+        cn_name: "写出来的内容读起来是不是要求的那个味（甜/虐/烧脑）"
+        sort_order: [3, 22]
+        tier_level: "basic"
+        description: "实际章节内容的情感倾向必须与配方的reaction_strength匹配，不能出现反向交付（要爽却虐、要虐却甜）。如果用户明确禁止某些元素，实际内容绝对不能触碰"
+        check_types: ["semantic_check"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        validation_focus:
+          - "配方reaction_strength=↗ → 实际内容应该是爽文（主角顺风顺水、反转爽快、情感甜美）"
+          - "配方reaction_strength=↘ → 实际内容应该是虐文（主角受难、情感压抑、冲突尖锐）"
+          - "配方reaction_strength=✷ → 实际内容应该烧脑（悖论、反转、认知颠覆）"
+          - "forbidden_elements中的元素绝对不能出现在实际内容中"
+        examples:
+          - "✅ 正确匹配：配方↗爽文 → 实际主角化险为夷、敌人自爆、甜蜜恋爱"
+          - "✅ 正确匹配：配方↘虐文 → 实际主角被迫害、爱而不得、悲剧收尾"
+          - "❌ 反向交付：配方↗爽文 → 实际主角各种受挫、感情虐心、压抑氛围"
+          - "❌ 触碰避雷：forbidden_elements=['悲剧结局'] → 实际写了BE"
+        note: "与genre_fit区分：emotional_delivery_match检查情感倾向正确性（爽/虐/烧脑基本对不对），genre_fit检查题材特征的精致度和完成度（对得多好多精彩）"
+
+      - subcategory_id: "language_purity"
+        subcategory_name: "语言纯净性"
+        cn_name: "正文有没有不合理的中英混用"
+        sort_order: [3, 1]
+        tier_level: "basic"
+        description: "避免不合理的多语言混用（如中文故事中突然夹杂大量英文、日文等）。如果是情节必需（如角色身份、特殊场景、专有名词等），则豁免"
+        check_types: ["semantic_check"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        validation_focus:
+          - "主要叙事语言保持统一，避免无故夹杂外语"
+          - "如果是情节必需（角色是外国人、特殊术语、品牌名等），则合理"
+        examples:
+          - "✅ 合理混用：'John是一位美国商人' → 人名本身就是英文，合理"
+          - "✅ 合理混用：'他们在Starbucks见面' → 专有品牌名，合理"
+          - "✅ 合理混用：'她说了一句\"Good morning\"' → 角色说外语，情节需要"
+          - "❌ 不合理混用：'他very生气地说' → 中英混杂无意义"
+          - "❌ 不合理混用：'这个idea真的不错' → 应该用'想法'而非'idea'"
+          - "❌ 不合理混用：'他feeling到了危险' → 应该用'感觉到'而非'feeling'"
+        note: "区分合理的外语使用（人名、地名、品牌、术语、角色对话）与不合理的语言炫技（无意义的中英混杂）"
+
+      - subcategory_id: "plot_progression"
+        subcategory_name: "情节推进"
+        cn_name: "章节之间情节有没有在往前推进"
+        sort_order: [3, 21]
+        tier_level: "basic"
+        description: "章节必须包含足够的具体故事事件推进，避免纯对话或纯内心独白。故事需要有实质性的情节发展（行动、发现、转折、冲突等），而非仅停留在静态的情感倾诉或对话"
+        check_types: ["semantic_check"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        validation_focus:
+          - "故事事件密度：每章应有明确的事件节点（行动、发现、转折、冲突）"
+          - "内容类型占比：故事事件占比应≥40%，避免过度的纯对话或纯内心独白（>70%）"
+          - "情节推进节奏：有明确的时间/空间变化，角色有具体行动而非仅对话"
+          - "事件因果性：事件之间有逻辑关联，推动故事发展"
+        examples:
+          - "✅ 良好推进：收到神秘信件 → 调查来源 → 发现线索 → 遇到关键人物 → 产生新转折（事件密集）"
+          - "✅ 良好推进：主角做出决策 → 执行行动 → 遇到障碍 → 寻求帮助 → 获得突破（有具体行动）"
+          - "⚠️ 中等质量：分析情况（30%）→ 回忆往事（40%）→ 发现异常（30%）（事件较少，回忆过多）"
+          - "❌ 缺乏推进：两人站着聊天，讨论情感和想法，无任何实质事件发生（纯对话，无推进）"
+          - "❌ 缺乏推进：大段内心独白，回忆过去，情感倾诉，场景静止（纯独白，无行动）"
+        scoring_rubric: |
+          1分（不合格）- 章节主要由静态对话或内心独白构成（>70%），无具体故事事件，场景静止，角色无实质行动
+          3分（及格）- 有一定故事事件（2-3个），事件与描写基本平衡（事件占比40-60%），有场景变化或时间推进
+          5分（优秀）- 故事事件密集（4-5个以上事件节点），事件推进为主（>60%），有明确场景变化和因果关系，包含冲突/转折/悬念
+        note: "与pacing_rationality_advanced区分：plot_progression是basic层的基本推进要求（有没有事件），pacing_rationality_advanced是advanced层的节奏优化（事件安排得好不好）"
+
+      - subcategory_id: "full_narrative_content"
+        subcategory_name: "完整叙事文本"
+        cn_name: "章节内容是完整正文还是大纲摘要"
+        sort_order: [3, 0]
+        tier_level: "basic"
+        description: "章节内容必须是完整的小说正文（有场景、对话、动作细节），而非事件罗列的简略大纲"
+        check_types: ["semantic_check"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        validation_focus:
+          - "叙事形式：是否有完整的场景描写、人物对话、动作细节"
+          - "文本密度：是否有具体的叙事文本，而非仅事件概述"
+          - "大纲特征识别：是否存在'然后...接着...最后...'的列举式表述"
+        examples:
+          - "✅ 完整正文：'凌晨三点，林羽双手悬在键盘上方。屏幕上的代码像水银一样流动。\"删除权限？\"他冷笑一声...'"
+          - "❌ 大纲罗列：'第一章：林羽被公司陷害，逃入地下黑客网络，遇到神秘黑客幽灵'"
+          - "❌ 事件列举：'林羽接到消息→调查线索→发现真相→决定反击'"
+        scoring_rubric: |
+          1分（不合格）- 章节主要由事件罗列构成，缺乏场景描写和人物对话，类似大纲或故事梗概
+          3分（及格）- 有基本的场景描写和对话，但叙事不够充分，部分内容仍显简略
+          5分（优秀）- 完整的小说正文，有丰富的场景描写、人物对话、动作细节和情感刻画
+        note: "与plot_progression区分：本项检查叙事形式（是不是正文），plot_progression检查情节密度（有没有事件）"
+
+      - subcategory_id: "repeated_endings"
+        subcategory_name: "反复结局"
+        cn_name: "不能出现多次结局标记（全文完/全书完/后记）"
+        sort_order: [3, 31]
+        tier_level: "basic"
+        description: "故事只能有一个结局，不能出现多次'全文完/全书完/后记'标记。反复结局是'写不动了硬撑'的典型症状"
+        check_types: ["semantic_check"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        validation_focus:
+          - "结局标记数量：扫描所有章节，统计'全文完/全书完/后记/尾声/完结'等标记出现次数"
+          - "结局标记位置：结局标记应该只出现在最后一章"
+          - "反复收尾特征：是否存在草草结局后又硬续新内容的情况"
+        examples:
+          - "✅ 合格：chapter_01~28无结局标记，chapter_29有'【全文完】'和'后记'"
+          - "❌ 不合格：chapter_12有'【全文完】'和'后记'，chapter_20又有'【全书完】'，chapter_29还有'【全书完】'"
+        note: "这是识别模型长篇创作后劲不足的重要指标"
+
+      - subcategory_id: "narrative_tone_match"
+        subcategory_name: "叙事调性匹配"
+        cn_name: "文笔画风跟题材搭不搭（烧脑文不能写成言情调）"
+        sort_order: [3, 23]
+        tier_level: "basic"
+        description: "章节的文笔风格、叙事语气、修辞手法、节奏感必须与题材类型匹配。烧脑悬疑应冷硬紧凑，不能写成温情细腻的言情风；热血冒险应紧张激燃，不能写成散文诗体。这是检查'画风搭不搭'的底线"
+        check_types: ["semantic_check"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        validation_focus:
+          - "文笔风格：句式（长句/短句）、修辞（感性/理性）、信息密度"
+          - "叙事语气：冷硬/温情/轻快/沉重/激燃"
+          - "对话风格：信息导向/情感导向/幽默导向"
+          - "节奏感：紧凑/舒缓/明快/散漫"
+        examples:
+          - "✅ 调性匹配：烧脑悬疑用冷硬紧凑的笔触，短句为主、推理过程干脆利落"
+          - "✅ 调性匹配：甜宠言情用轻快温暖的笔触，细腻的情感描写、甜蜜的互动"
+          - "❌ 调性错位：规则怪谈写成'两人的手不知什么时候握在了一起''泪水夺眶而出'——言情调"
+          - "❌ 调性错位：热血冒险写成散文诗体，战斗场景缺乏力度和速度感"
+        note: "与emotional_delivery_match区分：后者检查情感倾向方向（爽/虐/烧脑对不对），本项检查文笔画风（写出来像不像这个题材）。与genre_fit区分：后者是advanced层的精致度检查（做得好不好），本项是basic层的底线检查（像不像）"
+
+      - subcategory_id: "late_stage_digression"
+        subcategory_name: "后期章节跑偏"
+        cn_name: "后期章节不能跑偏写非正文内容（作者感想/读者互动/番外预告等）"
+        sort_order: [3, 32]
+        tier_level: "basic"
+        description: "chapters中所有章节都应是故事正文，不能跑去写作者感想、读者互动、番外预告、角色问答等非正文内容；后期章节长度不能异常萎缩"
+        check_types: ["semantic_check"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        validation_focus:
+          - "章节内容检查：后期章节是否偏离正文，写作者感想/读者互动/番外预告/角色问答等"
+          - "章节长度检查：后期章节长度是否异常萎缩（不足前期平均的1/10）"
+        examples:
+          - "✅ 合格：所有章节都是故事正文，长度稳定"
+          - "❌ 不合格（章节跑偏）：后期章节变成作者感想、番外预告、角色问答等"
+          - "❌ 不合格（章节萎缩）：前期每章5000-20000字，后期每章几十到几百字"
+        note: "从原late_stage_digression拆分出来的语义检查部分。白名单文件检查已拆分到workspace_file_compliance（business_rule_compliance维度）。与full_narrative_content区分：本项检查正文vs非正文乱内容，full_narrative_content检查大纲式vs正文"
+
+      # === 优秀层（10个）- 可选择性启用 ===
+      # 注：优秀层检查项可根据评测需要灵活启用，不必全部使用
+
+      # 核心通用检查（4个，建议优先启用）
+      - subcategory_id: "appeal_strength_advanced"
+        subcategory_name: "吸引力强度"
+        cn_name: "故事够不够吸引人（冲突、悬念、抓人程度）"
+        sort_order: [3, 40]
+        tier_level: "advanced"
+        description: "冲突尖锐、悬念强烈、开篇抓人、整体让人停不下来"
+        check_types: ["semantic_check"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        priority: "high"
+
+      - subcategory_id: "emotional_impact"
+        subcategory_name: "情感冲击力"
+        cn_name: "情感冲击力够不够强"
+        sort_order: [3, 41]
+        tier_level: "advanced"
+        description: "角色深刻动人、情感真实感染、情绪峰值到位、有具体共鸣点"
+        check_types: ["semantic_check"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        priority: "high"
+
+      - subcategory_id: "emotional_progression"
+        subcategory_name: "情感层次递进"
+        cn_name: "情感有没有从简单到复杂递进"
+        sort_order: [3, 42]
+        tier_level: "advanced"
+        description: "情感从简单到复杂的递进演化，呈现多层次、多维度的情感体验，而非单一情感的重复或平铺"
+        check_types: ["semantic_check"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        priority: "high"
+        note: "与emotional_impact区分：情感冲击力关注峰值强度，情感层次递进关注复杂度演化"
+        examples:
+          - "✅ 优秀递进（角色视角）：仰慕 → 靠近后的自我成长 → 自我接纳与共同成长"
+          - "✅ 优秀递进（关系视角）：甜 → 虐 → 更甜 → 更虐（情感越来越复合，层次递增）"
+          - "✅ 优秀递进（具体过程）：表面吸引（长得帅/同频）→ 依赖形成 → 共同对抗挑战 → 经历误解与和解 → 情感升华"
+          - "❌ 缺乏递进：始终停留在表面甜蜜，无深层情感演化"
+          - "❌ 缺乏递进：重复相同冲突类型，情感复杂度未提升"
+
+      - subcategory_id: "genre_fit"
+        subcategory_name: "题材契合度"
+        cn_name: "题材特征体现得精不精致"
+        sort_order: [3, 43]
+        tier_level: "advanced"
+        description: "完美体现配方精髓（X-Y轴化学反应准确）：不仅情感倾向正确（basic层已验证），还要体现出题材的独特魅力和深度。甜宠不仅甜还要甜得有层次，复仇不仅爽还要爽得有策略，悬疑不仅烧脑还要烧得有逻辑美感"
+        check_types: ["semantic_check"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        priority: "high"
+        note: "本场景核心评测点：验证X轴模式+Y轴标签的组合是否达到预期的化学反应效果。与emotional_delivery_match区分：后者检查情感倾向正确性（底线），genre_fit检查题材特征的精致度和完成度（优秀标准）"
+
+      # 扩展通用检查（4个，可选启用）
+      - subcategory_id: "pacing_rationality_advanced"
+        subcategory_name: "剧情节奏合理性"
+        cn_name: "剧情节奏合不合理"
+        sort_order: [3, 50]
+        tier_level: "advanced"
+        description: "高潮低谷分布合理、节奏有层次感、情绪曲线自然流畅、不拖沓不仓促"
+        check_types: ["semantic_check"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        priority: "medium"
+
+      - subcategory_id: "hook_design"
+        subcategory_name: "钩子设计"
+        cn_name: "悬念和钩子设计得好不好"
+        sort_order: [3, 51]
+        tier_level: "advanced"
+        description: "关键转折处有悬念设计、质量高（放出一点保留一些）、吊胃口但不空洞、让读者想继续阅读"
+        check_types: ["semantic_check"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        priority: "medium"
+
+      - subcategory_id: "novelty_appeal"
+        subcategory_name: "立意新颖性"
+        cn_name: "立意新不新颖"
+        sort_order: [3, 52]
+        tier_level: "advanced"
+        description: "设定新颖独特、能点燃读者好奇心、有反常规创意设计"
+        check_types: ["semantic_check"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        priority: "medium"
+
+      - subcategory_id: "dialogue_quality"
+        subcategory_name: "台词质量"
+        cn_name: "台词写得好不好"
+        sort_order: [3, 53]
+        tier_level: "advanced"
+        description: "对话生动自然、有生活化细节、符合人物身份、避免口号化宣传式台词"
+        check_types: ["semantic_check"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        priority: "medium"
+        note: "与emotional_impact区分：台词质量关注对话本身的表达方式，情感冲击力关注角色动机和情感深度"
+        examples:
+          - "✅ 优秀对话：有生活化细节、有互动感、符合人物身份"
+          - "❌ 口号化对话：'时代在变，我们也要变'、'知识改变命运'、'我要和大家共进退'"
+
+      # 题材特定检查（2个，按题材启用）
+      - subcategory_id: "sweetness_quality"
+        subcategory_name: "甜度质量"
+        cn_name: "甜度够不够（甜宠题材专用）"
+        sort_order: [3, 60]
+        tier_level: "advanced"
+        description: "发糖频率高、糖的高级感细腻、有具体暖心行为（非空洞霸总发言）"
+        check_types: ["semantic_check"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        applicable_genres: ["sweet_romance"]
+        priority: "low"
+        note: "仅适用于甜宠/言情类题材"
+
+      - subcategory_id: "humor_effect"
+        subcategory_name: "搞笑效果"
+        cn_name: "搞笑效果好不好（喜剧题材专用）"
+        sort_order: [3, 61]
+        tier_level: "advanced"
+        description: "有搞笑元素、无厘头但好笑、尺度恰当、节奏合理"
+        check_types: ["semantic_check"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        applicable_genres: ["comedy", "sweet_romance"]
+        priority: "low"
+        note: "仅适用于喜剧/轻松向题材，非所有故事都需要"
+
+# ============================================
+# 使用说明
+# ============================================
+
+usage_notes: |
+  1. 在check_list的每个check_item中添加能力维度标注：
+     - dimension_id: 第一层能力大类ID
+     - subcategory_id: 第二层检查类别ID
+     - quality_tier: (可选) 仅用于content_quality维度，值为"basic"/"advanced"
+
+  2. 示例标注：
+     # 格式规范类（不需要quality_tier）
+     - check_type: "json_schema"
+       dimension_id: "format_compliance"
+       subcategory_id: "structural_integrity"
+
+     # 内容质量类 - 基础质量
+     - check_type: "semantic_check"
+       dimension_id: "content_quality"
+       subcategory_id: "script_length_adequacy"
+       quality_tier: "basic"
+
+     # 内容质量类 - 优秀质量（题材特定）
+     - check_type: "semantic_check"
+       dimension_id: "content_quality"
+       subcategory_id: "sweetness_quality"
+       quality_tier: "advanced"
+       applicable_genres: ["sweet_romance"]
+
+  3. 统计分析：
+     - 按dimension_id聚合：统计各能力大类通过率
+     - 按subcategory_id聚合：统计细分类别通过率
+     - 按tier_level分层统计：basic/advanced各层通过率
+     - 按quality_tier计算最终质量等级（不合格/合格/优秀）
+     - 对比不同模型在各维度的表现差异
+
+  4. 题材差异化检查：
+     - 使用applicable_genres字段标注题材特定的检查项
+     - 统计时按题材过滤检查项（如sweetness_quality仅适用于sweet_romance）
+
+# ============================================
+# 版本演进历史
+# ============================================
+
+version_history:
+  - version: "2.7"
+    date: "2026-02-12"
+    changes:
+      - "【新增维度】content_quality基础层新增narrative_tone_match（叙事调性匹配）检查项"
+      - "叙事调性匹配：检查文笔风格、叙事语气、修辞手法、节奏感是否与题材类型匹配"
+      - "核心问题：'画风搭不搭'——烧脑悬疑不能写成温情言情调，热血冒险不能写成散文诗体"
+      - "与emotional_delivery_match区分：后者检查情感倾向方向（爽/虐/烧脑），本项检查文笔画风（文字表达方式）"
+      - "与genre_fit区分：后者是advanced层精致度检查（做得好不好），本项是basic层底线检查（像不像）"
+    rationale: "v2评测发现kimi-k2.5的烧脑规则怪谈样本（NW_CLEAR_MEDIUM_BRAINY_ACTION_001）文笔风格从第5章开始急剧转向言情调——大量温情细腻的情感描写、牺牲守护主题、'泪水夺眶而出'式的煽情表达，与规则怪谈应有的冷硬紧凑调性严重不搭。现有的emotional_delivery_match无法捕捉此问题（情感方向可能判正确），需要独立检查项"
+
+  - version: "2.6"
+    date: "2026-02-11"
+    changes:
+      - "【新增维度】content_quality基础层新增repeated_endings（反复结局）检查项"
+      - "【新增维度】content_quality基础层新增late_stage_digression（后期跑偏）检查项"
+      - "反复结局：检测多次出现'全文完/全书完/后记'标记，识别'写不动了硬撑'的典型症状"
+      - "后期跑偏：检测workspace中创建无关文件注水，以及chapters中后期章节内容偏离正文（作者感想、读者互动、番外预告等）"
+      - "后期跑偏还检测章节长度异常萎缩（后期章节不足前期平均的1/10）"
+    rationale: "v2评测发现kimi-k2.5等模型在长篇创作时存在'写不动了'问题：反复草草结局又硬续、后期跑去写乱七八糟的内容凑字数。新增这两个检查项识别长篇创作后劲不足"
+
+  - version: "2.5"
+    date: "2026-02-05"
+    changes:
+      - "【新增维度】content_quality基础层新增plot_progression（情节推进）检查项"
+      - "定义：章节必须包含足够的具体故事事件推进，避免纯对话或纯内心独白"
+      - "验证重点：故事事件密度（每章事件节点数量）、内容类型占比（事件vs对话vs独白）、情节推进节奏（场景/时间变化、角色行动）、事件因果性"
+      - "评分标准：1分（>70%静态内容）→ 3分（2-3个事件，事件占比40-60%）→ 5分（4-5+事件，事件占比>60%）"
+      - "与pacing_rationality_advanced区分：plot_progression是basic层的基本推进要求（有没有事件），pacing_rationality_advanced是advanced层的节奏优化（事件安排得好不好）"
+    rationale: "v2评测发现部分章节存在'俩人腻腻歪歪说没用的话'的问题，缺乏实质故事推进。新增plot_progression作为basic层检查，确保故事有基本的事件密度和推进节奏"
+
+  - version: "2.4"
+    date: "2026-02-02"
+    changes:
+      - "【新增维度】情感倾向匹配度两层验证体系"
+      - "business_rule_compliance层新增emotional_tendency_consistency（情感倾向一致性）：验证配方设计中reaction_strength与用户明确表达的desired_emotion逻辑一致"
+      - "content_quality.basic层新增emotional_delivery_match（情感交付匹配度）：验证实际章节内容的情感倾向必须与配方的reaction_strength匹配，不能反向交付"
+      - "调整genre_fit定位和描述：明确其为advanced层的精致度检查，与basic层的emotional_delivery_match形成分层验证"
+      - "分层逻辑：business_rule层检查Agent理解需求的准确性 → content_quality.basic层检查按配方交付的基本正确性 → content_quality.advanced层检查交付的精致度"
+    rationale: "用户明确要求爽文却写成虐文是严重的交付质量问题，应该是basic层失败而非advanced层扣分。分层验证确保：1）配方设计逻辑一致（business_rule层）；2）实际交付情感倾向正确（basic层）；3）题材特征精致完成度高（advanced层）"
+
+  - version: "2.3"
+    date: "2026-02-02"
+    changes:
+      - "【新增维度】优秀层新增emotional_progression（情感层次递进）检查项"
+      - "定义：情感从简单到复杂的递进演化，呈现多层次、多维度的情感体验"
+      - "与emotional_impact区分：情感冲击力关注峰值强度，情感层次递进关注复杂度演化"
+      - "优先级：high（故事深度的关键指标）"
+      - "示例递进路径：角色视角（仰慕→成长→自我接纳）、关系视角（甜→虐→更甜→更虐）"
+    rationale: "捕捉故事中情感复杂度的演化，区分表面情感重复与深层情感递进，评估作品的情感深度和层次感"
+
+  - version: "2.2"
+    date: "2026-02-02"
+    changes:
+      - "【场景适配】针对小说创作场景调整检查项结构"
+      - "篇幅合理性从维度4移至维度2（业务规则遵循-范围约束），属于客观的数量验证而非主观质量评估"
+      - "维度4基础层从3个增加到4个：theme_consistency（主题一致性-新增）、main_character_consistency（角色一致性）、character_trait_consistency（人物设定一致性-新增）、logical_contradiction（逻辑硬伤）"
+      - "维度4优秀层保留9个检查项，增加priority标注（high/medium/low），支持选择性启用"
+      - "优秀层分3组：核心通用（3个-吸引力/情感/题材契合）、扩展通用（4个-节奏/钩子/立意/台词）、题材特定（2个-甜度/搞笑）"
+      - "调整优秀层描述，去掉短剧特有概念（如'集数'），改为适合小说的表述"
+      - "主题一致性检查：防止主题漂移（如从复仇漂移成商战再漂移成修仙）"
+      - "人物设定一致性检查：防止角色崩坏（如聪明人降智、能力设定前后矛盾），允许有铺垫的性格成长"
+    rationale: "小说创作场景中，篇幅是用户query明确要求（业务规则），而主题/角色/人设/逻辑是内容创作质量评估；优秀层检查项灵活启用以适应不同评测需求"
+
+  - version: "2.1"
+    date: "2026-02-02"
+    changes:
+      - "【重要调整】去除红线层（伦理道德合规性检查），由专门的合规评估系统处理"
+      - "调整质量等级计算逻辑：不合格（basic层失败）→ 合格（basic全过+advanced<70%）→ 优秀（basic全过+advanced≥70%）"
+      - "从三层体系（redline/basic/advanced）简化为两层体系（basic/advanced）"
+    rationale: "伦理道德合规性由专门评估系统处理，本体系专注创作质量评估"
+
+  - version: "2.0"
+    date: "2026-01-29"
+    changes:
+      - "【重大升级】内容质量维度从两层升级为三层体系（redline/basic/advanced）"
+      - "新增红线问题检查（1个）：ethical_compliance"
+      - "基础质量层（3个）：script_length_adequacy（篇幅300-500字/集）、main_character_consistency（主要角色一致性）、logical_contradiction（逻辑硬伤-前后矛盾）"
+      - "优秀质量层（9个）：7个通用检查（吸引力、情感、节奏、题材契合、钩子、立意、台词）+ 2个题材特定（甜宠、搞笑）"
+      - "新增题材差异化检查（applicable_genres字段）"
+      - "明确质量等级计算逻辑（四档：红线否决/不合格/合格/优秀）"
+    rationale: "基于'标准碎碎念.md'的设计理念，区分致命问题（红线）、可用性问题（基础）、优秀特征（优秀）"
+
+  - version: "1.2"
+    date: "2026-01-22"
+    changes:
+      - "将quality_tiers定义从全局移到content_quality维度下"
+      - "增加judge_criteria_versions版本管理体系"
+    note: "v1.2为两层体系（basic/advanced），已被v2.0替代"
+
+  - version: "1.1"
+    date: "2026-01-21"
+    changes:
+      - "初始版本，定义6大能力维度和quality_tiers"

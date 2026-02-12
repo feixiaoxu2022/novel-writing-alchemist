@@ -1,0 +1,45 @@
+template_id: NW_ULTRA_SHORT_ANGSTY
+checks:
+- check_id: 超短篇字数
+  check_name: 总字数应在6500-10000之间
+  dimension_id: business_rule_compliance
+  subcategory_id: range_constraint
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    validation_rules:
+    - rule_id: total_word_count_ultra_short
+      validation_method: word_count_range
+      expected_range:
+      - 6500
+      - 10000
+  weight: 1.0
+  is_critical: true
+- check_id: 情感交付虐心
+  check_name: 实际内容必须是虐心向
+  dimension_id: content_quality
+  subcategory_id: emotional_delivery_match
+  quality_tier: basic
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    recipe_source: creative_intent.json::selected_recipe.reaction_strength
+    llm_judge_criteria_file: judge_criteria/emotional_delivery.yaml
+    llm_judge_criteria_section: 情感交付虐心
+    validation_rules:
+    - rule_id: angsty_tone_delivery
+      description: 配方↘虐心 → 实际内容必须是虐心向（主角受难、爱而不得、悲剧氛围），不能有甜爽情节
+      validation_method: llm_semantic_analysis
+  weight: 1.0
+  is_critical: true
+- check_id: 读取短篇skill
+  check_name: 必须读取SHORT_STORY_GUIDE.md（短篇创作指南）
+  dimension_id: business_rule_compliance
+  subcategory_id: required_skill_reading
+  check_type: tool_called_with_params
+  params:
+    tool_name: read_file
+    expected_params:
+      path: data_pools/skills/SHORT_STORY_GUIDE.md
+  weight: 1.0
+  is_critical: true

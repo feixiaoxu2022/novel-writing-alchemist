@@ -1,0 +1,2383 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小说创作Agent评测结果查看器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f7fa;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-controls select {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .batch-stats {
+            color: rgba(255,255,255,0.9);
+            font-size: 13px;
+        }
+
+        /* Layout */
+        .container {
+            display: flex;
+            height: calc(100vh - 100px);
+            max-width: 1920px;
+            margin: 0 auto;
+        }
+
+        /* Left Sidebar - Sample List */
+        .sidebar {
+            width: 280px;
+            min-width: 180px;
+            max-width: 500px;
+            background: white;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header {
+            padding: 15px;
+            border-bottom: 1px solid #e8eaed;
+            background: #fafbfc;
+        }
+
+        .sidebar-header h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #5f6368;
+            text-transform: uppercase;
+        }
+
+        .sample-list {
+            list-style: none;
+        }
+
+        .sample-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .sample-item:hover {
+            background: #f8f9fa;
+        }
+
+        .sample-item.active {
+            background: #e8f0fe;
+            border-left: 3px solid #1a73e8;
+        }
+
+        .sample-id {
+            font-weight: 600;
+            color: #202124;
+            margin-bottom: 4px;
+        }
+
+        .sample-query {
+            font-size: 12px;
+            color: #5f6368;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .sample-models {
+            display: flex;
+            gap: 4px;
+            margin-top: 6px;
+        }
+
+        .model-badge {
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .model-badge.error {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .model-badge.annotated {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            background: white;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #e8eaed;
+            background: #fafbfc;
+            padding: 0 20px;
+        }
+
+        .tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            color: #5f6368;
+            transition: all 0.2s;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tab svg {
+            flex-shrink: 0;
+        }
+
+        .tab:hover {
+            color: #202124;
+        }
+
+        .tab.active {
+            color: #1a73e8;
+            border-bottom-color: #1a73e8;
+        }
+
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        /* Model Tabs (horizontal comparison) */
+        .model-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e8eaed;
+            padding-bottom: 8px;
+        }
+
+        .model-tab {
+            padding: 8px 16px;
+            background: #f1f3f4;
+            border-radius: 4px 4px 0 0;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .model-tab:hover {
+            background: #e8eaed;
+        }
+
+        .model-tab.active {
+            background: #1a73e8;
+            color: white;
+        }
+
+        /* Section */
+        .section {
+            margin-bottom: 30px;
+            background: white;
+            border: 1px solid #e8eaed;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: #f8f9fa;
+            padding: 12px 16px;
+            border-bottom: 1px solid #e8eaed;
+            font-weight: 600;
+            color: #202124;
+        }
+
+        .section-content {
+            padding: 16px;
+        }
+
+        /* Conversation */
+        .message {
+            margin-bottom: 16px;
+            border-radius: 6px;
+            border: 1px solid #e8eaed;
+            overflow: hidden;
+        }
+
+        .message.user {
+            border-left: 3px solid #1a73e8;
+        }
+
+        .message.assistant {
+            border-left: 3px solid #5f6368;
+        }
+
+        .message.tool {
+            border-left: 3px solid #f9ab00;
+        }
+
+        .message-header {
+            padding: 12px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fafbfc;
+            transition: background 0.2s;
+        }
+
+        .message-header:hover {
+            background: #f1f3f4;
+        }
+
+        .message-header-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .message-role {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #5f6368;
+            flex-shrink: 0;
+        }
+
+        .message-preview {
+            font-size: 13px;
+            color: #5f6368;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .message-toggle {
+            flex-shrink: 0;
+            font-size: 18px;
+            color: #5f6368;
+            transition: transform 0.2s;
+        }
+
+        .message-toggle.expanded {
+            transform: rotate(90deg);
+        }
+
+        .message-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .message-content.expanded {
+            max-height: 50000px;
+            transition: max-height 0.5s ease-in;
+        }
+
+        .message-content-inner {
+            padding: 12px;
+            background: white;
+        }
+
+        .message-text {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        /* JSON Syntax Highlighting */
+        .json-key {
+            color: #881391;
+        }
+
+        .json-string {
+            color: #1a1aa6;
+        }
+
+        .json-number {
+            color: #1c00cf;
+        }
+
+        .json-boolean {
+            color: #0000ff;
+        }
+
+        .json-null {
+            color: #808080;
+        }
+
+        /* File Tree */
+        .file-tree {
+            list-style: none;
+        }
+
+        .file-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .file-item:hover {
+            background: #f1f3f4;
+        }
+
+        .file-item.active {
+            background: #e8f0fe;
+            color: #1a73e8;
+            font-weight: 500;
+        }
+
+        .file-name {
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .file-name span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .file-icon {
+            margin-right: 6px;
+            flex-shrink: 0;
+        }
+
+        .annotation-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #fbbc04;
+        }
+
+        /* File Viewer */
+        .file-viewer {
+            background: #f8f9fa;
+            border: 1px solid #e8eaed;
+            border-radius: 4px;
+            padding: 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        /* Annotation Panel */
+        .annotation-panel {
+            background: #fff8e1;
+            border: 1px solid #ffecb3;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+
+        .annotation-panel h4 {
+            margin-bottom: 12px;
+            color: #f57c00;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group > label {
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 500;
+            color: #5f6368;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Checkbox label (不应该是block) */
+        .checkbox-label {
+            display: flex !important;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            margin-bottom: 6px;
+            font-weight: normal;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #1a73e8;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1557b0;
+        }
+
+        .btn-secondary {
+            background: #f1f3f4;
+            color: #5f6368;
+        }
+
+        .btn-secondary:hover {
+            background: #e8eaed;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #5f6368;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #1a73e8;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #5f6368;
+        }
+
+        .empty-state svg {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        /* Resizable panels */
+        .resizable-container {
+            display: flex;
+            height: calc(100vh - 200px);
+            user-select: none;
+        }
+
+        .resizable-panel {
+            display: flex;
+            flex-direction: column;
+            min-width: 150px;
+            overflow: hidden;
+        }
+
+        .resize-handle {
+            width: 6px;
+            background: #e8eaed;
+            cursor: col-resize;
+            flex-shrink: 0;
+            transition: background 0.2s;
+            position: relative;
+        }
+
+        .resize-handle:hover,
+        .resize-handle.dragging {
+            background: #1a73e8;
+        }
+
+        .resize-handle::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 2px;
+            height: 30px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 1px;
+        }
+
+        .resize-handle:hover::after,
+        .resize-handle.dragging::after {
+            background: rgba(255,255,255,0.5);
+        }
+
+        /* Global resize handle (sidebar <-> main content) */
+        .resize-handle-global {
+            width: 6px;
+            background: #e8eaed;
+            cursor: col-resize;
+            flex-shrink: 0;
+            transition: background 0.2s;
+            position: relative;
+        }
+
+        .resize-handle-global:hover,
+        .resize-handle-global.dragging {
+            background: #1a73e8;
+        }
+
+        .resize-handle-global::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 2px;
+            height: 30px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 1px;
+        }
+
+        .resize-handle-global:hover::after,
+        .resize-handle-global.dragging::after {
+            background: rgba(255,255,255,0.5);
+        }
+
+        /* Specs Button */
+        .btn-specs {
+            padding: 8px 16px;
+            background: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            transition: background 0.2s;
+        }
+
+        .btn-specs:hover {
+            background: #1557b0;
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 1000px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #e8eaed;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 18px;
+            color: #202124;
+            display: flex;
+            align-items: center;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #5f6368;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: #202124;
+        }
+
+        .modal-body {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .specs-tabs {
+            display: flex;
+            border-bottom: 1px solid #e8eaed;
+            padding: 0 20px;
+            background: #fafbfc;
+        }
+
+        .specs-tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            color: #5f6368;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .specs-tab:hover {
+            color: #202124;
+        }
+
+        .specs-tab.active {
+            color: #1a73e8;
+            border-bottom-color: #1a73e8;
+        }
+
+        .specs-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+
+        .specs-content pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #202124;
+        }
+    </style>
+</head>
+<body>
+    <!-- SVG Icon Definitions -->
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="icon-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+        </symbol>
+        <symbol id="icon-clipboard" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+            <line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="15" y2="16"/>
+        </symbol>
+        <symbol id="icon-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+        </symbol>
+        <symbol id="icon-package" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/>
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>
+        </symbol>
+        <symbol id="icon-bar-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/>
+        </symbol>
+        <symbol id="icon-edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+        </symbol>
+        <symbol id="icon-folder" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+        </symbol>
+        <symbol id="icon-file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+            <polyline points="13 2 13 9 20 9"/>
+        </symbol>
+        <symbol id="icon-trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+            <path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+        </symbol>
+        <symbol id="icon-file-text" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+        </symbol>
+        <symbol id="icon-message-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+        </symbol>
+        <symbol id="icon-star" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </symbol>
+        <symbol id="icon-star-empty" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </symbol>
+    </svg>
+
+    <!-- Header -->
+    <div class="header">
+        <h1><svg width="24" height="24" style="vertical-align: middle; margin-right: 8px;"><use href="#icon-book"/></svg>小说创作Agent评测结果查看器</h1>
+        <div class="header-controls">
+            <button id="showSpecsBtn" class="btn-specs">
+                <svg width="16" height="16" style="vertical-align: middle; margin-right: 4px;"><use href="#icon-file-text"/></svg>
+                能力体系 &amp; Criteria
+            </button>
+            <select id="batchSelector">
+                <option value="">请选择批次...</option>
+            </select>
+            <span class="batch-stats" id="batchStats"></span>
+        </div>
+    </div>
+
+    <!-- Specs Modal -->
+    <div id="specsModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><svg width="20" height="20" style="vertical-align: middle; margin-right: 8px;"><use href="#icon-file-text"/></svg>能力体系 &amp; Criteria</h2>
+                <button class="modal-close" id="closeSpecsModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="specs-tabs">
+                    <div class="specs-tab active" data-spec="capability">能力体系</div>
+                    <div class="specs-tab" data-spec="criteria_basic">内容质量Criteria</div>
+                    <div class="specs-tab" data-spec="criteria_emotional">情感交付Criteria</div>
+                </div>
+                <div class="specs-content" id="specsContent">
+                    <pre>加载中...</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container" id="mainContainer">
+        <!-- Left Sidebar: Sample List -->
+        <div class="sidebar" id="sidebarPanel">
+            <div class="sidebar-header">
+                <h3>样本列表</h3>
+            </div>
+            <ul class="sample-list" id="sampleList">
+                <li class="loading">
+                    <div class="spinner"></div>
+                    <p>加载中...</p>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Resize Handle between sidebar and main content -->
+        <div class="resize-handle-global" id="sidebarResizeHandle"></div>
+
+        <!-- Main Content -->
+        <div class="main-content" id="mainContentPanel">
+            <!-- Tabs -->
+            <div class="tabs">
+                <div class="tab active" data-tab="task"><svg width="16" height="16"><use href="#icon-clipboard"/></svg> 原始任务</div>
+                <div class="tab" data-tab="trajectory"><svg width="16" height="16"><use href="#icon-refresh"/></svg> 执行轨迹</div>
+                <div class="tab" data-tab="workspace"><svg width="16" height="16"><use href="#icon-package"/></svg> 交付物</div>
+                <div class="tab" data-tab="check_result"><svg width="16" height="16"><use href="#icon-bar-chart"/></svg> 自动评测结果</div>
+                <div class="tab" data-tab="annotation"><svg width="16" height="16"><use href="#icon-edit"/></svg> 标注</div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="content-area" id="contentArea">
+                <div class="empty-state">
+                    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="100" cy="100" r="80" fill="none" stroke="currentColor" stroke-width="4"/>
+                        <path d="M60 100 L90 130 L140 70" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                    </svg>
+                    <h3>请从左侧选择样本</h3>
+                    <p>选择一个样本以查看多个模型的评测结果对比</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global State
+        const state = {
+            currentBatch: null,
+            currentSample: null,
+            currentModel: null,
+            currentTab: 'task',
+            currentFile: null,
+            batches: [],
+            samples: [],
+            sampleDetail: null
+        };
+
+        // API Base URL
+        const API_BASE = '';
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadBatches();
+            setupEventListeners();
+            initGlobalResizeHandle();
+        });
+
+        // 初始化全局分隔条（样本列表 <-> 主内容区域）
+        function initGlobalResizeHandle() {
+            const handle = document.getElementById('sidebarResizeHandle');
+            const sidebar = document.getElementById('sidebarPanel');
+            const mainContent = document.getElementById('mainContentPanel');
+            
+            if (!handle || !sidebar || !mainContent) return;
+            
+            let startX, startWidth;
+            
+            const onMouseDown = (e) => {
+                e.preventDefault();
+                handle.classList.add('dragging');
+                document.body.style.cursor = 'col-resize';
+                document.body.style.userSelect = 'none';
+                
+                startX = e.clientX;
+                startWidth = sidebar.offsetWidth;
+                
+                document.addEventListener('mousemove', onMouseMove);
+                document.addEventListener('mouseup', onMouseUp);
+            };
+            
+            const onMouseMove = (e) => {
+                const deltaX = e.clientX - startX;
+                const newWidth = Math.max(180, Math.min(500, startWidth + deltaX));
+                sidebar.style.width = newWidth + 'px';
+            };
+            
+            const onMouseUp = () => {
+                handle.classList.remove('dragging');
+                document.body.style.cursor = '';
+                document.body.style.userSelect = '';
+                document.removeEventListener('mousemove', onMouseMove);
+                document.removeEventListener('mouseup', onMouseUp);
+            };
+            
+            handle.addEventListener('mousedown', onMouseDown);
+        }
+
+        // Load Batches
+        async function loadBatches() {
+            try {
+                const response = await fetch(`${API_BASE}/api/v2/batches`);
+                const data = await response.json();
+                state.batches = data.batches;
+                renderBatchSelector();
+            } catch (error) {
+                console.error('Failed to load batches:', error);
+            }
+        }
+
+        // Render Batch Selector
+        function renderBatchSelector() {
+            const selector = document.getElementById('batchSelector');
+            selector.innerHTML = '<option value="">请选择批次...</option>';
+
+            state.batches.forEach(batch => {
+                const option = document.createElement('option');
+                option.value = batch.batch_name;
+                option.textContent = `${batch.batch_name} (${batch.sample_count}样本, ${batch.model_count}模型)`;
+                selector.appendChild(option);
+            });
+        }
+
+        // Load Batch Samples
+        async function loadBatchSamples(batchName) {
+            state.currentBatch = batchName;
+            showLoading('sampleList');
+
+            try {
+                const response = await fetch(`${API_BASE}/api/v2/batch/${batchName}/samples`);
+                const data = await response.json();
+                state.samples = data.samples;
+
+                // Update stats
+                const batch = state.batches.find(b => b.batch_name === batchName);
+                if (batch) {
+                    document.getElementById('batchStats').textContent =
+                        `${batch.sample_count} 个样本 · ${batch.model_count} 个模型`;
+                }
+
+                renderSampleList();
+            } catch (error) {
+                console.error('Failed to load samples:', error);
+                document.getElementById('sampleList').innerHTML = '<li class="empty-state"><p>加载失败</p></li>';
+            }
+        }
+
+        // Render Sample List
+        function renderSampleList() {
+            const list = document.getElementById('sampleList');
+            list.innerHTML = '';
+
+            state.samples.forEach(sample => {
+                const li = document.createElement('li');
+                li.className = 'sample-item';
+                li.dataset.dataId = sample.data_id;
+
+                // Model badges
+                const badges = sample.models.map(m => {
+                    let className = 'model-badge';
+                    if (m.status === 'error') className += ' error';
+                    if (m.has_annotation) className += ' annotated';
+                    return `<span class="${className}">${m.model.split('-')[0]}</span>`;
+                }).join('');
+
+                li.innerHTML = `
+                    <div class="sample-id">${sample.data_id}</div>
+                    <div class="sample-query">${sample.query_summary}</div>
+                    <div class="sample-models">${badges}</div>
+                `;
+
+                li.addEventListener('click', () => selectSample(sample.data_id));
+                list.appendChild(li);
+            });
+        }
+
+        // Select Sample
+        async function selectSample(dataId) {
+            state.currentSample = dataId;
+
+            // Update UI
+            document.querySelectorAll('.sample-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.dataId === dataId);
+            });
+
+            // Load sample detail
+            showLoading('contentArea');
+
+            try {
+                const response = await fetch(`${API_BASE}/api/v2/sample/${dataId}?batch_name=${state.currentBatch}`);
+                const data = await response.json();
+                state.sampleDetail = data;
+
+                // Select first model by default
+                if (data.models.length > 0) {
+                    state.currentModel = data.models[0].model;
+                }
+
+                renderContent();
+            } catch (error) {
+                console.error('Failed to load sample detail:', error);
+                document.getElementById('contentArea').innerHTML = '<div class="empty-state"><p>加载失败</p></div>';
+            }
+        }
+
+        // Render Content
+        function renderContent() {
+            const area = document.getElementById('contentArea');
+
+            switch (state.currentTab) {
+                case 'task':
+                    renderTaskView(area);
+                    break;
+                case 'trajectory':
+                    renderTrajectoryView(area);
+                    break;
+                case 'workspace':
+                    renderWorkspaceView(area);
+                    break;
+                case 'check_result':
+                    renderCheckResultView(area);
+                    break;
+                case 'annotation':
+                    renderAnnotationView(area);
+                    break;
+            }
+        }
+
+        // Render Task View
+        function renderTaskView(container) {
+            const task = state.sampleDetail.original_task;
+
+            container.innerHTML = `
+                <div class="section">
+                    <div class="section-header"><svg width="16" height="16" style="vertical-align: middle; margin-right: 6px;"><use href="#icon-clipboard"/></svg>首轮Query</div>
+                    <div class="section-content">
+                        <div style="white-space: pre-wrap;">${escapeHtml(task.query)}</div>
+                    </div>
+                </div>
+                <div class="section">
+                    <div class="section-header"><svg width="16" height="16" style="vertical-align: middle; margin-right: 6px;"><use href="#icon-file-text"/></svg>系统提示词</div>
+                    <div class="section-content">
+                        <div style="white-space: pre-wrap; font-size: 12px; color: #5f6368;">${escapeHtml(task.system)}</div>
+                    </div>
+                </div>
+                ${task.user_simulator_prompt ? `
+                <div class="section">
+                    <div class="section-header"><svg width="16" height="16" style="vertical-align: middle; margin-right: 6px;"><use href="#icon-message-circle"/></svg>用户模拟器Prompt</div>
+                    <div class="section-content">
+                        <div style="white-space: pre-wrap; font-size: 12px; color: #5f6368;">${escapeHtml(task.user_simulator_prompt)}</div>
+                    </div>
+                </div>
+                ` : ''}
+                <div class="section">
+                    <div class="section-header"><svg width="16" height="16" style="vertical-align: middle; margin-right: 6px; color: #4caf50;"><use href="#icon-clipboard"/></svg>检查清单</div>
+                    <div class="section-content">
+                        <pre style="font-size: 12px;">${escapeHtml(JSON.stringify(task.check_list, null, 2))}</pre>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render Check Result View
+        function renderCheckResultView(container) {
+            // SVG Icons
+            const icons = {
+                checkCircle: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="10" cy="10" r="9" stroke="#4caf50" stroke-width="2"/>
+                    <path d="M6 10L9 13L14 7" stroke="#4caf50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>`,
+                xCircle: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="10" cy="10" r="9" stroke="#f44336" stroke-width="2"/>
+                    <path d="M7 7L13 13M13 7L7 13" stroke="#f44336" stroke-width="2" stroke-linecap="round"/>
+                </svg>`,
+                alertCircle: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="10" cy="10" r="9" stroke="#ff9800" stroke-width="2"/>
+                    <path d="M10 6V11M10 14V14.01" stroke="#ff9800" stroke-width="2" stroke-linecap="round"/>
+                </svg>`,
+                skipCircle: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="10" cy="10" r="9" stroke="#9e9e9e" stroke-width="2"/>
+                    <path d="M7 10H13M13 10L10 7M13 10L10 13" stroke="#9e9e9e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>`,
+                chartBar: `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="1" y="8" width="3" height="6" rx="0.5" fill="currentColor"/>
+                    <rect x="6" y="4" width="3" height="10" rx="0.5" fill="currentColor"/>
+                    <rect x="11" y="1" width="3" height="13" rx="0.5" fill="currentColor"/>
+                </svg>`,
+                trendUp: `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2 12L6 8L9 11L14 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M10 4H14V8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>`,
+                clipboard: `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="2" width="10" height="12" rx="1" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M6 2V1.5C6 1.22386 6.22386 1 6.5 1H9.5C9.77614 1 10 1.22386 10 1.5V2" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M5.5 6H10.5M5.5 9H10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>`,
+                warning: `<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 1L13 12H1L7 1Z" stroke="#ef6c00" stroke-width="1.5" stroke-linejoin="round"/>
+                    <path d="M7 5V8M7 10V10.01" stroke="#ef6c00" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>`,
+                statusGood: `<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="24" cy="24" r="22" fill="#e8f5e9" stroke="#4caf50" stroke-width="2"/>
+                    <path d="M14 24L21 31L34 17" stroke="#4caf50" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>`,
+                statusFair: `<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="24" cy="24" r="22" fill="#fff3e0" stroke="#ff9800" stroke-width="2"/>
+                    <path d="M24 14V28M24 34V34.01" stroke="#ff9800" stroke-width="3" stroke-linecap="round"/>
+                </svg>`,
+                statusPoor: `<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="24" cy="24" r="22" fill="#ffebee" stroke="#f44336" stroke-width="2"/>
+                    <path d="M16 16L32 32M32 16L16 32" stroke="#f44336" stroke-width="3" stroke-linecap="round"/>
+                </svg>`
+            };
+
+            const getStatusIcon = (status) => {
+                if (status === 'Good') return icons.statusGood;
+                if (status === 'Fair') return icons.statusFair;
+                return icons.statusPoor;
+            };
+
+            const getCheckIcon = (result) => {
+                if (result === 'pass') return icons.checkCircle;
+                if (result === 'fail') return icons.xCircle;
+                return icons.skipCircle;
+            };
+
+            const modelTabs = state.sampleDetail.models.map(m => {
+                const hasCheckResult = m.check_result !== null;
+                return `<div class="model-tab ${m.model === state.currentModel ? 'active' : ''}" data-model="${m.model}">
+                    ${m.model}
+                    ${hasCheckResult ? '' : '<span style="color: #f44336; margin-left: 4px;">无评测</span>'}
+                </div>`;
+            }).join('');
+
+            const currentModelData = state.sampleDetail.models.find(m => m.model === state.currentModel);
+            const checkResult = currentModelData?.check_result;
+
+            if (!checkResult) {
+                container.innerHTML = `
+                    <div class="model-tabs">${modelTabs}</div>
+                    <div class="empty-state">
+                        <h3>暂无评测结果</h3>
+                        <p>该模型没有 check_result_rev003.json 评测结果文件</p>
+                    </div>
+                `;
+                attachModelTabListeners(container);
+                return;
+            }
+
+            // Overall Result Section
+            const overall = checkResult.overall_result;
+            const statusClass = overall.status === 'Good' ? 'good' : (overall.status === 'Fair' ? 'fair' : 'poor');
+            const statusIcon = getStatusIcon(overall.status);
+
+            // Dimension Scores Section
+            const dimensions = checkResult.dimension_scores;
+            const dimensionHtml = Object.entries(dimensions).map(([dimId, dimData]) => {
+                // content_quality has special structure
+                if (dimId === 'content_quality') {
+                    const basicLayer = dimData.basic_layer || {};
+                    const advancedLayer = dimData.advanced_layer || {};
+                    // 计算综合通过率用于显示
+                    const totalChecks = (basicLayer.total || 0) + (advancedLayer.total || 0);
+                    const passedChecks = (basicLayer.passed || 0) + (advancedLayer.passed || 0);
+                    const overallPassRate = totalChecks > 0 ? ((passedChecks / totalChecks) * 100).toFixed(1) : '0.0';
+                    const progressColor = (passedChecks / totalChecks) >= 0.9 ? '#4caf50' : ((passedChecks / totalChecks) >= 0.7 ? '#ff9800' : '#f44336');
+                    
+                    return `
+                        <div class="dimension-card">
+                            <div class="dimension-header">
+                                <span class="dimension-name">${getDimensionDisplayName(dimId)}</span>
+                                <span class="dimension-score">${overallPassRate}%</span>
+                            </div>
+                            <div class="dimension-progress">
+                                <div class="progress-bar" style="width: ${overallPassRate}%; background: ${progressColor};"></div>
+                            </div>
+                            <div class="dimension-layers">
+                                <div class="layer-item">
+                                    <span>基础层</span>
+                                    <span class="pass-rate">${(basicLayer.pass_rate * 100).toFixed(1)}% (${basicLayer.passed}/${basicLayer.total})</span>
+                                </div>
+                                <div class="layer-item">
+                                    <span>进阶层</span>
+                                    <span class="pass-rate">${advancedLayer.total > 0 ? (advancedLayer.pass_rate * 100).toFixed(1) + '%' : 'N/A'} (${advancedLayer.passed}/${advancedLayer.total})</span>
+                                </div>
+                            </div>
+                            ${dimData.basic_layer?.failed_items?.length > 0 || dimData.advanced_layer?.failed_items?.length > 0 ? `
+                                <div class="failed-items">
+                                    <span class="failed-label">失败项:</span>
+                                    ${[...(dimData.basic_layer?.failed_items || []), ...(dimData.advanced_layer?.failed_items || [])].join(', ')}
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }
+
+                const passRate = (dimData.pass_rate * 100).toFixed(1);
+                const progressColor = dimData.pass_rate >= 0.9 ? '#4caf50' : (dimData.pass_rate >= 0.7 ? '#ff9800' : '#f44336');
+                return `
+                    <div class="dimension-card">
+                        <div class="dimension-header">
+                            <span class="dimension-name">${getDimensionDisplayName(dimId)}</span>
+                            <span class="dimension-score">${passRate}%</span>
+                        </div>
+                        <div class="dimension-progress">
+                            <div class="progress-bar" style="width: ${passRate}%; background: ${progressColor};"></div>
+                        </div>
+                        <div class="dimension-stats">
+                            通过: ${dimData.passed} / 失败: ${dimData.failed} / 跳过: ${dimData.skipped} (共${dimData.total}项)
+                        </div>
+                        ${dimData.failed_items?.length > 0 ? `
+                            <div class="failed-items">
+                                <span class="failed-label">失败项:</span> ${dimData.failed_items.join(', ')}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+
+            // Check Details Section
+            const checkDetails = checkResult.check_details;
+            const checkDetailsHtml = Object.entries(checkDetails).map(([checkId, detail]) => {
+                const resultClass = detail.check_result === 'pass' ? 'pass' : (detail.check_result === 'fail' ? 'fail' : 'skip');
+                const resultIcon = getCheckIcon(detail.check_result);
+                return `
+                    <div class="check-item ${resultClass}">
+                        <div class="check-header" data-check-id="${checkId}">
+                            <div class="check-header-left">
+                                <span class="check-icon">${resultIcon}</span>
+                                <span class="check-id">${checkId}</span>
+                                <span class="check-dimension">[${detail.dimension_id}/${detail.subcategory_id}]</span>
+                            </div>
+                            <span class="check-toggle">▶</span>
+                        </div>
+                        <div class="check-content" data-check-id="${checkId}">
+                            <div class="check-description"><strong>描述:</strong> ${escapeHtml(detail.description || '')}</div>
+                            <div class="check-reason"><strong>结果:</strong> ${escapeHtml(detail.reason || '')}</div>
+                            <div class="check-details-text"><strong>详情:</strong> ${escapeHtml(detail.details || '')}</div>
+                            ${detail.is_critical ? `<div class="check-critical">${icons.warning} 关键检查项</div>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = `
+                <style>
+                    .overall-result {
+                        display: flex;
+                        align-items: center;
+                        gap: 20px;
+                        padding: 20px;
+                        background: linear-gradient(135deg, #f8f9fa 0%, #e8eaed 100%);
+                        border-radius: 8px;
+                        margin-bottom: 20px;
+                    }
+                    .overall-status {
+                        flex-shrink: 0;
+                    }
+                    .overall-info h2 {
+                        margin: 0 0 8px 0;
+                        font-size: 24px;
+                    }
+                    .overall-info .status-badge {
+                        display: inline-block;
+                        padding: 4px 12px;
+                        border-radius: 4px;
+                        font-weight: 600;
+                        font-size: 14px;
+                    }
+                    .overall-info .status-badge.good { background: #e8f5e9; color: #2e7d32; }
+                    .overall-info .status-badge.fair { background: #fff3e0; color: #ef6c00; }
+                    .overall-info .status-badge.poor { background: #ffebee; color: #c62828; }
+                    .overall-stats {
+                        display: flex;
+                        gap: 20px;
+                        margin-top: 12px;
+                        font-size: 14px;
+                        color: #5f6368;
+                    }
+                    .overall-stats .stat-item {
+                        display: flex;
+                        align-items: center;
+                        gap: 6px;
+                    }
+                    .overall-stats .stat-item svg {
+                        flex-shrink: 0;
+                    }
+                    .dimension-grid {
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                        gap: 16px;
+                        margin-bottom: 20px;
+                    }
+                    .dimension-card {
+                        background: white;
+                        border: 1px solid #e8eaed;
+                        border-radius: 8px;
+                        padding: 16px;
+                    }
+                    .dimension-header {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 12px;
+                    }
+                    .dimension-name {
+                        font-weight: 600;
+                        color: #202124;
+                    }
+                    .dimension-score {
+                        font-size: 18px;
+                        font-weight: 600;
+                        color: #1a73e8;
+                    }
+                    .dimension-progress {
+                        height: 8px;
+                        background: #e8eaed;
+                        border-radius: 4px;
+                        overflow: hidden;
+                        margin-bottom: 8px;
+                    }
+                    .progress-bar {
+                        height: 100%;
+                        border-radius: 4px;
+                        transition: width 0.3s ease;
+                    }
+                    .dimension-stats {
+                        font-size: 12px;
+                        color: #5f6368;
+                    }
+                    .dimension-layers {
+                        margin-bottom: 8px;
+                    }
+                    .layer-item {
+                        display: flex;
+                        justify-content: space-between;
+                        font-size: 13px;
+                        color: #5f6368;
+                        padding: 4px 0;
+                    }
+                    .failed-items {
+                        margin-top: 8px;
+                        padding: 8px;
+                        background: #fff3e0;
+                        border-radius: 4px;
+                        font-size: 12px;
+                    }
+                    .failed-label {
+                        color: #ef6c00;
+                        font-weight: 600;
+                    }
+                    .quality-unqualified { color: #c62828; }
+                    .quality-qualified { color: #ef6c00; }
+                    .quality-good { color: #2e7d32; }
+                    .quality-excellent { color: #1a73e8; }
+                    .check-list-container {
+                        max-height: 600px;
+                        overflow-y: auto;
+                    }
+                    .check-item {
+                        border: 1px solid #e8eaed;
+                        border-radius: 6px;
+                        margin-bottom: 8px;
+                        overflow: hidden;
+                    }
+                    .check-item.pass { border-left: 3px solid #4caf50; }
+                    .check-item.fail { border-left: 3px solid #f44336; }
+                    .check-item.skip { border-left: 3px solid #9e9e9e; }
+                    .check-header {
+                        padding: 10px 12px;
+                        cursor: pointer;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        background: #fafbfc;
+                        transition: background 0.2s;
+                    }
+                    .check-header:hover { background: #f1f3f4; }
+                    .check-header-left {
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        flex: 1;
+                        min-width: 0;
+                    }
+                    .check-icon { 
+                        flex-shrink: 0;
+                        display: flex;
+                        align-items: center;
+                    }
+                    .check-id {
+                        font-weight: 600;
+                        color: #202124;
+                    }
+                    .check-dimension {
+                        font-size: 11px;
+                        color: #5f6368;
+                        background: #e8eaed;
+                        padding: 2px 6px;
+                        border-radius: 3px;
+                    }
+                    .check-toggle {
+                        font-size: 14px;
+                        color: #5f6368;
+                        transition: transform 0.2s;
+                    }
+                    .check-toggle.expanded { transform: rotate(90deg); }
+                    .check-content {
+                        max-height: 0;
+                        overflow: hidden;
+                        transition: max-height 0.3s ease-out;
+                    }
+                    .check-content.expanded {
+                        max-height: 1000px;
+                        transition: max-height 0.5s ease-in;
+                    }
+                    .check-content > div {
+                        padding: 8px 12px;
+                        font-size: 13px;
+                        line-height: 1.6;
+                        border-top: 1px solid #f0f0f0;
+                    }
+                    .check-content > div:first-child { border-top: none; }
+                    .check-critical {
+                        color: #ef6c00;
+                        font-weight: 500;
+                        display: flex;
+                        align-items: center;
+                        gap: 6px;
+                    }
+                    .filter-buttons {
+                        display: flex;
+                        gap: 8px;
+                        margin-bottom: 12px;
+                    }
+                    .filter-btn {
+                        padding: 6px 12px;
+                        border: 1px solid #e8eaed;
+                        border-radius: 4px;
+                        background: white;
+                        cursor: pointer;
+                        font-size: 13px;
+                        transition: all 0.2s;
+                        display: flex;
+                        align-items: center;
+                        gap: 6px;
+                    }
+                    .filter-btn:hover { background: #f1f3f4; }
+                    .filter-btn.active {
+                        background: #1a73e8;
+                        color: white;
+                        border-color: #1a73e8;
+                    }
+                    .filter-btn.active svg path,
+                    .filter-btn.active svg circle {
+                        stroke: white;
+                    }
+                    .section-header-icon {
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 8px;
+                    }
+                </style>
+                <div class="model-tabs">${modelTabs}</div>
+                
+                <!-- Overall Result -->
+                <div class="overall-result">
+                    <div class="overall-status">${statusIcon}</div>
+                    <div class="overall-info">
+                        <h2>评测结果: <span class="status-badge ${statusClass}">${overall.status}</span></h2>
+                        <div class="overall-stats">
+                            <span class="stat-item">${icons.chartBar} 总分: ${overall.total_score?.toFixed(1) || 'N/A'}</span>
+                            <span class="stat-item">${icons.checkCircle} 通过: ${overall.passed_checks}</span>
+                            <span class="stat-item">${icons.xCircle} 失败: ${overall.failed_checks}</span>
+                            <span class="stat-item">${icons.trendUp} 通过率: ${(overall.pass_rate * 100).toFixed(1)}%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dimension Scores -->
+                <div class="section">
+                    <div class="section-header"><span class="section-header-icon">${icons.chartBar} 维度评分</span></div>
+                    <div class="section-content">
+                        <div class="dimension-grid">${dimensionHtml}</div>
+                    </div>
+                </div>
+
+                <!-- Check Details -->
+                <div class="section">
+                    <div class="section-header"><span class="section-header-icon">${icons.clipboard} 检查项详情 (${Object.keys(checkDetails).length}项)</span></div>
+                    <div class="section-content">
+                        <div class="filter-buttons">
+                            <button class="filter-btn active" data-filter="all">全部</button>
+                            <button class="filter-btn" data-filter="pass">${icons.checkCircle} 通过</button>
+                            <button class="filter-btn" data-filter="fail">${icons.xCircle} 失败</button>
+                            <button class="filter-btn" data-filter="skip">${icons.skipCircle} 跳过</button>
+                        </div>
+                        <div class="check-list-container">${checkDetailsHtml}</div>
+                    </div>
+                </div>
+            `;
+
+            // Attach model tab listeners
+            attachModelTabListeners(container);
+
+            // Attach check item toggle listeners
+            container.querySelectorAll('.check-header').forEach(header => {
+                header.addEventListener('click', () => {
+                    const checkId = header.dataset.checkId;
+                    const contentDiv = container.querySelector(`.check-content[data-check-id="${checkId}"]`);
+                    const toggleIcon = header.querySelector('.check-toggle');
+
+                    if (contentDiv.classList.contains('expanded')) {
+                        contentDiv.classList.remove('expanded');
+                        toggleIcon.classList.remove('expanded');
+                    } else {
+                        contentDiv.classList.add('expanded');
+                        toggleIcon.classList.add('expanded');
+                    }
+                });
+            });
+
+            // Attach filter button listeners
+            container.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const filter = btn.dataset.filter;
+                    container.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    container.querySelectorAll('.check-item').forEach(item => {
+                        if (filter === 'all') {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = item.classList.contains(filter) ? 'block' : 'none';
+                        }
+                    });
+                });
+            });
+        }
+
+        // Helper function to get dimension display name
+        function getDimensionDisplayName(dimId) {
+            const names = {
+                'format_compliance': '格式规范',
+                'business_rule_compliance': '业务规则遵循',
+                'memory_management': '记忆管理',
+                'content_quality': '内容质量'
+            };
+            return names[dimId] || dimId;
+        }
+
+        // Helper function to attach model tab listeners
+        function attachModelTabListeners(container) {
+            container.querySelectorAll('.model-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    state.currentModel = tab.dataset.model;
+                    renderContent();
+                });
+            });
+        }
+
+        // JSON Syntax Highlighting
+        function highlightJSON(jsonString) {
+            try {
+                const obj = JSON.parse(jsonString);
+                const formatted = JSON.stringify(obj, null, 2);
+
+                return formatted
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"([^"]+)":/g, '<span class="json-key">"$1"</span>:')
+                    .replace(/: "([^"]*)"/g, ': <span class="json-string">"$1"</span>')
+                    .replace(/: (\d+\.?\d*)/g, ': <span class="json-number">$1</span>')
+                    .replace(/: (true|false)/g, ': <span class="json-boolean">$1</span>')
+                    .replace(/: (null)/g, ': <span class="json-null">$1</span>');
+            } catch (e) {
+                return escapeHtml(jsonString);
+            }
+        }
+
+        // Format message content with JSON detection
+        function formatMessageContent(content) {
+            if (typeof content === 'object' && content !== null) {
+                const jsonString = JSON.stringify(content, null, 2);
+                return highlightJSON(jsonString);
+            }
+
+            if (typeof content === 'string') {
+                // Try to detect and highlight JSON
+                const trimmed = content.trim();
+                if ((trimmed.startsWith('{') && trimmed.endsWith('}')) ||
+                    (trimmed.startsWith('[') && trimmed.endsWith(']'))) {
+                    try {
+                        JSON.parse(trimmed);
+                        return highlightJSON(trimmed);
+                    } catch (e) {
+                        // Not valid JSON, return as plain text
+                        return escapeHtml(content);
+                    }
+                }
+                return escapeHtml(content);
+            }
+
+            return escapeHtml(String(content));
+        }
+
+        // Get message preview (first 100 chars)
+        function getMessagePreview(content) {
+            let text = '';
+            if (typeof content === 'object' && content !== null) {
+                text = JSON.stringify(content);
+            } else if (typeof content === 'string') {
+                text = content;
+            } else {
+                text = String(content);
+            }
+
+            text = text.trim().replace(/\s+/g, ' ');
+            return text.length > 100 ? text.substring(0, 100) + '...' : text;
+        }
+
+        // Render Trajectory View
+        function renderTrajectoryView(container) {
+            const modelTabs = state.sampleDetail.models.map(m =>
+                `<div class="model-tab ${m.model === state.currentModel ? 'active' : ''}" data-model="${m.model}">${m.model}</div>`
+            ).join('');
+
+            const currentModelData = state.sampleDetail.models.find(m => m.model === state.currentModel);
+            const messages = currentModelData.conversation_history;
+
+            const messagesHtml = messages.map((msg, index) => {
+                const role = msg.role;
+                const content = msg.content !== undefined ? msg.content : JSON.stringify(msg, null, 2);
+                const preview = getMessagePreview(content);
+                const formattedContent = formatMessageContent(content);
+
+                return `
+                    <div class="message ${role}">
+                        <div class="message-header" data-index="${index}">
+                            <div class="message-header-left">
+                                <span class="message-role">${role}</span>
+                                <span class="message-preview">${escapeHtml(preview)}</span>
+                            </div>
+                            <span class="message-toggle">▶</span>
+                        </div>
+                        <div class="message-content" data-index="${index}">
+                            <div class="message-content-inner">
+                                <div class="message-text">${formattedContent}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = `
+                <div class="model-tabs">${modelTabs}</div>
+                <div class="section">
+                    <div class="section-header">
+                        <svg width="16" height="16" style="vertical-align: middle; margin-right: 6px;"><use href="#icon-message-circle"/></svg>对话历史
+                        <span style="float: right; font-weight: normal; color: #5f6368;">
+                            ${messages.length} 条消息 · 执行时间: ${currentModelData.execution_time.toFixed(2)}s
+                        </span>
+                    </div>
+                    <div class="section-content">${messagesHtml}</div>
+                </div>
+            `;
+
+            // Attach model tab listeners
+            container.querySelectorAll('.model-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    state.currentModel = tab.dataset.model;
+                    renderContent();
+                });
+            });
+
+            // Attach message toggle listeners
+            container.querySelectorAll('.message-header').forEach(header => {
+                header.addEventListener('click', () => {
+                    const index = header.dataset.index;
+                    const contentDiv = container.querySelector(`.message-content[data-index="${index}"]`);
+                    const toggleIcon = header.querySelector('.message-toggle');
+
+                    if (contentDiv.classList.contains('expanded')) {
+                        contentDiv.classList.remove('expanded');
+                        toggleIcon.classList.remove('expanded');
+                    } else {
+                        contentDiv.classList.add('expanded');
+                        toggleIcon.classList.add('expanded');
+                    }
+                });
+            });
+        }
+
+        // Render Workspace View
+        function renderWorkspaceView(container) {
+            const modelTabs = state.sampleDetail.models.map(m =>
+                `<div class="model-tab ${m.model === state.currentModel ? 'active' : ''}" data-model="${m.model}">${m.model}</div>`
+            ).join('');
+
+            const currentModelData = state.sampleDetail.models.find(m => m.model === state.currentModel);
+            const files = currentModelData.workspace_files;
+
+            // 对文件列表进行排序
+            const sortedFilePaths = Object.keys(files).sort((a, b) => {
+                // 定义文件优先级
+                const getOrder = (path) => {
+                    if (path === 'creative_intent.json') return 1;
+                    if (path === 'characters.json') return 2;
+                    if (path === 'outline.json') return 3;
+                    if (path.startsWith('chapters/')) return 4;
+                    if (path === 'writing_log.md') return 99;
+                    return 50;
+                };
+
+                const orderA = getOrder(a);
+                const orderB = getOrder(b);
+
+                if (orderA !== orderB) {
+                    return orderA - orderB;
+                }
+
+                // 相同优先级内，chapters按数字排序
+                if (a.startsWith('chapters/') && b.startsWith('chapters/')) {
+                    const numA = parseInt(a.match(/chapter_(\d+)/)?.[1] || '0');
+                    const numB = parseInt(b.match(/chapter_(\d+)/)?.[1] || '0');
+                    return numA - numB;
+                }
+
+                // 其他情况按字母排序
+                return a.localeCompare(b);
+            });
+
+            const fileListHtml = sortedFilePaths.map(path => {
+                const hasAnnotation = currentModelData.file_annotations && currentModelData.file_annotations[path];
+                return `
+                    <li class="file-item" data-path="${path}" title="${path}">
+                        <div class="file-name">
+                            <span class="file-icon"><svg width="14" height="14"><use href="#icon-file"/></svg></span>
+                            <span>${path}</span>
+                        </div>
+                        ${hasAnnotation ? '<span class="annotation-indicator"></span>' : ''}
+                    </li>
+                `;
+            }).join('');
+
+            const sampleAnnotation = currentModelData.sample_annotation || {};
+
+            container.innerHTML = `
+                <div class="model-tabs">${modelTabs}</div>
+                <div class="resizable-container" id="workspaceContainer">
+                    <div class="section resizable-panel" id="fileListPanel" style="width: 220px;">
+                        <div class="section-header"><svg width="16" height="16" style="vertical-align: middle; margin-right: 6px;"><use href="#icon-folder"/></svg>文件列表</div>
+                        <div class="section-content" style="flex: 1; overflow-y: auto;">
+                            <ul class="file-tree">${fileListHtml}</ul>
+                        </div>
+                    </div>
+                    <div class="resize-handle" data-left="fileListPanel" data-right="fileContentPanel"></div>
+                    <div class="section resizable-panel" id="fileContentPanel" style="flex: 1;">
+                        <div class="section-header"><svg width="16" height="16" style="vertical-align: middle; margin-right: 6px;"><use href="#icon-file-text"/></svg>文件内容</div>
+                        <div class="section-content" style="flex: 1; overflow: hidden;">
+                            <div id="fileViewer" class="file-viewer" style="height: 100%; overflow-y: auto;">请从左侧选择文件</div>
+                        </div>
+                    </div>
+                    <div class="resize-handle" data-left="fileContentPanel" data-right="annotationPanel"></div>
+                    <div class="section resizable-panel" id="annotationPanel" style="width: 350px;">
+                        <div class="section-header"><svg width="16" height="16" style="vertical-align: middle; margin-right: 6px;"><use href="#icon-edit"/></svg>标注</div>
+                        <div class="section-content" style="flex: 1; overflow-y: auto; padding: 20px;">
+                            <!-- 样本级标注 -->
+                            <div style="margin-bottom: 24px; padding-bottom: 24px; border-bottom: 2px solid #e8eaed;">
+                                <h4 style="font-size: 14px; font-weight: 600; color: #202124; margin-bottom: 16px;"><svg width="14" height="14" style="vertical-align: middle; margin-right: 6px;"><use href="#icon-clipboard"/></svg>样本级标注</h4>
+                                <form id="sampleAnnotationForm">
+                                    <div class="form-group">
+                                        <label>整体质量</label>
+                                        <select name="overall_quality">
+                                            <option value="">请选择...</option>
+                                            <option value="good" ${sampleAnnotation.overall_quality === 'good' ? 'selected' : ''}>优秀</option>
+                                            <option value="fair" ${sampleAnnotation.overall_quality === 'fair' ? 'selected' : ''}>一般</option>
+                                            <option value="poor" ${sampleAnnotation.overall_quality === 'poor' ? 'selected' : ''}>较差</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" name="is_typical_case" ${sampleAnnotation.is_typical_case ? 'checked' : ''}>
+                                            是否为典型案例
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>标注备注</label>
+                                        <textarea name="notes" rows="3">${sampleAnnotation.notes || ''}</textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary" style="width: 100%;">保存样本标注</button>
+                                </form>
+                            </div>
+
+                            <!-- 文件级标注 -->
+                            <div id="fileAnnotationPanel" style="display: none;">
+                                <h4 style="font-size: 14px; font-weight: 600; color: #202124; margin-bottom: 12px;"><svg width="14" height="14" style="vertical-align: middle; margin-right: 6px;"><use href="#icon-file"/></svg>文件级标注</h4>
+                                <p id="currentFileName" style="font-size: 12px; color: #5f6368; margin-bottom: 16px; padding: 8px; background: #f8f9fa; border-radius: 4px;"></p>
+                                <form id="fileAnnotationForm">
+                                    <div class="form-group">
+                                        <label>质量评分</label>
+                                        <select name="quality_rating">
+                                            <option value="">请选择...</option>
+                                            <option value="good">优秀</option>
+                                            <option value="fair">一般</option>
+                                            <option value="poor">较差</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>问题类型（可多选）</label>
+                                        <div>
+                                            <label class="checkbox-label">
+                                                <input type="checkbox" name="issues" value="character_inconsistency"> 角色不一致
+                                            </label>
+                                            <label class="checkbox-label">
+                                                <input type="checkbox" name="issues" value="pacing_problem"> 节奏问题
+                                            </label>
+                                            <label class="checkbox-label">
+                                                <input type="checkbox" name="issues" value="plot_hole"> 剧情漏洞
+                                            </label>
+                                            <label class="checkbox-label">
+                                                <input type="checkbox" name="issues" value="style_issue"> 风格问题
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>标注备注</label>
+                                        <textarea name="notes" rows="3"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary" style="width: 100%;">保存文件标注</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Attach listeners
+            container.querySelectorAll('.model-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    state.currentModel = tab.dataset.model;
+                    renderContent();
+                });
+            });
+
+            container.querySelectorAll('.file-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    document.querySelectorAll('.file-item').forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                    const path = item.dataset.path;
+                    const content = files[path];
+                    state.currentFile = path;
+
+                    // 更新文件内容
+                    document.getElementById('fileViewer').textContent = content;
+
+                    // 显示文件标注面板
+                    const fileAnnotationPanel = document.getElementById('fileAnnotationPanel');
+                    const currentFileName = document.getElementById('currentFileName');
+                    currentFileName.textContent = `当前文件: ${path}`;
+                    fileAnnotationPanel.style.display = 'block';
+
+                    // 加载已有的文件标注
+                    const fileAnnotation = currentModelData.file_annotations?.[path] || {};
+                    const form = document.getElementById('fileAnnotationForm');
+                    form.elements['quality_rating'].value = fileAnnotation.quality_rating || '';
+                    form.elements['notes'].value = fileAnnotation.notes || '';
+
+                    // 清空并重新勾选issues
+                    Array.from(form.elements['issues']).forEach(cb => cb.checked = false);
+                    if (fileAnnotation.issues) {
+                        fileAnnotation.issues.forEach(issue => {
+                            const checkbox = form.querySelector(`input[name="issues"][value="${issue}"]`);
+                            if (checkbox) checkbox.checked = true;
+                        });
+                    }
+                });
+            });
+
+            // 样本标注表单提交
+            const sampleForm = container.querySelector('#sampleAnnotationForm');
+            sampleForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formData = new FormData(sampleForm);
+                const annotation = {
+                    overall_quality: formData.get('overall_quality'),
+                    is_typical_case: formData.get('is_typical_case') === 'on',
+                    notes: formData.get('notes')
+                };
+                await saveSampleAnnotation(annotation);
+            });
+
+            // 文件标注表单提交
+            const fileForm = container.querySelector('#fileAnnotationForm');
+            fileForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (!state.currentFile) {
+                    alert('请先选择文件');
+                    return;
+                }
+
+                const formData = new FormData(fileForm);
+                const issues = Array.from(formData.getAll('issues'));
+                const annotation = {
+                    quality_rating: formData.get('quality_rating'),
+                    issues: issues,
+                    notes: formData.get('notes')
+                };
+                await saveFileAnnotation(state.currentFile, annotation);
+            });
+
+            // 初始化拖动分隔条
+            initResizeHandles(container);
+        }
+
+        // 初始化拖动分隔条功能
+        function initResizeHandles(container) {
+            const handles = container.querySelectorAll('.resize-handle');
+            
+            handles.forEach(handle => {
+                let startX, startLeftWidth, startRightWidth, leftPanel, rightPanel;
+                
+                const onMouseDown = (e) => {
+                    e.preventDefault();
+                    handle.classList.add('dragging');
+                    document.body.style.cursor = 'col-resize';
+                    document.body.style.userSelect = 'none';
+                    
+                    const leftId = handle.dataset.left;
+                    const rightId = handle.dataset.right;
+                    leftPanel = container.querySelector('#' + leftId);
+                    rightPanel = container.querySelector('#' + rightId);
+                    
+                    if (!leftPanel || !rightPanel) {
+                        console.error('Panel not found:', leftId, rightId);
+                        return;
+                    }
+                    
+                    startX = e.clientX;
+                    startLeftWidth = leftPanel.offsetWidth;
+                    startRightWidth = rightPanel.offsetWidth;
+                    
+                    document.addEventListener('mousemove', onMouseMove);
+                    document.addEventListener('mouseup', onMouseUp);
+                };
+                
+                const onMouseMove = (e) => {
+                    if (!leftPanel || !rightPanel) return;
+                    
+                    const deltaX = e.clientX - startX;
+                    const newLeftWidth = Math.max(150, startLeftWidth + deltaX);
+                    const newRightWidth = Math.max(150, startRightWidth - deltaX);
+                    
+                    // 只有当两边都满足最小宽度时才调整
+                    if (newLeftWidth >= 150 && newRightWidth >= 150) {
+                        leftPanel.style.width = newLeftWidth + 'px';
+                        leftPanel.style.flex = 'none';
+                        
+                        // 如果右侧面板不是flex:1的，也设置宽度
+                        if (rightPanel.id !== 'fileContentPanel') {
+                            rightPanel.style.width = newRightWidth + 'px';
+                            rightPanel.style.flex = 'none';
+                        }
+                    }
+                };
+                
+                const onMouseUp = () => {
+                    handle.classList.remove('dragging');
+                    document.body.style.cursor = '';
+                    document.body.style.userSelect = '';
+                    document.removeEventListener('mousemove', onMouseMove);
+                    document.removeEventListener('mouseup', onMouseUp);
+                };
+                
+                handle.addEventListener('mousedown', onMouseDown);
+            });
+        }
+
+        // Render Annotation View
+        function renderAnnotationView(container) {
+            const models = state.sampleDetail.models;
+
+            // 尝试从第一个模型读取跨模型标注
+            const crossModelAnnotation = models[0].sample_annotation?.cross_model_comparison || {};
+            const modelRatings = crossModelAnnotation.model_ratings || {};
+
+            // 构建模型列表HTML
+            const modelListHtml = models.map((m, index) => {
+                const rating = modelRatings[m.model] || 0;
+                const statusBadge = m.execution_status === 'success'
+                    ? '<span style="color: #2e7d32;">✓ 成功</span>'
+                    : '<span style="color: #c62828;">✗ 失败</span>';
+
+                const starFilled = '<svg width="16" height="16" style="color: #fbbc04;"><use href="#icon-star"/></svg>';
+                const starEmpty = '<svg width="16" height="16" style="color: #dadce0;"><use href="#icon-star-empty"/></svg>';
+                const starsDisplay = rating > 0 
+                    ? starFilled.repeat(rating) + starEmpty.repeat(5 - rating)
+                    : starEmpty.repeat(5);
+
+                return `
+                    <div style="border: 1px solid #e8eaed; border-radius: 6px; padding: 16px; margin-bottom: 12px; background: white;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <div>
+                                <strong style="font-size: 15px;">${index + 1}. ${m.model}</strong>
+                                <div style="font-size: 12px; color: #5f6368; margin-top: 4px;">
+                                    ${statusBadge} · 耗时: ${m.execution_time.toFixed(2)}s
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center;">
+                                ${starsDisplay}
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label style="font-size: 12px;">评分 (1-5星)</label>
+                            <select class="model-rating-select" data-model="${m.model}" style="width: 100%; padding: 6px; border: 1px solid #dadce0; border-radius: 4px;">
+                                <option value="0" ${rating === 0 ? 'selected' : ''}>未评分</option>
+                                <option value="1" ${rating === 1 ? 'selected' : ''}>★ 1星 - 很差</option>
+                                <option value="2" ${rating === 2 ? 'selected' : ''}>★★ 2星 - 较差</option>
+                                <option value="3" ${rating === 3 ? 'selected' : ''}>★★★ 3星 - 一般</option>
+                                <option value="4" ${rating === 4 ? 'selected' : ''}>★★★★ 4星 - 良好</option>
+                                <option value="5" ${rating === 5 ? 'selected' : ''}>★★★★★ 5星 - 优秀</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-top: 8px; margin-bottom: 0;">
+                            <label style="font-size: 12px;">单独备注</label>
+                            <textarea class="model-comment-textarea" data-model="${m.model}"
+                                      rows="2"
+                                      placeholder="对该模型的评价..."
+                                      style="width: 100%; padding: 6px; border: 1px solid #dadce0; border-radius: 4px; font-size: 13px; font-family: inherit;">${(crossModelAnnotation.model_comments || {})[m.model] || ''}</textarea>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = `
+                <div class="section">
+                    <div class="section-header"><svg width="16" height="16" style="vertical-align: middle; margin-right: 6px;"><use href="#icon-trophy"/></svg>多模型对比标注</div>
+                    <div class="section-content" style="max-width: 900px; margin: 0 auto;">
+                        <div style="background: #e8f0fe; border-left: 4px solid #1a73e8; padding: 12px; border-radius: 4px; margin-bottom: 20px;">
+                            <strong>说明：</strong>对本样本中所有模型的表现进行评分和对比
+                        </div>
+
+                        <!-- 模型列表 -->
+                        <div style="margin-bottom: 24px;">
+                            <h3 style="font-size: 16px; margin-bottom: 16px; color: #202124;"><svg width="16" height="16" style="vertical-align: middle; margin-right: 6px;"><use href="#icon-bar-chart"/></svg>各模型评分</h3>
+                            ${modelListHtml}
+                        </div>
+
+                        <!-- 整体对比备注 -->
+                        <div class="annotation-panel">
+                            <h4><svg width="16" height="16" style="vertical-align: middle; margin-right: 6px;"><use href="#icon-file-text"/></svg>整体对比备注</h4>
+                            <div class="form-group">
+                                <label>排名总结与关键发现</label>
+                                <textarea id="comparisonNotes" rows="6" placeholder="例如：
+• 排名：Model A > Model B > Model C
+• Model A 在创意性和角色塑造上表现最好
+• Model B 在情节连贯性上有优势，但结尾略显仓促
+• Model C 存在明显的逻辑错误
+..." style="width: 100%; padding: 12px; border: 1px solid #dadce0; border-radius: 4px; font-family: inherit; font-size: 14px;">${crossModelAnnotation.comparison_notes || ''}</textarea>
+                            </div>
+
+                            <button id="saveCrossModelAnnotation" class="btn btn-primary" style="width: 100%;">
+                                保存多模型对比标注
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // 保存按钮事件
+            container.querySelector('#saveCrossModelAnnotation').addEventListener('click', async () => {
+                // 收集所有模型的评分
+                const ratings = {};
+                container.querySelectorAll('.model-rating-select').forEach(select => {
+                    const model = select.dataset.model;
+                    ratings[model] = parseInt(select.value);
+                });
+
+                // 收集所有模型的备注
+                const comments = {};
+                container.querySelectorAll('.model-comment-textarea').forEach(textarea => {
+                    const model = textarea.dataset.model;
+                    const comment = textarea.value.trim();
+                    if (comment) {
+                        comments[model] = comment;
+                    }
+                });
+
+                // 整体对比备注
+                const comparisonNotes = container.querySelector('#comparisonNotes').value.trim();
+
+                // 构建标注数据
+                const annotation = {
+                    cross_model_comparison: {
+                        model_ratings: ratings,
+                        model_comments: comments,
+                        comparison_notes: comparisonNotes,
+                        annotated_at: new Date().toISOString()
+                    }
+                };
+
+                // 保存到第一个模型（作为样本级的跨模型标注）
+                try {
+                    const response = await fetch(`${API_BASE}/api/v2/annotation/sample`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            batch_name: state.currentBatch,
+                            data_id: state.currentSample,
+                            model: models[0].model,
+                            annotation
+                        })
+                    });
+
+                    const data = await response.json();
+                    if (data.success) {
+                        alert(' 多模型对比标注已保存');
+                        selectSample(state.currentSample);
+                    } else {
+                        alert(' 保存失败: ' + data.error);
+                    }
+                } catch (error) {
+                    console.error('Failed to save cross-model annotation:', error);
+                    alert(' 保存失败');
+                }
+            });
+        }
+
+        // Save Sample Annotation
+        async function saveSampleAnnotation(annotation) {
+            try {
+                const response = await fetch(`${API_BASE}/api/v2/annotation/sample`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        batch_name: state.currentBatch,
+                        data_id: state.currentSample,
+                        model: state.currentModel,
+                        annotation
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    alert(' 样本标注已保存');
+                    // Reload sample detail
+                    selectSample(state.currentSample);
+                } else {
+                    alert(' 保存失败: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Failed to save annotation:', error);
+                alert(' 保存失败');
+            }
+        }
+
+        // Save File Annotation
+        async function saveFileAnnotation(filePath, annotation) {
+            try {
+                const response = await fetch(`${API_BASE}/api/v2/annotation/file`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        batch_name: state.currentBatch,
+                        data_id: state.currentSample,
+                        model: state.currentModel,
+                        file_path: filePath,
+                        annotation
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    alert(' 文件标注已保存');
+                    // Reload sample detail to update annotation indicator
+                    selectSample(state.currentSample);
+                } else {
+                    alert(' 保存失败: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Failed to save file annotation:', error);
+                alert(' 保存失败');
+            }
+        }
+
+        // Utility Functions
+        function showLoading(elementId) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = '<div class="loading"><div class="spinner"></div><p>加载中...</p></div>';
+        }
+
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+
+        // Event Listeners
+        function setupEventListeners() {
+            // Batch selector
+            document.getElementById('batchSelector').addEventListener('change', (e) => {
+                const batchName = e.target.value;
+                if (batchName) {
+                    loadBatchSamples(batchName);
+                }
+            });
+
+            // Tab switching
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    state.currentTab = tab.dataset.tab;
+                    if (state.sampleDetail) {
+                        renderContent();
+                    }
+                });
+            });
+
+            // Specs Modal
+            setupSpecsModal();
+        }
+
+        // ==================== 规范文档模态框 ====================
+        
+        function setupSpecsModal() {
+            const modal = document.getElementById('specsModal');
+            const showBtn = document.getElementById('showSpecsBtn');
+            const closeBtn = document.getElementById('closeSpecsModal');
+            const specsTabs = document.querySelectorAll('.specs-tab');
+            const specsContent = document.getElementById('specsContent');
+
+            // 显示模态框
+            showBtn.addEventListener('click', () => {
+                modal.style.display = 'flex';
+                // 默认加载第一个Tab的内容
+                loadSpecContent('capability');
+            });
+
+            // 关闭模态框 - 点击关闭按钮
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+
+            // 关闭模态框 - 点击遮罩层
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+            // 关闭模态框 - 按ESC键
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.style.display === 'flex') {
+                    modal.style.display = 'none';
+                }
+            });
+
+            // Tab切换
+            specsTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // 更新Tab激活状态
+                    specsTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    // 加载对应内容
+                    const specName = tab.dataset.spec;
+                    loadSpecContent(specName);
+                });
+            });
+        }
+
+        // 加载规范文档内容
+        async function loadSpecContent(specName) {
+            const specsContent = document.getElementById('specsContent');
+            specsContent.innerHTML = '<pre>加载中...</pre>';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/v2/specs/${specName}`);
+                const data = await response.json();
+
+                if (data.error) {
+                    specsContent.innerHTML = `<pre style="color: #c62828;">错误: ${data.error}</pre>`;
+                    return;
+                }
+
+                // 显示YAML内容（不做高亮，避免问题）
+                specsContent.innerHTML = `<pre style="white-space: pre-wrap; font-size: 13px;">${escapeHtml(data.content)}</pre>`;
+            } catch (error) {
+                console.error('Failed to load spec:', error);
+                specsContent.innerHTML = `<pre style="color: #c62828;">加载失败: ${error.message}</pre>`;
+            }
+        }
+
+        // YAML语法高亮
+        function highlightYaml(yamlContent) {
+            return yamlContent
+                // 先转义HTML特殊字符
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                // 注释
+                .replace(/(#.*)$/gm, '<span style="color: #6a9955;">$1</span>')
+                // 键（冒号前的内容）
+                .replace(/^(\s*)([a-zA-Z_][a-zA-Z0-9_-]*):/gm, '$1<span style="color: #9cdcfe;">$2</span>:')
+                // 字符串值（单引号和双引号）
+                .replace(/"([^"]*)"/g, '<span style="color: #ce9178;">"$1"</span>')
+                .replace(/'([^']*)'/g, '<span style="color: #ce9178;">\'$1\'</span>')
+                // 数字
+                .replace(/: (\d+\.?\d*)/g, ': <span style="color: #b5cea8;">$1</span>')
+                // 布尔值
+                .replace(/: (true|false)/gi, ': <span style="color: #569cd6;">$1</span>')
+                // null
+                .replace(/: (null|~)/gi, ': <span style="color: #569cd6;">$1</span>')
+                // 列表项
+                .replace(/^(\s*)-\s/gm, '$1<span style="color: #d4d4d4;">-</span> ');
+        }
+    </script>
+</body>
+</html>

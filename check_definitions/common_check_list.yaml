@@ -1,0 +1,529 @@
+description: 所有模板通用的检查项（23项），会自动合并到每个模板的check_list中
+checks:
+- check_id: 读取配方知识库
+  check_name: 必须读取RECIPE_KNOWLEDGE.md（配方知识库）
+  dimension_id: business_rule_compliance
+  subcategory_id: required_skill_reading
+  check_type: tool_called_with_params
+  params:
+    tool_name: read_file
+    expected_params:
+      path: data_pools/skills/RECIPE_KNOWLEDGE.md
+    skip_if_file_not_exists: true
+  weight: 1.0
+  is_critical: true
+- check_id: 读取人物设计指南
+  check_name: 必须读取CHARACTER_DESIGN_GUIDE.md（人物设计指南）
+  dimension_id: business_rule_compliance
+  subcategory_id: required_skill_reading
+  check_type: tool_called_with_params
+  params:
+    tool_name: read_file
+    expected_params:
+      path: data_pools/skills/CHARACTER_DESIGN_GUIDE.md
+    skip_if_file_not_exists: true
+  weight: 1.0
+  is_critical: true
+- check_id: 读取大纲设计指南
+  check_name: 必须读取OUTLINE_DESIGN_GUIDE.md（大纲设计指南）
+  dimension_id: business_rule_compliance
+  subcategory_id: required_skill_reading
+  check_type: tool_called_with_params
+  params:
+    tool_name: read_file
+    expected_params:
+      path: data_pools/skills/OUTLINE_DESIGN_GUIDE.md
+    skip_if_file_not_exists: true
+  weight: 1.0
+  is_critical: true
+- check_id: 读取写作技巧指南
+  check_name: 必须读取WRITING_TECHNIQUE_GUIDE.md（写作技巧指南）
+  dimension_id: business_rule_compliance
+  subcategory_id: required_skill_reading
+  check_type: tool_called_with_params
+  params:
+    tool_name: read_file
+    expected_params:
+      path: data_pools/skills/WRITING_TECHNIQUE_GUIDE.md
+    skip_if_file_not_exists: true
+  weight: 1.0
+  is_critical: true
+- check_id: 读取设定一致性管理指南
+  check_name: 必须读取CONSISTENCY_MANAGEMENT_GUIDE.md（设定一致性管理指南）
+  dimension_id: business_rule_compliance
+  subcategory_id: required_skill_reading
+  check_type: tool_called_with_params
+  params:
+    tool_name: read_file
+    expected_params:
+      path: data_pools/skills/CONSISTENCY_MANAGEMENT_GUIDE.md
+    skip_if_file_not_exists: true
+  weight: 1.0
+  is_critical: true
+- check_id: 读取命名skill
+  check_name: 必须读取CHARACTER_NAMING_GUIDE.md（角色命名规范）
+  dimension_id: business_rule_compliance
+  subcategory_id: required_skill_reading
+  check_type: tool_called_with_params
+  params:
+    tool_name: read_file
+    expected_params:
+      path: data_pools/skills/CHARACTER_NAMING_GUIDE.md
+  weight: 1.0
+  is_critical: true
+- check_id: 读取creative_intent的schema
+  check_name: 必须读取creative_intent.schema.json（输出格式规范）
+  dimension_id: business_rule_compliance
+  subcategory_id: required_skill_reading
+  check_type: tool_called_with_params
+  params:
+    tool_name: read_file
+    expected_params:
+      path: data_pools/schemas/creative_intent.schema.json
+  weight: 1.0
+  is_critical: true
+- check_id: 读取characters的schema
+  check_name: 必须读取characters.schema.json（输出格式规范）
+  dimension_id: business_rule_compliance
+  subcategory_id: required_skill_reading
+  check_type: tool_called_with_params
+  params:
+    tool_name: read_file
+    expected_params:
+      path: data_pools/schemas/characters.schema.json
+  weight: 1.0
+  is_critical: true
+- check_id: 读取outline的schema
+  check_name: 必须读取outline.schema.json（输出格式规范）
+  dimension_id: business_rule_compliance
+  subcategory_id: required_skill_reading
+  check_type: tool_called_with_params
+  params:
+    tool_name: read_file
+    expected_params:
+      path: data_pools/schemas/outline.schema.json
+  weight: 1.0
+  is_critical: true
+- check_id: 章节命名格式
+  check_name: 章节文件命名必须为chapter_NN.md格式
+  dimension_id: format_compliance
+  subcategory_id: naming_convention
+  check_type: entity_attribute_equals
+  params:
+    entity_type: file
+    target_id: workspace/chapters/
+    attribute_key: naming_pattern
+    expected_value:
+      regex: ^chapter_\d{2}\.md$
+  weight: 1.0
+  is_critical: true
+- check_id: creative_intent格式
+  check_name: creative_intent.json的Schema验证
+  dimension_id: format_compliance
+  subcategory_id: structural_integrity
+  check_type: json_schema
+  params:
+    file_pattern: workspace/creative_intent.json
+    required_fields: []
+  weight: 1.0
+  is_critical: true
+- check_id: characters格式
+  check_name: characters.json的Schema验证
+  dimension_id: format_compliance
+  subcategory_id: structural_integrity
+  check_type: json_schema
+  params:
+    file_pattern: workspace/characters.json
+    required_fields: []
+  weight: 1.0
+  is_critical: true
+- check_id: outline格式
+  check_name: outline.json的Schema验证
+  dimension_id: format_compliance
+  subcategory_id: structural_integrity
+  check_type: json_schema
+  params:
+    file_pattern: workspace/outline.json
+    required_fields: []
+  weight: 1.0
+  is_critical: true
+- check_id: X轴模式ID格式
+  check_name: X轴模式ID必须匹配^[A-G]\d{1,2}$格式
+  dimension_id: business_rule_compliance
+  subcategory_id: enum_validity
+  check_type: entity_attribute_equals
+  params:
+    entity_type: file
+    target_id: workspace/creative_intent.json
+    attribute_key: selected_recipe.x_axis_mode_id
+    expected_value:
+      regex: ^[A-G]\d{1,2}$
+  weight: 1.0
+  is_critical: true
+- check_id: Y轴标签枚举
+  check_name: Y轴标签必须在12种枚举中
+  dimension_id: business_rule_compliance
+  subcategory_id: enum_validity
+  check_type: entity_attribute_equals
+  params:
+    entity_type: file
+    target_id: workspace/creative_intent.json
+    attribute_key: selected_recipe.y_axis_tags
+    expected_value:
+      array_item_type: string
+      enum:
+      - 双向暗恋
+      - 系统流
+      - 无限流
+      - 种田流
+      - 赛博朋克
+      - 规则怪谈
+      - 重生/穿越
+      - 商战权谋
+      - 克苏鲁
+      - 第四天灾
+      - 仙侠修真
+      - 刑侦悬疑
+  weight: 1.0
+  is_critical: true
+- check_id: Y轴标签数量
+  check_name: Y轴标签数量必须为2-3个
+  dimension_id: business_rule_compliance
+  subcategory_id: quantity_constraint
+  check_type: entity_attribute_equals
+  params:
+    entity_type: file
+    target_id: workspace/creative_intent.json
+    attribute_key: selected_recipe.y_axis_tags
+    expected_value:
+      array_min_length: 2
+      array_max_length: 3
+  weight: 1.0
+  is_critical: true
+- check_id: forbidden_elements存在性
+  check_name: forbidden_elements必须至少有1个
+  dimension_id: business_rule_compliance
+  subcategory_id: quantity_constraint
+  check_type: entity_attribute_equals
+  params:
+    entity_type: file
+    target_id: workspace/creative_intent.json
+    attribute_key: selected_recipe.forbidden_elements
+    expected_value:
+      array_min_length: 1
+  weight: 1.0
+  is_critical: true
+- check_id: 配方选择交互
+  check_name: 配方选择阶段HITL调用
+  dimension_id: business_rule_compliance
+  subcategory_id: sop_compliance
+  check_type: tool_called_with_params
+  params:
+    tool_name: request_human_review
+    expected_params:
+      stage: 配方选择
+      type: question
+  weight: 1.0
+  is_critical: true
+- check_id: 写作准备确认
+  check_name: 写作准备阶段HITL调用
+  dimension_id: business_rule_compliance
+  subcategory_id: sop_compliance
+  check_type: tool_called_with_params
+  params:
+    tool_name: request_human_review
+    expected_params:
+      stage: 写作准备确认
+      type: confirmation
+  weight: 1.0
+  is_critical: true
+- check_id: 主题一致性
+  check_name: 故事主题一致
+  dimension_id: content_quality
+  subcategory_id: theme_consistency
+  quality_tier: basic
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    llm_judge_criteria_file: judge_criteria/content_quality_basic.yaml
+    llm_judge_criteria_section: 主题一致性
+    validation_rules:
+    - rule_id: theme_consistency
+      description: 核心主题保持一致
+      validation_method: llm_semantic_analysis
+  weight: 1.0
+  is_critical: true
+- check_id: 主要角色一致性
+  check_name: 主要角色一致性
+  dimension_id: content_quality
+  subcategory_id: main_character_consistency
+  quality_tier: basic
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    llm_judge_criteria_file: judge_criteria/content_quality_basic.yaml
+    llm_judge_criteria_section: 主要角色一致性
+    validation_rules:
+    - rule_id: main_character_consistency
+      description: 主角不能前后不一致或突然消失
+      validation_method: llm_semantic_analysis
+  weight: 1.0
+  is_critical: true
+- check_id: 人物设定一致性
+  check_name: 人物设定一致性
+  dimension_id: content_quality
+  subcategory_id: character_trait_consistency
+  quality_tier: basic
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    llm_judge_criteria_file: judge_criteria/content_quality_basic.yaml
+    llm_judge_criteria_section: 人物设定一致性
+    validation_rules:
+    - rule_id: character_trait_consistency
+      description: 性格、能力不能无故崩坏（除非有合理铺垫）
+      validation_method: llm_semantic_analysis
+  weight: 1.0
+  is_critical: true
+- check_id: 人物设计遵循度
+  check_name: 实际表现符合设计文档
+  dimension_id: content_quality
+  subcategory_id: character_design_adherence
+  quality_tier: basic
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md + characters.json
+    llm_judge_criteria_file: judge_criteria/content_quality_basic.yaml
+    llm_judge_criteria_section: 人物设计遵循度
+    validation_rules:
+    - rule_id: character_design_adherence
+      description: 正式章节中角色的实际表现必须符合characters.json中设计的人物特点（traits、motivation、background等）
+      validation_method: llm_semantic_analysis
+  weight: 1.0
+  is_critical: true
+- check_id: 逻辑硬伤
+  check_name: 无逻辑硬伤
+  dimension_id: content_quality
+  subcategory_id: logical_contradiction
+  quality_tier: basic
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    llm_judge_criteria_file: judge_criteria/content_quality_basic.yaml
+    llm_judge_criteria_section: 逻辑硬伤
+    validation_rules:
+    - rule_id: no_logical_contradiction
+      description: 无前后矛盾（死人复活、判决矛盾、时间线错乱等）
+      validation_method: llm_semantic_analysis
+  weight: 1.0
+  is_critical: true
+- check_id: 语言纯净性
+  check_name: 无不合理的多语言混用
+  dimension_id: content_quality
+  subcategory_id: language_purity
+  quality_tier: basic
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    llm_judge_criteria_file: judge_criteria/content_quality_basic.yaml
+    llm_judge_criteria_section: 语言纯净性
+    validation_rules:
+    - rule_id: language_purity
+      description: 避免无意义的中英混杂，情节必需（人名、品牌、角色对话）除外
+      validation_method: llm_semantic_analysis
+  weight: 1.0
+  is_critical: true
+- check_id: creative_intent文件存在性
+  check_name: creative_intent.json必须存在
+  dimension_id: business_rule_compliance
+  subcategory_id: output_completeness
+  check_type: entity_attribute_equals
+  params:
+    entity_type: file
+    target_id: workspace/creative_intent.json
+    attribute_key: exists
+    expected_value: true
+  weight: 1.0
+  is_critical: true
+- check_id: characters文件存在性
+  check_name: characters.json必须存在
+  dimension_id: business_rule_compliance
+  subcategory_id: output_completeness
+  check_type: entity_attribute_equals
+  params:
+    entity_type: file
+    target_id: workspace/characters.json
+    attribute_key: exists
+    expected_value: true
+  weight: 1.0
+  is_critical: true
+- check_id: outline文件存在性
+  check_name: outline.json必须存在
+  dimension_id: business_rule_compliance
+  subcategory_id: output_completeness
+  check_type: entity_attribute_equals
+  params:
+    entity_type: file
+    target_id: workspace/outline.json
+    attribute_key: exists
+    expected_value: true
+  weight: 1.0
+  is_critical: true
+- check_id: chapters目录存在性
+  check_name: chapters/目录必须存在且有章节文件
+  dimension_id: business_rule_compliance
+  subcategory_id: output_completeness
+  check_type: entity_attribute_equals
+  params:
+    entity_type: file
+    target_id: workspace/chapters/
+    attribute_key: exists
+    expected_value: true
+  weight: 1.0
+  is_critical: true
+- check_id: 情节推进
+  check_name: 章节情节推进质量
+  dimension_id: content_quality
+  subcategory_id: plot_progression
+  quality_tier: basic
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    llm_judge_criteria_file: judge_criteria/content_quality_basic.yaml
+    llm_judge_criteria_section: 情节推进
+    validation_rules:
+    - rule_id: plot_event_density
+      description: 章节必须包含足够的具体故事事件，避免纯对话或纯内心独白
+      validation_method: llm_semantic_analysis
+  weight: 1.0
+  is_critical: true
+- check_id: 完整叙事文本
+  check_name: 章节内容必须是完整正文而非大纲
+  dimension_id: content_quality
+  subcategory_id: full_narrative_content
+  quality_tier: basic
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    llm_judge_criteria_file: judge_criteria/content_quality_basic.yaml
+    llm_judge_criteria_section: 完整叙事文本
+    validation_rules:
+    - rule_id: narrative_vs_outline
+      description: 章节内容必须是完整的小说正文（有场景、对话、动作细节），而非事件罗列的简略大纲
+      validation_method: llm_semantic_analysis
+  weight: 1.0
+  is_critical: true
+- check_id: 反复结局
+  check_name: 不能出现多次结局标记（全文完/全书完/后记）
+  dimension_id: content_quality
+  subcategory_id: repeated_endings
+  quality_tier: basic
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    llm_judge_criteria_file: judge_criteria/content_quality_basic.yaml
+    llm_judge_criteria_section: 反复结局
+    validation_rules:
+    - rule_id: single_ending_only
+      description: 故事只能有一个结局，不能出现多次"全文完/全书完/后记"标记
+      validation_method: llm_semantic_analysis
+  weight: 1.0
+  is_critical: true
+- check_id: workspace文件规范
+  check_name: workspace中不能有白名单之外的文件
+  dimension_id: business_rule_compliance
+  subcategory_id: workspace_file_compliance
+  quality_tier: basic
+  check_type: file_whitelist_check
+  params:
+    analysis_target: workspace/
+    required_files:
+    - creative_intent.json
+    - characters.json
+    - outline.json
+    - writing_log.md
+    - chapters/
+    - .hitl_context.json
+  weight: 1.0
+  is_critical: true
+- check_id: 叙事调性匹配
+  check_name: 文笔风格必须与题材类型匹配
+  dimension_id: content_quality
+  subcategory_id: narrative_tone_match
+  quality_tier: basic
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md + creative_intent.json
+    llm_judge_criteria_file: judge_criteria/content_quality_basic.yaml
+    llm_judge_criteria_section: 叙事调性匹配
+    validation_rules:
+    - rule_id: narrative_tone_match
+      description: 文笔风格、叙事语气、修辞手法、节奏感必须与题材类型匹配，不能画风错位（如烧脑文写成言情调）
+      validation_method: llm_semantic_analysis
+  weight: 1.0
+  is_critical: true
+- check_id: 后期章节跑偏
+  check_name: 后期章节不能跑偏写非正文内容（作者感想、读者互动、番外预告等）
+  dimension_id: content_quality
+  subcategory_id: late_stage_digression
+  quality_tier: basic
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/
+    llm_judge_criteria_file: judge_criteria/content_quality_basic.yaml
+    llm_judge_criteria_section: 后期章节跑偏
+    validation_rules:
+    - rule_id: stay_on_narrative
+      description: chapters中所有章节都应是故事正文，不能写作者感想、读者互动、番外预告、角色问答等；后期章节长度不能异常萎缩
+      validation_method: llm_semantic_analysis
+  weight: 1.0
+  is_critical: true
+- check_id: 角色大纲规划完整性
+  check_name: 设计的主要角色必须在大纲中规划
+  dimension_id: content_quality
+  subcategory_id: character_presence_in_outline
+  quality_tier: basic
+  check_type: entity_attribute_equals
+  params:
+    entity_type: file
+    target_id: workspace/characters.json + workspace/outline.json
+    attribute_key: main_characters_in_outline
+    expected_value: true
+  weight: 1.0
+  is_critical: true
+- check_id: 角色正文出场完整性
+  check_name: 设计的主要角色必须在正文中出现
+  dimension_id: content_quality
+  subcategory_id: character_presence_in_chapters
+  quality_tier: basic
+  check_type: entity_attribute_equals
+  params:
+    entity_type: file
+    target_id: workspace/characters.json + workspace/chapters/
+    attribute_key: main_characters_in_chapters
+    expected_value: true
+  weight: 1.0
+  is_critical: true
+- check_id: writing_log文件创建
+  check_name: 必须创建writing_log.md记录创作进度
+  dimension_id: memory_management
+  subcategory_id: log_file_creation
+  check_type: entity_attribute_equals
+  params:
+    entity_type: file
+    target_id: workspace/writing_log.md
+    attribute_key: exists
+    expected_value: true
+  weight: 1.0
+  is_critical: true
+- check_id: writing_log文件读取
+  check_name: 必须读取writing_log.md了解前文内容
+  dimension_id: memory_management
+  subcategory_id: log_file_usage
+  check_type: tool_called_with_params
+  params:
+    tool_name: read_file
+    expected_params:
+      path: writing_log.md
+  weight: 1.0
+  is_critical: true

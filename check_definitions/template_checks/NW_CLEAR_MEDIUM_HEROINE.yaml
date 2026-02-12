@@ -1,0 +1,50 @@
+template_id: NW_CLEAR_MEDIUM_HEROINE
+checks:
+- check_id: 中篇字数_大女主
+  check_name: 总字数应在80000-250000之间
+  dimension_id: business_rule_compliance
+  subcategory_id: range_constraint
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    validation_rules:
+    - rule_id: total_word_count_medium
+      validation_method: word_count_range
+      expected_range:
+      - 80000
+      - 250000
+  weight: 1.0
+  is_critical: true
+- check_id: 情感交付大女主
+  check_name: 实际内容必须是大女主逆袭向
+  dimension_id: content_quality
+  subcategory_id: emotional_delivery_match
+  quality_tier: basic
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    recipe_source: creative_intent.json::selected_recipe.reaction_strength
+    validation_rules:
+    - rule_id: heroine_tone_delivery
+      description: 配方↗大女主 → 实际内容必须以女主的自我实现、能力成长和逆袭翻盘为核心驱动力，女主是故事的绝对决策中心，靠自身能力（专业技能/智慧/手腕）推动剧情发展
+      validation_method: llm_semantic_analysis
+    llm_judge_criteria_file: judge_criteria/emotional_delivery.yaml
+    llm_judge_criteria_section: 情感交付大女主
+  weight: 1.0
+  is_critical: true
+- check_id: 女主独立性检查
+  check_name: 女主关键成功不能依赖男性角色
+  dimension_id: content_quality
+  subcategory_id: character_design_adherence
+  quality_tier: basic
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    validation_rules:
+    - rule_id: heroine_independence
+      description: 女主的关键决策和核心成功不能依赖男性角色的帮助、拯救或资源提供，男性角色可以存在但不能是女主翻盘的决定性因素
+      validation_method: llm_semantic_analysis
+    llm_judge_criteria_file: judge_criteria/emotional_delivery.yaml
+    llm_judge_criteria_section: 女主独立性检查
+  weight: 1.0
+  is_critical: false

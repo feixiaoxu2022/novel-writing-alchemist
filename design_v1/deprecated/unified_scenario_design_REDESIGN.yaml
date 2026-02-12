@@ -1,0 +1,392 @@
+user_need_templates:
+- need_template_id: NW_CLEAR_SHORT_SWEET
+  template_name: 清晰灵感-短篇-甜爽向
+  description: '用户有清晰的创作框架，明确要求甜爽向/爽文/不虐
+
+    Agent需要：识别清晰要素 → 匹配↗反应强度配方 → 创作15000-40000字甜爽短篇
+
+    '
+  clarity: clear
+  word_count: short
+  tone: sweet
+  query_pool_id: NW_CLEAR_SHORT_SWEET
+  query_pool_file: design_v1/query_pools.yaml
+  user_simulator_prompt: "你是一个想要创作甜爽向短篇小说(15000-40000字)的用户，已经有了清晰的灵感。\n\n**你的核心诉求**：\n- 希望故事是甜爽向的（主角顺风顺水、情感甜美、不要虐心）\n- 篇幅15000-40000字\n- 已经在首轮消息中明确表达了\"不要太虐\"、\"希望甜\"等要求\n\n**HITL交互行为指南**：\n\n1. **配方选择阶段（stage=配方选择）**：\n   - 如果Agent提供的配方中reaction_strength是↗（甜爽向），选择它\n   - 如果只有↘（虐心向）的配方，明确表示\"这个太虐了，有没有甜一点的\"\n   - 用简短自然的话回应，如\"选A吧\"、\"B方案不错\"\n\n2. **写作准备确认阶段（stage=写作准备确认）**：\n   - 查看Agent展示的人物设定和大纲\n   - 如果没有明显的虐心元素，表示满意，如\"人设不错，继续吧\"\n   - 如果发现有虐心迹象，提醒\"记得不要太虐哦\"\n\n**STOP时机**：\n- 在Agent开始实际创作章节后，简单确认开始即可STOP\n- 如\"好的，那你继续写吧\"\n\n**语气风格**：\n- 简短自然，像真实用户聊天\n- 不要过度啰嗦或过度专业\n- 避免\"非常感谢\"、\"辛苦了\"等客套话（除非真的很满意）\n"
+  check_list:
+  - check_id: check_01_配方选择交互
+    check_name: 配方选择阶段HITL调用
+    dimension_id: interaction_completeness
+    subcategory_id: confirmation_nodes
+    check_type: tool_called_with_params
+    params:
+      tool_name: request_human_review
+      required_params:
+        stage: 配方选择
+        type: question
+    weight: 1.0
+    is_critical: true
+  - check_id: check_02_写作准备确认
+    check_name: 写作准备阶段HITL调用
+    dimension_id: interaction_completeness
+    subcategory_id: confirmation_nodes
+    check_type: tool_called_with_params
+    params:
+      tool_name: request_human_review
+      required_params:
+        stage: 写作准备确认
+        type: confirmation
+    weight: 1.0
+    is_critical: true
+  - check_id: check_03_必需文件存在
+    check_name: 必需文件存在性
+    dimension_id: format_compliance
+    subcategory_id: structural_integrity
+    check_type: entity_attribute_equals
+    params:
+      workspace_path: .
+      required_files:
+      - creative_intent.json
+      - characters.json
+      - outline.json
+      - chapters/
+    weight: 1.0
+    is_critical: true
+  - check_id: check_04_反应强度为甜爽
+    check_name: reaction_strength必须为↗（甜爽向）
+    dimension_id: business_rule_compliance
+    subcategory_id: emotional_tone_constraint
+    check_type: entity_attribute_equals
+    params:
+      file_path: creative_intent.json
+      field: selected_recipe.reaction_strength
+      expected_value: ↗
+    weight: 1.0
+    is_critical: true
+  - check_id: check_05_避雷红线包含虐心元素
+    check_name: forbidden_elements必须包含虐心/悲剧/BE相关
+    dimension_id: business_rule_compliance
+    subcategory_id: emotional_tone_constraint
+    check_type: semantic_check
+    params:
+      analysis_target: creative_intent.json
+      validation_rules:
+      - rule_id: forbidden_contains_angsty_elements
+        description: sweet类型的forbidden_elements必须包含虐心/悲剧/BE等相关元素
+        validation_method: llm_semantic_analysis
+        validation_keywords:
+        - 虐心
+        - 悲剧
+        - BE
+        - 主角死亡
+        - 爱而不得
+        - 刀
+        - 受难
+    weight: 1.0
+    is_critical: true
+  - check_id: check_06_短篇字数
+    check_name: 总字数应在15000-40000之间
+    dimension_id: business_rule_compliance
+    subcategory_id: word_count_constraint
+    check_type: semantic_check
+    params:
+      analysis_target: chapters/
+      validation_rules:
+      - rule_id: total_word_count_short
+        description: 统计所有章节总字数
+        validation_method: word_count_range
+        expected_range:
+        - 15000
+        - 40000
+    weight: 1.0
+    is_critical: true
+  - check_id: check_07_情感交付为甜爽
+    check_name: 实际内容必须是甜爽向，不能有虐心情节
+    dimension_id: content_quality
+    subcategory_id: emotional_delivery_match
+    quality_tier: basic
+    check_type: semantic_check
+    params:
+      analysis_target: chapters/
+      recipe_source: creative_intent.json::selected_recipe.reaction_strength
+      validation_rules:
+      - rule_id: sweet_tone_delivery
+        description: '配方↗甜爽 → 实际内容必须是：
+
+          - 主角顺风顺水或化险为夷
+
+          - 情感甜美，双向奔赴
+
+          - 反转爽快，敌人自爆
+
+          - 无虐心情节（主角受难、爱而不得、悲剧氛围）
+
+          '
+        validation_method: llm_semantic_analysis
+        validation_examples:
+        - positive: 主角被陷害但很快翻盘，敌人自作自受
+        - positive: 男女主误会后快速和解，感情升温
+        - negative: 主角各种受挫，长期压抑
+        - negative: 感情虐心，求而不得
+    weight: 1.0
+    is_critical: true
+- need_template_id: NW_CLEAR_SHORT_ANGSTY
+  template_name: 清晰灵感-短篇-虐心向
+  clarity: clear
+  word_count: short
+  tone: angsty
+  query_pool_id: NW_CLEAR_SHORT_ANGSTY
+  query_pool_file: design_v1/query_pools.yaml
+  user_simulator_prompt: '你是想创作虐心向短篇(15000-40000字)的用户,期待虐心情节和悲剧氛围。
+
+    行为：选择↘配方,接受冲突尖锐设定,开始创作后STOP。
+
+    '
+  check_list:
+  - check_id: check_01_交互完整性
+    dimension_id: interaction_completeness
+    subcategory_id: confirmation_nodes
+    check_type: tool_called_with_params
+    params:
+      tool_name: request_human_review
+      required_params:
+        stage: 配方选择
+        type: question
+    weight: 1.0
+    is_critical: true
+  - check_id: check_02_反应强度虐心
+    dimension_id: business_rule_compliance
+    subcategory_id: emotional_tone_constraint
+    check_type: entity_attribute_equals
+    params:
+      file_path: creative_intent.json
+      field: selected_recipe.reaction_strength
+      expected_value: ↘
+    weight: 1.0
+    is_critical: true
+  - check_id: check_03_短篇字数
+    dimension_id: business_rule_compliance
+    subcategory_id: word_count_constraint
+    check_type: semantic_check
+    params:
+      analysis_target: chapters/
+      validation_rules:
+      - rule_id: total_word_count_short
+        validation_method: word_count_range
+        expected_range:
+        - 15000
+        - 40000
+    weight: 1.0
+    is_critical: true
+- need_template_id: NW_CLEAR_MEDIUM_ANGSTY
+  template_name: 清晰灵感-中篇-虐心向
+  clarity: clear
+  word_count: medium
+  tone: angsty
+  query_pool_id: NW_CLEAR_MEDIUM_ANGSTY
+  query_pool_file: design_v1/query_pools.yaml
+  user_simulator_prompt: '你是想创作虐心中篇(80000-250000字)的用户,期待情感冲击。
+
+    '
+  check_list:
+  - check_id: check_01_反应强度虐心
+    dimension_id: business_rule_compliance
+    check_type: entity_attribute_equals
+    params:
+      file_path: creative_intent.json
+      field: selected_recipe.reaction_strength
+      expected_value: ↘
+    weight: 1.0
+    is_critical: true
+  - check_id: check_02_中篇字数
+    dimension_id: business_rule_compliance
+    check_type: semantic_check
+    params:
+      analysis_target: chapters/
+      validation_rules:
+      - rule_id: total_word_count_medium
+        validation_method: word_count_range
+        expected_range:
+        - 80000
+        - 250000
+    weight: 1.0
+    is_critical: true
+- need_template_id: NW_CLEAR_MEDIUM_SUSPENSE
+  template_name: 清晰灵感-中篇-烧脑悬疑
+  clarity: clear
+  word_count: medium
+  tone: suspense
+  query_pool_id: NW_CLEAR_MEDIUM_SUSPENSE
+  query_pool_file: design_v1/query_pools.yaml
+  user_simulator_prompt: '你是想创作烧脑中篇(80000-250000字)的用户,追求悬念和反转。
+
+    '
+  check_list:
+  - check_id: check_01_反应强度烧脑
+    dimension_id: business_rule_compliance
+    check_type: entity_attribute_equals
+    params:
+      file_path: creative_intent.json
+      field: selected_recipe.reaction_strength
+      expected_value: ✷
+    weight: 1.0
+    is_critical: true
+  - check_id: check_02_中篇字数
+    dimension_id: business_rule_compliance
+    check_type: semantic_check
+    params:
+      analysis_target: chapters/
+      validation_rules:
+      - rule_id: total_word_count_medium
+        validation_method: word_count_range
+        expected_range:
+        - 80000
+        - 250000
+    weight: 1.0
+    is_critical: true
+- need_template_id: NW_IP_MEDIUM_NEUTRAL
+  template_name: IP改编-中篇-中性
+  clarity: clear
+  word_count: medium
+  tone: neutral
+  query_pool_id: NW_IP_MEDIUM_NEUTRAL
+  query_pool_file: design_v1/query_pools.yaml
+  user_simulator_prompt: '你是想改编IP为中篇(80000-250000字)的用户,要求保留IP特色并创新。
+
+    '
+  check_list:
+  - check_id: check_01_中篇字数
+    dimension_id: business_rule_compliance
+    check_type: semantic_check
+    params:
+      analysis_target: chapters/
+      validation_rules:
+      - rule_id: total_word_count_medium
+        validation_method: word_count_range
+        expected_range:
+        - 80000
+        - 250000
+    weight: 1.0
+    is_critical: true
+- need_template_id: NW_CLEAR_LONG_ANGSTY
+  template_name: 清晰灵感-长篇-虐心向
+  clarity: clear
+  word_count: long
+  tone: angsty
+  query_pool_id: NW_CLEAR_LONG_ANGSTY
+  query_pool_file: design_v1/query_pools.yaml
+  user_simulator_prompt: '你是想创作虐心长篇(400000-600000字)的用户,期待深度情感冲击和悲剧氛围。
+
+    '
+  check_list:
+  - check_id: check_01_反应强度虐心
+    dimension_id: business_rule_compliance
+    check_type: entity_attribute_equals
+    params:
+      file_path: creative_intent.json
+      field: selected_recipe.reaction_strength
+      expected_value: ↘
+    weight: 1.0
+    is_critical: true
+  - check_id: check_02_长篇字数
+    dimension_id: business_rule_compliance
+    check_type: semantic_check
+    params:
+      analysis_target: chapters/
+      validation_rules:
+      - rule_id: total_word_count_long
+        validation_method: word_count_range
+        expected_range:
+        - 400000
+        - 600000
+    weight: 1.0
+    is_critical: true
+- need_template_id: NW_IP_LONG_NEUTRAL
+  template_name: IP改编-长篇-中性
+  clarity: clear
+  word_count: long
+  tone: neutral
+  query_pool_id: NW_IP_LONG_NEUTRAL
+  query_pool_file: design_v1/query_pools.yaml
+  user_simulator_prompt: '你是想改编IP为长篇(400000-600000字)的用户,要求保留IP特色,深度拓展世界观。
+
+    '
+  check_list:
+  - check_id: check_01_长篇字数
+    dimension_id: business_rule_compliance
+    check_type: semantic_check
+    params:
+      analysis_target: chapters/
+      validation_rules:
+      - rule_id: total_word_count_long
+        validation_method: word_count_range
+        expected_range:
+        - 400000
+        - 600000
+    weight: 1.0
+    is_critical: true
+- need_template_id: NW_IP_ULTRA_LONG_NEUTRAL
+  template_name: IP改编-超长篇-中性
+  clarity: clear
+  word_count: ultra_long
+  tone: neutral
+  query_pool_id: NW_IP_ULTRA_LONG_NEUTRAL
+  query_pool_file: design_v1/query_pools.yaml
+  user_simulator_prompt: '你是想改编IP为超长篇(100万-300万+字)的用户,追求史诗级叙事和复杂世界观构建。
+
+    行为：选择合理配方,确认复杂大纲支撑长篇,开始创作后STOP。
+
+    '
+  check_list:
+  - check_id: check_01_交互完整性
+    dimension_id: interaction_completeness
+    check_type: tool_called_with_params
+    params:
+      tool_name: request_human_review
+      required_params:
+        stage: 配方选择
+        type: question
+    weight: 1.0
+    is_critical: true
+  - check_id: check_02_必需文件含log
+    dimension_id: format_compliance
+    check_type: entity_attribute_equals
+    params:
+      workspace_path: .
+      required_files:
+      - creative_intent.json
+      - characters.json
+      - outline.json
+      - writing_log.md
+      - chapters/
+    weight: 1.0
+    is_critical: true
+  - check_id: check_03_超长篇字数
+    dimension_id: business_rule_compliance
+    subcategory_id: word_count_constraint
+    check_type: semantic_check
+    params:
+      analysis_target: chapters/
+      validation_rules:
+      - rule_id: total_word_count_ultra_long
+        validation_method: word_count_range
+        expected_range:
+        - 1000000
+        - 3000000
+    weight: 1.0
+    is_critical: true
+  - check_id: check_04_世界观支撑质量
+    dimension_id: content_quality
+    subcategory_id: worldbuilding_depth
+    quality_tier: advanced
+    check_type: semantic_check
+    params:
+      analysis_target:
+      - creative_intent.json
+      - chapters/
+      quality_dimensions:
+      - dimension: worldbuilding_depth
+        description: 世界观深度和一致性
+        rubric: 1分=无世界观,3分=有基础世界观,5分=复杂完整的世界观体系
+        pass_threshold: 4.0
+    weight: 1.0
+    is_critical: false

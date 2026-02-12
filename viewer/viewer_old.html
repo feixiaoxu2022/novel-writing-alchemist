@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小说创作Agent评测结果查看器</title>
+    <style>
+        /* 恢复原始浅色样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .header .meta {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: #f8f8f8;
+            border: 1px solid #e0e0e0;
+            font-size: 14px;
+        }
+
+        .meta-item .label {
+            font-weight: 600;
+            color: #666;
+        }
+
+        .meta-item .value {
+            color: #333;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border: 1px solid #ddd;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-color: #a5d6a7;
+        }
+
+        .status-error {
+            background: #ffebee;
+            color: #c62828;
+            border-color: #ef9a9a;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: white;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .tab:hover {
+            background: #f8f8f8;
+        }
+
+        .tab.active {
+            background: #4a90e2;
+            color: white;
+            border-color: #4a90e2;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .conversation {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .message {
+            display: flex;
+            gap: 12px;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            margin-bottom: 10px;
+        }
+
+        .message.user {
+            background: #e3f2fd;
+            border-left: 3px solid #2196F3;
+        }
+
+        .message.assistant {
+            background: #f3e5f5;
+            border-left: 3px solid #9C27B0;
+        }
+
+        .message.system {
+            background: #fff3e0;
+            border-left: 3px solid #FF9800;
+        }
+
+        .message.tool {
+            background: #e8f5e9;
+            border-left: 3px solid #4CAF50;
+        }
+
+        .message-role {
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            padding: 4px 8px;
+            white-space: nowrap;
+            height: fit-content;
+        }
+
+        .message.user .message-role {
+            background: #2196F3;
+            color: white;
+        }
+
+        .message.assistant .message-role {
+            background: #9C27B0;
+            color: white;
+        }
+
+        .message.system .message-role {
+            background: #FF9800;
+            color: white;
+        }
+
+        .message.tool .message-role {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .message-content {
+            flex: 1;
+            color: #333;
+            line-height: 1.8;
+            word-break: break-word;
+        }
+
+        .tool-calls {
+            margin-top: 12px;
+            padding: 12px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 8px;
+            border-left: 4px solid #9C27B0;
+        }
+
+        .tool-call {
+            margin-bottom: 8px;
+        }
+
+        .tool-call .tool-name {
+            font-weight: 600;
+            color: #9C27B0;
+            font-family: 'Monaco', 'Courier New', monospace;
+        }
+
+        .deliverables-container {
+            display: flex;
+            gap: 20px;
+            height: calc(100vh - 300px);
+        }
+
+        .deliverables-sidebar {
+            width: 250px;
+            background: white;
+            border: 1px solid #ddd;
+            padding: 15px;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .deliverables-sidebar h3 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .file-tree {
+            list-style: none;
+        }
+        .folder-tree-item {
+            padding: 6px 8px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #333;
+            border-left: 3px solid transparent;
+            margin: 6px 0 2px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            user-select: none;
+        }
+        .folder-tree-item:hover { background: #f5f5f5; }
+        .folder-icon { width: 16px; }
+        .folder-children { margin-left: 12px; }
+        .folder-collapsed + .folder-children { display: none; }
+
+        .file-tree-item {
+            padding: 6px 8px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #555;
+            border-left: 3px solid transparent;
+            margin-bottom: 2px;
+        }
+
+        .file-tree-item:hover {
+            background: #f5f5f5;
+        }
+
+        .file-tree-item.active {
+            background: #e3f2fd;
+            border-left-color: #4a90e2;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .deliverables-content {
+            flex: 1;
+            overflow-y: auto;
+            background: white;
+            border: 1px solid #ddd;
+            padding: 20px;
+        }
+        .folder-section {
+            margin-bottom: 20px;
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 12px;
+        }
+        .folder-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        .folder-path {
+            font-size: 12px;
+            color: #666;
+            font-weight: 400;
+        }
+
+        .deliverable {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            scroll-margin-top: 20px;
+        }
+
+        .deliverable-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .deliverable-title {
+            font-weight: 700;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .deliverable-type {
+            padding: 4px 10px;
+            background: #4a90e2;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .deliverable-content {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 16px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        /* Markdown 渲染样式（仅用于 .md 内容） */
+        .deliverable-content.markdown {
+            background: #fff;
+            color: #1f2937;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            white-space: normal;
+        }
+        .markdown-body h1, .markdown-body h2, .markdown-body h3,
+        .markdown-body h4, .markdown-body h5, .markdown-body h6 {
+            margin: 1.2em 0 .6em;
+            line-height: 1.25;
+        }
+        .markdown-body h1 { font-size: 1.8em; }
+        .markdown-body h2 { font-size: 1.5em; }
+        .markdown-body h3 { font-size: 1.3em; }
+        .markdown-body p { margin: .6em 0; }
+        .markdown-body ul, .markdown-body ol { padding-left: 1.4em; margin: .6em 0; }
+        .markdown-body blockquote {
+            border-left: 4px solid #e5e7eb;
+            padding: .4em .8em;
+            background: #f9fafb;
+            color: #374151;
+            margin: .8em 0;
+        }
+        .markdown-body code {
+            background: #f3f4f6;
+            padding: .12em .32em;
+            border-radius: 4px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.95em;
+        }
+        .markdown-body pre {
+            background: #0b1220;
+            color: #e5e7eb;
+            padding: 12px 14px;
+            border-radius: 8px;
+            overflow: auto;
+            line-height: 1.5;
+        }
+        .markdown-body table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: .8em 0;
+        }
+        .markdown-body th, .markdown-body td {
+            border: 1px solid #e5e7eb;
+            padding: 8px 10px;
+            text-align: left;
+        }
+        .deliverable-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        .deliverable-content::-webkit-scrollbar-track {
+            background: #e0e0e0;
+            border-radius: 4px;
+        }
+        .deliverable-content::-webkit-scrollbar-thumb {
+            background: #999;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: #4a90e2;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #3a7bc8;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+        }
+
+        .json-viewer {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 12px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .json-key {
+            color: #9cdcfe;
+        }
+
+        .json-string {
+            color: #ce9178;
+        }
+
+        .json-number {
+            color: #b5cea8;
+        }
+
+        .json-boolean {
+            color: #569cd6;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: #666;
+            font-size: 16px;
+        }
+
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 20px;
+            border: 2px solid #ef9a9a;
+        }
+
+        .expand-btn {
+            background: none;
+            border: 1px solid #4a90e2;
+            color: #4a90e2;
+            cursor: pointer;
+            font-weight: 600;
+            padding: 6px 12px;
+            margin-top: 8px;
+        }
+        .expand-btn:hover {
+            background: #e3f2fd;
+        }
+
+        .collapsed {
+            max-height: 100px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .collapsed::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: linear-gradient(transparent, white);
+        }
+
+        .file-icon {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .selector {
+            margin-bottom: 20px;
+            background: white;
+            padding: 15px;
+            border: 1px solid #ddd;
+        }
+
+        .selector label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .selector select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+            background: white;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .tabs {
+                flex-wrap: wrap;
+            }
+
+            .tab {
+                flex: 1;
+                min-width: 120px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="selector">
+            <label for="resultSelector">选择测试结果目录：</label>
+            <select id="resultSelector">
+                <option value="">加载中...</option>
+            </select>
+        </div>
+
+        <div id="app">
+            <div class="loading">正在加载测试结果...</div>
+        </div>
+    </div>
+
+    <!-- Markdown 与 XSS 过滤库（内置，离线可用） -->
+    <script>
+    /*! DOMPurify 3.0.8 | (c) Cure53 and other contributors | Released under the Apache license 2.0 and Mozilla Public License 2.0 | github.com/cure53/DOMPurify */
+    (function(){function x(e){return(typeof e==="object"||typeof e==="function")&&typeof e.nodeType!=="number"}function B(e){var t=w?b.cloneNode():m.createElement("template");if(t.innerHTML=e.trim(),t.content)return t.content;var n=m.createDocumentFragment(),o=m.createElement("div");for(o.innerHTML=e.trim();o.firstChild;)n.appendChild(o.firstChild);return n}function C(e){var t=e.nodeType;if(t===1){var n=e.nodeName.toLowerCase();if(u&&u[n])return;var o=e.attributes;for(var r=o.length-1;r>=0;r--){var a=o[r].name.toLowerCase();if(g&&g[n]&&g[n][a])continue;var i=o[r].value;(!k[a]||E[a]&&E[a](i)===!1)&&e.removeAttribute(o[r].name)}}var s=e.firstChild;for(;s;)C(s),s=s.nextSibling}function P(e){var t=B("<template></template>");return t=e.cloneNode(!0),t}function F(e){if(!e)return e;var t=P(e);return C(t),t}function L(e){if(!e||typeof e!=="string")return"";var t=B(e);return C(t),T(t)}function T(e){var t=m.createElement("div");return t.appendChild(e.cloneNode(!0)),t.innerHTML}var m=typeof window!=="undefined"?window.document:void 0;if(!m)return;var b=m.createElement("template"),w="content"in b,k={src:1,href:1,xlink:1,action:1,formaction:1},E={src:function(e){return e.indexOf("javascript:")!==0},href:function(e){return e.indexOf("javascript:")!==0}},u=null,g=null;var D={sanitize:function(e){return L(e)},setConfig:function(e){e&&(u=e.FORBID_TAGS||u,g=e.FORBID_ATTR||g)}};window.DOMPurify=D})(); 
+    </script>
+    <script>
+    /*! marked 11.2.0 - a markdown parser - https://marked.js.org - MIT License */
+    (function(e){function t(e){return e instanceof t?e:this instanceof t?void(this.tokens=e):new t(e)}function n(e){return e instanceof n?e:this instanceof n?void(this.tokens=e):new n(e)}function r(e){return e instanceof r?e:this instanceof r?void(this.options=e||{}):new r(e)}function o(e,t){var n="";for(var r in e)n+=(t?t:"")+r+": "+e[r]+"\n";return n}function a(e){return e.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")}function i(e){return e}function s(e){return e}function l(e){return e}function c(e){return e}function u(e){return e}function f(e){return e}function p(e){return e}function d(e){return e}function h(e){return e}function g(e){return e}function m(e){return e}function y(e){return e}function v(e){return e}function x(e){return e}function b(e){return e}function k(e){return e}function w(e){return e}function S(e){return e}var E={gfm:!0,breaks:!0,headerIds:!1,mangle:!1};function C(e){return e}var M={options:E,setOptions:function(e){return this.options=Object.assign({},this.options,e||{}),this},parse:function(e){if(!e)return"";var t=e.replace(/\r\n|\r/g,"\n");return function(e){var t=e.split("\n"),n="",r=!1;for(var o=0;o<t.length;o++){var a=t[o];if(/^#{1,6}\s/.test(a)){var i=a.match(/^#{1,6}/)[0].length;n+="<h"+i+">"+a.slice(i+1).trim()+"</h"+i+">\n";continue}if(/^>\s?/.test(a)){n+=r?"":"<blockquote>\n",n+="<p>"+a.replace(/^>\s?/,"")+"</p>\n",r=!0;continue}if(/^```/.test(a)){var s=[];o++;for(;o<t.length&&!/^```/.test(t[o]);)s.push(a=t[o++]);n+="<pre><code>"+a(e=s.join("\n"))+"</code></pre>\n";continue}if(/^\s*[-*+]\s+/.test(a)){var l=[];for(;o<t.length&&/^\s*[-*+]\s+/.test(t[o]);)l.push(t[o++].replace(/^\s*[-*+]\s+/,"")),o--;n+="<ul>\n"+l.map(function(e){return"<li>"+e+"</li>\n"}).join("")+"</ul>\n";continue}if(/^\s*\d+\.\s+/.test(a)){var c=[];for(;o<t.length&&/^\s*\d+\.\s+/.test(t[o]);)c.push(t[o++].replace(/^\s*\d+\.\s+/,"")),o--;n+="<ol>\n"+c.map(function(e){return"<li>"+e+"</li>\n"}).join("")+"</ol>\n";continue}if(a.trim().length===0){n+="\n";continue}var u=a.replace(/`([^`]+)`/g,function(e,t){return"<code>"+t+"</code>"}).replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>").replace(/\*([^*]+)\*/g,"<em>$1</em>").replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');n+="<p>"+u+"</p>\n"}return n}(t)}};var L=M;function P(e){return L.setOptions(E).parse(e)}e.marked={parse:P,options:E}})("undefined"!=typeof window?window:this);
+    </script>
+    <script>
+      // Markdown 渲染函数（DOMPurify + marked）
+      function renderMarkdown(mdText) {
+        try {
+          const html = window.marked.parse(mdText || "");
+          return window.DOMPurify.sanitize(html);
+        } catch (e) {
+          return '<pre class="markdown-body">' + (mdText || '') + '</pre>';
+        }
+      }
+    </script>
+
+    <script>
+        const TEST_RESULTS_BASE = 'test_results';
+        let currentData = null;
+
+        // 加载可用的结果目录
+        async function loadResultDirectories() {
+            try {
+                const response = await fetch('/api/list-results');
+                const dirs = await response.json();
+
+                const selector = document.getElementById('resultSelector');
+                selector.innerHTML = dirs.map(dir =>
+                    `<option value="${dir}">${dir}</option>`
+                ).join('');
+
+                if (dirs.length > 0) {
+                    loadTestResult(dirs[0]);
+                }
+            } catch (error) {
+                console.error('加载结果目录失败:', error);
+                document.getElementById('app').innerHTML = `
+                    <div class="error">
+                        <h3>⚠️ 无法加载结果目录列表</h3>
+                        <p>请确保PHP服务器正在运行</p>
+                        <p>错误信息: ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // 加载测试结果
+        async function loadTestResult(dirName) {
+            try {
+                const response = await fetch(`/api/get-result?dir=${dirName}`);
+                const data = await response.json();
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                currentData = data;
+                renderResult(data);
+            } catch (error) {
+                console.error('加载测试结果失败:', error);
+                document.getElementById('app').innerHTML = `
+                    <div class="error">
+                        <h3>❌ 加载失败</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // 渲染结果
+        function renderResult(data) {
+            const result = data.result;
+            const deliverables = data.deliverables || {};
+
+            const app = document.getElementById('app');
+            app.innerHTML = `
+                <div class="header">
+                    <h1>📚 ${result.query}</h1>
+                    <div class="meta">
+                        <div class="meta-item">
+                            <span class="label">样本ID:</span>
+                            <span class="value">${result.data_id}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="label">模型:</span>
+                            <span class="value">${result.model}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="label">执行时间:</span>
+                            <span class="value">${result.execution_time.toFixed(2)}秒</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="label">状态:</span>
+                            <span class="status-badge ${result.execution_status === 'success' ? 'status-success' : 'status-error'}">
+                                ${result.execution_status}
+                            </span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="label">对话轮数:</span>
+                            <span class="value">${result.conversation_history.filter(m => m.role === 'user').length}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="label">工具调用:</span>
+                            <span class="value">${result.tool_call_list.length}次</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('overview')">📊 概览</button>
+                    <button class="tab" onclick="switchTab('conversation')">💬 对话轨迹</button>
+                    <button class="tab" onclick="switchTab('deliverables')">📦 交付物</button>
+                    <button class="tab" onclick="switchTab('tools')">🔧 工具调用</button>
+                    <button class="tab" onclick="switchTab('raw')">🔍 原始数据</button>
+                </div>
+
+                <div id="tab-overview" class="tab-content active">
+                    ${renderOverview(result)}
+                </div>
+
+                <div id="tab-conversation" class="tab-content">
+                    ${renderConversation(result.conversation_history)}
+                </div>
+
+                <div id="tab-deliverables" class="tab-content">
+                    ${renderDeliverables(deliverables)}
+                </div>
+
+                <div id="tab-tools" class="tab-content">
+                    ${renderTools(result.tool_call_list)}
+                </div>
+
+                <div id="tab-raw" class="tab-content">
+                    ${renderRaw(result)}
+                </div>
+            `;
+
+            // 设置滚动跟踪（延迟执行，确保DOM已更新）
+            setTimeout(() => {
+                setupDeliverableScrollTracking();
+                // 默认激活第一个文件
+                const firstFile = document.querySelector('.file-tree-item');
+                if (firstFile) {
+                    firstFile.classList.add('active');
+                }
+            }, 100);
+        }
+
+        function renderOverview(result) {
+            return `
+                <div class="card">
+                    <div class="card-title">统计信息</div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value">${result.conversation_history.length}</div>
+                            <div class="stat-label">总消息数</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${result.conversation_history.filter(m => m.role === 'user').length}</div>
+                            <div class="stat-label">用户消息</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${result.conversation_history.filter(m => m.role === 'assistant').length}</div>
+                            <div class="stat-label">AI回复</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${result.tool_call_list.length}</div>
+                            <div class="stat-label">工具调用</div>
+                        </div>
+                    </div>
+                </div>
+
+                    <div class="card">
+                    <div class="card-title">任务描述</div>
+                    <div style="padding: 16px; background: #f8f9fa; border-radius: 8px; line-height: 1.8;">
+                        ${result.query}
+                    </div>
+                </div>
+
+                    <div class="card">
+                    <div class="card-title">最终回复</div>
+                    <div style="padding: 16px; background: #f3e5f5; border-radius: 8px; line-height: 1.8;">
+                        ${result.response}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderConversation(history) {
+            return `
+                <div class="card">
+                    <div class="card-title">完整对话轨迹</div>
+                    <div class="conversation">
+                        ${history.map((msg, idx) => renderMessage(msg, idx)).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderMessage(msg, idx) {
+            const role = msg.role;
+            let content = msg.content || '';
+
+            // 处理content
+            if (typeof content === 'object') {
+                content = JSON.stringify(content, null, 2);
+            }
+
+            // 截断过长的内容
+            const isLong = content.length > 500;
+            const displayContent = isLong ? content.substring(0, 500) + '...' : content;
+            const contentId = `msg-${idx}`;
+
+            let toolCallsHtml = '';
+            if (msg.tool_calls && msg.tool_calls.length > 0) {
+                toolCallsHtml = `
+                    <div class="tool-calls">
+                        <strong>🔧 工具调用:</strong>
+                        ${msg.tool_calls.map(tc => `
+                            <div class="tool-call">
+                                <span class="tool-name">${tc.function.name}</span>
+                                <div style="margin-left: 16px; font-size: 12px; color: #666;">
+                                    参数: <code>${tc.function.arguments}</code>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="message ${role}">
+                    <div class="message-role">${role}</div>
+                    <div class="message-content">
+                        <div id="${contentId}" ${isLong ? 'class="collapsed"' : ''}>
+                            ${escapeHtml(displayContent)}
+                        </div>
+                        ${isLong ? `<button class="expand-btn" onclick="toggleExpand('${contentId}')">展开全部</button>` : ''}
+                        ${toolCallsHtml}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderDeliverables(deliverables) {
+            const files = Object.keys(deliverables);
+
+            if (files.length === 0) {
+                return `
+                    <div class="card">
+                        <div class="card-title">交付物</div>
+                        <p style="color: #999; text-align: center; padding: 40px;">暂无交付物</p>
+                    </div>
+                `;
+            }
+
+            // 构建目录树结构与文件ID映射
+            const fileIdMap = {};
+            const treeRoot = {name: '', type: 'folder', children: {}};
+            files.forEach((file, idx) => {
+                fileIdMap[file] = `file-${idx}`;
+                const parts = file.split('/');
+                let node = treeRoot;
+                parts.forEach((part, i) => {
+                    const isFile = i === parts.length - 1;
+                    if (isFile) {
+                        node.children[part] = {name: part, type: 'file', path: file, id: fileIdMap[file]};
+                    } else {
+                        node.children[part] = node.children[part] || {name: part, type: 'folder', children: {}};
+                        node = node.children[part];
+                    }
+                });
+            });
+
+            // 递归渲染目录树（左侧）
+            let folderSeq = 0;
+            function renderTree(node, parentId) {
+                let html = '';
+                const entries = Object.entries(node.children).sort((a,b) => {
+                    const A=a[1].type, B=b[1].type;
+                    if (A!==B) return A==='folder'?-1:1;
+                    return a[0].localeCompare(b[0]);
+                });
+                entries.forEach(([name, child]) => {
+                    if (child.type === 'folder') {
+                        const fid = `folder-${folderSeq++}`;
+                        html += `
+                          <div class="folder-tree-item" data-folder-id="${fid}" onclick="toggleFolder('${fid}')">
+                            <span class="folder-icon">📁</span>
+                            <span>${name}</span>
+                          </div>
+                          <div class="folder-children" id="${fid}">
+                            ${renderTree(child, fid)}
+                          </div>
+                        `;
+                    } else {
+                        const fileType = child.path.split('.').pop();
+                        html += `
+                          <div class="file-tree-item" data-file-id="${child.id}" onclick="scrollToFile('${child.id}')">
+                            ${getFileIcon(fileType)} ${child.name}
+                          </div>
+                        `;
+                    }
+                });
+                return html;
+            }
+            const fileTreeHtml = renderTree(treeRoot);
+
+            // 按文件夹分组构建内容（右侧）
+            function groupByFolder(paths) {
+                const groups = {};
+                paths.forEach(p => {
+                    const folder = p.includes('/') ? p.split('/').slice(0, -1).join('/') : '';
+                    groups[folder] = groups[folder] || [];
+                    groups[folder].push(p);
+                });
+                return groups;
+            }
+            const groups = groupByFolder(files);
+            const sortedFolders = Object.keys(groups).sort((a,b)=>a.localeCompare(b));
+
+            const fileContentsHtml = sortedFolders.map(folderPath => {
+                const sectionFiles = groups[folderPath].sort((a,b)=>a.localeCompare(b));
+                const folderLabel = folderPath || '根目录';
+                const itemsHtml = sectionFiles.map((file) => {
+                    const content = deliverables[file];
+                    const fileType = file.split('.').pop();
+                    const fileName = file.split('/').pop();
+                    const fileId = fileIdMap[file];
+
+                    let displayContent = content;
+                    if (fileType === 'json') {
+                        try {
+                            displayContent = JSON.stringify(JSON.parse(content), null, 2);
+                        } catch (e) {}
+                    }
+                    const isMarkdown = ['md', 'markdown'].includes(fileType.toLowerCase());
+                    return `
+                        <div class="deliverable" id="${fileId}">
+                            <div class="deliverable-header">
+                                <div class="deliverable-title">
+                                    <span class="file-icon">${getFileIcon(fileType)}</span>
+                                    ${fileName}
+                                </div>
+                                <div class="deliverable-type">${fileType.toUpperCase()}</div>
+                            </div>
+                            ${isMarkdown
+                              ? `<div class="deliverable-content markdown"><div class="markdown-body">${renderMarkdown(displayContent)}</div></div>`
+                              : `<div class="deliverable-content">${escapeHtml(displayContent)}</div>`
+                            }
+                        </div>
+                    `;
+                }).join('');
+                return `
+                  <div class="folder-section">
+                    <div class="folder-header">
+                      <span>📁 ${folderLabel === '' ? '根目录' : folderLabel}</span>
+                      <span class="folder-path">${folderLabel === '' ? '/workspace' : '/workspace/' + folderLabel}</span>
+                    </div>
+                    ${itemsHtml}
+                  </div>
+                `;
+            }).join('');
+
+            return `
+                <div class="card" style="padding: 0; overflow: hidden;">
+                    <div style="padding: 20px; border-bottom: 1px solid #ddd;">
+                        <div class="card-title" style="margin: 0; padding: 0; border: none;">交付物 (${files.length}个文件)</div>
+                    </div>
+                    <div class="deliverables-container">
+                        <div class="deliverables-sidebar">
+                            <h3>文件列表</h3>
+                            <div class="file-tree">
+                                ${fileTreeHtml}
+                            </div>
+                        </div>
+                        <div class="deliverables-content" id="deliverables-content">
+                            ${fileContentsHtml}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderTools(toolCalls) {
+            return `
+                <div class="card">
+                    <div class="card-title">工具调用记录 (${toolCalls.length}次)</div>
+                    ${toolCalls.map((tc, idx) => `
+                        <div class="deliverable">
+                            <div class="deliverable-header">
+                                <div class="deliverable-title">
+                                    #${idx + 1} ${tc.server_name}::${tc.name}
+                                </div>
+                            </div>
+                            <div style="padding: 12px;">
+                                <div style="margin-bottom: 12px;">
+                                    <strong>📥 参数:</strong>
+                                    <div class="deliverable-content" style="margin-top: 8px;">
+                                        ${escapeHtml(formatJSON(tc.arguments))}
+                                    </div>
+                                </div>
+                                <div>
+                                    <strong>📤 返回:</strong>
+                                    <div class="deliverable-content" style="margin-top: 8px;">
+                                        ${escapeHtml(formatJSON(tc.result))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function renderRaw(result) {
+            return `
+                <div class="card">
+                    <div class="card-title">原始JSON数据</div>
+                    <div class="json-viewer">
+                        ${escapeHtml(JSON.stringify(result, null, 2))}
+                    </div>
+                </div>
+            `;
+        }
+
+        function switchTab(tabName) {
+            // 更新tab按钮状态
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // 更新内容显示
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+        }
+
+        function toggleExpand(id) {
+            const element = document.getElementById(id);
+            const button = element.nextElementSibling;
+
+            if (element.classList.contains('collapsed')) {
+                element.classList.remove('collapsed');
+                button.textContent = '收起';
+            } else {
+                element.classList.add('collapsed');
+                button.textContent = '展开全部';
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function formatJSON(str) {
+            try {
+                const obj = typeof str === 'string' ? JSON.parse(str) : str;
+                return JSON.stringify(obj, null, 2);
+            } catch (e) {
+                return str;
+            }
+        }
+
+        function getFileIcon(type) {
+            const icons = {
+                'json': '📄',
+                'txt': '📝',
+                'md': '📋',
+                'html': '🌐',
+                'js': '⚙️',
+                'css': '🎨'
+            };
+            return icons[type] || '📎';
+        }
+
+        function scrollToFile(fileId) {
+            // 滚动到目标文件
+            const targetElement = document.getElementById(fileId);
+            const contentContainer = document.getElementById('deliverables-content');
+
+            if (targetElement && contentContainer) {
+                const offsetTop = targetElement.offsetTop - contentContainer.offsetTop - 20;
+                contentContainer.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
+                });
+
+                // 更新左侧文件树的激活状态
+                updateActiveFile(fileId);
+            }
+        }
+
+        function toggleFolder(folderId) {
+            const trigger = document.querySelector(`[data-folder-id=\"${folderId}\"]`);
+            const el = document.getElementById(folderId);
+            if (!el) return;
+            if (el.style.display === 'none') {
+                el.style.display = '';
+                if (trigger) trigger.classList.remove('folder-collapsed');
+            } else {
+                el.style.display = 'none';
+                if (trigger) trigger.classList.add('folder-collapsed');
+            }
+        }
+
+        function updateActiveFile(fileId) {
+            // 移除所有激活状态
+            document.querySelectorAll('.file-tree-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // 添加激活状态到当前文件
+            const activeItem = document.querySelector(`.file-tree-item[data-file-id="${fileId}"]`);
+            if (activeItem) {
+                activeItem.classList.add('active');
+            }
+        }
+
+        function setupDeliverableScrollTracking() {
+            const contentContainer = document.getElementById('deliverables-content');
+            if (!contentContainer) return;
+
+            // 监听滚动事件，自动更新左侧激活状态
+            let scrollTimeout;
+            contentContainer.addEventListener('scroll', () => {
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    const deliverables = contentContainer.querySelectorAll('.deliverable');
+                    const containerTop = contentContainer.scrollTop;
+                    const containerHeight = contentContainer.clientHeight;
+
+                    // 找到当前可见区域的第一个文件
+                    for (let deliverable of deliverables) {
+                        const elementTop = deliverable.offsetTop - contentContainer.offsetTop;
+                        const elementBottom = elementTop + deliverable.offsetHeight;
+
+                        if (elementTop <= containerTop + containerHeight / 3 && elementBottom > containerTop) {
+                            updateActiveFile(deliverable.id);
+                            break;
+                        }
+                    }
+                }, 100);
+            });
+        }
+
+        // 初始化
+        document.getElementById('resultSelector').addEventListener('change', (e) => {
+            loadTestResult(e.target.value);
+        });
+
+        loadResultDirectories();
+    </script>
+</body>
+</html>

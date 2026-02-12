@@ -1,0 +1,50 @@
+template_id: NW_CLEAR_MEDIUM_ADVENTURE
+checks:
+- check_id: 中篇字数_冒险
+  check_name: 总字数应在80000-250000之间
+  dimension_id: business_rule_compliance
+  subcategory_id: range_constraint
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    validation_rules:
+    - rule_id: total_word_count_medium
+      validation_method: word_count_range
+      expected_range:
+      - 80000
+      - 250000
+  weight: 1.0
+  is_critical: true
+- check_id: 情感交付冒险
+  check_name: 实际内容必须是热血冒险向
+  dimension_id: content_quality
+  subcategory_id: emotional_delivery_match
+  quality_tier: basic
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    recipe_source: creative_intent.json::selected_recipe.reaction_strength
+    validation_rules:
+    - rule_id: adventure_tone_delivery
+      description: 配方↗热血 → 实际内容必须是热血冒险向（主角面对逆境不退缩、通过努力和团队协作克服挑战、有明确的成长轨迹和蜕变节点），不能是言情向或虐心向
+      validation_method: llm_semantic_analysis
+    llm_judge_criteria_file: judge_criteria/emotional_delivery.yaml
+    llm_judge_criteria_section: 情感交付冒险
+  weight: 1.0
+  is_critical: true
+- check_id: 非恋爱主线检查
+  check_name: 核心关系线不能是恋爱
+  dimension_id: content_quality
+  subcategory_id: emotional_delivery_match
+  quality_tier: basic
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    validation_rules:
+    - rule_id: non_romance_main_plot
+      description: 核心关系线必须是非恋爱羁绊（战友/搭档/师徒/兄弟/对手），恋爱不能成为故事的主要驱动力或情感重心
+      validation_method: llm_semantic_analysis
+    llm_judge_criteria_file: judge_criteria/emotional_delivery.yaml
+    llm_judge_criteria_section: 非恋爱主线检查
+  weight: 1.0
+  is_critical: false

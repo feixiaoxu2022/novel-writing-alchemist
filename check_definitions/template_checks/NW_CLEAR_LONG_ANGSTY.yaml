@@ -1,0 +1,57 @@
+template_id: NW_CLEAR_LONG_ANGSTY
+checks:
+- check_id: writing_log文件创建
+  check_name: 必须创建writing_log.md记录创作进度
+  dimension_id: memory_management
+  subcategory_id: log_file_creation
+  check_type: entity_attribute_equals
+  params:
+    entity_type: file
+    target_id: workspace/writing_log.md
+    attribute_key: exists
+    expected_value: true
+  weight: 1.0
+  is_critical: true
+- check_id: writing_log文件读取
+  check_name: 必须读取writing_log.md了解前文内容
+  dimension_id: memory_management
+  subcategory_id: log_file_usage
+  check_type: tool_called_with_params
+  params:
+    tool_name: read_file
+    expected_params:
+      path: writing_log.md
+  weight: 1.0
+  is_critical: false
+- check_id: 长篇字数
+  check_name: 总字数应在400000-600000之间
+  dimension_id: business_rule_compliance
+  subcategory_id: range_constraint
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    validation_rules:
+    - rule_id: total_word_count_long
+      validation_method: word_count_range
+      expected_range:
+      - 400000
+      - 600000
+  weight: 1.0
+  is_critical: true
+- check_id: 情感交付虐心
+  check_name: 实际内容必须是虐心向
+  dimension_id: content_quality
+  subcategory_id: emotional_delivery_match
+  quality_tier: basic
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    recipe_source: creative_intent.json::selected_recipe.reaction_strength
+    llm_judge_criteria_file: judge_criteria/emotional_delivery.yaml
+    llm_judge_criteria_section: 情感交付虐心
+    validation_rules:
+    - rule_id: angsty_tone_delivery
+      description: 配方↘虐心 → 实际内容必须是虐心向（主角受难、爱而不得、悲剧氛围），不能有甜爽情节
+      validation_method: llm_semantic_analysis
+  weight: 1.0
+  is_critical: true

@@ -1,0 +1,45 @@
+template_id: NW_CLEAR_SHORT_SWEET
+checks:
+- check_id: 短篇字数
+  check_name: 总字数应在15000-40000之间
+  dimension_id: business_rule_compliance
+  subcategory_id: range_constraint
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    validation_rules:
+    - rule_id: total_word_count_short
+      validation_method: word_count_range
+      expected_range:
+      - 15000
+      - 40000
+  weight: 1.0
+  is_critical: true
+- check_id: 情感交付甜爽
+  check_name: 实际内容必须是甜爽向
+  dimension_id: content_quality
+  subcategory_id: emotional_delivery_match
+  quality_tier: basic
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    recipe_source: creative_intent.json::selected_recipe.reaction_strength
+    validation_rules:
+    - rule_id: sweet_tone_delivery
+      description: 配方↗甜爽 → 实际内容必须是甜爽向（主角顺风顺水、情感甜美、敌人自爆），不能有虐心情节
+      validation_method: llm_semantic_analysis
+    llm_judge_criteria_file: judge_criteria/emotional_delivery.yaml
+    llm_judge_criteria_section: 情感交付甜爽
+  weight: 1.0
+  is_critical: true
+- check_id: 读取感情线写作指南
+  check_name: 涉及感情线时必须读取ROMANCE_WRITING_GUIDE.md（感情线写作技巧指南）
+  dimension_id: business_rule_compliance
+  subcategory_id: required_skill_reading
+  check_type: tool_called_with_params
+  params:
+    tool_name: read_file
+    expected_params:
+      path: data_pools/skills/ROMANCE_WRITING_GUIDE.md
+  weight: 1.0
+  is_critical: false

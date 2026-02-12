@@ -1,0 +1,318 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "outline.schema.json",
+  "title": "小说故事大纲（三层结构）",
+  "description": "节奏规划参考，确保故事有合理的起承转合。三层设计：act故事梗概 → chapter故事梗概 → scene场景序列",
+  "type": "object",
+  "required": ["act_one", "act_two", "act_three"],
+  "properties": {
+    "act_one": {
+      "type": "object",
+      "description": "第一幕：开篇（20-30%篇幅）- 建立世界观、引入主角和核心冲突",
+      "required": ["description", "story_synopsis", "key_chapters", "turning_point"],
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "该幕的核心任务描述"
+        },
+        "story_synopsis": {
+          "type": "string",
+          "description": "本幕故事梗概（自然语言叙述，500-1000字）- 完整描述本幕的故事发展、主角行动、冲突转折、配角影响、状态变化",
+          "minLength": 500,
+          "maxLength": 1000
+        },
+        "key_chapters": {
+          "type": "array",
+          "description": "该幕的关键章节数组",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["chapter_number", "chapter_title", "chapter_synopsis", "scene_sequence"],
+            "properties": {
+              "chapter_number": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "章节编号"
+              },
+              "chapter_title": {
+                "type": "string",
+                "description": "章节标题"
+              },
+              "chapter_synopsis": {
+                "type": "string",
+                "description": "本章故事梗概（自然语言叙述，200-400字）- 描述起始状态、主角核心行动、主要冲突展开、在整幕中的作用、结束状态",
+                "minLength": 200,
+                "maxLength": 400
+              },
+              "scene_sequence": {
+                "type": "array",
+                "description": "本章场景序列（按时间顺序排列，至少3个场景）",
+                "minItems": 3,
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "scene_number",
+                    "scene_location",
+                    "characters_present",
+                    "scene_purpose",
+                    "core_action",
+                    "conflict_point",
+                    "emotional_shift",
+                    "scene_outcome"
+                  ],
+                  "properties": {
+                    "scene_number": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "description": "场景编号（章内序号）"
+                    },
+                    "scene_location": {
+                      "type": "string",
+                      "description": "场景地点（具体环境）"
+                    },
+                    "characters_present": {
+                      "type": "array",
+                      "description": "在场角色",
+                      "items": {
+                        "type": "string"
+                      },
+                      "minItems": 1
+                    },
+                    "scene_purpose": {
+                      "type": "string",
+                      "description": "本场景在chapter_synopsis中的作用"
+                    },
+                    "core_action": {
+                      "type": "string",
+                      "description": "核心动作（谁对谁做了什么，必须是可视化的具体行为，不能是抽象表述）"
+                    },
+                    "conflict_point": {
+                      "type": "string",
+                      "description": "本场景的冲突爆发点"
+                    },
+                    "emotional_shift": {
+                      "type": "string",
+                      "description": "本场景中主角的情感变化（从A到B）"
+                    },
+                    "scene_outcome": {
+                      "type": "string",
+                      "description": "本场景的结果（为下一场景埋伏笔）"
+                    }
+                  }
+                }
+              },
+              "emotional_tone": {
+                "type": "string",
+                "description": "本章整体情感基调"
+              }
+            }
+          }
+        },
+        "turning_point": {
+          "type": "string",
+          "description": "本幕结尾的转折点（标志本幕结束、下一幕开始的关键事件）"
+        }
+      }
+    },
+    "act_two": {
+      "type": "object",
+      "description": "第二幕：挣扎（40-50%篇幅）- 冲突升级、主角陷入困境",
+      "required": ["description", "story_synopsis", "key_chapters", "turning_point"],
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "该幕的核心任务描述"
+        },
+        "story_synopsis": {
+          "type": "string",
+          "description": "本幕故事梗概（自然语言叙述，500-1000字）",
+          "minLength": 500,
+          "maxLength": 1000
+        },
+        "key_chapters": {
+          "type": "array",
+          "description": "该幕的关键章节数组",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["chapter_number", "chapter_title", "chapter_synopsis", "scene_sequence"],
+            "properties": {
+              "chapter_number": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "章节编号"
+              },
+              "chapter_title": {
+                "type": "string",
+                "description": "章节标题"
+              },
+              "chapter_synopsis": {
+                "type": "string",
+                "description": "本章故事梗概（自然语言叙述，200-400字）",
+                "minLength": 200,
+                "maxLength": 400
+              },
+              "scene_sequence": {
+                "type": "array",
+                "description": "本章场景序列（至少3个场景）",
+                "minItems": 3,
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "scene_number",
+                    "scene_location",
+                    "characters_present",
+                    "scene_purpose",
+                    "core_action",
+                    "conflict_point",
+                    "emotional_shift",
+                    "scene_outcome"
+                  ],
+                  "properties": {
+                    "scene_number": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "scene_location": {
+                      "type": "string"
+                    },
+                    "characters_present": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "minItems": 1
+                    },
+                    "scene_purpose": {
+                      "type": "string"
+                    },
+                    "core_action": {
+                      "type": "string"
+                    },
+                    "conflict_point": {
+                      "type": "string"
+                    },
+                    "emotional_shift": {
+                      "type": "string"
+                    },
+                    "scene_outcome": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "emotional_tone": {
+                "type": "string",
+                "description": "本章整体情感基调"
+              }
+            }
+          }
+        },
+        "turning_point": {
+          "type": "string",
+          "description": "本幕结尾的转折点"
+        }
+      }
+    },
+    "act_three": {
+      "type": "object",
+      "description": "第三幕：高潮+结局（20-30%篇幅）- X-Y化学反应爆发",
+      "required": ["description", "story_synopsis", "key_chapters"],
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "该幕的核心任务描述"
+        },
+        "story_synopsis": {
+          "type": "string",
+          "description": "本幕故事梗概（自然语言叙述，500-1000字）",
+          "minLength": 500,
+          "maxLength": 1000
+        },
+        "key_chapters": {
+          "type": "array",
+          "description": "该幕的关键章节数组",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["chapter_number", "chapter_title", "chapter_synopsis", "scene_sequence"],
+            "properties": {
+              "chapter_number": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "章节编号"
+              },
+              "chapter_title": {
+                "type": "string",
+                "description": "章节标题"
+              },
+              "chapter_synopsis": {
+                "type": "string",
+                "description": "本章故事梗概（自然语言叙述，200-400字）",
+                "minLength": 200,
+                "maxLength": 400
+              },
+              "scene_sequence": {
+                "type": "array",
+                "description": "本章场景序列（至少3个场景）",
+                "minItems": 3,
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "scene_number",
+                    "scene_location",
+                    "characters_present",
+                    "scene_purpose",
+                    "core_action",
+                    "conflict_point",
+                    "emotional_shift",
+                    "scene_outcome"
+                  ],
+                  "properties": {
+                    "scene_number": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "scene_location": {
+                      "type": "string"
+                    },
+                    "characters_present": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "minItems": 1
+                    },
+                    "scene_purpose": {
+                      "type": "string"
+                    },
+                    "core_action": {
+                      "type": "string"
+                    },
+                    "conflict_point": {
+                      "type": "string"
+                    },
+                    "emotional_shift": {
+                      "type": "string"
+                    },
+                    "scene_outcome": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "emotional_tone": {
+                "type": "string",
+                "description": "本章整体情感基调"
+              }
+            }
+          }
+        },
+        "turning_point": {
+          "type": "string",
+          "description": "本幕结尾的转折点（可选，第三幕往往是渐进而非突变）"
+        }
+      }
+    }
+  }
+}

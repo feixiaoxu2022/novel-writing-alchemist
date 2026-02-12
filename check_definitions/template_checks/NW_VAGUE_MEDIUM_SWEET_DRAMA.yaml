@@ -1,0 +1,57 @@
+template_id: NW_VAGUE_MEDIUM_SWEET_DRAMA
+checks:
+- check_id: 灵感激发交互
+  check_name: 灵感模糊时必须进行灵感激发HITL交互
+  dimension_id: business_rule_compliance
+  subcategory_id: sop_compliance
+  check_type: tool_called_with_params
+  params:
+    tool_name: request_human_review
+    expected_params:
+      stage: 灵感激发
+      type: question
+  weight: 1.0
+  is_critical: true
+- check_id: 中篇字数
+  check_name: 总字数应在80000-250000之间
+  dimension_id: business_rule_compliance
+  subcategory_id: range_constraint
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    validation_rules:
+    - rule_id: total_word_count_medium
+      validation_method: word_count_range
+      expected_range:
+      - 80000
+      - 250000
+  weight: 1.0
+  is_critical: true
+- check_id: 情感交付甜宠外虐
+  check_name: 主角关系甜宠HE但有外部冲突
+  dimension_id: content_quality
+  subcategory_id: emotional_delivery_match
+  quality_tier: basic
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    recipe_source: creative_intent.json::selected_recipe.reaction_strength
+    validation_rules:
+    - rule_id: sweet_drama_tone_delivery
+      description: 主角之间的关系必须是甜的（双向暗恋、HE），同时故事中必须有来自外界的显著冲突和戏剧张力（其他角色、家族势力、世界设定等），不能全程无阻碍地甜
+      validation_method: llm_semantic_analysis
+    llm_judge_criteria_file: judge_criteria/emotional_delivery.yaml
+    llm_judge_criteria_section: 情感交付甜宠外虐
+  weight: 1.0
+  is_critical: true
+- check_id: 读取感情线写作指南
+  check_name: 涉及感情线时必须读取ROMANCE_WRITING_GUIDE.md（感情线写作技巧指南）
+  dimension_id: business_rule_compliance
+  subcategory_id: required_skill_reading
+  check_type: tool_called_with_params
+  params:
+    tool_name: read_file
+    expected_params:
+      path: data_pools/skills/ROMANCE_WRITING_GUIDE.md
+  weight: 1.0
+  is_critical: false

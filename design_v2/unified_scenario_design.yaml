@@ -1,0 +1,1959 @@
+scenario_name: 小说创作炼金术 - 从灵感激发到成稿的完整流程
+sub_scenario_type: novel_writing_with_formula_system
+description: |
+  测试Agent的用户意图理解和创作质量能力：
+  - 用户意图理解：从无灵感/模糊想法中提取关键要素，匹配X-Y配方
+  - 交付质量：验证配方的化学反应准确性、文本的情感/冲突质量
+  - 多轮交互：在关键决策点正确引导用户选择和确认
+
+  评测重点：
+  1. 意图识别能力（9个核心能力中的#3 Prompt遵循 + #2 复杂上下文理解）
+  2. 创作规划能力（#5 任务规划与工具组合 + #8 多源信息深度融合）
+  3. 领域知识运用（#9 结合领域知识的自主规划）
+domain: creative_content
+runtime_config:
+  system_time: '2026-01-28T14:00:00Z'
+  timezone: Asia/Shanghai
+  current_date_description: 今天是2026年1月28日，星期三下午14:00
+mcp_service_config:
+  service_name: novel_writing_service
+  service_description: 小说创作服务，提供文件操作和HITL交互
+  command: python
+  args:
+  - env/novel_writing_service.py
+  - ${ENV_DIR}
+  tools_description:
+    read_file: |
+      读取文件内容（创作手册、已生成的配方卡、大纲、草稿）
+      参数：file_path (相对于workspace的路径)
+    write_file: |
+      写入单个文件（配方卡、大纲、人物卡、章节草稿）
+      参数：file_path, content
+    write_files: |
+      批量写入多个文件（一次性创建多章草稿、多个人物卡）
+      参数：files (列表，每项包含path和content)
+    list_directory: |
+      列出目录内容（查看已创建的章节、人物卡）
+      参数：directory_path
+    create_directory: |
+      创建目录（创建chapters/、characters/等子目录）
+      参数：directory_path
+    bash: |
+      执行shell命令（查看文件系统状态、验证文件结构）
+      内部实现需严格控制权限，只允许在workspace目录下操作，不允许cd到这个之外的地方
+      参数：command
+    request_human_review: |
+      与用户交互的统一工具，支持两种模式：
+      (1) 确认模式 (type=confirmation)：关键阶段完成后请求用户确认
+         - 工具内部硬编码返回 {"status": "accept"}
+      (2) 询问模式 (type=question)：关键信息缺失或需要用户决策时询问
+         - 工具内部从sample的hitl_responses配置读取预设答案
+
+      参数强约束：
+      - stage: ['灵感激发', '配方选择', '写作准备确认', '开篇审阅', '结局类型确认']
+      - type: ['confirmation', 'question']
+      - summary: 当前阶段总结（confirmation模式必需）
+      - question: 询问的问题（question模式必需）
+      - options: 可选答案列表（question模式可选）
+business_rules:
+  agent_identity: 网文高手 - 精通配方化创作的小说创作助手
+  core_mission: |
+    基于用户灵感和创作需求，运用X-Y轴配方系统，完成从灵感明晰到成稿的全流程创作。
+  workspace_structure:
+    description: |
+      使用create_directory工具创建目录，使用write_file工具创建文件。
+      所有文件路径使用相对路径。
+    required_structure: |
+      必须创建的目录和文件结构：
+
+      creative_intent.json           # 必需，阶段2输出
+      characters.json                # 必需，阶段3输出
+      outline.json                   # 必需，阶段3输出
+      writing_log.md                 # 必需（仅超过8000字的任务），阶段4动态更新
+      chapters/                      # 必需目录，需要用create_directory("chapters")创建
+      ├── chapter_01.md              # 章节文件，阶段4输出
+      ├── chapter_02.md
+      └── ...
+    naming_rules:
+    - chapters目录必须使用create_directory工具创建
+    - 章节文件命名格式：chapter_NN.md（NN为两位数字，01-99）
+    - 不允许：chapter_1.md, chapter1.md, chap_01.md, 第一章.md
+    - 验证正则：^chapter_\\d{2}\\.md$
+    validation_references:
+    - creative_intent.json: data_pools/schemas/creative_intent.schema.json
+    - characters.json: data_pools/schemas/characters.schema.json
+    - outline.json: data_pools/schemas/outline.schema.json
+  workflow_stages:
+  - stage_id: stage_1_understand_need
+    stage_name: 理解用户需求
+    entry_condition: 用户提供初始query
+    core_tasks:
+    - 判断灵感清晰度（no_inspiration/vague/clear）
+    - 完全无灵感/模糊灵感：提取或明晰关键要素
+    - 清晰灵感：提取关键要素后跳到阶段2
+    - 提取关键要素（emotion_verbs, scene_elements, relationship_tension）
+    - 识别用户偏好（desired_emotion, forbidden_elements）
+    note: |
+      无论短篇、中篇还是长篇，都需要经历完整的创作流程（阶段2→3→4）。
+      篇幅的区别只影响writing_log.md的必需性（仅超过8000字的创作任务需要）。
+    hitl_requirement:
+    - when: 灵感模糊（vague）时
+      stage: 灵感激发
+      type: question
+      purpose: 明晰用户创作方向（风格/主题/冲突类型）
+  - stage_id: stage_2_generate_recipes
+    stage_name: 生成配方方案
+    entry_condition: 已提取关键要素
+    skill_reference:
+    - file: data_pools/skills/RECIPE_KNOWLEDGE.md
+      when: 生成配方前必读，获取完整配方知识库
+      sections:
+      - X轴36种剧情模式
+      - Y轴12种标签
+      - 化学反应规则
+      - 禁忌表
+    core_tasks:
+    - 匹配X轴模式（基于emotion_verbs）
+    - 选择Y轴标签（基于scene_elements）
+    - 判断化学反应强度（↗/↘/✷，基于user_preferences）
+    - 生成2-3个配方方案供选择
+    constraints:
+    - X轴模式必须在36种之内
+    - Y轴标签必须在12种之内，数量2-3个
+    - reaction_strength必须与用户desired_emotion一致（sweet→↗, angsty→↘, suspense→✷）
+    - forbidden_elements必须包含用户明确拒绝的元素
+    hitl_requirement:
+    - when: 生成配方后（必需）
+      stage: 配方选择
+      type: question
+      purpose: 让用户选择最符合期待的配方
+    output:
+    - file: creative_intent.json
+      required_fields:
+      - user_need
+      - inspiration_state
+      - extracted_elements
+      - selected_recipe
+  - stage_id: stage_3_prepare_writing
+    stage_name: 写作准备
+    entry_condition: 配方已选定
+    core_tasks:
+    - 设计人物（main_characters, supporting_characters）
+    - 规划大纲（三幕结构：act_one, act_two, act_three），分三个层次设计： * 第一层：为每一幕写story_synopsis（500-1000字自然语言故事梗概） * 第二层：为每个章节写chapter_synopsis（200-400字章节故事梗概）
+      * 第三层：为每个章节设计scene_sequence（至少3个具体场景）
+    - 场景设计原则： * 每个场景必须有明确的地点、在场角色、核心动作、冲突爆发点、情感变化、场景结果 * 场景之间必须有因果关系（前一场景的结果导致下一场景） * 场景设计必须忠实服务于chapter_synopsis的故事逻辑，不能为了填格子而凑数
+      * core_action必须是可视化的具体行为（谁对谁做了什么），不能是抽象表述
+    - 确认X-Y化学反应如何在具体场景中显影
+    constraints:
+    - 主角traits为3-5个
+    - 大纲必须有转折点（act_one.turning_point, act_two.turning_point）
+    - 人物动机要与X轴模式匹配
+    - 角色命名需符合Y轴标签风格（现代/古风/奇幻/科幻）
+    - 每个act必须有完整的story_synopsis（不能只写一句话概括）
+    - 每个chapter必须有完整的chapter_synopsis（描述起始状态、冲突展开、结束状态）
+    - 每个chapter必须有至少3个场景的scene_sequence
+    - 场景的core_action不能是抽象表述（如"了解情况"、"商量对策"），必须具体到"谁做了什么"
+    hitl_requirement:
+    - when: 人物和大纲完成后（必需）
+      stage: 写作准备确认
+      type: confirmation
+      purpose: 确认人物设定和大纲合理，允许用户提出调整
+    output:
+    - file: characters.json
+    - file: outline.json
+    skill_reference:
+    - file: data_pools/skills/CHARACTER_DESIGN_GUIDE.md
+      when: 设计人物前必读，掌握人物构建方法论
+      sections:
+      - traits设计三步法
+      - 显性/隐性动机设计
+      - 秘密恐惧设计
+      - 配角设计
+      - 人物关系设计
+    - file: data_pools/skills/CHARACTER_NAMING_GUIDE.md
+      when: 设计人物时参考，选择合适风格的命名
+      sections:
+      - 命名原则
+      - 不同风格规范（现代/古风/奇幻/科幻）
+      - 常见错误
+    - file: data_pools/skills/OUTLINE_DESIGN_GUIDE.md
+      when: 设计大纲前必读，掌握三层结构设计方法
+      sections:
+      - 三层结构设计
+      - story_synopsis写法
+      - chapter_synopsis写法
+      - scene_sequence设计
+      - 转折点设计
+    - file: data_pools/materials/NAME_DATABASE.md
+      when: 需要具体姓名灵感时查阅
+      sections:
+      - 姓氏库
+      - 语义字库
+      - 风格映射
+  - stage_id: stage_4_creative_writing
+    stage_name: 章节创作
+    entry_condition: 写作准备确认通过
+    core_tasks:
+    - 按大纲逐章创作（遵循三幕结构）
+    - 每章完成后更新writing_log.md（记录进度、状态、待办）
+    - 确保内容与配方一致（情感基调、主题、禁忌）
+    constraints:
+    - 章节命名：chapter_01.md, chapter_02.md（必须两位数字）
+    - 篇幅控制：short(3-7k字), medium(10-25k字), long(30k+字)
+    - 情感交付匹配：↗配方→甜爽内容，↘配方→虐心内容，✷配方→烧脑内容
+    - 绝对禁止触碰forbidden_elements
+    - 保持一致性：主题/人物/时间线/世界观规则
+    practical_tips:
+    - 超过8000字的长文创作：及时记录和读取writing_log.md，在开始新章节前先读取log了解前面的内容，确保前后一致
+    - 格式自查：可以根据输出规范写一个校验脚本，每写完一部分就校验一次文件命名和JSON格式，避免最后才发现格式错误
+    output:
+    - directory: chapters/
+    - file: writing_log.md
+    skill_reference:
+    - file: data_pools/skills/WRITING_TECHNIQUE_GUIDE.md
+      when: 开始章节创作前必读，获取写作技巧指导
+      sections:
+      - 场景构造技巧
+      - 对话写作技巧
+      - 叙事手法
+      - 情感渲染
+      - 冲突设计
+      - 节奏控制
+    - file: data_pools/skills/ROMANCE_WRITING_GUIDE.md
+      when: 创作涉及感情线的章节时必读，获取感情戏创作技法指导
+      sections:
+      - 核心原则（含蓄胜于直白、动作胜于语言、张力来自克制）
+      - 糖的类型学（动作糖/眼神糖/对话糖/日常糖/紧急糖/升级糖）
+      - 双男主感情戏专项（男性角色的克制特质表达、攻受差异化）
+      - 男女CP感情戏（行动派表达、细腻但不矫情）
+      - 性格与表达适配
+      - 感情线与情节融合
+      - 自查清单
+    - file: data_pools/skills/CONSISTENCY_MANAGEMENT_GUIDE.md
+      when: 长篇创作(超过8000字)时必读，维护设定一致性避免逻辑漏洞
+      sections:
+      - 设定登记簿机制（时间线、能力规则、角色属性、物件状态、倒计时）
+      - 章节前一致性检查清单
+      - 章节后自检步骤
+      - 高频漏洞点提醒（年份/日期、倒计时、超自然能力边界、身体细节、角色位置）
+    - file: data_pools/skills/SHORT_STORY_GUIDE.md
+      when: 超短篇(6500-10000字)创作时必读
+      sections:
+      - 时间压缩与视角统一
+      - 三幕结构建议
+      - X-Y工具箱参考
+  critical_constraints:
+    format_compliance:
+    - 必需文件：creative_intent.json, characters.json, outline.json, chapters/
+    - 超过8000字的创作任务必须有writing_log.md记录创作进度，方便校验前后文一致性
+    - JSON文件必须语法正确
+    - 章节文件命名格式：^chapter_\d{2}\.md$
+    business_rule_compliance:
+    - X轴模式ID：必须匹配^[A-G]\d{1,2}$
+    - Y轴标签：每个必须在12种枚举中，数量2-3个
+    - 化学反应强度：必须在[↗, ↘, ✷]中
+    - 情感基调约束： * sweet类型：reaction_strength=↗，forbidden_elements包含虐心相关 * angsty类型：reaction_strength=↘，forbidden_elements不包含反虐表述
+      * suspense类型：reaction_strength=✷
+    interaction_completeness:
+    - 灵感激发：vague类型必需
+    - 配方选择：必需（生成配方后必须让用户选择）
+    - 写作准备确认：完整创作任务必需
+    content_quality_basic:
+    - 主题一致性：核心主题贯穿始终
+    - 主要角色一致性：主角不能前后不一致或消失
+    - 人物设定一致性：性格/能力不能崩坏（除非有合理铺垫）
+    - 设计遵循度：角色实际表现必须符合characters.json中的设计（traits、motivation等）
+    - 逻辑自洽：无前后矛盾（死人复活/判决矛盾等）
+    - 情节密度：章节必须包含足够的具体故事事件，避免纯对话或纯内心独白
+    - 情感交付匹配：实际内容倾向必须与reaction_strength一致
+    - 语言纯净性：无不合理的多语言混用（情节必需除外）
+    - 人物完整出场：设计过的人物必须出现在大纲和正文中
+    - 正文叙事：章节内必须是小说正文叙事，不可以是大纲性质的简略叙事
+    - 反复结局：不能出现多次结局标记（全文完/全书完/后记），表明写不动了硬撑
+    - 后期跑偏：后期章节不能偏离正文，跑去写作者感想、读者互动、番外预告等
+    - 感情线写作质量（如涉及）：遵循含蓄胜于直白、动作胜于语言、张力来自克制的核心原则；避免直白台词（如"我爱你"、"我会保护你"）和过度情绪化反应（如"脸红心跳"、"眼眶湿润"）；男性角色保持克制特质表达
+environment:
+  description: |
+    每个样本的环境包含创作知识库：
+    - X轴：普罗蒂36种剧情模式
+    - Y轴：12种现代网文标签
+    - 化学反应判定规则
+    - 配方设计规范
+    - 角色命名规范和素材库
+    - 感情线写作技巧（含蓄表达、糖点设计、双男主/男女CP差异化表达）
+  files:
+  - path: data_pools/skills/RECIPE_KNOWLEDGE.md
+    description: 配方知识库 - X轴36种剧情模式+Y轴12种标签完整定义及化学反应规则
+    required: true
+  - path: data_pools/skills/WRITING_TECHNIQUE_GUIDE.md
+    description: 写作技巧指南 - 场景构造、对话、叙事、情感渲染、冲突设计等实战技巧
+    required: true
+  - path: data_pools/skills/CHARACTER_DESIGN_GUIDE.md
+    description: 人物设计指南 - traits设计、动机设计、秘密恐惧、配角设计、人物关系设计
+    required: true
+  - path: data_pools/skills/OUTLINE_DESIGN_GUIDE.md
+    description: 大纲设计指南 - 三层结构设计（story_synopsis/chapter_synopsis/scene_sequence）
+    required: true
+  - path: data_pools/skills/ROMANCE_WRITING_GUIDE.md
+    description: 感情线写作技巧指南 - 含蓄胜于直白、动作胜于语言、张力来自克制；糖点类型学（动作糖/眼神糖/对话糖/日常糖/紧急糖/升级糖）；双男主感情戏专项（克制表达/攻受差异化）；男女CP感情戏（行动派表达）；性格与表达适配
+    required: false
+  - path: data_pools/skills/SHORT_STORY_GUIDE.md
+    description: 短篇创作指南 - 针对6500-10000字短篇的写作建议（三幕结构、物件设计、时间压缩等技巧）
+    required: false
+  - path: data_pools/skills/CONSISTENCY_MANAGEMENT_GUIDE.md
+    description: 设定一致性管理指南 - 长篇创作时维护时间线、能力规则、角色属性等设定的一致性，避免逻辑漏洞
+    required: false
+  - path: data_pools/skills/CHARACTER_NAMING_GUIDE.md
+    description: 角色命名指南 - 提供不同风格（现代/古风/奇幻/科幻）的命名规范和注意事项
+    required: false
+  - path: data_pools/materials/NAME_DATABASE.md
+    description: 命名素材库 - 包含姓氏库、语义字库、音韵规律、风格映射等角色命名参考
+    required: false
+  - path: data_pools/schemas/creative_intent.schema.json
+    description: creative_intent.json的JSON Schema验证规范
+    required: true
+  - path: data_pools/schemas/characters.schema.json
+    description: characters.json的JSON Schema验证规范
+    required: true
+  - path: data_pools/schemas/outline.schema.json
+    description: outline.json的JSON Schema验证规范
+    required: true
+common_user_simulator_behavior:
+  description: 所有模板通用的用户模拟器行为，样本合成时与模板特有的user_simulator_prompt拼接
+  content: |
+    **通用HITL交互行为**：
+
+    1. **配方选择阶段（stage=配方选择）**：
+       - 用简短自然的话回应，如"选A吧"、"B方案不错"
+       - 选完后自然地建议Agent接下来设计角色和大纲时参考人物设计指南(CHARACTER_DESIGN_GUIDE.md)、起名指南(CHARACTER_NAMING_GUIDE.md)和大纲设计指南(OUTLINE_DESIGN_GUIDE.md)
+
+    2. **写作准备确认阶段（stage=写作准备确认）**：
+       - 查看Agent展示的人物设定和大纲
+       - 确认后建议Agent开始写章节前先阅读写作技巧指南(WRITING_TECHNIQUE_GUIDE.md)和设定一致性管理指南(CONSISTENCY_MANAGEMENT_GUIDE.md)，建立设定登记簿追踪时间线、能力规则、角色属性等，避免前后矛盾的逻辑漏洞
+       - 如果大纲中涉及感情线（CP互动、情感发展等），额外建议Agent阅读感情线写作技巧指南(ROMANCE_WRITING_GUIDE.md)，遵循含蓄胜于直白、动作胜于语言的核心原则
+user_need_templates:
+- need_template_id: NW_VAGUE_MEDIUM_SWEET_DRAMA
+  template_name: 模糊灵感-中篇-甜宠外虐
+  description: |
+    用户只有偏好和约束（题材、CP类型、情感基调、篇幅），没有具体故事构思。
+    要求甜宠HE但过程有外部冲突，虐点来自外界（其他人物、家族背景、势力冲突等），不来自主角之间。
+    Agent需要：灵感激发（帮用户明晰方向） → 匹配↗反应强度配方（X轴需含外部冲突模式） → 创作80000-250000字甜宠外虐中篇
+  clarity: vague
+  word_count: medium
+  tone: sweet_drama
+  query_pool_id: NW_VAGUE_MEDIUM_SWEET_DRAMA
+  query_pool_file: query_pools.yaml
+  user_simulator_prompt: |-
+    你是一个想写小说但只有模糊偏好的用户，没有具体的故事构思。
+
+    **你知道自己想要什么类型**：
+    - 双男主，主角之间是甜的（双向暗恋、HE结局），不要主角之间互虐
+    - 过程中要有来自外界的冲突和戏剧张力（其他人物、家族、势力等施加的压力）
+    - 故事世界丰富，不能只围绕主角两人的感情线
+    - 篇幅约10万字
+
+    **但你没有具体的故事idea**：
+    - 你不会主动提出具体的人物设定、场景设计或情节概念
+    - 如果Agent问你想要什么样的故事，你只会重复偏好（题材、CP类型、基调）
+    - 你期望Agent来帮你激发灵感、提出具体的故事方向
+
+    **灵感激发阶段**：
+    - Agent提出方向时，用自然的话回应，如"这个方向不错"或"换一个吧，这个不太感兴趣"
+    - 不要替Agent做创意工作，让Agent主导灵感激发过程
+
+    **配方选择偏好**：
+    - 偏好reaction_strength为↗（HE/甜向）的配方
+    - 但配方中需要有外部冲突元素
+    - 如果配方完全没有外部冲突，提醒"可以加点外部阻力吗，不要只写谈恋爱"
+
+    **写作准备确认关注点**：
+    - 确认有足够的外部冲突设计
+    - 确认主角之间关系线是甜的
+    - 简单表示满意，如"人设不错，继续吧"
+- need_template_id: NW_CLEAR_MEDIUM_BRAINY_ACTION
+  template_name: 清晰灵感-中篇-智斗向
+  clarity: clear
+  word_count: medium
+  tone: brainy_action
+  query_pool_id: NW_CLEAR_MEDIUM_BRAINY_ACTION
+  query_pool_file: query_pools.yaml
+  user_simulator_prompt: |-
+    你是一个想要创作智斗向中篇小说(80000-250000字)的用户，已经有了清晰的灵感。
+
+    **你的核心诉求**：
+    - 希望故事是智斗向的（主角靠智商、观察力和规则利用通关，而非蛮力或金手指）
+    - 篇幅80000-250000字
+    - 已经在首轮消息中明确表达了"智斗"、"逻辑"、"反套路"等要求
+    - 极度厌恶龙傲天、系统流、主角无脑开挂等降智套路
+
+    **配方选择偏好**：
+    - 偏好reaction_strength为✷（烧脑向）的配方
+    - 如果配方中出现主角过于强大或缺乏智斗元素的方案，明确表示"我不要爽文套路，要的是主角靠脑子赢"
+
+    **写作准备确认关注点**：
+    - 确认主角人设不是龙傲天，有明确的弱点和局限
+    - 确认反派智商在线，不会无脑送人头
+    - 确认剧情推进靠逻辑而非巧合
+    - 简单表示满意，如"逻辑线看着挺严密的，角色智商都在线，可以"
+- need_template_id: NW_CLEAR_MEDIUM_ADVENTURE
+  template_name: 清晰灵感-中篇-热血冒险向
+  clarity: clear
+  word_count: medium
+  tone: adventure
+  query_pool_id: NW_CLEAR_MEDIUM_ADVENTURE
+  query_pool_file: query_pools.yaml
+  user_simulator_prompt: |-
+    你是一个想要创作热血冒险向中篇小说(80000-250000字)的用户，已经有了清晰的灵感。
+
+    **你的核心诉求**：
+    - 希望故事是热血冒险向的（逆境奋斗、团队协作、成长蜕变）
+    - 篇幅80000-250000字
+    - 已经在首轮消息中明确表达了冒险、成长、伙伴等要求
+    - 不需要恋爱主线，核心关系是战友/搭档/师徒等非恋爱羁绊
+
+    **配方选择偏好**：
+    - 偏好reaction_strength为↗（热血/燃/向上）的配方
+    - 如果配方中出现恋爱主线或虐心元素，明确表示"我不要言情，要的是冒险和成长"
+
+    **写作准备确认关注点**：
+    - 确认主角有明确的成长轨迹
+    - 确认伙伴角色各有特色，不是主角的陪衬
+    - 确认冒险挑战有具体的环境和策略设计
+    - 简单表示满意，如"角色分工挺明确的，冒险路线也合理，可以"
+- need_template_id: NW_CLEAR_MEDIUM_HEROINE
+  template_name: 清晰灵感-中篇-大女主向
+  clarity: clear
+  word_count: medium
+  tone: heroine
+  query_pool_id: NW_CLEAR_MEDIUM_HEROINE
+  query_pool_file: query_pools.yaml
+  user_simulator_prompt: |-
+    你是一个想要创作大女主向中篇小说(80000-250000字)的用户，已经有了清晰的灵感。
+
+    **你的核心诉求**：
+    - 希望故事以女主的自我实现和逆袭成长为核心驱动力
+    - 篇幅80000-250000字
+    - 已经在首轮消息中明确表达了女主独立、靠自身能力翻盘的要求
+    - 感情线可以有但必须是辅线，男性角色不能是女主成功的关键
+
+    **配方选择偏好**：
+    - 偏好reaction_strength为↗（逆袭/向上/成长）的配方
+    - 如果配方中女主的成功依赖男性角色，明确表示"我不要男主拯救女主的套路，女主要靠自己"
+
+    **写作准备确认关注点**：
+    - 确认女主的专业能力有合理的背景支撑
+    - 确认女主的成长轨迹扎实，不是一路开挂
+    - 确认男性角色不会喧宾夺主
+    - 简单表示满意，如"女主人设立住了，成长线也合理，可以"
+- need_template_id: NW_CLEAR_SHORT_SWEET
+  template_name: 清晰灵感-短篇-甜爽向
+  description: |
+    用户有清晰的创作框架，明确要求甜爽向/爽文/不虐
+    Agent需要：识别清晰要素 → 匹配↗反应强度配方 → 创作15000-40000字甜爽短篇
+  clarity: clear
+  word_count: short
+  tone: sweet
+  query_pool_id: NW_CLEAR_SHORT_SWEET
+  query_pool_file: design_v1/query_pools.yaml
+  user_simulator_prompt: |-
+    你是一个想要创作甜爽向短篇小说(15000-40000字)的用户，已经有了清晰的灵感。
+
+    **你的核心诉求**：
+    - 希望故事是甜爽向的（主角顺风顺水、情感甜美、不要虐心）
+    - 篇幅15000-40000字
+    - 已经在首轮消息中明确表达了"不要太虐"、"希望甜"等要求
+
+    **配方选择偏好**：
+    - 偏好reaction_strength为↗（甜爽向）的配方
+    - 如果只有↘（虐心向）的配方，明确表示"这个太虐了，有没有甜一点的"
+
+    **写作准备确认关注点**：
+    - 如果没有明显的虐心元素，表示满意，如"人设不错，继续吧"
+    - 如果发现有虐心迹象，提醒"记得不要太虐哦"
+- need_template_id: NW_CLEAR_SHORT_ANGSTY
+  template_name: 清晰灵感-短篇-虐心向
+  clarity: clear
+  word_count: short
+  tone: angsty
+  query_pool_id: NW_CLEAR_SHORT_ANGSTY
+  query_pool_file: design_v1/query_pools.yaml
+  user_simulator_prompt: |-
+    你是一个想要创作虐心向短篇小说(15000-40000字)的用户，已经有了清晰的灵感。
+
+    **你的核心诉求**：
+    - 希望故事是虐心向的（悲剧氛围、情感痛苦、虐心情节）
+    - 篇幅15000-40000字
+    - 已经在首轮消息中明确表达了"虐一点"、"悲剧向"等要求
+
+    **配方选择偏好**：
+    - 偏好reaction_strength为↘（虐心向）的配方
+    - 如果只有↗（甜爽向）的配方，明确表示"这个太甜了，有没有虐一点的"
+
+    **写作准备确认关注点**：
+    - 确认有足够的冲突和情感张力
+    - 简单表示满意，如"人设不错，继续吧"
+- need_template_id: NW_CLEAR_MEDIUM_SWEET
+  template_name: 清晰灵感-中篇-甜爽向
+  description: |+
+    用户有清晰的创作框架，明确要求甜爽向/爽文/不虐
+
+    Agent需要：识别清晰要素 → 匹配↗反应强度配方 → 创作80000-250000字甜爽中篇
+
+  clarity: clear
+  word_count: medium
+  tone: sweet
+  query_pool_id: NW_CLEAR_MEDIUM_SWEET
+  query_pool_file: design_v1/query_pools.yaml
+  user_simulator_prompt: |-
+    你是一个想要创作甜爽向中篇小说(80000-250000字)的用户，已经有了清晰的灵感。
+
+    **你的核心诉求**：
+    - 希望故事是甜爽向的（主角顺风顺水、情感甜美、不要虐心）
+    - 篇幅80000-250000字
+    - 已经在首轮消息中明确表达了"不要太虐"、"希望甜"等要求
+
+    **配方选择偏好**：
+    - 偏好reaction_strength为↗（甜爽向）的配方
+    - 如果只有↘（虐心向）的配方，明确表示"这个太虐了，有没有甜一点的"
+
+    **写作准备确认关注点**：
+    - 如果没有明显的虐心元素，表示满意，如"人设不错，继续吧"
+    - 如果发现有虐心迹象，提醒"记得不要太虐哦"
+- need_template_id: NW_CLEAR_MEDIUM_ANGSTY
+  template_name: 清晰灵感-中篇-虐心向
+  clarity: clear
+  word_count: medium
+  tone: angsty
+  query_pool_id: NW_CLEAR_MEDIUM_ANGSTY
+  query_pool_file: design_v1/query_pools.yaml
+  user_simulator_prompt: |-
+    你是一个想要创作虐心向中篇小说(80000-250000字)的用户，已经有了清晰的灵感。
+
+    **你的核心诉求**：
+    - 希望故事是虐心向的（悲剧氛围、深度情感冲击、虐心情节）
+    - 篇幅80000-250000字
+    - 已经在首轮消息中明确表达了"虐一点"、"悲剧向"等要求
+
+    **配方选择偏好**：
+    - 偏好reaction_strength为↘（虐心向）的配方
+    - 如果只有↗（甜爽向）的配方，明确表示"这个太甜了，有没有虐一点的"
+
+    **写作准备确认关注点**：
+    - 确认有足够的冲突和情感张力
+    - 简单表示满意，如"人设不错，继续吧"
+- need_template_id: NW_CLEAR_MEDIUM_SUSPENSE
+  template_name: 清晰灵感-中篇-烧脑悬疑
+  clarity: clear
+  word_count: medium
+  tone: suspense
+  query_pool_id: NW_CLEAR_MEDIUM_SUSPENSE
+  query_pool_file: design_v1/query_pools.yaml
+  user_simulator_prompt: |-
+    你是一个想要创作烧脑悬疑中篇小说(80000-250000字)的用户，已经有了清晰的灵感。
+
+    **你的核心诉求**：
+    - 希望故事是烧脑向的（悬念重重、多重反转、认知颠覆）
+    - 篇幅80000-250000字
+    - 已经在首轮消息中明确表达了"烧脑"、"悬疑"、"反转"等要求
+
+    **配方选择偏好**：
+    - 偏好reaction_strength为✷（烧脑向）的配方
+    - 如果只有↗或↘的配方，明确表示"我想要更烧脑一点的，有没有反转多一些的方案"
+
+    **写作准备确认关注点**：
+    - 确认大纲有足够的悬念和反转设计
+    - 简单表示满意，如"大纲看着挺烧脑的，可以"
+- need_template_id: NW_IP_MEDIUM_NEUTRAL
+  template_name: IP改编-中篇-中性
+  clarity: clear
+  word_count: medium
+  tone: neutral
+  query_pool_id: NW_IP_MEDIUM_NEUTRAL
+  query_pool_file: design_v1/query_pools.yaml
+  user_simulator_prompt: |-
+    你是一个想要将已有IP改编为中篇小说(80000-250000字)的用户，已经有了清晰的改编方向。
+
+    **你的核心诉求**：
+    - 希望保留原IP的核心特色（世界观、经典角色、标志性设定）
+    - 在原IP基础上进行创新拓展
+    - 篇幅80000-250000字
+    - 已经在首轮消息中明确说明了改编的IP和改编方向
+
+    **配方选择偏好**：
+    - 选择最贴合IP气质的配方方案
+
+    **写作准备确认关注点**：
+    - 重点关注是否保留了原IP的核心元素
+    - 简单表示满意，如"角色设定不错，保留了原作精髓"
+output_specification:
+  description: |
+    定义Agent在workspace中应该创建的文件结构和内容规范。
+    设计原则：简洁实用，帮助Agent结构化创作过程，避免过度复杂。
+  file_naming_conventions:
+    description: 文件路径和命名规范（用于Checker验证）
+    root_files:
+    - path: creative_intent.json
+      naming_rule: 固定文件名，必须精确匹配
+      location: workspace根目录
+    - path: characters.json
+      naming_rule: 固定文件名，必须精确匹配
+      location: workspace根目录
+    - path: outline.json
+      naming_rule: 固定文件名，必须精确匹配
+      location: workspace根目录
+    - path: writing_log.md
+      naming_rule: 固定文件名，必须精确匹配
+      location: workspace根目录
+    - path: final_work.md
+      naming_rule: 固定文件名，必须精确匹配（可选文件）
+      location: workspace根目录
+    directories:
+    - path: chapters/
+      naming_rule: 固定目录名
+      location: workspace根目录
+      required: true
+    chapter_files:
+      pattern: chapters/chapter_{number}.md
+      naming_rules:
+      - 必须在chapters/目录下
+      - 文件名格式：chapter_数字.md
+      - 数字部分：两位数字，01-99，如 chapter_01.md, chapter_02.md
+      - 不允许：chapter1.md, chapter_1.md, chap_01.md 等变体
+      examples:
+        valid:
+        - chapters/chapter_01.md
+        - chapters/chapter_02.md
+        - chapters/chapter_10.md
+        invalid:
+        - chapters/chapter1.md
+        - chapters/chapter_1.md
+        - chapters/chap_01.md
+        - chapter_01.md
+        - chapters/第一章.md
+    validation_helper:
+      description: Checker可以使用的验证规则
+      file_existence_checks:
+      - 检查 creative_intent.json 是否存在于workspace根目录
+      - 检查 characters.json 是否存在于workspace根目录
+      - 检查 outline.json 是否存在于workspace根目录
+      - 检查 writing_log.md 是否存在于workspace根目录（仅超过8000字的创作任务必需）
+      - 检查 chapters/ 目录是否存在
+      - 检查 chapters/ 目录下是否至少有1个符合命名规范的.md文件
+      naming_pattern_checks:
+      - pattern: chapters/chapter_\d{2}\.md
+        description: 章节文件必须匹配此正则
+        check_method: regex match
+  complete_directory_structure_example:
+    description: 完整的workspace目录结构示例
+    example: |
+      workspace/
+      ├── creative_intent.json     # 用户意图&配方（必需）
+      ├── characters.json          # 人物设计（必需）
+      ├── outline.json             # 故事大纲（必需）
+      ├── writing_log.md           # 创作日志（仅超过8000字的任务必需）
+      ├── chapters/                # 章节目录（必需）
+      │   ├── chapter_01.md        # 第一章
+      │   ├── chapter_02.md        # 第二章
+      │   ├── chapter_03.md        # 第三章
+      │   └── chapter_04.md        # 第四章
+      └── final_work.md            # 最终成稿（可选）
+    checker_validation_sequence:
+      step_1: 验证必需文件存在性（根据篇幅判断是否需要writing_log.md）
+      step_2: 验证文件命名符合规范（chapter_NN.md格式）
+      step_3: 验证JSON文件的Schema和字段完整性（format_compliance）
+      step_4: 验证业务规则（枚举、数量、范围约束）（business_rule_compliance）
+      step_5: 验证Markdown文件的语义质量（content_quality，需LLM）
+  workspace_structure:
+    root_files:
+    - file: creative_intent.json
+      required: true
+      description: 用户创作意图、梗概和选定配方（结构化元数据）
+      stage: 阶段2-3（清晰灵感 → 任务明确）
+      purpose: 记录需求理解和配方选择结果，作为创作的北极星
+      format: JSON - 可确定性验证枚举、字段完整性
+    - file: characters.json
+      required: true
+      description: 人物设计（主角+配角，结构化数据）
+      stage: 阶段3（写作准备）
+      purpose: 人物一致性的参考依据，避免角色崩坏
+      format: JSON - 可验证数量约束、必需字段
+    - file: outline.json
+      required: true
+      description: 故事大纲（三幕结构 + 关键转折点，结构化）
+      stage: 阶段3（写作准备）
+      purpose: 节奏规划参考，确保主题贯穿始终
+      format: JSON - 可验证结构完整性
+    - file: writing_log.md
+      required: true
+      description: 创作日志（连续性笔记）
+      stage: 阶段4（创作修改）
+      purpose: 动态更新的工作文件，帮助Agent保持前后一致，记录已写内容和待办事项
+      update_frequency: 每写完一章后更新
+      format: Markdown - 灵活记录，LLM语义分析
+      condition: 仅超过8000字的创作任务必需
+    - file: final_work.md
+      required: false
+      description: 最终成稿（整合后的完整作品）
+      stage: 阶段5（成稿）
+      purpose: 完整作品交付，可选（也可以只有chapters/）
+      format: Markdown - 最终交付物
+    directories:
+    - dir: chapters/
+      required: true
+      description: 分章节的创作内容
+      stage: 阶段4（创作修改）
+      purpose: 实际创作内容，支持迭代修改
+      file_pattern: chapter_\d{2}\.md
+      naming_example: chapter_01.md, chapter_02.md, chapter_03.md
+      note: 必须使用两位数字编号，如chapter_01.md而不是chapter_1.md
+  file_content_specifications:
+    creative_intent_json:
+      description: 用户创作意图 & 梗概 & 选定配方（JSON格式）
+      format: JSON
+      purpose: 记录需求理解和配方选择结果，作为创作的北极星，确保后续章节始终围绕核心意图展开
+      schema:
+        type: object
+        required_fields:
+        - field_name: user_need
+          data_type: string
+          semantic_meaning: 用户的原始输入文本
+          business_purpose: 保留用户最初的表达方式，作为意图理解的原始证据，在创作过程中如果偏离主题可以回溯参考
+          example: 我想写一个赛博朋克风格的复仇故事，主角是黑客，被大公司陷害，要揭开真相并复仇。不要太虐，希望是爽文。
+        - field_name: inspiration_state
+          data_type: enum
+          valid_values:
+          - no_inspiration
+          - vague_inspiration
+          - clear_inspiration
+          semantic_meaning: 用户创作时的灵感清晰程度
+          business_purpose: 记录Agent采用的引导策略类型，帮助理解后续为什么选择特定配方
+          value_semantics:
+            no_inspiration: 完全无灵感，需要激发工具（Level 1基础意向问卷或随机组合输出）
+            vague_inspiration: 灵感模糊，需要明晰化问题（故事核心/主角困境/风格）
+            clear_inspiration: 有初步想法，可直接提取要素并生成配方
+          example: clear_inspiration
+        - field_name: extracted_elements
+          data_type: object
+          semantic_meaning: 从用户输入中提取的创作关键要素
+          business_purpose: 结构化记录Agent对用户意图的理解，这些要素决定了配方的X-Y轴选择
+          fields:
+          - field_name: emotion_verbs
+            data_type: array[string]
+            semantic_meaning: 情感动词/核心动作
+            business_purpose: 决定X轴剧情模式的匹配依据（如'复仇'→A3复仇的罪）
+            example:
+            - 复仇
+            - 揭开真相
+          - field_name: scene_elements
+            data_type: array[string]
+            semantic_meaning: 场景要素/世界观元素
+            business_purpose: 决定Y轴标签的选择依据（如'赛博朋克'→赛博朋克标签）
+            example:
+            - 赛博朋克
+            - 黑客
+            - 大公司
+          - field_name: relationship_tension
+            data_type: array[string]
+            semantic_meaning: 人物关系张力/冲突来源
+            business_purpose: 影响人物设计和剧情冲突的设计，确保冲突有足够的张力
+            example:
+            - 被陷害
+            - 对抗
+          - field_name: user_preferences
+            data_type: object (optional)
+            semantic_meaning: 用户的情感偏好和禁忌
+            business_purpose: 指导化学反应强度选择和避雷红线设定
+            fields:
+            - desired_emotion: 期望的情感倾向（如'爽文'、'虐心'）
+            - forbidden: 明确拒绝的元素（如['太虐']）
+            example:
+              desired_emotion: 爽文
+              forbidden:
+              - 太虐
+        - field_name: selected_recipe
+          data_type: object
+          semantic_meaning: 用户选定的创作配方（X-Y轴化学反应组合）
+          business_purpose: 配方是故事的基因蓝图，决定了底层冲突结构（X轴）和表达载体（Y轴），是创作质量评估的核心依据
+          required_fields:
+          - field_name: x_axis_mode_id
+            data_type: enum[string]
+            semantic_meaning: 普罗蒂36种剧情模式的标识符
+            business_purpose: 决定故事的底层冲突结构（古典冲突基因），是故事的骨架
+            valid_pattern: ^[A-G]\d{1,2}$
+            valid_values:
+            - A1
+            - A2
+            - A3
+            - A4
+            - A5
+            - A6
+            - B7
+            - B8
+            - B9
+            - B10
+            - B11
+            - B12
+            - C13
+            - C14
+            - C15
+            - C16
+            - C17
+            - C18
+            - D19
+            - D20
+            - D21
+            - D22
+            - D23
+            - E24
+            - E25
+            - E26
+            - E27
+            - E28
+            - F29
+            - F30
+            - F31
+            - F32
+            - F33
+            - F34
+            - G35
+            - G36
+            group_semantics:
+              A1-A6: 哀求与拯救（弱势者的博弈）
+              B7-B12: 抗争与夺取（主动者的冒险）
+              C13-C18: 血缘的诅咒（家族黑暗）
+              D19-D23: 献祭与激情（灵魂的称量）
+              E24-E28: 权力与僭越（社会结构冲突）
+              F29-F34: 错位与误判（认知迷雾）
+              G35-G36: 时间的轮回（得与失）
+            example: A3
+            validation_rule: 必须匹配 RECIPE_KNOWLEDGE.md 中定义的36种模式之一
+          - field_name: x_axis_mode_name
+            data_type: string
+            semantic_meaning: X轴模式的中文名称
+            business_purpose: 便于阅读理解，与x_axis_mode_id一一对应
+            example: 复仇的罪
+            validation_rule: 必须与x_axis_mode_id对应的模式名称一致
+          - field_name: y_axis_tags
+            data_type: array[string]
+            semantic_meaning: 现代网文核心标签（表达载体）
+            business_purpose: 决定故事的视觉风格和世界观载体，是故事的血肉
+            array_length:
+            - 2
+            - 3
+            valid_values:
+            - 双向暗恋
+            - 系统流
+            - 无限流
+            - 种田流
+            - 赛博朋克
+            - 规则怪谈
+            - 重生/穿越
+            - 商战权谋
+            - 克苏鲁
+            - 第四天灾
+            - 仙侠修真
+            - 刑侦悬疑
+            combination_constraint: 某些标签组合是禁忌（如系统流+第四天灾+无限流会造成三重元设定混乱）
+            example:
+            - 赛博朋克
+            - 规则怪谈
+          - field_name: reaction_strength
+            data_type: enum[string]
+            semantic_meaning: X轴与Y轴的化学反应强度符号
+            business_purpose: 预测X-Y组合产生的故事张力和情感倾向，指导创作方向
+            valid_values:
+            - ↗
+            - ↘
+            - ✷
+            value_semantics:
+              ↗: 轻度反应（协同增强）：Y轴为X轴提供解决方案/缓冲垫，倾向甜爽向
+              ↘: 中度反应（冲突加剧）：Y轴增加道德困境/悲剧必然性，倾向虐心向
+              ✷: 剧烈反应（解构重构）：产生逻辑悖论/元叙事突破，烧脑向
+            example: ↗
+            validation_rule: 反应强度必须与用户偏好匹配（如用户要爽文则不应该是↘）
+          - field_name: tension_stars
+            data_type: integer
+            semantic_meaning: 故事张力指数（1-5星）
+            business_purpose: 预测故事的吸引力和冲突强度，指导剧情节奏设计
+            valid_range:
+            - 1
+            - 5
+            star_semantics:
+              1: 低张力（日常向）
+              2: 中低张力（轻度冲突）
+              3: 中等张力（明显冲突）
+              4: 高张力（激烈冲突）
+              5: 极高张力（生死博弈）
+            example: 4
+          - field_name: forbidden_elements
+            data_type: array[string]
+            semantic_meaning: 避雷红线（创作禁忌元素）
+            business_purpose: 确保创作内容符合用户偏好和底线，避免写出用户不喜欢的内容
+            array_constraint: 至少1个元素
+            example:
+            - 过度虐心
+            - 悲剧结局
+            - 主角受难过度
+            validation_rule: 避雷红线必须与用户的user_preferences.forbidden对应
+          optional_fields:
+          - field_name: x_axis_display
+            data_type: string
+            semantic_meaning: X轴模式在故事中的具体显影方式
+            business_purpose: 指导Agent如何将抽象的冲突模式转化为具体的剧情设计
+            example: 主角被大公司陷害（复仇的罪的起因），通过技术手段逐步揭开真相并完成复仇
+          - field_name: y_axis_combination_effect
+            data_type: string
+            semantic_meaning: Y轴标签组合产生的效应描述
+            business_purpose: 解释多个Y轴标签如何协同作用，指导世界观设计
+            example: 赛博朋克提供视觉风格和世界观框架，规则怪谈增加诡异悬疑氛围，两者结合形成'数字空间的恐怖规则'设定
+          - field_name: reaction_formula
+            data_type: string
+            semantic_meaning: 化学反应公式的一句话描述
+            business_purpose: 用一句话概括X-Y组合的核心效应，方便快速理解配方精髓
+            example: 复仇故事在赛博空间规则的加持下，从单纯的报复升级为揭示系统性腐败的正义之战（↗甜爽向）
+          - field_name: platform_fit
+            data_type: array[string]
+            semantic_meaning: 适合发布的平台类型
+            business_purpose: 指导故事的篇幅、节奏、表达方式适配不同平台的用户偏好
+            example:
+            - 起点中文网
+            - 番茄小说
+            - 掌阅
+        - field_name: one_sentence_synopsis
+          data_type: string
+          semantic_meaning: 一句话故事梗概
+          business_purpose: 高度浓缩的故事核心，帮助Agent在创作过程中保持主题聚焦，避免主题漂移
+          length_constraint: 30-50字
+          example: 被大公司陷害的黑客利用赛博空间规则，逐步揭开真相并完成复仇
+          validation_rule: 必须包含：主角+困境+行动+目标
+      validation_rules:
+        format_validation:
+        - x_axis_mode_id 必须在 [A1-A6, B7-B12, C13-C18, D19-D23, E24-E28, F29-F34, G35-G36] 中
+        - y_axis_tags 每个元素必须在 12种标签枚举中
+        - y_axis_tags 数组长度必须为 2-3
+        - reaction_strength 必须是 ↗ 或 ↘ 或 ✷
+        - tension_stars 必须是 1-5 的整数
+        - forbidden_elements 数组长度 >= 1
+        business_rule_validation:
+        - reaction_strength 必须与 user_preferences.desired_emotion 匹配（爽文→↗，虐心→↘）
+        - forbidden_elements 必须包含 user_preferences.forbidden 中的元素
+        - y_axis_tags 不能触发禁忌组合（除非用户明确要求）
+        - x_axis_mode_id 必须与 extracted_elements.emotion_verbs 语义匹配
+      example:
+        user_need: 我想写一个赛博朋克风格的复仇故事，主角是黑客，被大公司陷害，要揭开真相并复仇。不要太虐，希望是爽文。
+        inspiration_state: clear_inspiration
+        extracted_elements:
+          emotion_verbs:
+          - 复仇
+          - 揭开真相
+          scene_elements:
+          - 赛博朋克
+          - 黑客
+          - 大公司
+          relationship_tension:
+          - 被陷害
+          - 对抗
+          user_preferences:
+            desired_emotion: 爽文
+            forbidden:
+            - 太虐
+        selected_recipe:
+          x_axis_mode_id: A3
+          x_axis_mode_name: 复仇的罪
+          y_axis_tags:
+          - 赛博朋克
+          - 规则怪谈
+          reaction_strength: ↗
+          tension_stars: 4
+          forbidden_elements:
+          - 过度虐心
+          - 悲剧结局
+          - 主角受难过度
+          x_axis_display: 主角被大公司陷害，通过技术手段逐步揭开真相并完成复仇
+          y_axis_combination_effect: 赛博朋克提供视觉风格，规则怪谈增加诡异悬疑，形成'数字空间的恐怖规则'设定
+          reaction_formula: 复仇故事在赛博空间规则的加持下，从报复升级为揭示系统性腐败的正义之战
+        one_sentence_synopsis: 被大公司陷害的黑客利用赛博空间规则，逐步揭开真相并完成复仇
+    characters_json:
+      description: 人物设计（JSON格式）
+      format: JSON
+      purpose: 人物一致性的参考依据，避免角色崩坏，确保人物性格、动机、恐惧在整个创作过程中保持连贯
+      schema:
+        type: object
+        required_fields:
+        - field_name: main_characters
+          data_type: array[object]
+          semantic_meaning: 主角/核心角色数组
+          business_purpose: 定义故事的核心驱动人物，他们的动机和冲突是剧情发展的引擎
+          array_constraint: 至少1个元素
+          item_schema:
+            required_fields:
+            - field_name: name
+              data_type: string
+              semantic_meaning: 角色姓名
+              business_purpose: 角色的唯一标识符，便于在创作过程中引用和追踪
+              example: 林羽
+            - field_name: role
+              data_type: enum[string]
+              semantic_meaning: 角色类型
+              business_purpose: 区分主角和次要主角，决定故事视角和叙事重心
+              valid_values:
+              - protagonist
+              - deuteragonist
+              value_semantics:
+                protagonist: 第一主角，故事的核心视角人物，剧情围绕其展开
+                deuteragonist: 第二主角，与第一主角并行的重要角色，有独立的人物弧
+              example: protagonist
+            - field_name: traits
+              data_type: array[string]
+              semantic_meaning: 核心性格特质关键词
+              business_purpose: 保持角色性格一致性的锚点，防止角色崩坏（如聪明人突然降智）
+              array_length:
+              - 3
+              - 5
+              design_principle: 3-5个关键词既能保持核心特征清晰，又避免人设过载导致角色刻板
+              example:
+              - 冷静
+              - 聪明
+              - 复仇心重
+              - 技术天才
+            - field_name: overt_motivation
+              data_type: string
+              semantic_meaning: 显性动机（表面目标）
+              business_purpose: 角色在对话和行动中公开展示的驱动力，推动剧情进展
+              vs_covert: 显性动机是角色自己说出来的目标，隐性动机是角色自己也可能未意识到的深层需求
+              example: 揭开真相并复仇
+            - field_name: covert_motivation
+              data_type: string
+              semantic_meaning: 隐性动机（深层需求）
+              business_purpose: 制造人物层次感和深度，是角色成长弧的关键驱动力
+              why_important: 隐性动机与显性动机的张力创造角色内心冲突，让人物更真实立体
+              example: 证明自己清白，重获尊严
+            - field_name: secret_fear
+              data_type: string
+              semantic_meaning: 秘密恐惧（内心脆弱点）
+              business_purpose: 人物弧的关键驱动力，故事高潮往往是角色直面并克服这个恐惧
+              why_important: 恐惧让角色有弱点，弱点让角色有共鸣感，克服恐惧是成长的标志
+              example: 失去理智，成为自己最讨厌的人
+            optional_fields:
+            - field_name: identity
+              data_type: string
+              semantic_meaning: 身份职业/社会角色
+              business_purpose: 提供角色的社会定位和技能背景，影响角色的行动方式
+              example: 高级程序员
+            - field_name: misperception_of_other
+              data_type: string
+              semantic_meaning: 对其他主角的错位认知
+              business_purpose: 制造角色间的误会和冲突，为剧情转折提供空间
+              example: 一开始以为'幽灵'是敌人，后来发现是盟友
+            - field_name: hidden_connection
+              data_type: string
+              semantic_meaning: 与其他角色的隐藏连接
+              business_purpose: 埋设伏笔和反转点，在关键时刻揭示真相制造戏剧冲击
+              example: 幽灵其实是主角的前同事，假死后一直在暗中帮助
+        optional_fields:
+        - field_name: supporting_characters
+          data_type: array[object]
+          semantic_meaning: 配角/次要角色数组
+          business_purpose: 丰富故事世界，推动主角成长，制造剧情转折
+          item_schema:
+            required_fields:
+            - field_name: name
+              data_type: string
+              semantic_meaning: 配角姓名
+              example: 幽灵
+            - field_name: function
+              data_type: enum[string]
+              semantic_meaning: 对主角的作用类型
+              business_purpose: 明确配角在剧情中的功能定位，避免配角功能混乱
+              valid_values:
+              - 助力
+              - 阻碍
+              - 反转点
+              value_semantics:
+                助力: 帮助主角达成目标的盟友/导师角色
+                阻碍: 阻挠主角的对手/障碍角色
+                反转点: 在关键时刻改变立场或揭示真相的角色
+              example: 助力
+            optional_fields:
+            - field_name: identity
+              data_type: string
+              semantic_meaning: 配角身份
+              example: 神秘黑客
+            - field_name: description
+              data_type: string
+              semantic_meaning: 配角简要描述
+              example: 地下网络的传奇人物，掌握关键信息
+        - field_name: relationship_dynamics
+          data_type: string
+          semantic_meaning: 角色关系动态描述
+          business_purpose: 总结主要角色间的关系变化轨迹，指导人物互动的情感基调
+          example: 林羽与幽灵初期互相试探，后期建立信任；前同事误以为林羽已死，是关键反转点
+      validation_rules:
+        format_validation:
+        - main_characters 数组长度 >= 1
+        - 每个main_character必须包含所有required_fields
+        - traits 数组长度必须为 3-5
+        - role 必须是 protagonist 或 deuteragonist
+        - supporting_characters 的 function 必须是 助力/阻碍/反转点 之一
+        business_rule_validation:
+        - traits 中的特质不能自相矛盾（如同时有'冷静'和'冲动'）
+        - overt_motivation 必须与 creative_intent 中的 X轴模式匹配
+        - 如果有 deuteragonist，必须有与 protagonist 不同的视角或冲突
+      example:
+        main_characters:
+        - name: 林羽
+          role: protagonist
+          identity: 高级程序员
+          traits:
+          - 冷静
+          - 聪明
+          - 复仇心重
+          - 技术天才
+          overt_motivation: 揭开真相并复仇
+          covert_motivation: 证明自己清白，重获尊严
+          secret_fear: 失去理智，成为自己最讨厌的人
+        supporting_characters:
+        - name: 幽灵
+          identity: 神秘黑客
+          function: 助力
+          description: 地下网络的传奇人物，掌握关键信息
+        relationship_dynamics: 林羽与幽灵初期互相试探，后期建立信任；前同事误以为林羽已死，是关键反转点
+    outline_json:
+      description: 故事大纲（JSON格式）
+      format: JSON
+      purpose: 节奏规划参考，确保故事有合理的起承转合，主题贯穿始终，避免剧情拖沓或仓促
+      schema:
+        type: object
+        required_fields:
+        - field_name: act_one
+          data_type: object
+          semantic_meaning: 第一幕：开篇
+          business_purpose: 建立世界观、引入主角和核心冲突，是故事的地基
+          length_ratio: 20-30%的篇幅
+          narrative_function: 让读者理解：这是谁的故事？他们想要什么？他们面临什么问题？
+          required_fields:
+          - field_name: description
+            data_type: string
+            semantic_meaning: 该幕的核心任务描述
+            business_purpose: 高度概括本幕的叙事目标，指导Agent不偏离主线
+            example: 开篇（20-30%）- 建立世界观，引入冲突
+          - field_name: story_synopsis
+            data_type: string
+            semantic_meaning: 本幕故事梗概（自然语言叙述）
+            business_purpose: 完整描述本幕的故事发展，为后续场景设计提供上下文
+            length_guideline: 500-1000字
+            content_requirements:
+            - 本幕的主线剧情发展（具体发生了什么事件）
+            - 主角在本幕的关键行动和决策（做了什么选择）
+            - 重要的冲突和转折点（矛盾如何爆发和发展）
+            - 配角如何影响主线（谁起了什么作用）
+            - 本幕结束时主角的状态变化（从什么状态到什么状态）
+            example: |
+              第一幕讲述林羽从被陷害到决定反击的过程。
+              故事开始于公司内部会议，总监张伟当众指控林羽篡改了核心代码，导致客户数据泄露。
+              林羽震惊地发现所有日志都被篡改，自己百口莫辩。会后他被保安拦截，意识到公司已全面封锁他的权限。
+
+              林羽决定逃离。在停车场与保安周旋时，他利用技术手段短暂瘫痪了监控系统，驾车冲出公司大楼。
+              深夜，他在废弃工业区被神秘黑客"幽灵"接应。幽灵透露公司陷害他是因为他无意中触碰了某个秘密项目——
+              一个利用规则怪谈机制控制数字空间的实验。
+
+              林羽意识到，这不仅是职场陷害，背后有更大的阴谋。公司正在利用他开发的代码构建某种可怕的控制系统。
+              第一幕结束时，林羽决定进入地下黑客网络，主动出击揭开真相并摧毁这个系统。
+          - field_name: key_chapters
+            data_type: array[object]
+            semantic_meaning: 该幕的关键章节数组
+            business_purpose: 细化本幕的剧情节点，每个章节推进一个关键事件
+            array_constraint: 至少1个章节
+            item_schema:
+              required_fields:
+              - field_name: chapter_number
+                data_type: integer
+                semantic_meaning: 章节编号
+                business_purpose: 唯一标识符，与chapters/目录下的文件名对应
+                example: 1
+              - field_name: chapter_title
+                data_type: string
+                semantic_meaning: 章节标题
+                business_purpose: 概括本章的核心主题或视觉意象，吸引读者兴趣
+                example: 赛博迷城
+              - field_name: chapter_synopsis
+                data_type: string
+                semantic_meaning: 本章故事梗概（自然语言叙述）
+                business_purpose: 描述本章完整的故事发展，为场景设计提供叙事逻辑
+                length_guideline: 200-400字
+                content_requirements:
+                - 本章的起始状态和结束状态
+                - 主角在本章的核心行动
+                - 本章的主要冲突如何展开和推进
+                - 本章在整幕中的作用（承上启下的关系）
+                example: |
+                  本章聚焦林羽被陷害的过程和他的应对决策。故事从公司内部会议开始，
+                  总监张伟在高管和技术团队面前指控林羽篡改了核心代码，导致客户数据泄露。
+                  林羽震惊地发现所有日志都被篡改，他无法证明自己的清白。
+
+                  会议结束后，林羽被保安拦截，公司已全面封锁他的门禁和系统权限。
+                  他意识到这是有预谋的陷害，决定立即逃离。在停车场，林羽利用自己对公司安全系统的了解，
+                  短暂瘫痪了监控系统，驾车冲出公司大楼。
+
+                  深夜，林羽在废弃工业区被神秘黑客"幽灵"接应。幽灵透露，公司陷害林羽是因为他无意中
+                  触碰了一个秘密项目。本章结束时，林羽决定相信幽灵，进入地下黑客网络寻找真相。
+              - field_name: scene_sequence
+                data_type: array[object]
+                semantic_meaning: 本章场景序列（按时间顺序排列）
+                business_purpose: 将chapter_synopsis拆解为具体可执行的场景单元，每个场景包含明确的地点、人物、动作、冲突
+                array_constraint: 至少3个场景
+                design_principle: 场景设计必须忠实服务于chapter_synopsis的故事逻辑，不能为了凑数而凑数
+                item_schema:
+                  required_fields:
+                  - field_name: scene_number
+                    data_type: integer
+                    semantic_meaning: 场景编号（章内序号）
+                    example: 1
+                  - field_name: scene_location
+                    data_type: string
+                    semantic_meaning: 场景地点（具体环境）
+                    example: 公司总部24楼会议室
+                  - field_name: characters_present
+                    data_type: array[string]
+                    semantic_meaning: 在场角色
+                    example:
+                    - 林羽
+                    - 总监张伟
+                    - 技术主管李明
+                    - 其他高管
+                  - field_name: scene_purpose
+                    data_type: string
+                    semantic_meaning: 本场景在chapter_synopsis中的作用
+                    example: 展现陷害事件的爆发，建立主要冲突
+                  - field_name: core_action
+                    data_type: string
+                    semantic_meaning: 核心动作（谁对谁做了什么，要具体）
+                    action_guideline: 必须是可视化的具体行为，不能是抽象表述
+                    example: 总监张伟当众播放一段视频，显示林羽的账号在凌晨3点修改了核心代码，并将客户数据上传到外部服务器
+                  - field_name: conflict_point
+                    data_type: string
+                    semantic_meaning: 本场景的冲突爆发点
+                    example: 林羽发现所有系统日志都被篡改，自己的登录记录、代码提交记录全部指向他，但他确信自己从未进行过这些操作
+                  - field_name: emotional_shift
+                    data_type: string
+                    semantic_meaning: 本场景中主角的情感变化（从A到B）
+                    example: 从最初的震惊困惑，到发现证据被伪造后的愤怒，最后意识到这是精心策划的陷阱时的冷静算计
+                  - field_name: scene_outcome
+                    data_type: string
+                    semantic_meaning: 本场景的结果（为下一场景埋伏笔）
+                    example: 林羽被要求交出工作设备并暂时停职，他意识到必须尽快离开公司
+                example:
+                - scene_number: 1
+                  scene_location: 公司总部24楼会议室
+                  characters_present:
+                  - 林羽
+                  - 总监张伟
+                  - 技术主管李明
+                  - 其他高管
+                  scene_purpose: 展现陷害事件的爆发，建立主要冲突
+                  core_action: 总监张伟当众播放视频证据，指控林羽篡改核心代码导致数据泄露
+                  conflict_point: 林羽发现所有日志都被篡改，无法自证清白
+                  emotional_shift: 从震惊困惑到愤怒，再到冷静算计
+                  scene_outcome: 林羽被要求停职并交出设备，意识到必须尽快逃离
+                - scene_number: 2
+                  scene_location: 公司总部地下停车场
+                  characters_present:
+                  - 林羽
+                  - 保安队长
+                  - 三名保安
+                  scene_purpose: 展现林羽的技术能力和决断力
+                  core_action: 林羽利用手机远程触发公司安全系统的测试模式，短暂瘫痪监控和门禁系统
+                  conflict_point: 保安队长已接到命令阻止林羽离开，双方对峙
+                  emotional_shift: 从紧张到果断，最后驾车冲出时的解脱
+                  scene_outcome: 林羽成功逃离，但他知道自己现在是公司通缉的目标
+                - scene_number: 3
+                  scene_location: 城郊废弃工业区
+                  characters_present:
+                  - 林羽
+                  - 神秘黑客"幽灵"
+                  scene_purpose: 引入关键盟友，揭示阴谋的冰山一角
+                  core_action: '"幽灵"现身接应林羽，透露公司秘密项目的存在'
+                  conflict_point: 林羽不确定是否能信任这个陌生人
+                  emotional_shift: 从警惕怀疑到逐渐产生信任
+                  scene_outcome: 林羽决定进入地下黑客网络，开始反击
+              optional_fields:
+              - field_name: emotional_tone
+                data_type: string
+                semantic_meaning: 本章整体情感基调
+                business_purpose: 指导Agent控制本章的情绪氛围，确保情绪曲线有起伏
+                example: 紧张、愤怒、决绝
+          - field_name: turning_point
+            data_type: string
+            semantic_meaning: 本幕结尾的转折点
+            business_purpose: 标志本幕结束、下一幕开始的关键事件，推动故事进入新阶段
+            why_required: 第一幕和第二幕必须有转折点，否则故事会平淡无波澜
+            example: 林羽发现公司篡改代码的目的远超想象
+        - field_name: act_two
+          data_type: object
+          semantic_meaning: 第二幕：挣扎
+          business_purpose: 冲突升级、主角陷入困境，是故事的核心张力所在
+          length_ratio: 40-50%的篇幅
+          narrative_function: 展示主角如何应对困难、失败、成长，让读者紧张和共鸣
+          required_fields:
+          - description
+          - story_synopsis
+          - key_chapters
+          - turning_point
+          note: schema结构与act_one相同，但narrative_function不同
+        - field_name: act_three
+          data_type: object
+          semantic_meaning: 第三幕：高潮+结局
+          business_purpose: X-Y化学反应爆发、主角达成目标或接受失败，是故事的情感释放点
+          length_ratio: 20-30%的篇幅
+          narrative_function: 解决所有悬念、完成人物弧、给出情感答案（爽/虐/升华）
+          required_fields:
+          - description
+          - story_synopsis
+          - key_chapters
+          optional_fields:
+          - turning_point
+          note: schema结构与act_one相同；第三幕的turning_point是可选的，因为结局往往是渐进而非突变
+      validation_rules:
+        format_validation:
+        - 必须包含 act_one, act_two, act_three 三个幕
+        - act_one 和 act_two 必须有 turning_point
+        - 每个 act 的 key_chapters 数组至少有 1 个元素
+        - chapter_number 必须是正整数
+        business_rule_validation:
+        - act_one 的篇幅建议占总章节数的 20-30%
+        - act_two 的篇幅建议占总章节数的 40-50%
+        - act_three 的篇幅建议占总章节数的 20-30%
+        - turning_point 必须是推动剧情的关键事件，不能是日常琐事
+        - 每个act必须有story_synopsis（500-1000字故事梗概）
+        - 每个chapter必须有chapter_synopsis（200-400字章节梗概）
+        - 每个chapter必须有scene_sequence（至少3个场景）
+        - scene_sequence中的每个场景必须有明确的地点、角色、动作、冲突、情感变化
+        - scene_sequence必须忠实服务于chapter_synopsis的故事逻辑
+      design_rationale:
+        three_act_structure: 采用经典三幕式结构，符合人类叙事心理，让故事有清晰的节奏
+        turning_points: 转折点是故事的关节，连接不同阶段，制造戏剧张力
+        length_ratio: 篇幅比例遵循经典比例，避免开篇拖沓或结局仓促
+      example:
+        act_one:
+          description: 开篇（20-30%）- 建立世界观，引入冲突
+          story_synopsis: |
+            第一幕讲述林羽从被陷害到决定反击的过程。
+            故事开始于公司内部会议，总监张伟当众指控林羽篡改了核心代码，导致客户数据泄露。
+            林羽震惊地发现所有日志都被篡改，自己百口莫辩。会后他被保安拦截，意识到公司已全面封锁他的权限。
+
+            林羽决定逃离。在停车场与保安周旋时，他利用技术手段短暂瘫痪了监控系统，驾车冲出公司大楼。
+            深夜，他在废弃工业区被神秘黑客"幽灵"接应。幽灵透露公司陷害他是因为他无意中触碰了某个秘密项目——
+            一个利用规则怪谈机制控制数字空间的实验。
+
+            林羽意识到，这不仅是职场陷害，背后有更大的阴谋。公司正在利用他开发的代码构建某种可怕的控制系统。
+            第一幕结束时，林羽决定进入地下黑客网络，主动出击揭开真相并摧毁这个系统。
+          key_chapters:
+          - chapter_number: 1
+            chapter_title: 赛博迷城
+            chapter_synopsis: |
+              本章聚焦林羽被陷害的过程和他的应对决策。故事从公司内部会议开始，
+              总监张伟在高管和技术团队面前指控林羽篡改了核心代码，导致客户数据泄露。
+              林羽震惊地发现所有日志都被篡改，他无法证明自己的清白。
+
+              会议结束后，林羽被保安拦截，公司已全面封锁他的门禁和系统权限。
+              他意识到这是有预谋的陷害，决定立即逃离。在停车场，林羽利用自己对公司安全系统的了解，
+              短暂瘫痪了监控系统，驾车冲出公司大楼。
+
+              深夜，林羽在废弃工业区被神秘黑客"幽灵"接应。幽灵透露，公司陷害林羽是因为他无意中
+              触碰了一个秘密项目。本章结束时，林羽决定相信幽灵，进入地下黑客网络寻找真相。
+            scene_sequence:
+            - scene_number: 1
+              scene_location: 公司总部24楼会议室
+              characters_present:
+              - 林羽
+              - 总监张伟
+              - 技术主管李明
+              - 其他高管
+              scene_purpose: 展现陷害事件的爆发，建立主要冲突
+              core_action: 总监张伟当众播放视频证据，指控林羽篡改核心代码导致数据泄露
+              conflict_point: 林羽发现所有日志都被篡改，无法自证清白
+              emotional_shift: 从震惊困惑到愤怒，再到冷静算计
+              scene_outcome: 林羽被要求停职并交出设备，意识到必须尽快逃离
+            - scene_number: 2
+              scene_location: 公司总部地下停车场
+              characters_present:
+              - 林羽
+              - 保安队长
+              - 三名保安
+              scene_purpose: 展现林羽的技术能力和决断力
+              core_action: 林羽利用手机远程触发公司安全系统的测试模式，短暂瘫痪监控和门禁系统
+              conflict_point: 保安队长已接到命令阻止林羽离开，双方对峙
+              emotional_shift: 从紧张到果断，最后驾车冲出时的解脱
+              scene_outcome: 林羽成功逃离，但他知道自己现在是公司通缉的目标
+            - scene_number: 3
+              scene_location: 城郊废弃工业区
+              characters_present:
+              - 林羽
+              - 神秘黑客"幽灵"
+              scene_purpose: 引入关键盟友，揭示阴谋的冰山一角
+              core_action: '"幽灵"现身接应林羽，透露公司秘密项目的存在'
+              conflict_point: 林羽不确定是否能信任这个陌生人
+              emotional_shift: 从警惕怀疑到逐渐产生信任
+              scene_outcome: 林羽决定进入地下黑客网络，开始反击
+            emotional_tone: 紧张、愤怒、决绝
+          turning_point: 林羽发现公司篡改代码的目的远超想象，背后是规则怪谈控制实验
+        act_two:
+          description: 挣扎（40-50%）- 冲突升级，陷入低谷
+          story_synopsis: (此处应有500-1000字梗概，展示省略)
+          key_chapters:
+          - chapter_number: 2
+            chapter_title: 深渊凝视
+            chapter_synopsis: (此处应有200-400字章节梗概，展示省略)
+            scene_sequence:
+            - scene_number: 1
+              scene_location: 地下黑客基地
+              characters_present:
+              - 林羽
+              - 幽灵
+              - 其他黑客
+              scene_purpose: 林羽开始深入调查
+              core_action: 林羽在幽灵帮助下入侵公司服务器
+              conflict_point: 遇到AI防火墙，发现更大的阴谋
+              emotional_shift: 从自信到困惑
+              scene_outcome: 线索指向更深层的秘密
+            emotional_tone: 困惑、受挫
+          turning_point: 关键证据被销毁，林羽陷入绝境
+        act_three:
+          description: 高潮+结局（20-30%）- X-Y化学反应爆发
+          story_synopsis: (此处应有500-1000字梗概，展示省略)
+          key_chapters:
+          - chapter_number: 3
+            chapter_title: 代码审判
+            chapter_synopsis: (此处应有200-400字章节梗概，展示省略)
+            scene_sequence:
+            - scene_number: 1
+              scene_location: 数字空间核心
+              characters_present:
+              - 林羽
+              - 张伟
+              - 幽灵
+              scene_purpose: 最终对决
+              core_action: 林羽利用规则怪谈元素设下陷阱
+              conflict_point: 与张伟的终极对决
+              emotional_shift: 从紧张到胜利的释然
+              scene_outcome: 完成复仇，摧毁控制系统
+            emotional_tone: 爽快、释然
+    writing_log_md:
+      description: 创作日志（连续性笔记）- 动态更新的工作文件
+      format: Markdown
+      purpose: 帮助Agent在长篇创作中保持前后一致，避免人物崩坏、剧情矛盾、时间线错乱
+      update_rule: 每写完一章后更新，记录关键变化
+      sections:
+      - section: 已完成章节摘要
+        content: |
+          每章的关键信息（简洁记录，方便快速回顾）：
+          - 章节编号 & 标题
+          - 核心事件（1-2句话）
+          - 人物状态变化（情感/关系/位置）
+          - 埋下的伏笔/悬念
+          - 时间线标记（如：第3天/凌晨）
+        example: |
+          **第一章：赛博迷城**
+          - 事件：主角林羽被公司陷害，逃入地下黑客网络
+          - 状态：林羽从信任公司 → 愤怒复仇，认识了神秘黑客"幽灵"
+          - 伏笔：幽灵提到"真相比你想象的更深"
+          - 时间：2086年5月1日，晚上11点
+      - section: 当前故事状态
+        content: |
+          关键状态追踪（确保后续章节不会出现矛盾）：
+          - 主角位置：当前在哪里？
+          - 人物关系：谁知道什么？谁误会了什么？
+          - 已知信息：主角掌握了哪些线索/证据？
+          - 世界观状态：有无改变世界规则的事件？
+          - 时间线：当前是第几天/什么时间？
+        example: |
+          - 林羽位置：地下黑客基地"暗网巢穴"
+          - 关系状态：与幽灵初步信任，前同事以为他已死
+          - 已知线索：发现公司篡改了自己的代码，但不知为何
+          - 时间线：第1天结束（5月1日深夜）
+      - section: 待办事项（避免遗忘）
+        content: |
+          需要在后续章节中处理的内容：
+          - 待填的坑：前文提到但未展开的内容
+          - 待引爆的伏笔：埋设的悬念何时揭晓
+          - 待呼应的前文：需要前后照应的细节
+          - 待完成的人物弧：角色成长的关键节点
+        example: |
+          - [ ] 揭示"幽灵"的真实身份（计划第5章）
+          - [ ] 解释公司篡改代码的真正目的（计划第8章高潮）
+          - [ ] 前同事发现林羽还活着的反应（计划第3章）
+          - [ ] 林羽的隐性动机"证明自己清白"如何实现
+      - section: 一致性检查清单
+        content: |
+          关键一致性要点（每写一章前检查）：
+          - 人物性格：是否符合character.md中的设定？有无突然降智/崩坏？
+          - 时间线：时间推进是否合理？有无时间倒流/跳跃？
+          - 世界观规则：是否遵守creative_intent.md中的世界观锚点？
+          - X轴模式：核心冲突（复仇）是否持续推进？
+          - Y轴标签：赛博朋克特征是否在每章体现？
+          - 避雷红线：是否触碰了forbidden_elements？
+      - section: 下一章预告
+        content: |
+          根据outline.md，下一章要写什么（提醒Agent不要偏离主线）：
+          - 章节编号 & 计划标题
+          - 核心任务（根据大纲）
+          - 关键场景/对话
+          - 需要呼应的前文内容
+        example: |
+          **第二章：数字幽魂**
+          - 任务：林羽尝试入侵公司服务器，但遇到AI防火墙
+          - 场景：赛博空间中的对决，展示规则怪谈元素
+          - 呼应：第一章埋下的"幽灵"的神秘技术
+          - 情感：从愤怒 → 困惑（发现事情比想象的复杂）
+      usage_example: |
+        Agent的工作流程：
+        1. 写完第一章后 → 更新writing_log.md（记录第一章摘要、更新故事状态、添加待办）
+        2. 开始写第二章前 → 阅读writing_log.md（回顾前情、检查一致性、确认下一章任务）
+        3. 写完第二章后 → 再次更新writing_log.md
+        ... 循环往复
+      note: |
+        - 这个文件是Agent的"工作记忆"，不是给读者看的
+        - 内容应简洁实用，避免冗长重复
+        - Checker可以验证：Agent是否在每章后更新了这个文件
+    chapters_md:
+      description: 章节内容
+      format: Markdown
+      structure:
+      - 章节标题（如：第一章 赛博迷城）
+      - 正文内容（根据format_type决定格式）
+      - 字数统计（可选）
+      format_types:
+      - type: 网文格式
+        content: 章节体，带章节标题，段落分明
+      - type: 剧本格式
+        content: 场景描述 + 对话 + 动作指示
+      - type: 自媒体格式
+        content: 连贯叙事，分段清晰
+      note: 命名建议：chapter_01.md, chapter_02.md, chapter_03.md 等
+    final_work_md:
+      description: 最终成稿（可选）
+      format: Markdown
+      content: |
+        整合所有章节后的完整作品，包含：
+        - 作品标题
+        - 完整正文
+        - 字数统计
+        - 配方卡（附在文末，记录创作基因）
+      note: 如果Agent已经创建了chapters/，这个文件可以省略
+  validation_checkpoints:
+    description: Checker可以验证的关键检查点
+    file_existence:
+      description: 文件存在性验证（基于file_naming_conventions定义）
+      checks:
+      - file: creative_intent.json
+        location: workspace根目录
+        required: true
+      - file: characters.json
+        location: workspace根目录
+        required: true
+      - file: outline.json
+        location: workspace根目录
+        required: true
+      - file: writing_log.md
+        location: workspace根目录
+        required: true
+        condition: 如果chapters/目录下有文件，则writing_log.md必须存在
+      - directory: chapters/
+        location: workspace根目录
+        required: true
+      - file_pattern: chapters/chapter_\d{2}\.md
+        description: chapters/目录下至少有1个符合命名规范的章节文件
+        required: true
+        min_count: 1
+    naming_convention_compliance:
+      description: 文件命名规范遵循（format_compliance维度）
+      checks:
+      - check_id: chapter_files_naming
+        check_type: naming_convention
+        pattern: ^chapter_\d{2}\.md$
+        location: chapters/目录
+        description: 章节文件命名必须符合 chapter_NN.md 格式（NN为两位数字）
+        valid_examples:
+        - chapter_01.md
+        - chapter_02.md
+        - chapter_10.md
+        invalid_examples:
+        - chapter1.md
+        - chapter_1.md
+        - chap_01.md
+        - 第一章.md
+      - check_id: root_files_exact_match
+        check_type: exact_match
+        description: 根目录文件名必须精确匹配
+        required_files:
+        - creative_intent.json
+        - characters.json
+        - outline.json
+        - writing_log.md
+        note: 不允许变体，如creative_intent_v1.json或creative-intent.json
+    content_completeness:
+      creative_intent:
+      - 包含用户原始需求（user_need字段）
+      - 包含灵感状态（inspiration_state字段）
+      - 包含选定配方（selected_recipe对象，包含X轴+Y轴+化学反应）
+      - 包含避雷红线（selected_recipe.forbidden_elements数组）
+      characters:
+      - 至少有1个主角（main_characters数组长度 >= 1）
+      - 每个主角包含必需字段（name, role, traits, overt_motivation, covert_motivation, secret_fear）
+      - traits数组长度为3-5
+      outline:
+      - 包含三幕结构（act_one, act_two, act_three）
+      - 包含至少2个转折点（act_one.turning_point 和 act_two.turning_point）
+      - 每个act至少有1个key_chapters
+      writing_log:
+      - 包含已完成章节摘要（与chapters/数量一致）
+      - 包含当前故事状态（人物位置、关系、时间线）
+      - 包含待办事项或一致性检查清单
+      - 动态更新：每写完一章后应该更新
+      chapters:
+      - 开篇章节展示了Y轴标签特征
+      - 核心冲突（X轴模式）在章节中有体现
+    format_validation:
+      description: JSON格式的确定性验证（format_compliance维度）
+      creative_intent_json:
+      - check_type: json_schema
+        description: JSON语法正确性
+      - check_type: entity_attribute_equals
+        field: inspiration_state
+        valid_values:
+        - no_inspiration
+        - vague_inspiration
+        - clear_inspiration
+      - check_type: entity_attribute_equals
+        field: selected_recipe.x_axis_mode_id
+        valid_pattern: ^[A-G]\d{1,2}$
+        note: 必须匹配 A1-A6, B7-B12, C13-C18, D19-D23, E24-E28, F29-F34, G35-G36
+      - check_type: entity_attribute_equals
+        field: selected_recipe.reaction_strength
+        valid_values:
+        - ↗
+        - ↘
+        - ✷
+      - check_type: entity_attribute_equals
+        field: selected_recipe.tension_stars
+        valid_range:
+        - 1
+        - 5
+        data_type: integer
+      characters_json:
+      - check_type: json_schema
+        description: JSON语法正确性
+      - check_type: entity_attribute_equals
+        field: main_characters
+        constraint: length >= 1
+      - check_type: entity_attribute_equals
+        field: main_characters[*].role
+        valid_values:
+        - protagonist
+        - deuteragonist
+      outline_json:
+      - check_type: json_schema
+        description: JSON语法正确性
+      - check_type: entity_attribute_equals
+        field: act_one
+        constraint: must exist
+      - check_type: entity_attribute_equals
+        field: act_two
+        constraint: must exist
+      - check_type: entity_attribute_equals
+        field: act_three
+        constraint: must exist
+    business_rule_validation:
+      description: 业务规则的确定性验证（business_rule_compliance维度）
+      y_axis_tags_enumeration:
+        check_type: entity_attribute_equals
+        field: creative_intent.selected_recipe.y_axis_tags
+        description: Y轴标签枚举合法性
+        valid_values:
+        - 双向暗恋
+        - 系统流
+        - 无限流
+        - 种田流
+        - 赛博朋克
+        - 规则怪谈
+        - 重生/穿越
+        - 商战权谋
+        - 克苏鲁
+        - 第四天灾
+        - 仙侠修真
+        - 刑侦悬疑
+        constraint: 每个元素必须在valid_values中
+      y_axis_tags_count:
+        check_type: entity_attribute_equals
+        field: creative_intent.selected_recipe.y_axis_tags
+        description: Y轴标签数量约束
+        valid_range:
+        - 2
+        - 3
+        constraint: 数组长度必须为2-3
+      forbidden_elements_count:
+        check_type: entity_attribute_equals
+        field: creative_intent.selected_recipe.forbidden_elements
+        description: 避雷红线数量约束
+        constraint: length >= 1
+      main_characters_count:
+        check_type: entity_attribute_equals
+        field: characters.main_characters
+        description: 主角数量约束
+        constraint: length >= 1
+      traits_count:
+        check_type: entity_attribute_equals
+        field: characters.main_characters[*].traits
+        description: 性格特质数量约束
+        valid_range:
+        - 3
+        - 5
+  usage_notes: |
+    1. **文件命名必须严格遵循规范**：
+       - 根目录文件：creative_intent.json, characters.json, outline.json, writing_log.md（精确匹配）
+       - 章节文件：chapter_01.md, chapter_02.md（必须两位数字，不允许chapter_1.md）
+       - 不允许任何变体或中文命名
+
+    2. Agent应该在每个阶段完成时写入对应的文件
+
+    3. 文件路径都是相对于workspace根目录
+
+    4. **格式选择原则**：
+       - 元数据（creative_intent, characters, outline）用JSON → 可确定性验证
+       - 创作内容（writing_log, chapters/, final_work）用Markdown → LLM语义分析
+
+    5. writing_log.md是动态文件，需要在每章完成后更新（这是保持前后一致的关键）
+
+    6. 允许Agent创建额外的辅助文件（如world_anchors.md），但不强制要求
+
+    7. **Checker验证分两层**：
+       - 第一层（格式+业务规则）：JSON文件的确定性验证（无需LLM）
+       - 第二层（内容质量）：Markdown文件的语义分析（需要LLM）
+
+    8. 如果用户只要求生成大纲而不写作，可以不创建chapters/和writing_log.md
+
+    9. **命名规范验证优先级**：文件存在性 → 命名格式正确性 → 内容Schema → 内容语义
+checker_architecture:
+  description: |
+    本场景使用两阶段checker架构，支持独立重跑评分逻辑：
+    - checker_execute.py: 执行所有检查（含LLM调用），生成execution_result.json
+    - checker_score.py: 计算维度分数和质量等级，生成check_result.json
+    - checker.py: Wrapper入口，与benchkit适配
+  split_design:
+    purpose: 经常需要调整统计逻辑（维度权重、质量等级判断等），拆分后可避免重复执行昂贵的LLM检查
+    stage_1_execute:
+      script: env/checker_execute.py
+      responsibility: 执行所有检查项（调用LLM），生成原始检查结果
+      input:
+      - sample_result.json（包含conversation_history和workspace_path）
+      - check_list（来自unified_scenario_design.yaml）
+      - LLM配置（model_name, api_base, api_key）
+      output: execution_result.json
+      output_format:
+        sample_id: 样本ID
+        check_timestamp: 检查时间戳
+        check_details:
+          检查项N:
+            result: pass/fail/skip
+            reason: 简要原因
+            details: 详细信息
+            check_type: 检查类型
+            dimension_id: 能力维度ID
+            subcategory_id: 子维度ID
+            level: must_have/basic/excellent
+            grading: 评分详情（仅semantic_analysis有）
+      cost: 贵（含LLM调用），可缓存
+    stage_2_score:
+      script: env/checker_score.py
+      responsibility: 按能力维度聚合统计，计算质量等级
+      input:
+      - execution_result.json（stage_1输出）
+      - capability_taxonomy.yaml（可选，能力体系配置）
+      output: check_result.json
+      output_format:
+        check_version: novel_writing_v1.0
+        sample_id: 样本ID
+        check_timestamp: 检查时间戳
+        dimension_scores:
+          format_compliance:
+            score: 分数(0-100)
+            pass_rate: 通过率(0-1)
+            total: 总数
+            passed: 通过数
+            failed: 失败数
+            failed_items:
+            - 失败的check_id列表
+          business_rule_compliance:
+            '...': null
+          interaction_completeness:
+            '...': null
+          content_quality:
+            overall_score: 总分(0-100)
+            quality_level: unqualified/qualified/excellent
+            basic_layer:
+              '...': null
+            advanced_layer:
+              '...': null
+        overall_result:
+          status: Excellent/Good/Fair/Poor
+          total_score: 总分(0-100)
+          total_checks: 总检查项数
+          passed_checks: 通过数
+          failed_checks: 失败数
+          pass_rate: 通过率(0-1)
+        check_details: 完整的检查详情（来自execution_result）
+      cost: 便宜（纯计算），可重跑
+    wrapper_interface:
+      script: env/checker.py
+      responsibility: 统一入口，与benchkit适配
+      input:
+      - bench.json（包含check_list）
+      - result.json（Agent执行结果）
+      - LLM配置
+      output: check_result.json
+      internal_flow:
+      - 调用checker_execute.py执行检查
+      - 调用checker_score.py计算分数
+      - 输出完整的check_result.json
+      compatibility: 保持与benchkit executor的完全兼容
+  check_types:
+    description: 本场景支持的4种检查类型
+    conversation_analysis:
+      description: 分析对话历史，验证Agent的意图识别和工作流程遵循
+      subtypes:
+      - 'intention_detection: 意图识别（查找evidence_keywords）'
+      - 'workflow_adherence: 工作流程遵循（检查should_not_deploy）'
+      cost: 零LLM成本，确定性验证
+    tool_invocation:
+      description: 检查Agent是否调用了期望的工具，参数是否正确
+      cost: 零LLM成本，确定性验证
+    file_content_analysis:
+      description: 分析workspace中的文件内容（配方卡、草稿等）
+      subtypes:
+      - 'recipe_card_completeness: 配方卡完整性'
+      - 'recipe_diversity: 配方多样性'
+      cost: 零LLM成本，确定性验证
+    semantic_analysis:
+      description: 使用LLM进行语义判断和评分
+      subtypes:
+      - '质量评分（quality_dimensions）: 返回grading分数（1-5分）'
+      - '验证规则（validation_rules）: 返回matched布尔值'
+      cost: 需要LLM调用
+      examples:
+        quality_scoring:
+          params:
+            analysis_target: opening_draft
+            quality_dimensions:
+            - dimension: hook_strength
+              description: 开篇钩子强度
+              rubric: 1分=无钩子，3分=有冲突/悬念，5分=第一句话就抓住读者
+              pass_threshold: 3.0
+            - dimension: y_tag_visibility
+              description: Y轴标签特征展示
+              rubric: 1分=看不出标签，3分=有标签元素，5分=前100-300字清晰展示
+              pass_threshold: 3.0
+          output:
+            result: pass/fail
+            grading:
+              hook_strength: 4.2
+              y_tag_visibility: 3.8
+        validation_rules:
+          params:
+            analysis_target: selected_recipe
+            validation_rules:
+            - rule_id: x_axis_valid
+              description: X轴模式必须是36种之一
+              validation_method: keyword_match
+            - rule_id: y_axis_valid
+              description: Y轴标签必须是12种之一
+              validation_method: keyword_match
+          output:
+            result: pass/fail
+            reason: 判断依据
+  capability_dimensions:
+    description: 4个能力维度的聚合规则
+    format_compliance:
+      name: 格式规范遵循
+      calculation: 通过率 × 100
+      mapping: check_list中dimension_id=format_compliance的检查项
+    business_rule_compliance:
+      name: 业务规则遵循
+      calculation: 通过率 × 100
+      mapping: check_list中dimension_id=business_rule_compliance的检查项
+    interaction_completeness:
+      name: 流程交互完整性
+      calculation: 通过率 × 100
+      mapping: check_list中dimension_id=interaction_completeness的检查项
+    content_quality:
+      name: 内容创作质量
+      calculation: 两层体系评分
+      mapping: check_list中dimension_id=content_quality的检查项
+      two_tier_system:
+        basic_layer:
+          description: 基础质量（60分及格线）
+          checks:
+          - 'theme_consistency: 主题一致性'
+          - 'main_character_consistency: 主要角色一致性'
+          - 'character_trait_consistency: 人物设定一致性'
+          - 'logical_contradiction: 逻辑硬伤'
+          quality_tier_field: quality_tier=basic
+        advanced_layer:
+          description: 优秀质量（60-80分）
+          checks:
+          - 'appeal_strength_advanced: 吸引力强度（priority=high）'
+          - 'emotional_impact: 情感冲击力（priority=high）'
+          - 'genre_fit: 题材契合度（priority=high）'
+          - 'pacing_rationality_advanced: 剧情节奏（priority=medium）'
+          - 'hook_design: 钩子设计（priority=medium）'
+          - 'novelty_appeal: 立意新颖性（priority=medium）'
+          - 'dialogue_quality: 台词质量（priority=medium）'
+          - 'sweetness_quality: 甜度质量（priority=low，仅甜宠）'
+          - 'humor_effect: 搞笑效果（priority=low，仅喜剧）'
+          quality_tier_field: quality_tier=advanced
+          note: 可选择性启用，不必全部使用
+        quality_level_calculation:
+          unqualified: basic层有任何失败 → 0-60分
+          qualified: basic全过 + advanced通过率<70% → 60-70分
+          excellent: basic全过 + advanced通过率≥70% → 70分以上
+    overall_score:
+      calculation: 4个维度等权平均（content_quality使用overall_score）
+      status_mapping:
+        Excellent: ≥95分
+        Good: 80-95分
+        Fair: 60-80分
+        Poor: <60分
+  usage_scenarios:
+    benchkit_integration:
+      description: benchkit executor调用checker.py wrapper
+      command: |
+        python env/checker.py \
+          --bench bench.json \
+          --result result.json \
+          --model claude-3-5-sonnet-20241022 \
+          --base-url https://api.anthropic.com \
+          --api-key YOUR_API_KEY \
+          --output check_result.json
+    manual_debugging:
+      description: 手动调试或重跑scoring
+      step1: |
+        python env/checker_execute.py \
+          --sample-result sample_result.json \
+          --checklist unified_scenario_design.yaml \
+          --model-name claude-3-5-sonnet-20241022 \
+          --api-base https://api.anthropic.com \
+          --api-key YOUR_API_KEY \
+          --output execution_result.json
+      step2: |
+        python env/checker_score.py \
+          --execution-result execution_result.json \
+          --capability-taxonomy check_capability_taxonomy.yaml \
+          --output check_result.json
+    rerun_scoring:
+      description: 调整统计逻辑后，只重跑第2步
+      prerequisite: 已有execution_result.json（第1步的缓存结果）
+      command: |
+        # 修改checker_score.py的计算逻辑后
+        python env/checker_score.py \
+          --execution-result execution_result.json \
+          --output check_result_v2.json
+check_definitions_ref: ../check_definitions
