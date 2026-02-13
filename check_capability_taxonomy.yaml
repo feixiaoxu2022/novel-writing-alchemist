@@ -1,10 +1,10 @@
 # Check能力维度分层体系
 # 用于统计和分析模型在不同能力维度上的表现
 
-version: "2.8"
+version: "2.9"
 created_at: "2026-01-29"
-updated_at: "2026-02-13"
-description: "定义check_list检查项的能力维度分层，支持按维度聚合统计和归因分析。v2.8新增P1-P5程序化内容质量检查（章节克隆、交替重复、章节完成度、长度稳定性、段落重复），零LLM成本检测严重结构性缺陷"
+updated_at: "2026-02-14"
+description: "定义check_list检查项的能力维度分层。v2.9新增4个维度解决短篇区分度不足：imagery_system(意象系统)、emotional_gradient(情感弧线层次)、semantic_redundancy(语义重复P6级)、structural_design(结构功能性,短篇条件化)；强化narrative_density整合Show vs Tell评判"
 
 # === 三层结构 ===
 # 第一层：能力大类（对应9大核心能力）
@@ -679,10 +679,80 @@ capability_dimensions:
           - "✅ 逻辑自洽：根据墙上壁画中的星象排列推导出密码对应黄道十二宫的编号，线索链完整"
         note: "题材特定检查项，仅适用于brainy_action/suspense/mystery等需要智力对抗的题材。审计发现qwen3的BRAINY_ACTION样本中谜题设计全面崩坏"
 
-      # === 挂起的维度（暂不启用，等积累评判经验后再设计）===
+      # v1.1新增（4个）：解决短篇区分度不足问题
+      - subcategory_id: "imagery_system"
+        subcategory_name: "意象系统"
+        cn_name: "有没有贯穿全文的核心意象，意象有没有意义变奏"
+        sort_order: [3, 46]
+        tier_level: "advanced"
+        description: "核心意象（物件/场景/感官元素）在全文反复出现且在不同阶段发生意义层面的变化（变奏），比喻与主题深度关联而非通用修辞堆砌。短篇/超短篇中本项权重更高——短篇没有篇幅做复杂情节，意象变奏是最经济的结构手段"
+        check_types: ["semantic_check"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        priority: "high"
+        validation_method: "llm_semantic_analysis"
+        examples:
+          - "✅ 有变奏：'信'在故事中经历了 恶作剧→警告→遗书→闭环证明 四次意义变化，与宿命论主题咬合"
+          - "✅ 有变奏：'雨'从日常背景→浪漫相遇→失控暴雨→首尾闭合回到起点，意义随情节推进而深化"
+          - "❌ 装饰性重复：'月光'反复出现但每次都只是'月光很美'，没有意义变化"
+          - "❌ 通用比喻：'像一只找不到出口的飞蛾'——任何故事都能用，不与本故事主题关联"
+        note: "深读对比发现：claude超短篇中'信'的意象系统是同题材样本中区分度最高的质量维度之一，kimi有部分意象但不发展，EB5完全无意象系统"
+
+      - subcategory_id: "emotional_gradient"
+        subcategory_name: "情感弧线层次"
+        cn_name: "主角情感发展有几层变化，每层变化有没有事件驱动"
+        sort_order: [3, 47]
+        tier_level: "advanced"
+        description: "主角情感发展有≥4层性质不同的可辨识状态（不只是程度变化，而是质的变化），每次转折由具体事件驱动。区分真正的层次变化（好奇→恐惧→心动→绝望=4种不同情感）和伪层次（害怕→恐惧→战栗→惊慌=同一情感的4种说法）"
+        check_types: ["semantic_check"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        priority: "high"
+        validation_method: "llm_semantic_analysis"
+        examples:
+          - "✅ 丰富(7层)：好奇→恐惧→试探→心动→绝望→顿悟→宿命感中的平静。每层都由具体事件触发"
+          - "❌ 扁平(2层)：焦虑→杀人。中间没有过渡，角色只有起点和终点"
+          - "❌ 伪层次：害怕→恐惧→战栗→无法承受。这是同一种情绪的不同说法，不是4层"
+          - "❌ 无驱动突变：角色上一段还恨着某人，下一段'她释然了'，中间没有任何事件"
+        note: "与pacing_rationality_advanced区分：后者检查节奏（高潮低谷分布），本项检查情感深度（有几层、驱动力是什么）。原挂起的emotional_progression过于笼统，本项从具体样本对比中提炼出可操作的判定标准"
+
+      - subcategory_id: "semantic_redundancy"
+        subcategory_name: "语义重复/信息衰减"
+        cn_name: "后续章节有没有换了词汇但在说同一件事（P6级）"
+        sort_order: [3, 6]
+        tier_level: "basic"
+        description: "P5段落重复的语义升级版。检测'换了词但传达相同信息'的语义级重复。包括同义反复（同一情感被反复用不同表述重申）、结论反刍（同一认知被多次'重新意识到'）、情境模板复制（不同章节用相同结构只换表面细节）。≥3处语义重复即判定失败。首尾呼应等有意的文学重复不计入"
+        check_types: ["semantic_check"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        priority: "high"
+        validation_method: "llm_semantic_analysis"
+        examples:
+          - "❌ 同义反复：三章结尾分别说'她爱他，这不可改变'/'她的爱是唯一确定的'/'无论如何她知道自己爱他'——同一信息三种说法"
+          - "❌ 结论反刍：角色在第4章意识到'信是自己写的'，第5/6/7章反复'重新意识到'同一件事"
+          - "❌ 情境模板：连续3章开头都是'清晨醒来→打开信箱→紧张'，结构和信息完全相同"
+          - "✅ 首尾呼应：开头和结尾用相同场景，但语境变了含义不同——这是有意的文学重复"
+        note: "质量审计发现EB5超短篇后三章几乎在语义层面完全重复前文，但P5无法检测（字符串不同）。本项填补这一盲区。放在basic层因为语义重复是严重的内容质量问题"
+
+      - subcategory_id: "structural_design"
+        subcategory_name: "结构功能性"
+        cn_name: "叙事结构有没有服务于主题表达（短篇尤重）"
+        sort_order: [3, 48]
+        tier_level: "advanced"
+        description: "叙事结构本身是否参与主题表达——不只是'用什么顺序讲故事'，而是'这个顺序/形式本身就在说一些事'。如首尾闭合=时间闭环、视角切换=不可靠叙述者、双线交叉=因果呼应。对短篇/超短篇权重更高（短篇没有篇幅做复杂情节，结构是最重要的叙事手段）"
+        check_types: ["semantic_check"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        applicable_length_tiers: ["ultra_short", "short", "medium"]
+        priority: "high"
+        validation_method: "llm_semantic_analysis"
+        examples:
+          - "✅ 结构=意义：首尾闭合（结尾回到开头的'普通的周二下午'），读者意识到结构本身就是一个时间循环"
+          - "✅ 结构=意义：前80%女主视角，最后20%切男主视角，读者发现女主叙述中的'事实'完全不同"
+          - "❌ 机械排列：纯按时间顺序排列章节（第1天→第2天→...→结局），开头结尾无呼应"
+          - "❌ 拖沓收束：结尾反复解释/总结/抒情，不是有意识的收束设计"
+        note: "深读对比发现：claude超短篇的首尾闭合结构本身表达了'时间闭环'主题，这是它与kimi/EB5之间最大的质量差距之一，但现有checker完全无法检测"
+
+      # === 挂起的维度（暂不启用）===
       # appeal_strength_advanced — 吸引力强度（LLM judge区分度低）
       # emotional_impact — 情感冲击力（LLM judge区分度低）
-      # emotional_progression — 情感层次递进（LLM judge区分度低）
+      # emotional_progression — 已被emotional_gradient替代（v2.9从样本对比中提炼出可操作标准）
       # novelty_appeal — 立意新颖性（太主观）
       # sweetness_quality — 甜度质量（太细，题材特定）
       # humor_effect — 搞笑效果（太细，题材特定）
@@ -732,6 +802,17 @@ usage_notes: |
 # ============================================
 
 version_history:
+  - version: "2.9"
+    date: "2026-02-14"
+    changes:
+      - "【新增维度】content_quality优秀层新增imagery_system（意象系统）：检查核心意象贯穿全文且发生意义变奏"
+      - "【新增维度】content_quality优秀层新增emotional_gradient（情感弧线层次）：替代挂起的emotional_progression，从样本对比中提炼出可操作标准"
+      - "【新增维度】content_quality基础层新增semantic_redundancy（语义重复P6级）：P5的语义升级版，检测换词但同义的重复"
+      - "【新增维度】content_quality优秀层新增structural_design（结构功能性）：短篇条件化，检查结构是否服务于主题"
+      - "【强化】narrative_density整合Show vs Tell评判维度，check_name更新"
+      - "content_quality优秀层从7个扩展为10个（新增3个），基础层从20个扩展为21个（新增1个semantic_redundancy）"
+    rationale: "深读claude/kimi/EB5在同一超短篇题目上的作品，发现现有checker只能区分'差'和'不差'，对'好'和'很好'之间的差距全盲。短篇很少犯低级错误，但短篇写好靠的是Show vs Tell、意象变奏、结构即意义、情感层次——这些维度完全未覆盖。语义重复是P5的盲区（字符串不同但意义相同的重复）"
+
   - version: "2.8"
     date: "2026-02-13"
     changes:

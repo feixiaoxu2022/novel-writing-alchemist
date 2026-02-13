@@ -13,7 +13,7 @@
 #        --revision NNN
 #   4. 在本文件中记录新 revision 和关联的评测批次
 
-latest_revision: "004"
+latest_revision: "006"
 
 # 绑定的执行样本（checklist从该样本体系生成，data_id与之对齐）
 execution_sample: eval_dsv2.jsonl
@@ -121,6 +121,72 @@ revisions:
       
       影响：结构化输出要求迫使Judge逐条列举问题，而非笼统评判"整体无明显硬伤"就给pass。
       实测同批DSV1小说在新标准下通过率从42.9%降至21.4%，说明评判标准显著变严。
+    status: superseded
+
+  "005":
+    date: "2026-02-14"
+    description: "P1-P5程序化检查 + 7个新LLM检查项 + content_quality_advanced.yaml v1.0"
+    check_count_per_sample: "52-55"
+    check_dimensions:
+      format_compliance: 4
+      business_rule_compliance: 22
+      content_quality: 24
+      memory_management: 2
+    judge_criteria_files:
+      - content_quality_basic.yaml     # v1.9
+      - content_quality_advanced.yaml  # v1.0 (新增)
+      - emotional_delivery.yaml        # v1.0
+    changes: |
+      P1-P5程序化内容质量检查(零LLM成本):
+      P1 chapter_cloning_detection(gate), P2 alternating_repetition_detection(gate),
+      P3 chapter_completion_ratio(gate), P4 chapter_length_stability, P5 paragraph_repetition_detection。
+      
+      7个新LLM检查项：大纲执行忠实度(basic层)、角色语言辨识度(advanced)、叙事密度(advanced)、
+      智斗逻辑合理性(advanced,brainy_action/suspense/mystery条件化)、题材契合度(advanced)、
+      剧情节奏合理性(advanced)、钩子设计(advanced)。
+      
+      新增judge_criteria文件content_quality_advanced.yaml(v1.0)。
+      content_quality_basic.yaml升级到v1.9(新增大纲执行忠实度section)。
+    status: superseded
+
+  "006":
+    date: "2026-02-14"
+    description: "4个新检查项(意象/情感弧线/语义重复/结构功能性) + Show vs Tell强化 + LLM截断限制提升到150K"
+    check_count_per_sample: "55-58"
+    check_dimensions:
+      format_compliance: 4
+      business_rule_compliance: 22
+      content_quality: 30
+      memory_management: 2
+    judge_criteria_files:
+      - content_quality_basic.yaml     # v1.9
+      - content_quality_advanced.yaml  # v1.1 (4个新section + 叙事密度强化)
+      - emotional_delivery.yaml        # v1.0
+    changes: |
+      变更1 - 4个新LLM检查项 (52-55 → 55-58):
+      1. imagery_system（意象系统，advanced层）：检测核心意象的创建、演变和意义赋予
+      2. emotional_gradient（情感弧线层次，advanced层）：检测情感变化的层次丰富度
+      3. semantic_redundancy（语义重复/信息衰减，basic层/P6级）：检测不同章节用不同措辞重复相同内容
+      4. structural_design（结构功能性，advanced层/短篇条件化）：检测叙事结构是否承载主题意义
+      
+      发现来源：深读claude/kimi/EB5同题ULTRA_SHORT ANGSTY_001对比，发现"好 vs 很好"的核心差异在于
+      Show vs Tell比例、意象系统演变、情感梯度层次、语义层面重复、结构承载意义。
+      这些维度是现有42个检查项的盲区。
+      
+      变更2 - 叙事密度(narrative_density) Show vs Tell强化:
+      content_quality_advanced.yaml中"叙事密度与手法"section新增"低密度类型5: Tell过度"子类，
+      包含3组对比示例（情感表达/环境描写/人物心理），建立Show vs Tell的具体评判标准。
+      
+      变更3 - LLM judge截断限制从50K提升到150K:
+      checker_execute.py中_check_file_content_raw()和_check_file_content()的截断限制
+      从50K/30K统一提升到150K（75K head + 75K tail）。
+      
+      数据支撑：GPT-5.2 context window 128K tokens ≈ 175K+中文字符；
+      实测样本最大153K chars（claude MEDIUM），中位45K。
+      50K截断影响27.4%样本（MEDIUM层45.7%），150K截断仅影响极少数Claude MEDIUM样本。
+      
+      变更4 - sample_generator validator修正:
+      DSV2 main.py的validation_method白名单新增P1-P5程序化方法名，解决rev_005以来的校验报错。
     status: active
 
 # 评测批次与 revision 的映射关系

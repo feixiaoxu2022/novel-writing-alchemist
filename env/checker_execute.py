@@ -2275,10 +2275,17 @@ class SemanticChecker:
         )
 
         # 如果内容过长，截取（保留前后部分）
-        max_length = 30000  # LLM上下文限制
+        # GPT-5.2 context window = 128K tokens ≈ 175K+ 中文字符可用于内容
+        max_length = 150000
         if len(combined_content) > max_length:
-            # 保留前15000和后15000字符
-            combined_content = combined_content[:15000] + "\n\n... [中间内容省略] ...\n\n" + combined_content[-15000:]
+            half = max_length // 2  # 75K head + 75K tail
+            truncated_chars = len(combined_content) - max_length
+            combined_content = (
+                combined_content[:half]
+                + f"\n\n... [中间内容省略，共截断 {truncated_chars} 字符] ...\n\n"
+                + combined_content[-half:]
+            )
+            print(f"[截断] _check_file_content: 从 {len(combined_content) + truncated_chars} 字符截断到 ~{max_length} 字符", flush=True)
 
         # 使用LLM评估整体内容
         if not self.model_name or not self.api_base or not self.api_key:
@@ -2596,10 +2603,20 @@ class SemanticChecker:
             )
 
         # 长度限制（避免超过LLM上下文）
-        max_length = 50000  # 增加到50k以支持多文件
+        # GPT-5.2 context window = 128K tokens ≈ 175K+ 中文字符可用于内容
+        # 实测数据：Ultra-short ≤82K, Short ≤81K, Medium ≤153K chars
+        # 150K 限制可覆盖99%的样本，仅极端 Medium 样本（>150K）需截断
+        max_length = 150000
         if len(combined_content) > max_length:
-            # 保留前25k和后25k
-            combined_content = combined_content[:25000] + "\\n\\n... [中间内容省略] ...\\n\\n" + combined_content[-25000:]
+            half = max_length // 2  # 75K head + 75K tail
+            truncated_chars = len(combined_content) - max_length
+            combined_content = (
+                combined_content[:half]
+                + f"\\n\\n... [中间内容省略，共截断 {truncated_chars} 字符] ...\\n\\n"
+                + combined_content[-half:]
+            )
+            print(f"[截断] 内容从 {len(combined_content) + truncated_chars} 字符截断到 ~{max_length} 字符 "
+                  f"(丢弃中间 {truncated_chars} 字符)", flush=True)
 
         # 使用LLM评估
         if not self.model_name or not self.api_base or not self.api_key:

@@ -80,9 +80,28 @@ export USER_SIMULATOR_MODEL_BASE_URL="http://yy.dbh.baidu-int.com/v1"
 export PYTHONPATH="$FRAMEWORK_DIR:$PYTHONPATH"
 export LITELLM_LOG=ERROR
 
-# ========== 输出目录 ==========
+# ========== 修补 servers.json 中的 Python 路径 ==========
 cd "$NOVEL_DIR"
 
+SERVERS_JSON="$NOVEL_DIR/env/servers.json"
+VENV_PYTHON="$VENV_DIR/bin/python3"
+if [ -f "$SERVERS_JSON" ]; then
+    CURRENT_CMD=$(python3 -c "import json; d=json.load(open('$SERVERS_JSON')); print(d['mcpServers']['novel_writing_service']['command'])" 2>/dev/null || echo "")
+    if [ "$CURRENT_CMD" != "$VENV_PYTHON" ]; then
+        echo -e "${YELLOW}修补 servers.json: command -> $VENV_PYTHON${NC}"
+        python3 -c "
+import json
+with open('$SERVERS_JSON') as f:
+    d = json.load(f)
+d['mcpServers']['novel_writing_service']['command'] = '$VENV_PYTHON'
+with open('$SERVERS_JSON', 'w') as f:
+    json.dump(d, f, indent=2)
+    f.write('\n')
+"
+    fi
+fi
+
+# ========== 输出目录 ==========
 if [ ! -f "$SAMPLES_FILE" ]; then
     echo -e "${RED}错误: 样本文件不存在: $SAMPLES_FILE${NC}"
     echo "可用的样本文件:"

@@ -1,4 +1,4 @@
-description: 所有模板通用的检查项（23项），会自动合并到每个模板的check_list中
+description: 所有模板通用的检查项（54项），会自动合并到每个模板的check_list中
 checks:
 - check_id: 读取配方知识库
   check_name: 必须读取RECIPE_KNOWLEDGE.md（配方知识库）
@@ -625,7 +625,7 @@ checks:
   weight: 1.0
   is_critical: false
 - check_id: 叙事密度
-  check_name: 章节叙事应有足够的场景描写、感官细节和心理活动
+  check_name: 章节叙事应有足够的场景描写、感官细节和心理活动，情感传达以Show为主
   dimension_id: content_quality
   subcategory_id: narrative_density
   quality_tier: advanced
@@ -633,7 +633,7 @@ checks:
   params:
     analysis_target: chapters/chapter_*.md
     llm_judge_criteria_file: judge_criteria/content_quality_advanced.yaml
-    llm_judge_criteria_section: 叙事密度
+    llm_judge_criteria_section: 叙事密度与手法
     validation_rules:
     - rule_id: narrative_density
       description: 区分细腻描写和粗糙罗列，检查场景/感官/心理/动作四维密度
@@ -705,6 +705,75 @@ checks:
     validation_rules:
     - rule_id: hook_design
       description: 钩子有信息差、具体化、与剧情关联、多样化，不能空洞或模板化
+      validation_method: llm_semantic_analysis
+  weight: 1.0
+  is_critical: false
+# ========== v1.1新增：短篇区分度强化（4项）==========
+- check_id: 意象系统
+  check_name: 核心意象贯穿全文并发生意义变奏
+  dimension_id: content_quality
+  subcategory_id: imagery_system
+  quality_tier: advanced
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    llm_judge_criteria_file: judge_criteria/content_quality_advanced.yaml
+    llm_judge_criteria_section: 意象系统
+    validation_rules:
+    - rule_id: imagery_system
+      description: 有贯穿全文的核心意象，且意象在不同阶段发生意义变奏，比喻与主题深度关联
+      validation_method: llm_semantic_analysis
+  weight: 1.0
+  is_critical: false
+- check_id: 情感弧线层次
+  check_name: 主角情感发展有多层递进变化
+  dimension_id: content_quality
+  subcategory_id: emotional_gradient
+  quality_tier: advanced
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    llm_judge_criteria_file: judge_criteria/content_quality_advanced.yaml
+    llm_judge_criteria_section: 情感弧线层次
+    validation_rules:
+    - rule_id: emotional_gradient
+      description: 主角情感有≥4层性质不同的变化，每次转折由具体事件驱动
+      validation_method: llm_semantic_analysis
+  weight: 1.0
+  is_critical: false
+- check_id: 语义重复检测
+  check_name: 不能出现大量语义级别的内容重复（P6级）
+  dimension_id: content_quality
+  subcategory_id: semantic_redundancy
+  quality_tier: basic
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    llm_judge_criteria_file: judge_criteria/content_quality_advanced.yaml
+    llm_judge_criteria_section: 语义重复/信息衰减
+    validation_rules:
+    - rule_id: semantic_redundancy_detection
+      description: 后续章节不能在语义层面大量重复前文已传达的内容，≥3处语义重复即失败
+      validation_method: llm_semantic_analysis
+  weight: 1.0
+  is_critical: true
+- check_id: 结构功能性
+  check_name: 叙事结构服务于主题表达（短篇尤重）
+  dimension_id: content_quality
+  subcategory_id: structural_design
+  quality_tier: advanced
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md + creative_intent.json
+    llm_judge_criteria_file: judge_criteria/content_quality_advanced.yaml
+    llm_judge_criteria_section: 结构功能性
+    applicable_length_tiers:
+    - ultra_short
+    - short
+    - medium
+    validation_rules:
+    - rule_id: structural_design
+      description: 结构设计是否服务于主题（首尾呼应、视角切换、非线性时间等），短篇尤为重要
       validation_method: llm_semantic_analysis
   weight: 1.0
   is_critical: false

@@ -278,11 +278,19 @@ class NovelSampleGenerator:
                             )
                         else:
                             method = rule['validation_method']
-                            if method not in ['llm_semantic_analysis', 'word_count_range']:
+                            # P1-P5 程序化检查方法（在checker_execute.py中实现，零LLM成本）
+                            PROGRAMMATIC_METHODS = {
+                                'chapter_cloning_detection',
+                                'alternating_repetition_detection',
+                                'chapter_completion_ratio',
+                                'chapter_length_stability',
+                                'paragraph_repetition_detection',
+                            }
+                            VALID_METHODS = {'llm_semantic_analysis', 'word_count_range'} | PROGRAMMATIC_METHODS
+                            if method not in VALID_METHODS:
                                 errors.append(
                                     f"[{context}] {check_id}: validation_rules[{idx}] invalid "
-                                    f"validation_method '{method}', must be 'llm_semantic_analysis' "
-                                    f"or 'word_count_range'"
+                                    f"validation_method '{method}', must be one of {sorted(VALID_METHODS)}"
                                 )
 
                             # 根据方法检查对应参数
