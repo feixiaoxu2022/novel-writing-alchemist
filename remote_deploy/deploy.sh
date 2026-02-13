@@ -88,29 +88,27 @@ else
     python3 -m venv .venv
 fi
 
-source .venv/bin/activate
-echo "  Python: $(which python3)"
-echo "  版本: $(python3 --version)"
+VENV_PIP="$WORK_DIR/.venv/bin/pip3"
+VENV_PYTHON="$WORK_DIR/.venv/bin/python3"
+echo "  Python: $VENV_PYTHON"
+echo "  版本: $($VENV_PYTHON --version)"
 
-# pip 可能需要代理访问 PyPI
-export https_proxy="$PROXY"
-export http_proxy="$PROXY"
+# 升级 pip（使用代理访问 PyPI）
+echo "  升级 pip..."
+(export https_proxy="$PROXY"; $VENV_PIP install --upgrade pip -q)
 
-# 升级 pip
-pip install --upgrade pip -q
-
-# 安装依赖
+# 安装依赖（使用代理访问 PyPI）
 echo "  安装依赖包..."
-pip install -q \
+(export https_proxy="$PROXY"; $VENV_PIP install -q \
     "fastmcp>=0.1.0" \
     "pydantic>=2.0" \
     "requests" \
     "litellm" \
     "jsonschema>=4.0.0" \
-    "PyYAML"
+    "PyYAML")
 
-# 装完后取消代理（后续内网 API 测试不需要代理）
-unset https_proxy http_proxy
+# 激活虚拟环境供后续验证使用
+source .venv/bin/activate
 
 echo "  验证关键包..."
 python3 -c "import fastmcp; print(f'  ✓ fastmcp {fastmcp.__version__}')"
