@@ -727,19 +727,33 @@ class FileSystemChecker:
             return result
 
         # 提取主要角色名
+        if not isinstance(characters_data, dict):
+            result = create_check_item_result(
+                "skip", "前置条件失败（characters.json schema不合规）",
+                f"characters.json顶层不是dict，而是{type(characters_data).__name__}"
+            )
+            result["dependency_failure"] = True
+            result["schema_violation"] = True
+            return result
         main_characters = characters_data.get("main_characters", [])
         if not main_characters:
-            return create_check_item_result(
-                "fail", "characters.json中无主要角色",
-                "main_characters字段为空或不存在"
+            result = create_check_item_result(
+                "skip", "前置条件失败（characters.json schema不合规）",
+                "main_characters字段为空或不存在，实际顶层字段: " + ", ".join(list(characters_data.keys())[:5])
             )
+            result["dependency_failure"] = True
+            result["schema_violation"] = True
+            return result
 
         character_names = [char.get("name", "") for char in main_characters if isinstance(char, dict)]
         if not character_names:
-            return create_check_item_result(
-                "fail", "无法提取角色名",
+            result = create_check_item_result(
+                "skip", "前置条件失败（characters.json schema不合规）",
                 "main_characters中的角色对象缺少name字段"
             )
+            result["dependency_failure"] = True
+            result["schema_violation"] = True
+            return result
 
         # 读取outline.json
         outline_data = self._load_json_file(outline_path)
@@ -813,19 +827,33 @@ class FileSystemChecker:
             return result
 
         # 提取主要角色名
+        if not isinstance(characters_data, dict):
+            result = create_check_item_result(
+                "skip", "前置条件失败（characters.json schema不合规）",
+                f"characters.json顶层不是dict，而是{type(characters_data).__name__}"
+            )
+            result["dependency_failure"] = True
+            result["schema_violation"] = True
+            return result
         main_characters = characters_data.get("main_characters", [])
         if not main_characters:
-            return create_check_item_result(
-                "fail", "characters.json中无主要角色",
-                "main_characters字段为空或不存在"
+            result = create_check_item_result(
+                "skip", "前置条件失败（characters.json schema不合规）",
+                "main_characters字段为空或不存在，实际顶层字段: " + ", ".join(list(characters_data.keys())[:5])
             )
+            result["dependency_failure"] = True
+            result["schema_violation"] = True
+            return result
 
         character_names = [char.get("name", "") for char in main_characters if isinstance(char, dict)]
         if not character_names:
-            return create_check_item_result(
-                "fail", "无法提取角色名",
+            result = create_check_item_result(
+                "skip", "前置条件失败（characters.json schema不合规）",
                 "main_characters中的角色对象缺少name字段"
             )
+            result["dependency_failure"] = True
+            result["schema_violation"] = True
+            return result
 
         # 匹配章节文件（容错处理）
         if chapters_pattern.endswith('/'):
@@ -2397,9 +2425,11 @@ class SemanticChecker:
         use_llm = params.get("use_llm_judge", False)
         llm_judge_criteria = load_judge_criteria_from_params(params, self.work_dir)
 
-        # 检查是否是word_count_range类型（不需要LLM）
+        # 检查是否是不需要LLM的程序化检查类型
         validation_rules = params.get("validation_rules", [])
         is_word_count_check = False
+        is_programmatic_check = False  # P1-P5程序化检查标志
+        programmatic_method = None  # 具体的程序化检查方法名
         expected_range = None
 
         if validation_rules and isinstance(validation_rules, list) and len(validation_rules) > 0:
@@ -2409,6 +2439,15 @@ class SemanticChecker:
                 if validation_method == "word_count_range":
                     is_word_count_check = True
                     expected_range = first_rule.get("expected_range")
+                elif validation_method in (
+                    "chapter_cloning_detection",
+                    "alternating_repetition_detection",
+                    "chapter_completion_ratio",
+                    "chapter_length_stability",
+                    "paragraph_repetition_detection",
+                ):
+                    is_programmatic_check = True
+                    programmatic_method = validation_method
                 elif validation_method == "llm_semantic_analysis":
                     # 自动启用LLM
                     if llm_judge_criteria:
@@ -2437,8 +2476,8 @@ class SemanticChecker:
             if matched_files:
                 all_matched_files.extend(matched_files)
 
-        # word_count_range检查不需要LLM
-        if not is_word_count_check and (not use_llm or not llm_judge_criteria):
+        # word_count_range和P1-P5程序化检查不需要LLM
+        if not is_word_count_check and not is_programmatic_check and (not use_llm or not llm_judge_criteria):
             return create_check_item_result(
                 "fail", "缺少参数", "llm_semantic_analysis方法需要启用LLM并提供llm_judge_criteria"
             )
@@ -2550,6 +2589,12 @@ class SemanticChecker:
                     f"总字数 {total_word_count} 不在范围 [{min_count}, {max_count}] 内; {context_info}"
                 )
 
+        # ========== P1-P5 程序化检查（不使用LLM）==========
+        if is_programmatic_check:
+            return self._execute_programmatic_check(
+                programmatic_method, params, matched_files, all_contents, file_names, context_info
+            )
+
         # 长度限制（避免超过LLM上下文）
         max_length = 50000  # 增加到50k以支持多文件
         if len(combined_content) > max_length:
@@ -2631,10 +2676,484 @@ class SemanticChecker:
                 f"检查过程出错: {str(e)}"
             )
 
+    # ========== P1-P5 程序化质量检查 ==========
+
+    def _execute_programmatic_check(
+        self,
+        method: str,
+        params: Dict,
+        matched_files: list,
+        all_contents: list,
+        file_names: list,
+        context_info: str,
+    ) -> Dict:
+        """P1-P5程序化内容质量检查的分发入口。
+
+        所有检查纯程序化实现，不调用LLM，检测成本为零。
+        """
+        try:
+            if method == "chapter_cloning_detection":
+                return self._check_chapter_cloning(matched_files, all_contents, file_names)
+            elif method == "alternating_repetition_detection":
+                return self._check_alternating_repetition(matched_files, all_contents, file_names)
+            elif method == "chapter_completion_ratio":
+                return self._check_chapter_completion(params, matched_files, file_names)
+            elif method == "chapter_length_stability":
+                return self._check_chapter_length_stability(all_contents, file_names)
+            elif method == "paragraph_repetition_detection":
+                return self._check_paragraph_repetition(all_contents, file_names)
+            else:
+                return create_check_item_result(
+                    "skip", f"未知的程序化检查方法: {method}", ""
+                )
+        except Exception as e:
+            return create_check_item_result(
+                "fail", "程序化检查异常", f"方法 {method} 执行出错: {str(e)}"
+            )
+
+    def _check_chapter_cloning(
+        self, matched_files: list, all_contents: list, file_names: list
+    ) -> Dict:
+        """P1: 章节克隆检测。
+
+        检测逻辑:
+        1. 对每个chapter文件，去掉第一行（标题行），计算剩余内容的MD5
+        2. 连续 >= 2 章完全克隆(hash一致) → fail
+        3. 去掉标题行后前500字符一致的连续 >= 3 章（近似克隆）→ fail
+        """
+        import hashlib
+
+        if len(all_contents) < 4:
+            return create_check_item_result(
+                "skip", "章节数不足", f"仅{len(all_contents)}章，跳过克隆检测（需>=4章）"
+            )
+
+        # 计算每章去掉第一行后的完整hash和前500字符hash
+        full_hashes = []
+        prefix_hashes = []
+        for content in all_contents:
+            lines = content.split("\n", 1)
+            body = lines[1] if len(lines) > 1 else ""
+            full_hashes.append(hashlib.md5(body.encode("utf-8")).hexdigest())
+            prefix_500 = body[:500]
+            prefix_hashes.append(hashlib.md5(prefix_500.encode("utf-8")).hexdigest())
+
+        # 检测完全克隆：连续相同full_hash的最长序列
+        max_clone_run = 1
+        clone_start_idx = 0
+        cur_run = 1
+        cur_start = 0
+        for i in range(1, len(full_hashes)):
+            if full_hashes[i] == full_hashes[i - 1]:
+                cur_run += 1
+                if cur_run > max_clone_run:
+                    max_clone_run = cur_run
+                    clone_start_idx = cur_start
+            else:
+                cur_run = 1
+                cur_start = i
+
+        if max_clone_run >= 2:
+            clone_end_idx = clone_start_idx + max_clone_run - 1
+            return create_check_item_result(
+                "fail",
+                f"检测到{max_clone_run}章完全克隆",
+                f"章节 {file_names[clone_start_idx]} 到 {file_names[clone_end_idx]} "
+                f"（共{max_clone_run}章）去掉标题行后内容完全相同 "
+                f"(hash: {full_hashes[clone_start_idx][:12]}...)",
+            )
+
+        # 检测近似克隆：连续相同prefix_hash的最长序列
+        max_prefix_run = 1
+        prefix_start_idx = 0
+        cur_run = 1
+        cur_start = 0
+        for i in range(1, len(prefix_hashes)):
+            if prefix_hashes[i] == prefix_hashes[i - 1]:
+                cur_run += 1
+                if cur_run > max_prefix_run:
+                    max_prefix_run = cur_run
+                    prefix_start_idx = cur_start
+            else:
+                cur_run = 1
+                cur_start = i
+
+        if max_prefix_run >= 3:
+            prefix_end_idx = prefix_start_idx + max_prefix_run - 1
+            return create_check_item_result(
+                "fail",
+                f"检测到{max_prefix_run}章近似克隆",
+                f"章节 {file_names[prefix_start_idx]} 到 {file_names[prefix_end_idx]} "
+                f"（共{max_prefix_run}章）前500字符完全相同 "
+                f"(prefix_hash: {prefix_hashes[prefix_start_idx][:12]}...)",
+            )
+
+        return create_check_item_result(
+            "pass",
+            "未检测到章节克隆",
+            f"共{len(all_contents)}章，无连续完全克隆或近似克隆",
+        )
+
+    def _check_alternating_repetition(
+        self, matched_files: list, all_contents: list, file_names: list
+    ) -> Dict:
+        """P2: 交替重复检测（A-B-A-B循环模式）。
+
+        检测逻辑:
+        1. 提取每章的文件字节大小
+        2. 检测是否存在 size_A, size_B 交替出现的模式（容差5%）
+        3. 连续交替 >= 3 轮（即6章） → fail
+        """
+        if len(all_contents) < 8:
+            return create_check_item_result(
+                "skip", "章节数不足", f"仅{len(all_contents)}章，跳过交替重复检测（需>=8章）"
+            )
+
+        sizes = [len(content.encode("utf-8")) for content in all_contents]
+
+        # 从后半部分开始检测（交替重复通常出现在后期）
+        half = len(sizes) // 2
+        check_sizes = sizes[half:]
+        check_names = file_names[half:]
+
+        if len(check_sizes) < 6:
+            return create_check_item_result(
+                "pass", "后半部分章节不足", f"后半部分仅{len(check_sizes)}章，不构成交替模式"
+            )
+
+        # 检测A-B-A-B模式
+        max_alternating = 0
+        best_start = 0
+        for start in range(len(check_sizes) - 5):
+            size_a = check_sizes[start]
+            size_b = check_sizes[start + 1]
+            # A和B不能太接近（否则就是普通克隆而不是交替）
+            if size_a == 0 or size_b == 0:
+                continue
+            if abs(size_a - size_b) / max(size_a, size_b) < 0.03:
+                continue  # A和B太接近，跳过
+
+            count = 2  # 已有A, B
+            for j in range(start + 2, len(check_sizes)):
+                expected = size_a if (j - start) % 2 == 0 else size_b
+                actual = check_sizes[j]
+                # 容差5%
+                if expected > 0 and abs(actual - expected) / expected <= 0.05:
+                    count += 1
+                else:
+                    break
+
+            rounds = count // 2
+            if rounds > max_alternating:
+                max_alternating = rounds
+                best_start = start
+
+        if max_alternating >= 3:
+            actual_start = half + best_start
+            actual_end = actual_start + max_alternating * 2 - 1
+            size_a = sizes[actual_start]
+            size_b = sizes[actual_start + 1]
+            return create_check_item_result(
+                "fail",
+                f"检测到{max_alternating}轮交替重复",
+                f"从 {file_names[actual_start]} 到 {file_names[min(actual_end, len(file_names)-1)]} "
+                f"呈现 A({size_a}bytes)-B({size_b}bytes) 交替模式，共{max_alternating}轮",
+            )
+
+        return create_check_item_result(
+            "pass", "未检测到交替重复", f"共{len(all_contents)}章，无A-B-A-B交替模式"
+        )
+
+    def _check_chapter_completion(
+        self, params: Dict, matched_files: list, file_names: list
+    ) -> Dict:
+        """P3: 章节完成度检测。
+
+        检测逻辑:
+        1. 从outline.json推断规划章节数
+        2. 实际章节数 / 规划章节数 < 30% → fail
+        3. 无法推断规划数时: MEDIUM类型样本实际<=1章 → fail
+        """
+        actual_count = len(file_names)
+
+        # 尝试从outline.json读取规划章节数
+        planned_count = None
+        outline_path = self.work_dir / "workspace" / "outline.json"
+        if not outline_path.exists():
+            outline_path = self.work_dir / "workspace" / "workspace" / "outline.json"
+
+        if outline_path.exists():
+            try:
+                import json
+                with open(outline_path, "r", encoding="utf-8") as f:
+                    outline = json.load(f)
+                if isinstance(outline, dict):
+                    # 尝试多种常见大纲结构
+                    for key in ["chapters", "outline", "chapter_outlines", "volume_structure"]:
+                        val = outline.get(key)
+                        if isinstance(val, list) and len(val) > 0:
+                            planned_count = len(val)
+                            break
+                    if planned_count is None:
+                        # 尝试统计act结构中的key_chapters
+                        total_from_acts = 0
+                        for act_key in ["act_one", "act_two", "act_three", "act_four"]:
+                            act = outline.get(act_key, {})
+                            if isinstance(act, dict):
+                                kc = act.get("key_chapters", [])
+                                if isinstance(kc, list):
+                                    total_from_acts += len(kc)
+                        if total_from_acts > 0:
+                            planned_count = total_from_acts
+                elif isinstance(outline, list):
+                    planned_count = len(outline)
+            except Exception:
+                pass
+
+        # 从params中获取最低阈值（可选配置）
+        min_ratio = params.get("validation_rules", [{}])[0].get("min_completion_ratio", 0.30) if params.get("validation_rules") else 0.30
+
+        if planned_count and planned_count > 0:
+            ratio = actual_count / planned_count
+            if ratio < min_ratio:
+                return create_check_item_result(
+                    "fail",
+                    f"章节完成度不足({ratio:.0%})",
+                    f"大纲规划{planned_count}章，实际仅完成{actual_count}章 "
+                    f"(完成率{ratio:.1%}，阈值{min_ratio:.0%})",
+                )
+            return create_check_item_result(
+                "pass",
+                f"章节完成度合格({ratio:.0%})",
+                f"大纲规划{planned_count}章，实际完成{actual_count}章 (完成率{ratio:.1%})",
+            )
+
+        # 无法从大纲推断规划数时的兜底判断
+        if actual_count == 0:
+            return create_check_item_result(
+                "fail", "未写出任何章节", "chapters目录中没有任何章节文件"
+            )
+        if actual_count <= 1:
+            return create_check_item_result(
+                "fail",
+                f"仅写出{actual_count}章",
+                f"无法从大纲推断规划章节数，但仅{actual_count}章明显不足",
+            )
+
+        return create_check_item_result(
+            "pass",
+            f"完成{actual_count}章",
+            f"无法从大纲推断规划章节数，实际完成{actual_count}章",
+        )
+
+    def _check_chapter_length_stability(
+        self, all_contents: list, file_names: list
+    ) -> Dict:
+        """P4: 章节长度稳定性检测。
+
+        检测逻辑:
+        1. 计算前1/3章节平均字数和后1/4章节平均字数
+        2. 后1/4 < 前1/3 × 0.25 → fail（严重崩塌）
+        3. 后1/4中任何单章 < 200字 → fail（极端退化）
+        """
+        n = len(all_contents)
+        if n < 6:
+            return create_check_item_result(
+                "skip", "章节数不足", f"仅{n}章，跳过长度稳定性检测（需>=6章）"
+            )
+
+        char_counts = [len(content) for content in all_contents]
+
+        # 前1/3
+        first_n = max(n // 3, 2)
+        first_avg = sum(char_counts[:first_n]) / first_n
+
+        # 后1/4
+        last_n = max(n // 4, 2)
+        last_chars = char_counts[-last_n:]
+        last_avg = sum(last_chars) / last_n
+        last_min = min(last_chars)
+        last_min_idx = len(char_counts) - last_n + last_chars.index(last_min)
+
+        # 极端退化：单章<200字
+        if last_min < 200:
+            return create_check_item_result(
+                "fail",
+                f"后期章节极端退化(最短{last_min}字)",
+                f"后{last_n}章中 {file_names[last_min_idx]} 仅{last_min}字; "
+                f"前{first_n}章均值{first_avg:.0f}字, 后{last_n}章均值{last_avg:.0f}字",
+            )
+
+        # 严重崩塌
+        if first_avg > 0:
+            ratio = last_avg / first_avg
+            if ratio < 0.25:
+                return create_check_item_result(
+                    "fail",
+                    f"章节长度严重崩塌(后期仅为前期{ratio:.0%})",
+                    f"前{first_n}章均值{first_avg:.0f}字, 后{last_n}章均值{last_avg:.0f}字 "
+                    f"(衰减至{ratio:.1%}); 后{last_n}章: {', '.join(f'{file_names[n-last_n+i]}={last_chars[i]}字' for i in range(last_n))}",
+                )
+
+        return create_check_item_result(
+            "pass",
+            "章节长度稳定",
+            f"前{first_n}章均值{first_avg:.0f}字, 后{last_n}章均值{last_avg:.0f}字 "
+            f"(比率{last_avg/first_avg:.1%})" if first_avg > 0 else f"前{first_n}章均值{first_avg:.0f}字",
+        )
+
+    def _check_paragraph_repetition(
+        self, all_contents: list, file_names: list
+    ) -> Dict:
+        """P5: 段落级重复检测。
+
+        检测逻辑:
+        1. 将每章按空行分隔为段落
+        2. 对每个 >= 50字的段落计算hash
+        3. 同章内完全相同段落 >= 2处 → fail
+        4. 跨章完全相同段落 >= 5处 → fail
+        """
+        import hashlib
+        from collections import defaultdict
+
+        MIN_PARA_LEN = 50  # 最短段落长度（跳过短段落如标题行）
+
+        # 收集所有段落hash -> [(chapter_idx, para_text_preview)]
+        para_hash_map = defaultdict(list)
+        # 同章内重复检测
+        intra_chapter_duplicates = []
+
+        for ch_idx, content in enumerate(all_contents):
+            # 按空行分段
+            paragraphs = [p.strip() for p in content.split("\n\n") if p.strip()]
+            seen_in_chapter = {}  # hash -> first occurrence para preview
+
+            for para in paragraphs:
+                if len(para) < MIN_PARA_LEN:
+                    continue
+                h = hashlib.md5(para.encode("utf-8")).hexdigest()
+
+                # 同章内重复
+                if h in seen_in_chapter:
+                    intra_chapter_duplicates.append(
+                        (file_names[ch_idx], para[:80] + "..." if len(para) > 80 else para)
+                    )
+                else:
+                    seen_in_chapter[h] = para[:80]
+
+                # 跨章追踪
+                para_hash_map[h].append((ch_idx, para[:60]))
+
+        # 判定：同章内重复
+        if len(intra_chapter_duplicates) >= 2:
+            examples = intra_chapter_duplicates[:3]
+            example_strs = "; ".join(f"[{fn}] \"{preview}\"" for fn, preview in examples)
+            return create_check_item_result(
+                "fail",
+                f"同章内段落重复{len(intra_chapter_duplicates)}处",
+                f"示例: {example_strs}",
+            )
+
+        # 判定：跨章重复
+        cross_chapter_duplicates = []
+        for h, occurrences in para_hash_map.items():
+            if len(occurrences) >= 2:
+                # 确认确实是不同章节
+                chapter_indices = set(o[0] for o in occurrences)
+                if len(chapter_indices) >= 2:
+                    cross_chapter_duplicates.append((len(occurrences), occurrences[0][1], occurrences))
+
+        if len(cross_chapter_duplicates) >= 5:
+            # 按出现次数降序，取前3个示例
+            cross_chapter_duplicates.sort(key=lambda x: -x[0])
+            examples = cross_chapter_duplicates[:3]
+            example_strs = "; ".join(
+                f"\"{preview}...\" 出现在{count}章"
+                for count, preview, _ in examples
+            )
+            return create_check_item_result(
+                "fail",
+                f"跨章段落重复{len(cross_chapter_duplicates)}组",
+                f"有{len(cross_chapter_duplicates)}个段落在多章中完全相同。示例: {example_strs}",
+            )
+
+        # 汇总
+        intra_count = len(intra_chapter_duplicates)
+        cross_count = len(cross_chapter_duplicates)
+        return create_check_item_result(
+            "pass",
+            "段落重复在可接受范围",
+            f"同章内重复{intra_count}处, 跨章重复{cross_count}组 (阈值: 同章>=2, 跨章>=5)",
+        )
+
 
 # =========================================
 # 7. 主执行逻辑
 # =========================================
+
+
+def _check_file_whitelist(check_item: Dict, work_dir: Path) -> Dict:
+    """检查workspace目录中是否存在白名单之外的文件。
+    
+    params中需要:
+      - analysis_target: 要检查的目录（如 "workspace/"）
+      - required_files: 允许存在的文件/目录白名单列表
+    """
+    params = check_item.get("params", {})
+    analysis_target = params.get("analysis_target", "workspace/")
+    whitelist = params.get("required_files", [])
+    
+    # 构建目标目录路径
+    target_dir = work_dir / analysis_target.rstrip("/")
+    
+    # 也检查嵌套路径 workspace/workspace/（部分Agent会创建）
+    if not target_dir.exists():
+        nested_dir = work_dir / "workspace" / analysis_target.rstrip("/")
+        if nested_dir.exists():
+            target_dir = nested_dir
+        else:
+            return create_check_item_result(
+                "skip",
+                f"目标目录不存在: {analysis_target}",
+                f"检查路径: {target_dir}"
+            )
+    
+    # 标准化白名单：去掉目录的尾部斜杠用于匹配
+    whitelist_names = set()
+    whitelist_dirs = set()
+    for item in whitelist:
+        if item.endswith("/"):
+            whitelist_dirs.add(item.rstrip("/"))
+        else:
+            whitelist_names.add(item)
+    
+    # 扫描目标目录下的所有顶层条目
+    extra_files = []
+    for entry in target_dir.iterdir():
+        name = entry.name
+        # 跳过隐藏文件中已在白名单的
+        if name in whitelist_names:
+            continue
+        if entry.is_dir() and name in whitelist_dirs:
+            continue
+        # __pycache__ 等Python缓存目录不算违规
+        if name == "__pycache__":
+            continue
+        extra_files.append(name)
+    
+    if extra_files:
+        return create_check_item_result(
+            "fail",
+            f"workspace中存在白名单外的文件: {extra_files}",
+            f"白名单: {whitelist}, 额外文件: {extra_files}"
+        )
+    else:
+        return create_check_item_result(
+            "pass",
+            "workspace中所有文件均在白名单内",
+            f"白名单: {whitelist}"
+        )
+
 
 def execute_checks(sample_result: Dict, check_list: List[Dict],
                   model_config: Dict = None) -> Dict:
@@ -2722,6 +3241,8 @@ def execute_checks(sample_result: Dict, check_list: List[Dict],
                 result = create_check_item_result(
                     "skip", "缺少LLM配置", "semantic_check需要LLM模型配置"
                 )
+        elif check_type == "file_whitelist_check":
+            result = _check_file_whitelist(check_item, work_dir)
         else:
             result = create_check_item_result(
                 "skip", f"不支持的检查类型: {check_type}", ""

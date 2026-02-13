@@ -270,10 +270,10 @@ class ViewerHandlerV2(SimpleHTTPRequestHandler):
             sample_annotation = result_data.get('manual_annotation', {})
             file_annotations = result_data.get('file_annotations', {})
 
-            # 读取check_result_rev003.json评测结果
+            # 读取check_result_rev004.json评测结果
             check_result = None
             env_dir = eval_dir / f'{data_id}_env'
-            check_result_file = env_dir / 'check_result_rev003.json'
+            check_result_file = env_dir / 'check_result_rev004.json'
             if check_result_file.exists():
                 try:
                     with open(check_result_file, 'r', encoding='utf-8') as f:

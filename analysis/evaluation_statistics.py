@@ -134,24 +134,28 @@ class EvaluationStatistics:
         assert cls._sort_order_cache is not None
         return cls._sort_order_cache
 
-    def __init__(self, evaluation_outputs_dir: str, check_result_filename: str = 'check_result_v4.json'):
+    def __init__(self, evaluation_outputs_dir: str, check_result_filename: str = 'check_result_v4.json',
+                 batch_prefix: str = 'eval_dsv1'):
         self.evaluation_outputs_dir = Path(evaluation_outputs_dir)
         self.check_result_filename = check_result_filename
+        self.batch_prefix = batch_prefix
         self.model_data = {}  # {model_name: [check_result_1, check_result_2, ...]}
         self.model_total_samples = {}  # {model_name: 总样本目录数}
 
     def load_all_results(self):
         """加载所有模型的评测结果"""
-        # 只处理eval_v2开头的目录
         eval_dirs = [d for d in self.evaluation_outputs_dir.iterdir()
-                     if d.is_dir() and d.name.startswith('eval_dsv1_')]
+                     if d.is_dir() and d.name.startswith(f'{self.batch_prefix}_')]
 
+        print(f"样本批次前缀: {self.batch_prefix}_")
         print(f"使用check_result文件: {self.check_result_filename}")
 
         for eval_dir in eval_dirs:
             # 从目录名提取模型名称
-            # eval_v2_20260205_132400_claude-opus-4-5-20251101 -> claude-opus-4-5-20251101
-            model_name = '_'.join(eval_dir.name.split('_')[4:])
+            # eval_dsv1_20260205_132400_claude-opus-4-5-20251101 -> claude-opus-4-5-20251101
+            # 前缀部分的下划线数 + 时间戳2段 = 跳过的段数
+            prefix_parts = len(self.batch_prefix.split('_'))  # eval_dsv1 -> 2
+            model_name = '_'.join(eval_dir.name.split('_')[prefix_parts + 2:])
 
             print(f"加载模型: {model_name}")
 
@@ -672,25 +676,33 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog='''
 示例:
-    python evaluation_statistics.py check_result_rev003.json     # 使用指定文件名
-    python evaluation_statistics.py check_result_v4.json         # 使用check_result_v4.json
+    python evaluation_statistics.py check_result_rev004.json --batch eval_dsv2
+    python evaluation_statistics.py check_result_rev003.json --batch eval_dsv1
+    python evaluation_statistics.py check_result_rev004.json               # 默认 eval_dsv1
         '''
     )
     parser.add_argument(
         'filename',
         type=str,
-        help='check_result文件名（必填，如 check_result_rev003.json）'
+        help='check_result文件名（必填，如 check_result_rev004.json）'
+    )
+    parser.add_argument(
+        '--batch',
+        type=str,
+        default='eval_dsv1',
+        help='样本批次前缀（默认 eval_dsv1），如 eval_dsv1, eval_dsv2'
     )
     args = parser.parse_args()
 
     # 评测结果目录
     evaluation_outputs_dir = '/Users/feixiaoxu01/Documents/agents/agent_auto_evaluation/universal_scenario_framework/tmp_scenarios/novel_writing_alchemist/evaluation_outputs'
 
-    # 输出文件
-    output_file = '/Users/feixiaoxu01/Documents/agents/agent_auto_evaluation/universal_scenario_framework/tmp_scenarios/novel_writing_alchemist/analysis/model_comparison_statistics.md'
+    # 输出文件（区分批次）
+    output_file = f'/Users/feixiaoxu01/Documents/agents/agent_auto_evaluation/universal_scenario_framework/tmp_scenarios/novel_writing_alchemist/analysis/model_comparison_statistics_{args.batch}.md'
 
-    # 创建统计分析器（传入文件名）
-    stats = EvaluationStatistics(evaluation_outputs_dir, check_result_filename=args.filename)
+    # 创建统计分析器
+    stats = EvaluationStatistics(evaluation_outputs_dir, check_result_filename=args.filename,
+                                 batch_prefix=args.batch)
 
     # 加载数据
     print("开始加载评测结果...")

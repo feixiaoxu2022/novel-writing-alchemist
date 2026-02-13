@@ -18,6 +18,8 @@ OUTPUT_SUFFIX=""     # 输出文件后缀，默认为空（覆盖原check_result
 MODEL="gpt-5.2"     # 默认使用gpt-5进行评估
 DATA_ID=""           # 可选，仅处理指定样本
 RESUME=false         # 新增：resume模式，跳过已有结果的样本
+ONLY_CHECKS=""       # 增量模式：只执行指定检查项（逗号分隔序号，如 33,35,36）
+ADD_MODE=false       # 增量模式：在已有结果上增跑新检查项
 
 # 解析参数
 while [[ $# -gt 0 ]]; do
@@ -54,6 +56,14 @@ while [[ $# -gt 0 ]]; do
             RESUME=true
             shift
             ;;
+        --only-checks)
+            ONLY_CHECKS="$2"
+            shift 2
+            ;;
+        --add)
+            ADD_MODE=true
+            shift
+            ;;
         *)
             echo "未知参数: $1"
             exit 1
@@ -78,6 +88,8 @@ if [ -z "$AGENT_RESULTS_DIR" ]; then
     echo "    --agent-results <agent执行结果目录> \\"
     echo "    --revision <revision编号，如 003> \\"
     echo "    [--resume] \\"
+    echo "    [--add] \\"
+    echo "    [--only-checks <检查项序号，如 33,35,36>] \\"
     echo "    [--model <模型名，默认gpt-5.2>] \\"
     echo "    [--data-id <仅处理指定样本>]"
     echo ""
@@ -92,6 +104,18 @@ if [ -z "$AGENT_RESULTS_DIR" ]; then
     echo "    --agent-results evaluation_outputs/eval_v2_20260205_132400_claude-opus-4-5-20251101 \\"
     echo "    --revision 003 \\"
     echo "    --resume"
+    echo ""
+    echo "  # 增量模式：只重跑第33,35,36项检查（在已有结果上覆盖这些项）"
+    echo "  $0 \\"
+    echo "    --agent-results evaluation_outputs/eval_v2_20260205_132400_claude-opus-4-5-20251101 \\"
+    echo "    --revision 004 \\"
+    echo "    --only-checks 33,35,36"
+    echo ""
+    echo "  # add模式：在已有结果上增跑新增的检查项（跳过已有项）"
+    echo "  $0 \\"
+    echo "    --agent-results evaluation_outputs/eval_v2_20260205_132400_claude-opus-4-5-20251101 \\"
+    echo "    --revision 004 \\"
+    echo "    --add"
     echo ""
     echo "  # 模式1（旧）：从样本文件提取"
     echo "  $0 \\"
@@ -200,6 +224,8 @@ echo "输出后缀: ${OUTPUT_SUFFIX:-无（覆盖原文件）}"
 echo "模型: $MODEL"
 echo "API端点: $API_BASE"
 echo "Resume模式: $RESUME"
+echo "Add模式: $ADD_MODE"
+echo "指定检查项: ${ONLY_CHECKS:-全部}"
 echo ""
 
 # 获取脚本所在目录（可能在前面已经设置过）
@@ -247,8 +273,8 @@ for result_json in "$AGENT_RESULTS_DIR"/*.json; do
         output_file="check_result.json"
     fi
 
-    # Resume模式：检查输出文件是否已存在
-    if [ "$RESUME" = true ] && [ -f "$env_dir/$output_file" ]; then
+    # Resume模式：检查输出文件是否已存在（--add和--only-checks模式下不跳过）
+    if [ "$RESUME" = true ] && [ -f "$env_dir/$output_file" ] && [ "$ADD_MODE" = false ] && [ -z "$ONLY_CHECKS" ]; then
         echo "⏭️  $basename: 已存在 $output_file，跳过"
         SKIPPED_COUNT=$((SKIPPED_COUNT + 1))
         continue
@@ -287,14 +313,34 @@ for result_json in "$AGENT_RESULTS_DIR"/*.json; do
     CHECKER_DIR="$SCRIPT_DIR/../env"
     cd "$CHECKER_DIR"
 
-    python3 checker.py \
-        --bench "$temp_bench" \
-        --result "$result_json_abs" \
-        --model "$MODEL" \
-        --base-url "$API_BASE" \
-        --api-key "$API_KEY" \
-        --output "$env_dir_abs/$output_file" \
+    # 构建checker.py调用命令
+    CHECKER_CMD=(
+        python3 checker.py
+        --bench "$temp_bench"
+        --result "$result_json_abs"
+        --model "$MODEL"
+        --base-url "$API_BASE"
+        --api-key "$API_KEY"
+        --output "$env_dir_abs/$output_file"
         --work-dir "$env_dir_abs"
+    )
+
+    # 增量模式：传递已有结果和指定检查项
+    existing_result_file="$env_dir_abs/$output_file"
+    if [ "$ADD_MODE" = true ] && [ -f "$existing_result_file" ]; then
+        CHECKER_CMD+=(--existing-result "$existing_result_file")
+        echo "  [增量] 基于已有结果: $output_file"
+    fi
+    if [ -n "$ONLY_CHECKS" ]; then
+        CHECKER_CMD+=(--only-checks "$ONLY_CHECKS")
+        # --only-checks 隐含需要已有结果（如果存在的话）
+        if [ "$ADD_MODE" = false ] && [ -f "$existing_result_file" ]; then
+            CHECKER_CMD+=(--existing-result "$existing_result_file")
+        fi
+        echo "  [指定] 只执行检查项: $ONLY_CHECKS"
+    fi
+
+    "${CHECKER_CMD[@]}"
 
     if [ ${PIPESTATUS[0]} -eq 0 ]; then
         echo "✅ $basename: recheck完成 -> $output_file"

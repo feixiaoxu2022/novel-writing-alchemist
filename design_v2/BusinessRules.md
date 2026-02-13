@@ -75,6 +75,11 @@
 - `data_pools/skills/OUTLINE_DESIGN_GUIDE.md` — 大纲设计方法论
 - `data_pools/materials/NAME_DATABASE.md` — 姓名素材
 
+**开始前必须读取schema确认输出格式**：
+
+- `data_pools/schemas/characters.schema.json` — **创建characters.json前必须先读取**，确认字段名（如 `main_characters` 而非 `protagonist`）
+- `data_pools/schemas/outline.schema.json` — **创建outline.json前必须先读取**，确认大纲结构
+
 **实施方式**：
 
 根据阶段2的用户意图和配方设计人物、人物关系和大纲（可灵活调整设计顺序）：
@@ -106,7 +111,7 @@
 
 **交付前验证**：
 
-- 读取 `data_pools/schemas/characters.schema.json` 和 `data_pools/schemas/outline.schema.json`，确认输出格式正确
+- 再次确认characters.json和outline.json的字段名与schema一致（特别是 `main_characters` 字段）
 - JSON语法正确（注意引号转义），可写脚本调用bash验证JSON合法性和schema匹配
 - 所有配角有明确功能定位
 - 关系转折点与大纲转折点呼应

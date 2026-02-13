@@ -1,10 +1,10 @@
 # Check能力维度分层体系
 # 用于统计和分析模型在不同能力维度上的表现
 
-version: "2.7"
+version: "2.8"
 created_at: "2026-01-29"
-updated_at: "2026-02-12"
-description: "定义check_list检查项的能力维度分层，支持按维度聚合统计和归因分析。v2.7新增叙事调性匹配检查（识别文笔画风与题材类型错位问题）"
+updated_at: "2026-02-13"
+description: "定义check_list检查项的能力维度分层，支持按维度聚合统计和归因分析。v2.8新增P1-P5程序化内容质量检查（章节克隆、交替重复、章节完成度、长度稳定性、段落重复），零LLM成本检测严重结构性缺陷"
 
 # === 三层结构 ===
 # 第一层：能力大类（对应9大核心能力）
@@ -498,47 +498,103 @@ capability_dimensions:
           - "❌ 不合格（章节萎缩）：前期每章5000-20000字，后期每章几十到几百字"
         note: "从原late_stage_digression拆分出来的语义检查部分。白名单文件检查已拆分到workspace_file_compliance（business_rule_compliance维度）。与full_narrative_content区分：本项检查正文vs非正文乱内容，full_narrative_content检查大纲式vs正文"
 
-      # === 优秀层（10个）- 可选择性启用 ===
-      # 注：优秀层检查项可根据评测需要灵活启用，不必全部使用
-
-      # 核心通用检查（4个，建议优先启用）
-      - subcategory_id: "appeal_strength_advanced"
-        subcategory_name: "吸引力强度"
-        cn_name: "故事够不够吸引人（冲突、悬念、抓人程度）"
-        sort_order: [3, 40]
-        tier_level: "advanced"
-        description: "冲突尖锐、悬念强烈、开篇抓人、整体让人停不下来"
+      # === P1-P5 程序化内容质量检查（零LLM成本，检测严重结构性缺陷）===
+      - subcategory_id: "chapter_cloning"
+        subcategory_name: "章节克隆检测"
+        cn_name: "有没有连续多章内容完全一样（复制粘贴）"
+        sort_order: [3, 2]
+        tier_level: "basic"
+        is_gate: true
+        description: "检测连续章节内容完全重复（克隆）的严重质量缺陷。连续>=2章去掉标题行后内容完全相同，或连续>=3章前500字符完全相同，均判定为克隆。纯程序化检测，零LLM成本"
         check_types: ["semantic_check"]
         applicable_scenarios: ["original_creation", "adaptation"]
-        priority: "high"
-
-      - subcategory_id: "emotional_impact"
-        subcategory_name: "情感冲击力"
-        cn_name: "情感冲击力够不够强"
-        sort_order: [3, 41]
-        tier_level: "advanced"
-        description: "角色深刻动人、情感真实感染、情绪峰值到位、有具体共鸣点"
-        check_types: ["semantic_check"]
-        applicable_scenarios: ["original_creation", "adaptation"]
-        priority: "high"
-
-      - subcategory_id: "emotional_progression"
-        subcategory_name: "情感层次递进"
-        cn_name: "情感有没有从简单到复杂递进"
-        sort_order: [3, 42]
-        tier_level: "advanced"
-        description: "情感从简单到复杂的递进演化，呈现多层次、多维度的情感体验，而非单一情感的重复或平铺"
-        check_types: ["semantic_check"]
-        applicable_scenarios: ["original_creation", "adaptation"]
-        priority: "high"
-        note: "与emotional_impact区分：情感冲击力关注峰值强度，情感层次递进关注复杂度演化"
+        validation_method: "chapter_cloning_detection"
         examples:
-          - "✅ 优秀递进（角色视角）：仰慕 → 靠近后的自我成长 → 自我接纳与共同成长"
-          - "✅ 优秀递进（关系视角）：甜 → 虐 → 更甜 → 更虐（情感越来越复合，层次递增）"
-          - "✅ 优秀递进（具体过程）：表面吸引（长得帅/同频）→ 依赖形成 → 共同对抗挑战 → 经历误解与和解 → 情感升华"
-          - "❌ 缺乏递进：始终停留在表面甜蜜，无深层情感演化"
-          - "❌ 缺乏递进：重复相同冲突类型，情感复杂度未提升"
+          - "❌ 完全克隆：chapter_13到chapter_48（36章）去掉标题行后内容完全相同，每章2207字节"
+          - "❌ 近似克隆：chapter_25到chapter_45（21章）前500字符完全相同"
+        note: "Gate项（一票否决候选）。这不是'质量差'，是'根本没有有效交付'——模型写入循环后输出了几十章相同内容"
 
+      - subcategory_id: "alternating_repetition"
+        subcategory_name: "交替重复检测"
+        cn_name: "有没有A-B-A-B这样两章内容交替循环"
+        sort_order: [3, 3]
+        tier_level: "basic"
+        is_gate: true
+        description: "检测A-B-A-B或A-B-C-A-B-C等交替循环模式。连续>=4章出现交替重复（相邻偶数/奇数章内容相同）即判定失败。纯程序化检测，零LLM成本"
+        check_types: ["semantic_check"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        validation_method: "alternating_repetition_detection"
+        examples:
+          - "❌ 交替重复：chapter_23到chapter_44呈现A(1403bytes)-B(1508bytes)交替模式，共11轮"
+        note: "Gate项（一票否决候选）。比完全克隆更隐蔽的退化模式——模型在两个状态之间振荡"
+
+      - subcategory_id: "chapter_completion"
+        subcategory_name: "章节完成度"
+        cn_name: "该写的章节写了多少（有没有半途而废）"
+        sort_order: [3, 4]
+        tier_level: "basic"
+        is_gate: true
+        description: "实际写作章节数/大纲规划章节数的比例。比例<0.5即判定为早期终止。0章交付直接判定失败。纯程序化检测，零LLM成本"
+        check_types: ["semantic_check"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        validation_method: "chapter_completion_ratio"
+        examples:
+          - "❌ 早期终止：大纲规划10章，实际仅完成1章（完成率10%）"
+          - "❌ 零交付：chapters目录中没有任何章节文件"
+          - "✅ 合格：大纲规划60章，实际完成60章（完成率100%）"
+        note: "Gate项（一票否决候选）。检测Agent在执行阶段因各种原因（429/crash/能力不足）提前终止的情况"
+
+      - subcategory_id: "chapter_length_stability"
+        subcategory_name: "章节长度稳定性"
+        cn_name: "后期章节有没有越写越短、严重萎缩"
+        sort_order: [3, 5]
+        tier_level: "basic"
+        description: "后1/4章节平均长度不能低于前1/3章节平均长度的30%。低于该阈值表明模型在长篇创作中出现严重的输出退化。纯程序化检测，零LLM成本"
+        check_types: ["semantic_check"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        validation_method: "chapter_length_stability"
+        examples:
+          - "❌ 严重崩塌：前20章均值2821字，后15章均值376字（衰减至13.3%）"
+          - "❌ 严重崩塌：前14章均值4800字，后11章均值498字（衰减至10.4%）"
+          - "✅ 稳定：前1/3均值3000字，后1/4均值2500字（比率83%）"
+        note: "非Gate项，但是重要的质量指标。后期章节萎缩往往伴随内容质量退化（摘要体、模板化）"
+
+      - subcategory_id: "paragraph_repetition"
+        subcategory_name: "段落重复检测"
+        cn_name: "有没有大量段落在不同章节间重复出现"
+        sort_order: [3, 6]
+        tier_level: "basic"
+        description: "检测跨章节段落重复（相同段落出现在多个章节）和单章内连续段落重复。跨章重复>=5组或单章连续重复段落>=3即判定失败。纯程序化检测，零LLM成本"
+        check_types: ["semantic_check"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        validation_method: "paragraph_repetition_detection"
+        examples:
+          - "❌ 跨章重复：5个段落分别出现在36章中（因章节克隆导致）"
+          - "❌ 单章重复：chapter_05中有37处连续段落重复"
+          - "✅ 合格：跨章重复1组（阈值5），单章重复0处（阈值3）"
+        note: "非Gate项。段落级重复是比章节克隆更细粒度的质量问题，可以独立于P1/P2出现"
+
+      - subcategory_id: "outline_execution_fidelity"
+        subcategory_name: "大纲执行忠实度"
+        cn_name: "实际写的内容跟自己设计的大纲一不一致"
+        sort_order: [3, 7]
+        tier_level: "basic"
+        description: "实际写出的章节是否忠实执行了自己设计的outline.json。检查大纲中的关键转折点、核心事件是否在对应章节中体现，不能出现大纲设计A结局实际写成B结局、大纲规划的关键场景完全缺失等情况"
+        check_types: ["semantic_check"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        validation_method: "llm_semantic_analysis"
+        examples:
+          - "❌ 严重偏离：outline设计'彻底悲剧结局'，实际写成'悬念续集开放结局'"
+          - "❌ 严重偏离：outline设计9章，实际只写7章，缺少高潮对决和结局"
+          - "❌ 关键缺失：outline设计'主角发现真凶是父亲'的核心转折，实际章节中完全没有"
+          - "✅ 允许偏离：大纲说'在咖啡馆相遇'，实际写成'在书店相遇'（细节调整，不影响主线）"
+          - "✅ 允许偏离：大纲规划3个场景，实际扩展为5个场景（丰富化，不违背大纲意图）"
+        note: "规划-执行一致性是基础底线：Agent花了资源设计大纲却不按大纲执行，说明执行阶段的规划遵循能力有缺陷。与character_design_adherence类似，都是plan vs execute的一致性检查"
+
+      # === 优秀层 ===
+      # 保留有清晰判定标准的维度，挂起难以标准化的情感类维度
+
+      # 保留（3个）
       - subcategory_id: "genre_fit"
         subcategory_name: "题材契合度"
         cn_name: "题材特征体现得精不精致"
@@ -550,7 +606,6 @@ capability_dimensions:
         priority: "high"
         note: "本场景核心评测点：验证X轴模式+Y轴标签的组合是否达到预期的化学反应效果。与emotional_delivery_match区分：后者检查情感倾向正确性（底线），genre_fit检查题材特征的精致度和完成度（优秀标准）"
 
-      # 扩展通用检查（4个，可选启用）
       - subcategory_id: "pacing_rationality_advanced"
         subcategory_name: "剧情节奏合理性"
         cn_name: "剧情节奏合不合理"
@@ -571,54 +626,66 @@ capability_dimensions:
         applicable_scenarios: ["original_creation", "adaptation"]
         priority: "medium"
 
-      - subcategory_id: "novelty_appeal"
-        subcategory_name: "立意新颖性"
-        cn_name: "立意新不新颖"
-        sort_order: [3, 52]
+      # 替换（dialogue_quality → dialogue_character_distinction）
+      - subcategory_id: "dialogue_character_distinction"
+        subcategory_name: "角色语言辨识度"
+        cn_name: "遮住角色名能不能分辨谁在说话"
+        sort_order: [3, 44]
         tier_level: "advanced"
-        description: "设定新颖独特、能点燃读者好奇心、有反常规创意设计"
+        description: "不同角色的对话必须有语言风格差异：用词习惯、句式长短、语气特征、口头禅等。理想状态是遮住角色名仅凭对话内容就能识别说话者。最差的情况是所有角色共享同一套话术模板"
         check_types: ["semantic_check"]
         applicable_scenarios: ["original_creation", "adaptation"]
-        priority: "medium"
-
-      - subcategory_id: "dialogue_quality"
-        subcategory_name: "台词质量"
-        cn_name: "台词写得好不好"
-        sort_order: [3, 53]
-        tier_level: "advanced"
-        description: "对话生动自然、有生活化细节、符合人物身份、避免口号化宣传式台词"
-        check_types: ["semantic_check"]
-        applicable_scenarios: ["original_creation", "adaptation"]
-        priority: "medium"
-        note: "与emotional_impact区分：台词质量关注对话本身的表达方式，情感冲击力关注角色动机和情感深度"
+        priority: "high"
+        validation_method: "llm_semantic_analysis"
         examples:
-          - "✅ 优秀对话：有生活化细节、有互动感、符合人物身份"
-          - "❌ 口号化对话：'时代在变，我们也要变'、'知识改变命运'、'我要和大家共进退'"
+          - "✅ 有辨识度：老刑警说话简短粗粝（'少废话，现场封了没'），法医用专业术语+冷幽默（'死亡时间嘛，比你早起那么一点点'），线人口语化带方言（'哥你不知道啊，昨晚那阵势...'）"
+          - "❌ 无辨识度：所有角色共享'神秘暗示体'——'也许真相并不像你看到的那样''有些事，知道得太多并不是好事'"
+          - "❌ 无辨识度：外公和年轻同事对同一件事回应一字不差（'看走眼不可怕，可怕的是不敢承认'）"
+        note: "替代原dialogue_quality。原项关注'台词写得好不好'（太模糊），新项关注'角色说话有没有区分'（有具体操作标准）。审计发现qwen3/glm多个样本存在严重的对话同质化"
 
-      # 题材特定检查（2个，按题材启用）
-      - subcategory_id: "sweetness_quality"
-        subcategory_name: "甜度质量"
-        cn_name: "甜度够不够（甜宠题材专用）"
+      # 新增（2个）
+      - subcategory_id: "narrative_density"
+        subcategory_name: "叙事密度"
+        cn_name: "写得细不细（场景描写、感官细节、心理活动的密度）"
+        sort_order: [3, 45]
+        tier_level: "advanced"
+        description: "章节是否包含足够的场景描写、感官细节、心理活动，而非纯对话或事件流水账。区分'细腻描写'和'粗糙罗列'。与full_narrative_content(basic)的区别：后者检查'是不是正文'，本项检查'写得细不细'"
+        check_types: ["semantic_check"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        priority: "high"
+        validation_method: "llm_semantic_analysis"
+        examples:
+          - "✅ 高密度：'凌晨三点的实验室，荧光灯发出轻微的嗡鸣。陆衡盯着显微镜下的切片，左眼酸涩到快要痉挛，但他不敢眨眼——上一次眨眼时，他漏掉了关键的细胞异变。咖啡已经凉了，杯壁上凝结着一层棕色的膜。'"
+          - "❌ 低密度/流水账：'陆衡在实验室工作到凌晨三点。他看了显微镜。咖啡凉了。他继续工作。'"
+          - "❌ 纯对话骨架：整章仅由对话构成，无环境描写、无心理活动、无动作细节"
+          - "❌ 议论文体：章节退化为观点阐述和工作报告，丧失叙事性"
+        note: "审计发现：kimi后期章节退化为'人物摘要列表'，glm退化为纯对话骨架，qwen3退化为议论文。这些问题full_narrative_content可能判通过（因为确实是'正文'不是'大纲'），但叙事质量极低"
+
+      - subcategory_id: "puzzle_logic_validity"
+        subcategory_name: "智斗逻辑合理性"
+        cn_name: "谜题/智斗的推理逻辑成不成立"
         sort_order: [3, 60]
         tier_level: "advanced"
-        description: "发糖频率高、糖的高级感细腻、有具体暖心行为（非空洞霸总发言）"
+        description: "烧脑/悬疑/智斗类题材中，谜题的答案推理链是否逻辑自洽。密码谜题是否有合理的解法路径，策略博弈是否有合理的攻防逻辑，不能出现'直接猜对'或'太复杂了直接砸门然后门自己开了'的情况"
         check_types: ["semantic_check"]
         applicable_scenarios: ["original_creation", "adaptation"]
-        applicable_genres: ["sweet_romance"]
-        priority: "low"
-        note: "仅适用于甜宠/言情类题材"
+        applicable_genres: ["brainy_action", "suspense", "mystery"]
+        priority: "medium"
+        validation_method: "llm_semantic_analysis"
+        examples:
+          - "❌ 逻辑崩坏：密码谜题直接猜'13'就对了，无推理过程"
+          - "❌ 逻辑崩坏：'13+7=20, 20-13=7, 会不会是7？'——推理链不成立但答案正确"
+          - "❌ 逻辑崩坏：'太复杂了直接砸吧'→门自己开了"
+          - "✅ 逻辑自洽：根据墙上壁画中的星象排列推导出密码对应黄道十二宫的编号，线索链完整"
+        note: "题材特定检查项，仅适用于brainy_action/suspense/mystery等需要智力对抗的题材。审计发现qwen3的BRAINY_ACTION样本中谜题设计全面崩坏"
 
-      - subcategory_id: "humor_effect"
-        subcategory_name: "搞笑效果"
-        cn_name: "搞笑效果好不好（喜剧题材专用）"
-        sort_order: [3, 61]
-        tier_level: "advanced"
-        description: "有搞笑元素、无厘头但好笑、尺度恰当、节奏合理"
-        check_types: ["semantic_check"]
-        applicable_scenarios: ["original_creation", "adaptation"]
-        applicable_genres: ["comedy", "sweet_romance"]
-        priority: "low"
-        note: "仅适用于喜剧/轻松向题材，非所有故事都需要"
+      # === 挂起的维度（暂不启用，等积累评判经验后再设计）===
+      # appeal_strength_advanced — 吸引力强度（LLM judge区分度低）
+      # emotional_impact — 情感冲击力（LLM judge区分度低）
+      # emotional_progression — 情感层次递进（LLM judge区分度低）
+      # novelty_appeal — 立意新颖性（太主观）
+      # sweetness_quality — 甜度质量（太细，题材特定）
+      # humor_effect — 搞笑效果（太细，题材特定）
 
 # ============================================
 # 使用说明
@@ -665,6 +732,25 @@ usage_notes: |
 # ============================================
 
 version_history:
+  - version: "2.8"
+    date: "2026-02-13"
+    changes:
+      - "【新增维度】content_quality基础层新增P1-P5共5个程序化内容质量检查项"
+      - "P1 chapter_cloning（章节克隆检测）：连续>=2章完全克隆或>=3章前500字克隆。Gate项"
+      - "P2 alternating_repetition（交替重复检测）：A-B-A-B等循环模式，连续>=4章。Gate项"
+      - "P3 chapter_completion（章节完成度）：实际/大纲 < 0.5 即早期终止。Gate项"
+      - "P4 chapter_length_stability（章节长度稳定性）：后1/4均值 < 前1/3均值的30%"
+      - "P5 paragraph_repetition（段落重复检测）：跨章>=5组或单章连续>=3"
+      - "【新增维度】content_quality基础层新增outline_execution_fidelity（大纲执行忠实度）"
+      - "大纲执行忠实度：Agent设计的outline.json与实际chapters的一致性，规划-执行一致性是底线"
+      - "【重构】content_quality优秀层从10个精简为7个"
+      - "保留：genre_fit、pacing_rationality_advanced、hook_design"
+      - "替换：dialogue_quality → dialogue_character_distinction（角色语言辨识度），聚焦审计发现的对话同质化问题"
+      - "新增：narrative_density（叙事密度）、puzzle_logic_validity（智斗逻辑合理性，题材特定）"
+      - "挂起：appeal_strength、emotional_impact、emotional_progression（LLM judge区分度低，等积累经验后再设计）"
+      - "删除：novelty_appeal（太主观）、sweetness_quality（太细）、humor_effect（太细）"
+    rationale: "质量审计发现4类需要LLM judge的深层叙事问题：对话同质化、大纲偏离、智斗逻辑崩坏、叙事退化。大纲偏离属于规划-执行一致性底线放basic层。对话辨识度、叙事密度、智斗逻辑放advanced层，均有具体可操作的判定标准。情感类维度因LLM judge评判区分度低暂时挂起"
+
   - version: "2.7"
     date: "2026-02-12"
     changes:

@@ -12,18 +12,81 @@ checks:
     skip_if_file_not_exists: true
   weight: 1.0
   is_critical: true
-- check_id: 读取人物设计指南
-  check_name: 必须读取CHARACTER_DESIGN_GUIDE.md（人物设计指南）
-  dimension_id: business_rule_compliance
-  subcategory_id: required_skill_reading
-  check_type: tool_called_with_params
+# ========== P1-P5 程序化内容质量检查（零LLM成本，检测严重质量缺陷）==========
+- check_id: 章节克隆检测
+  check_name: 不能出现连续章节内容完全重复（克隆）
+  dimension_id: content_quality
+  subcategory_id: chapter_cloning
+  quality_tier: basic
+  check_type: semantic_check
   params:
-    tool_name: read_file
-    expected_params:
-      path: data_pools/skills/CHARACTER_DESIGN_GUIDE.md
-    skip_if_file_not_exists: true
+    analysis_target: chapters/chapter_*.md
+    validation_rules:
+    - rule_id: chapter_cloning_detection
+      description: 连续>=2章完全克隆或连续>=3章前500字克隆即判定失败
+      validation_method: chapter_cloning_detection
   weight: 1.0
   is_critical: true
+  is_gate: true
+- check_id: 交替重复检测
+  check_name: 不能出现A-B-A-B交替循环的章节内容
+  dimension_id: content_quality
+  subcategory_id: alternating_repetition
+  quality_tier: basic
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    validation_rules:
+    - rule_id: alternating_repetition_detection
+      description: 检测A-B-A-B或A-B-C-A-B-C等循环模式，连续>=4章出现交替重复即失败
+      validation_method: alternating_repetition_detection
+  weight: 1.0
+  is_critical: true
+  is_gate: true
+- check_id: 章节完成度
+  check_name: 实际写作章节数必须达到大纲规划的合理比例
+  dimension_id: content_quality
+  subcategory_id: chapter_completion
+  quality_tier: basic
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    validation_rules:
+    - rule_id: chapter_completion_ratio
+      description: 实际章节数/大纲规划章节数 < 0.5 即判定失败（早期终止）
+      validation_method: chapter_completion_ratio
+  weight: 1.0
+  is_critical: true
+  is_gate: true
+- check_id: 章节长度稳定性
+  check_name: 后期章节不能出现严重长度萎缩
+  dimension_id: content_quality
+  subcategory_id: chapter_length_stability
+  quality_tier: basic
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    validation_rules:
+    - rule_id: chapter_length_stability
+      description: 后1/4章节平均长度不能低于前1/3章节平均长度的30%
+      validation_method: chapter_length_stability
+  weight: 1.0
+  is_critical: true
+- check_id: 段落重复检测
+  check_name: 不能出现大量段落在不同章节间重复
+  dimension_id: content_quality
+  subcategory_id: paragraph_repetition
+  quality_tier: basic
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    validation_rules:
+    - rule_id: paragraph_repetition_detection
+      description: 跨章节段落重复率>15%或单章内连续重复段落>=3即失败
+      validation_method: paragraph_repetition_detection
+  weight: 1.0
+  is_critical: true
+
 - check_id: 读取大纲设计指南
   check_name: 必须读取OUTLINE_DESIGN_GUIDE.md（大纲设计指南）
   dimension_id: business_rule_compliance
@@ -527,3 +590,121 @@ checks:
       path: writing_log.md
   weight: 1.0
   is_critical: true
+# ========== 新增：大纲执行忠实度（basic层LLM检查）==========
+- check_id: 大纲执行忠实度
+  check_name: 实际章节内容必须忠实于自己设计的大纲
+  dimension_id: content_quality
+  subcategory_id: outline_execution_fidelity
+  quality_tier: basic
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md + outline.json
+    llm_judge_criteria_file: judge_criteria/content_quality_basic.yaml
+    llm_judge_criteria_section: 大纲执行忠实度
+    validation_rules:
+    - rule_id: outline_execution_fidelity
+      description: outline.json中设计的核心事件和结局方向必须在实际章节中体现，不能大纲设计A结局实际写成B结局
+      validation_method: llm_semantic_analysis
+  weight: 1.0
+  is_critical: true
+# ========== 新增：Advanced层内容质量检查（6项LLM judge）==========
+- check_id: 角色语言辨识度
+  check_name: 不同角色对话必须有可辨识的语言风格差异
+  dimension_id: content_quality
+  subcategory_id: dialogue_character_distinction
+  quality_tier: advanced
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    llm_judge_criteria_file: judge_criteria/content_quality_advanced.yaml
+    llm_judge_criteria_section: 角色语言辨识度
+    validation_rules:
+    - rule_id: dialogue_character_distinction
+      description: 遮住角色名能否分辨谁在说话，不同角色需有独特的语言特征
+      validation_method: llm_semantic_analysis
+  weight: 1.0
+  is_critical: false
+- check_id: 叙事密度
+  check_name: 章节叙事应有足够的场景描写、感官细节和心理活动
+  dimension_id: content_quality
+  subcategory_id: narrative_density
+  quality_tier: advanced
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    llm_judge_criteria_file: judge_criteria/content_quality_advanced.yaml
+    llm_judge_criteria_section: 叙事密度
+    validation_rules:
+    - rule_id: narrative_density
+      description: 区分细腻描写和粗糙罗列，检查场景/感官/心理/动作四维密度
+      validation_method: llm_semantic_analysis
+  weight: 1.0
+  is_critical: false
+- check_id: 智斗逻辑合理性
+  check_name: 谜题/智斗的推理逻辑必须自洽
+  dimension_id: content_quality
+  subcategory_id: puzzle_logic_validity
+  quality_tier: advanced
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    llm_judge_criteria_file: judge_criteria/content_quality_advanced.yaml
+    llm_judge_criteria_section: 智斗逻辑合理性
+    applicable_genres:
+    - brainy_action
+    - suspense
+    - mystery
+    validation_rules:
+    - rule_id: puzzle_logic_validity
+      description: 谜题答案推理链是否逻辑自洽，不能盲猜/暴力破解/假推理
+      validation_method: llm_semantic_analysis
+  weight: 1.0
+  is_critical: false
+- check_id: 题材契合度
+  check_name: 题材特征精致度和X-Y轴化学反应效果
+  dimension_id: content_quality
+  subcategory_id: genre_fit
+  quality_tier: advanced
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md + creative_intent.json
+    llm_judge_criteria_file: judge_criteria/content_quality_advanced.yaml
+    llm_judge_criteria_section: 题材契合度
+    validation_rules:
+    - rule_id: genre_fit
+      description: X轴模式+Y轴标签的组合是否达到预期的化学反应效果，题材特征是否有深度而非流于表面
+      validation_method: llm_semantic_analysis
+  weight: 1.0
+  is_critical: false
+- check_id: 剧情节奏合理性
+  check_name: 高潮低谷分布合理、情绪曲线有层次感
+  dimension_id: content_quality
+  subcategory_id: pacing_rationality_advanced
+  quality_tier: advanced
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    llm_judge_criteria_file: judge_criteria/content_quality_advanced.yaml
+    llm_judge_criteria_section: 剧情节奏合理性
+    validation_rules:
+    - rule_id: pacing_rationality_advanced
+      description: 起承转合节奏自然流畅，不拖沓不仓促，有明确高潮点
+      validation_method: llm_semantic_analysis
+  weight: 1.0
+  is_critical: false
+- check_id: 钩子设计
+  check_name: 关键转折处有有效的悬念钩子设计
+  dimension_id: content_quality
+  subcategory_id: hook_design
+  quality_tier: advanced
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    llm_judge_criteria_file: judge_criteria/content_quality_advanced.yaml
+    llm_judge_criteria_section: 钩子设计
+    validation_rules:
+    - rule_id: hook_design
+      description: 钩子有信息差、具体化、与剧情关联、多样化，不能空洞或模板化
+      validation_method: llm_semantic_analysis
+  weight: 1.0
+  is_critical: false

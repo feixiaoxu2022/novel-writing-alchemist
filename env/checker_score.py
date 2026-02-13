@@ -1,17 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-小说创作炼金术场景 - Checker评分模块
+小说创作炼金术场景 - Checker评分模块 (v2.0)
 
 职责：读取execution_result，按能力维度聚合统计，计算质量等级
 输入：execution_result.json（checker_execute的输出）
 输出：check_result.json（含维度分数、质量等级和overall统计）
+
+v2.0变更：
+- 引入Gate层（一票否决）：P1(克隆)+P2(交替)+P3(完成度)任一fail → 总分上限30
+- 内容质量权重70%，流程合规权重30%
+- 三层递进评分：Gate→Basic→Advanced
 """
 
 import json
 import argparse
 import sys
-from typing import Dict, List
+from typing import Dict, List, Tuple
 from pathlib import Path
 
 
@@ -29,6 +34,20 @@ CAPABILITY_DIMENSIONS = [
 
 # content_quality维度的两层
 QUALITY_TIERS = ["basic", "advanced"]
+
+# Gate层（一票否决）的subcategory_id
+GATE_SUBCATEGORIES = {
+    "chapter_cloning",          # P1
+    "alternating_repetition",   # P2
+    "chapter_completion",       # P3
+}
+
+# 权重配置
+CONTENT_WEIGHT = 0.7   # 内容质量占70%
+PROCESS_WEIGHT = 0.3   # 流程合规占30%
+
+# Gate失败时的内容分数上限
+GATE_FAIL_CAP = 30.0
 
 
 # =========================================
@@ -93,56 +112,101 @@ def calculate_dimension_score(checks: List[Dict]) -> Dict:
     }
 
 
+def separate_gate_checks(basic_checks: List[Dict]) -> Tuple[List[Dict], List[Dict]]:
+    """
+    从basic检查项中分离出Gate层检查项。
+
+    Gate层检查项通过 is_gate=True 或 subcategory_id 在 GATE_SUBCATEGORIES 中识别。
+
+    Args:
+        basic_checks: basic层所有检查项
+
+    Returns:
+        (gate_checks, non_gate_basic_checks)
+    """
+    gate_checks = []
+    non_gate_checks = []
+
+    for check in basic_checks:
+        subcategory_id = check.get("subcategory_id", "")
+        is_gate = check.get("is_gate", False)
+
+        if is_gate or subcategory_id in GATE_SUBCATEGORIES:
+            gate_checks.append(check)
+        else:
+            non_gate_checks.append(check)
+
+    return gate_checks, non_gate_checks
+
+
 def calculate_content_quality_score(basic_checks: List[Dict],
                                     advanced_checks: List[Dict]) -> Dict:
     """
-    计算content_quality维度的分数（两层体系）
+    计算content_quality维度的分数（三层体系：Gate→Basic→Advanced）
 
-    质量等级计算：
-    - 不合格（0-60分）：basic层有任何失败
-    - 合格（60-70分）：basic全过 + advanced通过率<70%
-    - 优秀（70分以上）：basic全过 + advanced通过率≥70%
+    评分逻辑：
+    1. Gate层（P1+P2+P3）任何fail → 内容分数上限30分（一票否决）
+    2. Gate通过 + Basic有fail → 30 + basic_pass_rate * 40（30-70分）
+    3. Gate通过 + Basic全过 + Advanced → 70 + advanced_pass_rate * 30（70-100分）
 
     Args:
-        basic_checks: basic层检查项
+        basic_checks: basic层检查项（含Gate层）
         advanced_checks: advanced层检查项
 
     Returns:
         {
             "overall_score": 总分,
-            "quality_level": "unqualified/qualified/excellent",
+            "quality_level": "gate_failed/unqualified/qualified/excellent",
+            "gate_layer": {...},
             "basic_layer": {...},
-            "advanced_layer": {...}
+            "advanced_layer": {...},
+            "gate_triggered": bool
         }
     """
-    basic_score_info = calculate_dimension_score(basic_checks)
+    # 分离Gate层
+    gate_checks, non_gate_basic_checks = separate_gate_checks(basic_checks)
+
+    gate_score_info = calculate_dimension_score(gate_checks)
+    basic_score_info = calculate_dimension_score(non_gate_basic_checks)
     advanced_score_info = calculate_dimension_score(advanced_checks)
 
-    # 判断质量等级（用pass_rate代替score）
-    if basic_score_info["failed"] > 0:
-        # basic层有失败 → 不合格
-        quality_level = "unqualified"
-        overall_score = min(60, basic_score_info["pass_rate"] * 100)  # 0-60分
-    else:
-        # basic层全过
-        if advanced_score_info["total"] == 0:
-            # 没有advanced检查 → 合格
-            quality_level = "qualified"
-            overall_score = 65
-        elif advanced_score_info["pass_rate"] >= 0.7:
-            # advanced通过率≥70% → 优秀
-            quality_level = "excellent"
-            overall_score = 70 + (advanced_score_info["pass_rate"] - 0.7) * 100
+    gate_triggered = False
+
+    # 第一层：Gate检查
+    if gate_score_info["failed"] > 0:
+        gate_triggered = True
+        quality_level = "gate_failed"
+        # Gate失败时，分数 = min(30, basic通过率 * 30)
+        # 用所有basic（含gate）的通过数计算
+        all_basic_total = gate_score_info["total"] + basic_score_info["total"]
+        all_basic_passed = gate_score_info["passed"] + basic_score_info["passed"]
+        if all_basic_total > 0:
+            overall_score = min(GATE_FAIL_CAP, (all_basic_passed / all_basic_total) * GATE_FAIL_CAP)
         else:
-            # advanced通过率<70% → 合格
+            overall_score = 0.0
+    elif basic_score_info["failed"] > 0:
+        # 第二层：Basic有fail
+        quality_level = "unqualified"
+        overall_score = 30 + basic_score_info["pass_rate"] * 40  # 30-70分
+    else:
+        # 第三层：Basic全过
+        if advanced_score_info["total"] == 0:
             quality_level = "qualified"
-            overall_score = 60 + advanced_score_info["pass_rate"] * 10
+            overall_score = 70.0
+        elif advanced_score_info["pass_rate"] >= 0.7:
+            quality_level = "excellent"
+            overall_score = 70 + advanced_score_info["pass_rate"] * 30  # 70-100分
+        else:
+            quality_level = "qualified"
+            overall_score = 70 + advanced_score_info["pass_rate"] * 30  # 70-100分（根据通过率线性）
 
     return {
         "overall_score": round(overall_score, 2),
         "quality_level": quality_level,
+        "gate_layer": gate_score_info,
         "basic_layer": basic_score_info,
-        "advanced_layer": advanced_score_info
+        "advanced_layer": advanced_score_info,
+        "gate_triggered": gate_triggered
     }
 
 
@@ -156,11 +220,11 @@ def determine_status(total_score: float) -> str:
     Returns:
         Excellent / Good / Fair / Poor
     """
-    if total_score >= 95:
+    if total_score >= 90:
         return "Excellent"
-    elif total_score >= 80:
+    elif total_score >= 70:
         return "Good"
-    elif total_score >= 60:
+    elif total_score >= 50:
         return "Fair"
     else:
         return "Poor"
@@ -172,11 +236,11 @@ def determine_status(total_score: float) -> str:
 
 def calculate_dimension_scores(check_details: Dict, capability_taxonomy: Dict = None) -> Dict:
     """
-    按能力维度聚合统计
+    按能力维度聚合统计（v2.0：内容70%+流程30%+Gate一票否决）
 
     Args:
         check_details: 检查详情结果（来自checker_execute）
-        capability_taxonomy: 能力体系配置（可选，用于获取额外的元信息）
+        capability_taxonomy: 能力体系配置（可选）
 
     Returns:
         {
@@ -215,7 +279,7 @@ def calculate_dimension_scores(check_details: Dict, capability_taxonomy: Dict = 
 
     for dim_id in CAPABILITY_DIMENSIONS:
         if dim_id == "content_quality":
-            # 使用两层评分体系
+            # 使用三层评分体系（Gate + Basic + Advanced）
             dimension_scores[dim_id] = calculate_content_quality_score(
                 content_quality_basic,
                 content_quality_advanced
@@ -226,55 +290,70 @@ def calculate_dimension_scores(check_details: Dict, capability_taxonomy: Dict = 
                 dimension_checks[dim_id]
             )
 
-    # 计算总分（等权平均）
-    # content_quality使用overall_score，其他维度使用score
-    scores = []
-    for dim_id in CAPABILITY_DIMENSIONS:
-        if dim_id == "content_quality":
-            scores.append(dimension_scores[dim_id]["overall_score"])
-        else:
-            if dimension_scores[dim_id]["total"] > 0:
-                scores.append(dimension_scores[dim_id]["pass_rate"] * 100)
+    # 计算总分（v2.0：内容70% + 流程30%）
+    # 内容分数
+    content_score = dimension_scores.get("content_quality", {}).get("overall_score", 0.0)
 
-    if scores:
-        total_score = sum(scores) / len(scores)
+    # 流程分数（format + business + memory 等权平均）
+    process_scores = []
+    for dim_id in ["format_compliance", "business_rule_compliance", "memory_management"]:
+        dim = dimension_scores.get(dim_id, {})
+        if dim.get("total", 0) > 0:
+            process_scores.append(dim["pass_rate"] * 100)
+
+    if process_scores:
+        process_score = sum(process_scores) / len(process_scores)
     else:
-        total_score = 0.0
+        process_score = 0.0
+
+    # 加权总分
+    total_score = content_score * CONTENT_WEIGHT + process_score * PROCESS_WEIGHT
 
     # 统计总数
     total_checks = sum(
         dimension_scores[dim].get("total", 0)
         if dim != "content_quality"
-        else (dimension_scores[dim]["basic_layer"]["total"] +
+        else (dimension_scores[dim]["gate_layer"]["total"] +
+              dimension_scores[dim]["basic_layer"]["total"] +
               dimension_scores[dim]["advanced_layer"]["total"])
         for dim in CAPABILITY_DIMENSIONS
+        if dim in dimension_scores
     )
 
     passed_checks = sum(
         dimension_scores[dim].get("passed", 0)
         if dim != "content_quality"
-        else (dimension_scores[dim]["basic_layer"]["passed"] +
+        else (dimension_scores[dim]["gate_layer"]["passed"] +
+              dimension_scores[dim]["basic_layer"]["passed"] +
               dimension_scores[dim]["advanced_layer"]["passed"])
         for dim in CAPABILITY_DIMENSIONS
+        if dim in dimension_scores
     )
 
     failed_checks = sum(
         dimension_scores[dim].get("failed", 0)
         if dim != "content_quality"
-        else (dimension_scores[dim]["basic_layer"]["failed"] +
+        else (dimension_scores[dim]["gate_layer"]["failed"] +
+              dimension_scores[dim]["basic_layer"]["failed"] +
               dimension_scores[dim]["advanced_layer"]["failed"])
         for dim in CAPABILITY_DIMENSIONS
+        if dim in dimension_scores
     )
 
     # 判定status
     status = determine_status(total_score)
 
+    # Gate触发标记
+    gate_triggered = dimension_scores.get("content_quality", {}).get("gate_triggered", False)
+
     # 过滤掉total=0的维度（没有检查项的维度不显示）
     filtered_dimension_scores = {}
     for dim_id, dim_score in dimension_scores.items():
         if dim_id == "content_quality":
-            # content_quality检查两层total之和
-            total = dim_score["basic_layer"]["total"] + dim_score["advanced_layer"]["total"]
+            # content_quality检查三层total之和
+            total = (dim_score["gate_layer"]["total"] +
+                     dim_score["basic_layer"]["total"] +
+                     dim_score["advanced_layer"]["total"])
             if total > 0:
                 filtered_dimension_scores[dim_id] = dim_score
         else:
@@ -287,6 +366,11 @@ def calculate_dimension_scores(check_details: Dict, capability_taxonomy: Dict = 
         "overall_result": {
             "status": status,
             "total_score": round(total_score, 2),
+            "content_score": round(content_score, 2),
+            "process_score": round(process_score, 2),
+            "content_weight": CONTENT_WEIGHT,
+            "process_weight": PROCESS_WEIGHT,
+            "gate_triggered": gate_triggered,
             "total_checks": total_checks,
             "passed_checks": passed_checks,
             "failed_checks": failed_checks,
@@ -489,22 +573,33 @@ def main():
 
     print(f"\n[评分] 状态: {overall['status']}")
     print(f"[评分] 总分: {overall['total_score']}/100")
+    print(f"[评分] 内容分: {overall.get('content_score', '?')}/100 (权重{CONTENT_WEIGHT*100:.0f}%)")
+    print(f"[评分] 流程分: {overall.get('process_score', '?')}/100 (权重{PROCESS_WEIGHT*100:.0f}%)")
+    if overall.get("gate_triggered"):
+        print(f"[评分] ⚠ Gate层触发一票否决，内容分上限{GATE_FAIL_CAP:.0f}分")
     print(f"[评分] 通过率: {overall['pass_rate']*100:.1f}% ({overall['passed_checks']}/{overall['total_checks']})")
 
     print(f"\n[维度分数]")
     for dim_id in CAPABILITY_DIMENSIONS:
+        if dim_id not in dimension_scores:
+            continue
         if dim_id == "content_quality":
-            # content_quality特殊显示
+            # content_quality特殊显示（三层）
             cq = dimension_scores[dim_id]
             print(f"  - {dim_id}: {cq['overall_score']:.1f}分 [{cq['quality_level']}]")
-            print(f"    · basic层: {cq['basic_layer']['pass_rate']*100:.1f}分 " +
+            print(f"    · gate层: {cq['gate_layer']['pass_rate']*100:.1f}% " +
+                  f"({cq['gate_layer']['passed']}/{cq['gate_layer']['total']})" +
+                  (f" ⚠ 一票否决" if cq['gate_triggered'] else ""))
+            if cq['gate_layer']['failed_items']:
+                print(f"      失败项: {', '.join(cq['gate_layer']['failed_items'])}")
+            print(f"    · basic层: {cq['basic_layer']['pass_rate']*100:.1f}% " +
                   f"({cq['basic_layer']['passed']}/{cq['basic_layer']['total']})")
-            print(f"    · advanced层: {cq['advanced_layer']['pass_rate']*100:.1f}分 " +
-                  f"({cq['advanced_layer']['passed']}/{cq['advanced_layer']['total']})")
             if cq['basic_layer']['failed_items']:
-                print(f"    · basic失败项: {', '.join(cq['basic_layer']['failed_items'])}")
+                print(f"      失败项: {', '.join(cq['basic_layer']['failed_items'])}")
+            print(f"    · advanced层: {cq['advanced_layer']['pass_rate']*100:.1f}% " +
+                  f"({cq['advanced_layer']['passed']}/{cq['advanced_layer']['total']})")
             if cq['advanced_layer']['failed_items']:
-                print(f"    · advanced失败项: {', '.join(cq['advanced_layer']['failed_items'])}")
+                print(f"      失败项: {', '.join(cq['advanced_layer']['failed_items'])}")
         else:
             # 普通维度
             dim = dimension_scores[dim_id]

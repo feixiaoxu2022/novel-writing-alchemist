@@ -30,6 +30,8 @@ RESUME=false
 DRY_RUN=false
 DATA_ID=""          # 可选：仅处理指定样本
 OUTPUT_SUFFIX=""    # 可选：覆盖自动生成的后缀
+ONLY_CHECKS=""      # 增量模式：只执行指定检查项
+ADD_MODE=false      # 增量模式：在已有结果上增跑新检查项
 
 # 解析参数
 while [[ $# -gt 0 ]]; do
@@ -66,6 +68,14 @@ while [[ $# -gt 0 ]]; do
             OUTPUT_SUFFIX="$2"
             shift 2
             ;;
+        --only-checks)
+            ONLY_CHECKS="$2"
+            shift 2
+            ;;
+        --add)
+            ADD_MODE=true
+            shift
+            ;;
         -h|--help)
             echo "用法: $0 --revision <NNN> [选项]"
             echo ""
@@ -80,6 +90,8 @@ while [[ $# -gt 0 ]]; do
             echo "  --dry-run             只显示将要执行的命令"
             echo "  --data-id <id>        仅处理指定 data_id 的样本"
             echo "  --output-suffix <s>   覆盖自动后缀（默认 _revNNN）"
+            echo "  --only-checks <N,N>   只执行指定检查项（逗号分隔序号，如 33,35,36）"
+            echo "  --add                 增量模式：在已有结果上增跑新检查项"
             echo "  -h, --help            显示帮助"
             echo ""
             echo "示例:"
@@ -91,6 +103,12 @@ while [[ $# -gt 0 ]]; do
             echo ""
             echo "  # resume + 并行"
             echo "  $0 --revision 003 --parallel 3 --resume"
+            echo ""
+            echo "  # 只重跑第33,35,36项检查"
+            echo "  $0 --revision 004 --only-checks 33,35,36"
+            echo ""
+            echo "  # 增量模式：在已有结果上增跑新增的检查项"
+            echo "  $0 --revision 004 --add"
             exit 0
             ;;
         *)
@@ -145,6 +163,8 @@ echo "Revision:    rev_${REVISION}"
 echo "Judge 模型:  $MODEL"
 echo "并行数:      $PARALLEL"
 echo "Resume:      $RESUME"
+echo "Add模式:     $ADD_MODE"
+echo "指定检查项:  ${ONLY_CHECKS:-全部}"
 echo "目录模式:    $PATTERN"
 echo ""
 echo "将处理 ${#DIRS[@]} 个目录:"
@@ -167,6 +187,12 @@ if [ "$DRY_RUN" = true ]; then
         fi
         if [ -n "$OUTPUT_SUFFIX" ]; then
             cmd="$cmd --output-suffix $OUTPUT_SUFFIX"
+        fi
+        if [ -n "$ONLY_CHECKS" ]; then
+            cmd="$cmd --only-checks $ONLY_CHECKS"
+        fi
+        if [ "$ADD_MODE" = true ]; then
+            cmd="$cmd --add"
         fi
         echo "  $cmd"
     done
@@ -211,6 +237,12 @@ run_single_dir() {
     if [ -n "$OUTPUT_SUFFIX" ]; then
         cmd+=(--output-suffix "$OUTPUT_SUFFIX")
     fi
+    if [ -n "$ONLY_CHECKS" ]; then
+        cmd+=(--only-checks "$ONLY_CHECKS")
+    fi
+    if [ "$ADD_MODE" = true ]; then
+        cmd+=(--add)
+    fi
 
     # 执行，输出写入日志
     if "${cmd[@]}" >> "$log_file" 2>&1; then
@@ -230,7 +262,7 @@ run_single_dir() {
 
 # 导出函数和变量供子进程使用（parallel 模式需要）
 export -f run_single_dir
-export RECHECK_SCRIPT REVISION MODEL RESUME DATA_ID OUTPUT_SUFFIX
+export RECHECK_SCRIPT REVISION MODEL RESUME DATA_ID OUTPUT_SUFFIX ONLY_CHECKS ADD_MODE
 
 TOTAL=${#DIRS[@]}
 SUCCESS=0

@@ -113,6 +113,14 @@ revisions:
       与现有检查项的区分：
       - vs emotional_delivery_match：后者检查情感倾向方向（爽/虐/烧脑），本项检查文笔画风
       - vs genre_fit(advanced)：后者检查题材精致度（做得好不好），本项是底线检查（像不像）
+      
+      变更3 - judge_criteria结构化输出格式变更（重大变更，影响logical_contradiction评判严格度）:
+      content_quality_basic.yaml从v1.4升级到v1.6，逻辑硬伤(logical_contradiction)的judge输出格式
+      从简单的 {"matched": true/false, "reason": "..."} 变为结构化硬伤清单：
+      {"matched": false, "flaw_count": 3, "flaws": [{"type": "factual_consistency/worldbuilding_coherence/spatiotemporal_continuity", "severity": "critical/major/minor", "location": "...", "description": "..."}], "reason": "..."}
+      
+      影响：结构化输出要求迫使Judge逐条列举问题，而非笼统评判"整体无明显硬伤"就给pass。
+      实测同批DSV1小说在新标准下通过率从42.9%降至21.4%，说明评判标准显著变严。
     status: active
 
 # 评测批次与 revision 的映射关系

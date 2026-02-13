@@ -560,6 +560,9 @@
         .resizable-container {
             display: flex;
             height: calc(100vh - 200px);
+        }
+
+        .resizable-container.resizing {
             user-select: none;
         }
 
@@ -1198,7 +1201,7 @@
                     <div class="model-tabs">${modelTabs}</div>
                     <div class="empty-state">
                         <h3>暂无评测结果</h3>
-                        <p>该模型没有 check_result_rev003.json 评测结果文件</p>
+                        <p>该模型没有 check_result_rev004.json 评测结果文件</p>
                     </div>
                 `;
                 attachModelTabListeners(container);
@@ -1982,8 +1985,8 @@
                 const onMouseDown = (e) => {
                     e.preventDefault();
                     handle.classList.add('dragging');
+                    container.classList.add('resizing');
                     document.body.style.cursor = 'col-resize';
-                    document.body.style.userSelect = 'none';
                     
                     const leftId = handle.dataset.left;
                     const rightId = handle.dataset.right;
@@ -2025,8 +2028,8 @@
                 
                 const onMouseUp = () => {
                     handle.classList.remove('dragging');
+                    container.classList.remove('resizing');
                     document.body.style.cursor = '';
-                    document.body.style.userSelect = '';
                     document.removeEventListener('mousemove', onMouseMove);
                     document.removeEventListener('mouseup', onMouseUp);
                 };
