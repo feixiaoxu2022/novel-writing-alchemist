@@ -14,9 +14,10 @@ NC='\033[0m'
 
 # ========== 配置区 ==========
 WORK_DIR="$HOME/novel_eval"
-GITHUB_REPO_NOVEL="https://github.com/feixiaoxu2022/novel-writing-alchemist.git"
-GITHUB_REPO_BENCHMARK="https://github.com/feixiaoxu2022/mcp-benchmark.git"
-# 代理配置（百度内网拉 GitHub 可能需要）
+GITHUB_TOKEN="${GITHUB_TOKEN:-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}"
+GITHUB_REPO_NOVEL="https://${GITHUB_TOKEN}@github.com/feixiaoxu2022/novel-writing-alchemist.git"
+GITHUB_REPO_BENCHMARK="https://${GITHUB_TOKEN}@github.com/feixiaoxu2022/mcp-benchmark.git"
+# 代理配置（百度内网拉 GitHub / PyPI 需要）
 PROXY="http://agent.baidu.com:8891"
 # HTTP 文件服务端口（用于结果回传）
 FILE_SERVER_PORT=9090
@@ -47,19 +48,32 @@ else
 fi
 
 if [ -d "novel-writing-alchemist" ]; then
-    echo "  novel-writing-alchemist 已存在，执行 git pull..."
-    cd novel-writing-alchemist && git pull && cd ..
+    echo "  novel-writing-alchemist 已存在，更新 remote 并 pull..."
+    cd novel-writing-alchemist
+    git remote set-url origin "$GITHUB_REPO_NOVEL" 2>/dev/null || git remote add origin "$GITHUB_REPO_NOVEL"
+    git pull origin main
+    cd ..
 else
     echo "  克隆 novel-writing-alchemist..."
     git clone "$GITHUB_REPO_NOVEL"
 fi
 
 if [ -d "mcp-benchmark" ]; then
-    echo "  mcp-benchmark 已存在，执行 git pull..."
-    cd mcp-benchmark && git pull && cd ..
+    echo "  mcp-benchmark 已存在，更新 remote 并 pull..."
+    cd mcp-benchmark
+    git remote set-url origin "$GITHUB_REPO_BENCHMARK" 2>/dev/null || git remote add origin "$GITHUB_REPO_BENCHMARK"
+    git pull origin main
+    cd ..
 else
     echo "  克隆 mcp-benchmark..."
     git clone "$GITHUB_REPO_BENCHMARK"
+fi
+
+# mcp-benchmark 仓库根目录即是 release 内容(framework/ 在根目录下)
+# 创建兼容软链接: mcp-benchmark/release -> mcp-benchmark
+if [ ! -e "mcp-benchmark/release" ]; then
+    ln -s "$(pwd)/mcp-benchmark" "mcp-benchmark/release"
+    echo "  ✓ 创建兼容软链接: mcp-benchmark/release -> mcp-benchmark"
 fi
 
 # Step 3: 创建 Python 虚拟环境并安装依赖
@@ -78,6 +92,10 @@ source .venv/bin/activate
 echo "  Python: $(which python3)"
 echo "  版本: $(python3 --version)"
 
+# pip 可能需要代理访问 PyPI
+export https_proxy="$PROXY"
+export http_proxy="$PROXY"
+
 # 升级 pip
 pip install --upgrade pip -q
 
@@ -90,6 +108,9 @@ pip install -q \
     "litellm" \
     "jsonschema>=4.0.0" \
     "PyYAML"
+
+# 装完后取消代理（后续内网 API 测试不需要代理）
+unset https_proxy http_proxy
 
 echo "  验证关键包..."
 python3 -c "import fastmcp; print(f'  ✓ fastmcp {fastmcp.__version__}')"
