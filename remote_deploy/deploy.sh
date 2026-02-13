@@ -112,7 +112,7 @@ source .venv/bin/activate
 
 echo "  验证关键包..."
 python3 -c "import fastmcp; print(f'  ✓ fastmcp {fastmcp.__version__}')"
-python3 -c "import litellm; print(f'  ✓ litellm {litellm.__version__}')"
+python3 -c "import litellm; v = getattr(litellm, '__version__', 'installed'); print(f'  ✓ litellm {v}')"
 python3 -c "import requests; print(f'  ✓ requests {requests.__version__}')"
 python3 -c "import jsonschema; print(f'  ✓ jsonschema {jsonschema.__version__}')"
 
