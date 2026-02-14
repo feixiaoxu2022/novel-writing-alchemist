@@ -63,9 +63,37 @@ def list_remote(base_url):
     print(f"\n下载命令: python3 {os.path.basename(__file__)} --download <目录名>")
 
 
+def patch_env_dir(target_dir):
+    """将结果 JSON 中的远程 env_dir 路径替换为本地路径"""
+    import glob
+    # 自动检测远程路径前缀（从第一个 JSON 的 env_dir 字段提取）
+    local_base = os.path.dirname(os.path.dirname(os.path.abspath(target_dir)))
+    patched = 0
+    for f in sorted(glob.glob(os.path.join(target_dir, "*.json"))):
+        if os.path.basename(f) == "execution_report.json":
+            continue
+        with open(f, "r", encoding="utf-8") as fh:
+            d = json.load(fh)
+        env_dir = d.get("env_dir", "")
+        if not env_dir or local_base in env_dir:
+            continue
+        # 从远程路径中提取 evaluation_outputs/... 部分，拼接本地前缀
+        # 远程: /home/work/novel_eval/novel-writing-alchemist/evaluation_outputs/xxx/yyy_env
+        # 本地: /Users/.../novel_writing_alchemist/evaluation_outputs/xxx/yyy_env
+        idx = env_dir.find("evaluation_outputs/")
+        if idx >= 0:
+            d["env_dir"] = os.path.join(local_base, env_dir[idx:])
+            with open(f, "w", encoding="utf-8") as fh:
+                json.dump(d, fh, ensure_ascii=False, indent=2)
+                fh.write("\n")
+            patched += 1
+    if patched:
+        print(f"  ✓ 已修补 {patched} 个文件的 env_dir 路径")
+
+
 def download_one(base_url, dirname, output_dir):
     """下载一个评测结果目录"""
-    url = f"{base_url}/{dirname}.tar.gz"
+    url = f"{base_url}/api/tar/{dirname}"
     target_dir = os.path.join(output_dir, dirname)
 
     if os.path.isdir(target_dir):
@@ -83,7 +111,7 @@ def download_one(base_url, dirname, output_dir):
             remote_count = remote_item["total_samples"] if remote_item else "?"
             print(f"  远程有 {remote_count} 个样本，本地有 {existing} 个，重新下载...")
 
-    print(f"  下载: {dirname}.tar.gz ...")
+    print(f"  下载: {dirname} ...")
     try:
         req = urllib.request.Request(url)
         with urllib.request.urlopen(req, timeout=300) as resp:
@@ -94,6 +122,9 @@ def download_one(base_url, dirname, output_dir):
             # 解压到 output_dir
             with tarfile.open(fileobj=io.BytesIO(data), mode="r:gz") as tar:
                 tar.extractall(path=output_dir)
+
+        # 修补 env_dir 路径（远程路径 → 本地路径）
+        patch_env_dir(target_dir)
 
         print(f"  ✓ 已保存到: {target_dir}")
         return True

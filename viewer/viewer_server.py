@@ -270,16 +270,26 @@ class ViewerHandlerV2(SimpleHTTPRequestHandler):
             sample_annotation = result_data.get('manual_annotation', {})
             file_annotations = result_data.get('file_annotations', {})
 
-            # 读取check_result_rev004.json评测结果
+            # 读取最新版本的 check_result 评测结果
             check_result = None
+            check_result_revision = None
             env_dir = eval_dir / f'{data_id}_env'
-            check_result_file = env_dir / 'check_result_rev004.json'
-            if check_result_file.exists():
-                try:
-                    with open(check_result_file, 'r', encoding='utf-8') as f:
-                        check_result = json.load(f)
-                except Exception as e:
-                    print(f"Failed to load check_result: {e}")
+            if env_dir.exists():
+                # 查找所有 check_result_rev*.json，取版本号最大的
+                check_files = sorted(
+                    env_dir.glob('check_result_rev*.json'),
+                    key=lambda p: p.stem,  # rev006 > rev004 > rev003 按字符串排序即可
+                    reverse=True
+                )
+                if check_files:
+                    latest_check_file = check_files[0]
+                    check_result_revision = re.search(r'rev(\d+)', latest_check_file.stem)
+                    check_result_revision = check_result_revision.group(0) if check_result_revision else None
+                    try:
+                        with open(latest_check_file, 'r', encoding='utf-8') as f:
+                            check_result = json.load(f)
+                    except Exception as e:
+                        print(f"Failed to load check_result from {latest_check_file.name}: {e}")
 
             models.append({
                 'model': result_data.get('model', 'unknown'),
@@ -292,7 +302,8 @@ class ViewerHandlerV2(SimpleHTTPRequestHandler):
                 'workspace_files': workspace_files,
                 'sample_annotation': sample_annotation,
                 'file_annotations': file_annotations,
-                'check_result': check_result
+                'check_result': check_result,
+                'check_result_revision': check_result_revision
             })
 
         return self.send_json_response({

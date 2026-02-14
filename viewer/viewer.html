@@ -1195,13 +1195,14 @@
 
             const currentModelData = state.sampleDetail.models.find(m => m.model === state.currentModel);
             const checkResult = currentModelData?.check_result;
+            const checkRevision = currentModelData?.check_result_revision || 'unknown';
 
             if (!checkResult) {
                 container.innerHTML = `
                     <div class="model-tabs">${modelTabs}</div>
                     <div class="empty-state">
                         <h3>暂无评测结果</h3>
-                        <p>该模型没有 check_result_rev004.json 评测结果文件</p>
+                        <p>该模型没有 check_result 评测结果文件</p>
                     </div>
                 `;
                 attachModelTabListeners(container);
@@ -1528,7 +1529,7 @@
                 <div class="overall-result">
                     <div class="overall-status">${statusIcon}</div>
                     <div class="overall-info">
-                        <h2>评测结果: <span class="status-badge ${statusClass}">${overall.status}</span></h2>
+                        <h2>评测结果 <span style="font-size:13px;color:#5f6368;font-weight:normal;">(${checkRevision})</span>: <span class="status-badge ${statusClass}">${overall.status}</span></h2>
                         <div class="overall-stats">
                             <span class="stat-item">${icons.chartBar} 总分: ${overall.total_score?.toFixed(1) || 'N/A'}</span>
                             <span class="stat-item">${icons.checkCircle} 通过: ${overall.passed_checks}</span>
