@@ -43,8 +43,13 @@ from litellm import completion
 # 1. 辅助函数
 # =========================================
 
-def request_llm_with_litellm(messages, model_name, api_base, api_key, max_retries=3):
-    """使用LiteLLM调用模型进行语义判断"""
+def request_llm_with_litellm(messages, model_name, api_base, api_key, max_retries=20):
+    """使用LiteLLM调用模型进行语义判断
+    
+    重试策略：指数退避 + 随机抖动，base=5s，cap=120s，最多20次
+    """
+    import random
+
     if api_base:
         litellm.api_base = api_base
     if api_key:
@@ -95,7 +100,10 @@ def request_llm_with_litellm(messages, model_name, api_base, api_key, max_retrie
             error_msg = str(e)
             print(f"[LLM调用] 失败 (尝试 {attempt + 1}/{max_retries}): {error_msg}", flush=True)
             if attempt < max_retries - 1:
-                time.sleep(1)
+                # 指数退避 + 随机抖动: base=5s, cap=120s
+                sleep_time = min(5 * (2 ** attempt) + random.uniform(0, 3), 120)
+                print(f"[LLM调用] 等待 {sleep_time:.1f}s 后重试...", flush=True)
+                time.sleep(sleep_time)
                 continue
             else:
                 return False, error_msg

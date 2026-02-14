@@ -52,37 +52,56 @@ def extract_bench(checklist_file, data_id, output_file, criteria_dir=None, env_d
         env_dir: 可选，部署 criteria 的目标 _env 目录
     """
     try:
+        # 先加载所有条目，建立索引
+        entries = {}
         with open(checklist_file, 'r', encoding='utf-8') as f:
             for line in f:
                 line = line.strip()
                 if not line:
                     continue
                 entry = json.loads(line)
-                if entry.get('data_id') == data_id:
-                    # 构造 bench.json（checker.py 需要的格式）
-                    # 注意：revision 模式下没有 environment 字段（criteria 通过文件部署）
-                    bench = {
-                        'data_id': entry['data_id'],
-                        'check_list': entry['check_list'],
-                        'environment': [],  # revision 模式不通过 environment 传递文件
-                    }
+                entries[entry.get('data_id')] = entry
 
-                    with open(output_file, 'w', encoding='utf-8') as out:
-                        json.dump(bench, out, ensure_ascii=True, indent=2)
+        # 精确匹配
+        matched_entry = entries.get(data_id)
 
-                    print(f'✓ 成功提取 {data_id} 的 checklist '
-                          f'({len(entry["check_list"])} checks)', file=sys.stderr)
+        # Fallback: 同模板的 _001（如 NW_CLEAR_SHORT_ANGSTY_002 -> NW_CLEAR_SHORT_ANGSTY_001）
+        if not matched_entry:
+            import re
+            m = re.match(r'^(.+)_\d{3}$', data_id)
+            if m:
+                fallback_id = f"{m.group(1)}_001"
+                matched_entry = entries.get(fallback_id)
+                if matched_entry:
+                    print(f'⚠️  未找到 {data_id}，使用同模板 fallback: {fallback_id}',
+                          file=sys.stderr)
 
-                    # 部署 judge_criteria 文件到 _env 目录
-                    if criteria_dir and env_dir:
-                        deployed = deploy_criteria_files(criteria_dir, env_dir)
-                        if deployed > 0:
-                            print(f'✓ 已部署 {deployed} 个 judge_criteria 文件到 {env_dir}',
-                                  file=sys.stderr)
+        if matched_entry:
+            # 构造 bench.json（checker.py 需要的格式）
+            # 注意：revision 模式下没有 environment 字段（criteria 通过文件部署）
+            bench = {
+                'data_id': data_id,  # 使用原始 data_id，不是 fallback 的
+                'check_list': matched_entry['check_list'],
+                'environment': [],  # revision 模式不通过 environment 传递文件
+            }
 
-                    return 0
+            with open(output_file, 'w', encoding='utf-8') as out:
+                json.dump(bench, out, ensure_ascii=True, indent=2)
 
-        print(f'错误: 未找到 data_id={data_id} 的 checklist', file=sys.stderr)
+            print(f'✓ 成功提取 {data_id} 的 checklist '
+                  f'({len(matched_entry["check_list"])} checks)', file=sys.stderr)
+
+            # 部署 judge_criteria 文件到 _env 目录
+            if criteria_dir and env_dir:
+                deployed = deploy_criteria_files(criteria_dir, env_dir)
+                if deployed > 0:
+                    print(f'✓ 已部署 {deployed} 个 judge_criteria 文件到 {env_dir}',
+                          file=sys.stderr)
+
+            return 0
+
+        print(f'错误: 未找到 data_id={data_id} 的 checklist（也无同模板 fallback）',
+              file=sys.stderr)
         return 1
 
     except Exception as e:

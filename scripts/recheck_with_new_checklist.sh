@@ -340,9 +340,7 @@ for result_json in "$AGENT_RESULTS_DIR"/*.json; do
         echo "  [指定] 只执行检查项: $ONLY_CHECKS"
     fi
 
-    "${CHECKER_CMD[@]}"
-
-    if [ ${PIPESTATUS[0]} -eq 0 ]; then
+    if "${CHECKER_CMD[@]}"; then
         echo "✅ $basename: recheck完成 -> $output_file"
         SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
     else
