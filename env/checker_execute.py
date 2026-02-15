@@ -3237,6 +3237,15 @@ def execute_checks(sample_result: Dict, check_list: List[Dict],
             model_config.get("api_key")
         )
 
+    # 篇幅自适应：ULTRA_SHORT 样本跳过不适用的流程类检查项
+    ULTRA_SHORT_SKIP_SUBCATEGORIES = {
+        "sop_compliance",           # 超短篇不需要复杂SOP流程
+        "log_file_usage",           # 超短篇不需要读写 writing_log
+        "log_file_creation",        # 超短篇不需要创建 writing_log
+        "required_skill_reading",   # 超短篇不需要阅读大量技能资料
+    }
+    is_ultra_short = "ULTRA_SHORT" in sample_id
+
     # 执行所有检查
     check_details = {}
     for i, check_item in enumerate(check_list, 1):
@@ -3245,6 +3254,21 @@ def execute_checks(sample_result: Dict, check_list: List[Dict],
         description = check_item.get("description", "")
         
         print(f"\033[1;36m[执行] {check_idx}: {description} ({check_type})...\033[0m", flush=True)
+
+        # 篇幅自适应skip
+        subcategory_id = check_item.get("subcategory_id", "")
+        if is_ultra_short and subcategory_id in ULTRA_SHORT_SKIP_SUBCATEGORIES:
+            result = create_check_item_result(
+                "skip", f"ULTRA_SHORT篇幅不适用", f"subcategory={subcategory_id}"
+            )
+            result["description"] = description
+            result["check_type"] = check_type
+            for key in ["dimension_id", "subcategory_id", "quality_tier", "is_critical"]:
+                if key in check_item:
+                    result[key] = check_item[key]
+            check_details[check_idx] = result
+            print(f"  ⊘ skip (ULTRA_SHORT不适用: {subcategory_id})", flush=True)
+            continue
 
         # 根据check_type分发到对应的checker
         if check_type == "entity_attribute_equals":

@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-小说创作炼金术场景 - Checker评分模块 (v2.0)
+小说创作炼金术场景 - Checker评分模块 (v3.0)
 
 职责：读取execution_result，按能力维度聚合统计，计算质量等级
 输入：execution_result.json（checker_execute的输出）
 输出：check_result.json（含维度分数、质量等级和overall统计）
 
-v2.0变更：
-- 引入Gate层（一票否决）：P1(克隆)+P2(交替)+P3(完成度)任一fail → 总分上限30
-- 内容质量权重70%，流程合规权重30%
-- 三层递进评分：Gate→Basic→Advanced
+v3.0变更（基准60分公式）：
+- 内容分 = clamp(0, 100, 60 - gate惩罚 - basic扣分 + advanced加分)
+- Gate fail: 每项 -20分（3项 gate，最多扣60分）
+- Basic fail: 每项 -(60/basic_total)分（basic全fail → 扣60分 → 到0分）
+- Advanced pass: 每项 +(40/adv_total)分（adv全过 → +40分 → 到100分）
+- 总分 = 内容分×0.7 + 流程规范分×0.3
 """
 
 import json
@@ -46,8 +48,11 @@ GATE_SUBCATEGORIES = {
 CONTENT_WEIGHT = 0.7   # 内容质量占70%
 PROCESS_WEIGHT = 0.3   # 流程合规占30%
 
-# Gate失败时的内容分数上限
-GATE_FAIL_CAP = 30.0
+# 基准60分公式参数
+BASE_SCORE = 60.0               # 基准分
+GATE_PENALTY_PER_ITEM = 20.0    # Gate每项fail扣20分
+BASIC_POOL = 60.0               # Basic层扣分池（basic全fail扣60分，到0分）
+ADVANCED_POOL = 40.0            # Advanced层加分池（adv全过加40分，到100分）
 
 
 # =========================================
@@ -142,12 +147,13 @@ def separate_gate_checks(basic_checks: List[Dict]) -> Tuple[List[Dict], List[Dic
 def calculate_content_quality_score(basic_checks: List[Dict],
                                     advanced_checks: List[Dict]) -> Dict:
     """
-    计算content_quality维度的分数（三层体系：Gate→Basic→Advanced）
+    计算content_quality维度的分数（基准60分公式）
 
     评分逻辑：
-    1. Gate层（P1+P2+P3）任何fail → 内容分数上限30分（一票否决）
-    2. Gate通过 + Basic有fail → 30 + basic_pass_rate * 40（30-70分）
-    3. Gate通过 + Basic全过 + Advanced → 70 + advanced_pass_rate * 30（70-100分）
+    内容分 = clamp(0, 100, 60 - gate惩罚 - basic扣分 + advanced加分)
+    - Gate fail: 每项 -20分（3项 gate，最多扣60分）
+    - Basic fail: 每项 -(60/basic_total)分（basic全fail → 扣60分 → 到0分）
+    - Advanced pass: 每项 +(40/adv_total)分（adv全过 → +40分 → 到100分）
 
     Args:
         basic_checks: basic层检查项（含Gate层）
@@ -160,7 +166,13 @@ def calculate_content_quality_score(basic_checks: List[Dict],
             "gate_layer": {...},
             "basic_layer": {...},
             "advanced_layer": {...},
-            "gate_triggered": bool
+            "gate_triggered": bool,
+            "score_breakdown": {  # 新增：评分拆解
+                "base": 60,
+                "gate_penalty": -N,
+                "basic_deduction": -N,
+                "advanced_bonus": +N,
+            }
         }
     """
     # 分离Gate层
@@ -170,35 +182,31 @@ def calculate_content_quality_score(basic_checks: List[Dict],
     basic_score_info = calculate_dimension_score(non_gate_basic_checks)
     advanced_score_info = calculate_dimension_score(advanced_checks)
 
-    gate_triggered = False
+    # 计算各层扣分/加分
+    gate_penalty = gate_score_info["failed"] * GATE_PENALTY_PER_ITEM
+    gate_triggered = gate_score_info["failed"] > 0
 
-    # 第一层：Gate检查
-    if gate_score_info["failed"] > 0:
-        gate_triggered = True
+    basic_total = basic_score_info["total"]
+    basic_deduction_per_item = BASIC_POOL / basic_total if basic_total > 0 else 0
+    basic_deduction = basic_score_info["failed"] * basic_deduction_per_item
+
+    adv_total = advanced_score_info["total"]
+    adv_bonus_per_item = ADVANCED_POOL / adv_total if adv_total > 0 else 0
+    advanced_bonus = advanced_score_info["passed"] * adv_bonus_per_item
+
+    # 总分 = 基准 - gate惩罚 - basic扣分 + advanced加分
+    overall_score = BASE_SCORE - gate_penalty - basic_deduction + advanced_bonus
+    overall_score = max(0.0, min(100.0, overall_score))
+
+    # 确定质量等级
+    if gate_triggered:
         quality_level = "gate_failed"
-        # Gate失败时，分数 = min(30, basic通过率 * 30)
-        # 用所有basic（含gate）的通过数计算
-        all_basic_total = gate_score_info["total"] + basic_score_info["total"]
-        all_basic_passed = gate_score_info["passed"] + basic_score_info["passed"]
-        if all_basic_total > 0:
-            overall_score = min(GATE_FAIL_CAP, (all_basic_passed / all_basic_total) * GATE_FAIL_CAP)
-        else:
-            overall_score = 0.0
     elif basic_score_info["failed"] > 0:
-        # 第二层：Basic有fail
         quality_level = "unqualified"
-        overall_score = 30 + basic_score_info["pass_rate"] * 40  # 30-70分
+    elif advanced_score_info["total"] == 0 or advanced_score_info["pass_rate"] < 0.7:
+        quality_level = "qualified"
     else:
-        # 第三层：Basic全过
-        if advanced_score_info["total"] == 0:
-            quality_level = "qualified"
-            overall_score = 70.0
-        elif advanced_score_info["pass_rate"] >= 0.7:
-            quality_level = "excellent"
-            overall_score = 70 + advanced_score_info["pass_rate"] * 30  # 70-100分
-        else:
-            quality_level = "qualified"
-            overall_score = 70 + advanced_score_info["pass_rate"] * 30  # 70-100分（根据通过率线性）
+        quality_level = "excellent"
 
     return {
         "overall_score": round(overall_score, 2),
@@ -206,7 +214,13 @@ def calculate_content_quality_score(basic_checks: List[Dict],
         "gate_layer": gate_score_info,
         "basic_layer": basic_score_info,
         "advanced_layer": advanced_score_info,
-        "gate_triggered": gate_triggered
+        "gate_triggered": gate_triggered,
+        "score_breakdown": {
+            "base": BASE_SCORE,
+            "gate_penalty": round(-gate_penalty, 2),
+            "basic_deduction": round(-basic_deduction, 2),
+            "advanced_bonus": round(advanced_bonus, 2),
+        }
     }
 
 
@@ -576,7 +590,7 @@ def main():
     print(f"[评分] 内容分: {overall.get('content_score', '?')}/100 (权重{CONTENT_WEIGHT*100:.0f}%)")
     print(f"[评分] 流程分: {overall.get('process_score', '?')}/100 (权重{PROCESS_WEIGHT*100:.0f}%)")
     if overall.get("gate_triggered"):
-        print(f"[评分] ⚠ Gate层触发一票否决，内容分上限{GATE_FAIL_CAP:.0f}分")
+        print(f"[评分] ⚠ Gate层触发惩罚，每项-{GATE_PENALTY_PER_ITEM:.0f}分")
     print(f"[评分] 通过率: {overall['pass_rate']*100:.1f}% ({overall['passed_checks']}/{overall['total_checks']})")
 
     print(f"\n[维度分数]")

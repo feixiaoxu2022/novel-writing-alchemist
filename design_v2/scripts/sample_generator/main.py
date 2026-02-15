@@ -456,7 +456,7 @@ class NovelSampleGenerator:
 
             # 成本和时间控制：限制各类型样本数量
             sample_limits = {
-                'ultra_short': 0,
+                'ultra_short': 5,
                 'short': 1,
                 'medium': 1,
                 'long': 0,
