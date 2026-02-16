@@ -26,8 +26,11 @@ MODEL_MAP = {
 }
 
 def extract_model_name(dirname):
-    """从目录名中提取模型简称"""
-    # eval_dsv1_20260214_014809_claude-opus-4-6 → claude-opus-4-6
+    """从目录名中提取模型简称
+    
+    格式: eval_dsvN_YYYYMMDD_HHMMSS_model
+    例如: eval_dsv1_20260214_014809_claude-opus-4-6
+    """
     parts = dirname.split("_", 4)  # split into at most 5 parts
     if len(parts) >= 5:
         model_suffix = parts[4]
@@ -81,6 +84,26 @@ SHARED_TASKS = {
     "IP_NEUTRAL_001": {
         "dsv1": "NW_IP_MEDIUM_NEUTRAL_001",
         "dsv2": "NW_IP_MEDIUM_NEUTRAL_001"
+    },
+    "ULTRA_SHORT_ANGSTY_001": {
+        "dsv1": "NW_ULTRA_SHORT_ANGSTY_001",
+        "dsv2": "NW_ULTRA_SHORT_ANGSTY_001"
+    },
+    "ULTRA_SHORT_ANGSTY_002": {
+        "dsv1": "NW_ULTRA_SHORT_ANGSTY_002",
+        "dsv2": "NW_ULTRA_SHORT_ANGSTY_002"
+    },
+    "ULTRA_SHORT_ANGSTY_003": {
+        "dsv1": "NW_ULTRA_SHORT_ANGSTY_003",
+        "dsv2": "NW_ULTRA_SHORT_ANGSTY_003"
+    },
+    "ULTRA_SHORT_ANGSTY_004": {
+        "dsv1": "NW_ULTRA_SHORT_ANGSTY_004",
+        "dsv2": "NW_ULTRA_SHORT_ANGSTY_004"
+    },
+    "ULTRA_SHORT_ANGSTY_005": {
+        "dsv1": "NW_ULTRA_SHORT_ANGSTY_005",
+        "dsv2": "NW_ULTRA_SHORT_ANGSTY_005"
     },
 }
 
@@ -150,6 +173,10 @@ def main():
     for dirname in sorted(os.listdir(EVAL_DIR)):
         full_path = os.path.join(EVAL_DIR, dirname)
         if not os.path.isdir(full_path) or not dirname.startswith("eval_dsv"):
+            continue
+        
+        # 跳过 ultra_short 独立目录（数据已合并到主 DSV2 目录中）
+        if "ultra_short" in dirname:
             continue
         
         version = extract_version(dirname)

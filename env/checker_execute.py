@@ -7,7 +7,7 @@
 输入：sample执行结果（conversation_history + workspace文件） + checklist
 输出：execution_result.json（包含pass/fail和grading分数，不含维度聚合统计）
 
-注意：本文件从shortdrama/env/checker.py恢复，支持7种check_types：
+注意：本文件从shortdrama/env/checker.py恢复，支持8种check_types：
   1. entity_attribute_equals (FileSystemChecker)
   2. create_operation_verified (FileSystemChecker)
   3. json_schema (JSONSchemaChecker)
@@ -15,6 +15,7 @@
   5. tool_called_with_params (ToolCalledWithParamsChecker)
   6. tool_call_absence (ToolCallAbsenceChecker)
   7. semantic_check (SemanticChecker)
+  8. sop_stage_coverage (Gate级SOP执行完整性检查)
 """
 
 import json
@@ -3117,6 +3118,119 @@ class SemanticChecker:
 # =========================================
 
 
+def _check_sop_stage_coverage(check_item: Dict, work_dir: Path) -> Dict:
+    """检查SOP执行完整性：Agent是否完成了核心工作流阶段。
+
+    这是一个Gate级检查项。当章节写作阶段未完成时，说明Agent的执行流程
+    在中途崩坏（API崩溃/Simulator误判/模型能力不足），产出物不足以进行
+    内容质量评估。
+
+    params中需要:
+      - required_stages: 必要阶段列表，每项包含:
+          - stage_id: 阶段标识
+          - description: 阶段描述
+          - evidence: 验证方式
+              - file_exists: 检查文件是否存在
+              - dir_has_files: 检查目录下是否有匹配文件（支持glob）
+              - min_count: dir_has_files的最低文件数（默认1）
+      - collapse_threshold: 触发"执行崩坏"判定的关键阶段ID
+      - collapse_description: 崩坏时的描述信息
+
+    Returns:
+        check result dict (pass/fail)，fail时附带 execution_collapsed=True 标记
+    """
+    params = check_item.get("params", {})
+    required_stages = params.get("required_stages", [])
+    collapse_threshold = params.get("collapse_threshold", "chapter_writing")
+    collapse_description = params.get("collapse_description", "SOP执行崩坏")
+
+    stage_results = []
+    all_passed = True
+    collapse_triggered = False
+
+    for stage in required_stages:
+        stage_id = stage.get("stage_id", "unknown")
+        description = stage.get("description", stage_id)
+        evidence = stage.get("evidence", {})
+
+        stage_passed = False
+
+        if "file_exists" in evidence:
+            file_path = work_dir / evidence["file_exists"]
+            # 容错：也检查嵌套路径 workspace/workspace/
+            if file_path.exists():
+                stage_passed = True
+            else:
+                # 尝试嵌套路径（Agent可能写了 workspace/workspace/xxx）
+                nested = evidence["file_exists"]
+                if nested.startswith("workspace/"):
+                    nested_path = work_dir / nested.replace("workspace/", "workspace/workspace/", 1)
+                    if nested_path.exists():
+                        stage_passed = True
+
+        elif "dir_has_files" in evidence:
+            pattern = str(work_dir / evidence["dir_has_files"])
+            min_count = evidence.get("min_count", 1)
+            matched = glob_module.glob(pattern)
+
+            # 容错1：扩展名不匹配（如Agent写了.tex/.json而非.md）
+            # 策略：保留文件名stem部分的glob，替换扩展名为通配符
+            if not matched and "." in pattern.rsplit("/", 1)[-1]:
+                stem_pattern = pattern.rsplit(".", 1)[0] + ".*"
+                matched = glob_module.glob(stem_pattern)
+
+            # 容错2：嵌套路径 workspace/workspace/
+            if not matched:
+                nested_pattern = evidence["dir_has_files"]
+                if nested_pattern.startswith("workspace/"):
+                    nested_pattern = nested_pattern.replace("workspace/", "workspace/workspace/", 1)
+                    full_nested = str(work_dir / nested_pattern)
+                    matched = glob_module.glob(full_nested)
+                    # 嵌套路径也做扩展名容错
+                    if not matched and "." in full_nested.rsplit("/", 1)[-1]:
+                        nested_stem = full_nested.rsplit(".", 1)[0] + ".*"
+                        matched = glob_module.glob(nested_stem)
+
+            if len(matched) >= min_count:
+                stage_passed = True
+
+        status_mark = "✓" if stage_passed else "✗"
+        stage_results.append(f"{status_mark} {description}({stage_id})")
+
+        if not stage_passed:
+            all_passed = False
+            if stage_id == collapse_threshold:
+                collapse_triggered = True
+
+    detail_str = "; ".join(stage_results)
+
+    if all_passed:
+        return create_check_item_result(
+            "pass",
+            "SOP核心阶段全部完成",
+            f"阶段覆盖: {detail_str}"
+        )
+
+    if collapse_triggered:
+        result = create_check_item_result(
+            "fail",
+            collapse_description,
+            f"阶段覆盖: {detail_str}。未达到关键阶段 {collapse_threshold}，"
+            f"后续内容质量评估不具参考价值。"
+        )
+        result["execution_collapsed"] = True
+        return result
+    else:
+        # 部分阶段缺失但已过关键阶段（如有章节但没有characters.json）
+        result = create_check_item_result(
+            "fail",
+            f"SOP部分阶段缺失",
+            f"阶段覆盖: {detail_str}"
+        )
+        result["execution_collapsed"] = False
+        return result
+
+
 def _check_file_whitelist(check_item: Dict, work_dir: Path) -> Dict:
     """检查workspace目录中是否存在白名单之外的文件。
     
@@ -3292,6 +3406,8 @@ def execute_checks(sample_result: Dict, check_list: List[Dict],
                 )
         elif check_type == "file_whitelist_check":
             result = _check_file_whitelist(check_item, work_dir)
+        elif check_type == "sop_stage_coverage":
+            result = _check_sop_stage_coverage(check_item, work_dir)
         else:
             result = create_check_item_result(
                 "skip", f"不支持的检查类型: {check_type}", ""

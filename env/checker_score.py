@@ -42,6 +42,7 @@ GATE_SUBCATEGORIES = {
     "chapter_cloning",          # P1
     "alternating_repetition",   # P2
     "chapter_completion",       # P3
+    "sop_stage_coverage",       # P0: SOP执行完整性（未产出章节=执行崩坏）
 }
 
 # 权重配置
