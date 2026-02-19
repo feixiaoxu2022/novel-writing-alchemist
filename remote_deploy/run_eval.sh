@@ -58,6 +58,8 @@ SAMPLES_FILE="${SAMPLES_FILE:-design_v2/samples/eval_dsv2.jsonl}"
 if [[ "$AGENT_MODEL" == ernie-* ]]; then
     export OPENAI_API_KEY="bce-v3/ALTAK-mCOi62yEOQCJIvZVDI521/10000568a22b656d14d37bb80abb5da439026f1a"
     export OPENAI_BASE_URL="https://qianfan.baidubce.com/v2"
+    export no_proxy="qianfan.baidubce.com"
+    export NO_PROXY="qianfan.baidubce.com"
     case "$AGENT_MODEL" in
         "ernie-5.0") AGENT_MODEL="ernie-5.0-thinking-preview" ;;
     esac
