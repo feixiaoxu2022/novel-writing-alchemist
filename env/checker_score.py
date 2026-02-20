@@ -42,7 +42,8 @@ GATE_SUBCATEGORIES = {
     "chapter_cloning",          # P1
     "alternating_repetition",   # P2
     "chapter_completion",       # P3
-    "sop_stage_coverage",       # P0: SOP执行完整性（未产出章节=执行崩坏）
+    "chapter_output_existence", # P0: 章节文件是否存在（无章节=执行崩坏）
+    "sop_stage_coverage",       # P0 旧名，兼容已有 check_result 数据
 }
 
 # 权重配置
@@ -54,6 +55,11 @@ BASE_SCORE = 60.0               # 基准分
 GATE_PENALTY_PER_ITEM = 20.0    # Gate每项fail扣20分
 BASIC_POOL = 60.0               # Basic层扣分池（basic全fail扣60分，到0分）
 ADVANCED_POOL = 40.0            # Advanced层加分池（adv全过加40分，到100分）
+
+# 仅展示不计分的 subcategory_id（检查结果保留但评分时视为 skip）
+DISPLAY_ONLY_SUBCATEGORIES = {
+    "character_naming_quality",  # 77.6% fail 率且 DSV1=DSV2 零差异，不具区分度
+}
 
 
 # =========================================
@@ -276,6 +282,13 @@ def calculate_dimension_scores(check_details: Dict, capability_taxonomy: Dict = 
         # 准备check数据（带ID）
         check_data = result.copy()
         check_data["check_id"] = check_id
+
+        # 仅展示不计分的项：评分时视为 skip，但 check_details 中保留原始结果
+        subcategory_id = result.get("subcategory_id", "")
+        if subcategory_id in DISPLAY_ONLY_SUBCATEGORIES:
+            check_data["check_result"] = "skip"
+            check_data["result"] = "skip"
+            check_data["display_only"] = True
 
         # 分配到对应维度
         if dimension_id in dimension_checks:

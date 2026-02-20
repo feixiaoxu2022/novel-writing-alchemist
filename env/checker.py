@@ -13,11 +13,19 @@
 
 增量模式：
 - --existing-result: 基于已有check_result，只执行新增/指定的check项
-- --only-checks: 逗号分隔的检查项序号（如 33,35,36），只执行这些项
+- --only-checks: 逗号分隔的检查项标识，支持两种格式：
+  · 语义化ID: --only-checks "逻辑硬伤,章节克隆检测,题材契合度"
+  · 数字序号（向后兼容）: --only-checks "33,35,36"
+  · 可混用: --only-checks "逻辑硬伤,35,36"
   两者可组合使用：
   - --only-checks 单独使用：只跑指定项，输出只含这些项
   - --existing-result + --only-checks: 在已有结果上重跑指定项（覆盖）
   - --existing-result 单独使用：在已有结果上增跑新checklist中有但已有结果中没有的项
+
+check_id 稳定性：
+- 检查结果的 key 使用 checklist.jsonl 中的语义化 check_id（如"逻辑硬伤"、"章节克隆检测"）
+- 增删 check 项不会导致其他项的 key 偏移
+- 如果 check_item 没有 check_id 字段，降级为位置编号（"检查项N"）以向后兼容
 """
 
 import json
@@ -45,7 +53,7 @@ def main():
     parser.add_argument("--existing-result", default=None,
                        help="已有的check_result.json路径，用于增量模式")
     parser.add_argument("--only-checks", default=None,
-                       help="逗号分隔的检查项序号（如 33,35,36），只执行这些项")
+                        help="逗号分隔的检查项标识（支持语义ID如'逻辑硬伤,章节克隆检测'，也兼容数字序号如'33,35,36'）")
     args = parser.parse_args()
 
     print("[Checker] 加载输入文件...")
@@ -91,27 +99,47 @@ def main():
         else:
             print(f"[Checker] 警告：--existing-result 文件不存在: {existing_path}，将执行全量检查")
 
-    # 解析 --only-checks
-    only_check_indices = None
+    # 解析 --only-checks（同时支持数字序号和语义化 check_id）
+    only_check_indices = None   # 数字序号集合
+    only_check_ids = None       # 语义化 check_id 集合
     if args.only_checks:
         only_check_indices = set()
+        only_check_ids = set()
         for part in args.only_checks.split(","):
             part = part.strip()
             if part.isdigit():
                 only_check_indices.add(int(part))
-        print(f"[Checker] 指定检查项: {sorted(only_check_indices)}")
+            elif part:
+                only_check_ids.add(part)
+        # 如果某个集合为空，设为 None（表示不使用该过滤方式）
+        if not only_check_indices:
+            only_check_indices = None
+        if not only_check_ids:
+            only_check_ids = None
+        display_parts = []
+        if only_check_indices:
+            display_parts.append(f"序号: {sorted(only_check_indices)}")
+        if only_check_ids:
+            display_parts.append(f"ID: {sorted(only_check_ids)}")
+        print(f"[Checker] 指定检查项: {', '.join(display_parts)}")
 
     # 确定需要执行的检查项
     checks_to_run = []
-    check_index_map = {}  # index -> check_item，用于后续合并
+    check_index_map = {}  # index -> (check_key, check_item)
 
     for i, check_item in enumerate(check_list, 1):
-        check_key = f"检查项{i}"
+        # 优先使用语义化 check_id，兜底用位置编号（向后兼容）
+        check_key = check_item.get("check_id", f"检查项{i}")
         check_index_map[i] = (check_key, check_item)
 
-        if only_check_indices is not None:
-            # --only-checks 模式：只跑指定项
-            if i in only_check_indices:
+        if only_check_indices is not None or only_check_ids is not None:
+            # --only-checks 模式：按数字序号 OR 语义 ID 匹配
+            matched = False
+            if only_check_indices and i in only_check_indices:
+                matched = True
+            if only_check_ids and check_key in only_check_ids:
+                matched = True
+            if matched:
                 checks_to_run.append((i, check_key, check_item))
         elif existing_check_details:
             # --existing-result 单独使用（add模式）：只跑已有结果中没有的项
@@ -144,11 +172,12 @@ def main():
         filtered_check_list = [item for _, _, item in checks_to_run]
         run_indices = [idx for idx, _, _ in checks_to_run]
 
-        mode_desc = "增量" if existing_check_details else ("指定项" if only_check_indices else "全量")
+        mode_desc = "增量" if existing_check_details else ("指定项" if (only_check_indices or only_check_ids) else "全量")
+        run_keys = [key for _, key, _ in checks_to_run]
         print(f"\n[Checker] 第1步：执行检查（{mode_desc}模式）...")
         print(f"[Checker]   - Sample ID: {sample_id}")
         print(f"[Checker]   - Workspace: {workspace_path}")
-        print(f"[Checker]   - 待执行: {len(checks_to_run)}/{len(check_list)} 项 (序号: {run_indices})")
+        print(f"[Checker]   - 待执行: {len(checks_to_run)}/{len(check_list)} 项 (IDs: {run_keys})")
         print(f"[Checker]   - Model: {args.model}")
 
         # 执行检查
@@ -164,19 +193,40 @@ def main():
             traceback.print_exc()
             sys.exit(1)
 
-        # 将 execute_checks 返回的结果（检查项1,2,3...）映射回正确的序号
+        # execute_checks 现在直接使用 check_id 作为 key，无需重映射
         partial_details = partial_result.get("check_details", {})
-        remapped_details = {}
-        for j, (orig_idx, check_key, _) in enumerate(checks_to_run, 1):
-            partial_key = f"检查项{j}"
-            if partial_key in partial_details:
-                remapped_details[check_key] = partial_details[partial_key]
 
         # 合并结果：已有结果 + 新执行结果（新的覆盖旧的）
         merged_details = {}
         if existing_check_details:
             merged_details.update(existing_check_details)
-        merged_details.update(remapped_details)
+
+        # 清理被替代的旧检查项：如果新 checklist 中的检查项声明了 replaces 字段，
+        # 从已有结果中删掉对应的旧 key，避免重复计分
+        replaced_keys = set()
+        for check_item in check_list:
+            replaces = check_item.get("params", {}).get("replaces", [])
+            if isinstance(replaces, str):
+                replaces = [replaces]
+            for old_key in replaces:
+                replaced_keys.add(old_key)
+        if replaced_keys:
+            for old_key in replaced_keys:
+                # 旧 key 可能是语义化 ID，也可能是 "检查项N" 格式
+                if old_key in merged_details:
+                    del merged_details[old_key]
+                    print(f"[Checker] 清理被替代的旧检查项: {old_key}")
+            # 也按 subcategory_id 清理（兼容旧 "检查项N" key 的情况）
+            # 如果 replaces 中的值匹配某个旧项的 subcategory_id，也删掉
+            keys_to_remove = []
+            for key, val in merged_details.items():
+                if isinstance(val, dict) and val.get("subcategory_id") in replaced_keys:
+                    keys_to_remove.append(key)
+            for key in keys_to_remove:
+                del merged_details[key]
+                print(f"[Checker] 清理被替代的旧检查项（按subcategory_id匹配）: {key}")
+
+        merged_details.update(partial_details)
 
         import time
         execution_result = {

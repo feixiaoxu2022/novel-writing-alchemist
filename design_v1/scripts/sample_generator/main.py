@@ -583,6 +583,10 @@ class NovelSampleGenerator:
                 if field in item:
                     check_item[field] = item[field]
 
+            # 保留源 YAML 中的语义化 check_id（如果有）
+            if 'check_id' in item:
+                check_item['check_id'] = item['check_id']
+
             converted.append(check_item)
 
         # 再添加模板特定检查项
@@ -652,11 +656,16 @@ class NovelSampleGenerator:
                 if field in item:
                     check_item[field] = item[field]
 
+            # 保留源 YAML 中的语义化 check_id（如果有）
+            if 'check_id' in item:
+                check_item['check_id'] = item['check_id']
+
             converted.append(check_item)
 
-        # 统一重新编号所有check_id（按合并后的顺序）
+        # 统一处理 check_id：保留已有的语义化 ID，为没有 ID 的项生成兜底编号
         for idx, check_item in enumerate(converted, 1):
-            check_item['check_id'] = f"check_{idx:02d}"
+            if 'check_id' not in check_item:
+                check_item['check_id'] = f"check_{idx:02d}"
 
         return converted
 
@@ -976,6 +985,72 @@ class NovelSampleGenerator:
 
         print(f"✓ Generated HTML viewer → {output_path}")
 
+    def export_check_revision(self, samples, revision_dir):
+        """仅导出评测方案（checklist + judge_criteria）到 revision 目录
+
+        用于在不重新生成完整样本的情况下，单独迭代评测方案。
+
+        输出：
+        - revision_dir/checklist.jsonl: 每行 {data_id, check_list}
+        - revision_dir/judge_criteria/: 从 check_definitions 目录复制的 criteria 文件
+        - revision_dir/meta.json: revision 元数据
+        """
+        import shutil
+
+        revision_path = Path(revision_dir)
+        revision_path.mkdir(parents=True, exist_ok=True)
+
+        # 1. 导出 checklist.jsonl
+        checklist_file = revision_path / "checklist.jsonl"
+        with open(checklist_file, 'w', encoding='utf-8') as f:
+            for sample in samples:
+                entry = {
+                    "data_id": sample["data_id"],
+                    "check_list": sample["check_list"]
+                }
+                f.write(json.dumps(entry, ensure_ascii=False) + '\n')
+
+        print(f"\n✓ Exported {len(samples)} checklists → {checklist_file}")
+
+        # 统计检查项信息
+        if samples:
+            check_count = len(samples[0]["check_list"])
+            dims = {}
+            for c in samples[0]["check_list"]:
+                dim = c.get('dimension_id', 'unknown')
+                dims[dim] = dims.get(dim, 0) + 1
+            print(f"  Check items per sample: {check_count}")
+            for d, n in sorted(dims.items()):
+                print(f"    {d}: {n}")
+
+        # 2. 复制 judge_criteria 目录（优先从check_definitions，回退到design目录）
+        if self.check_definitions_dir:
+            src_criteria = self.check_definitions_dir / "judge_criteria"
+        else:
+            src_criteria = self.base_dir / "judge_criteria"
+        dst_criteria = revision_path / "judge_criteria"
+        if src_criteria.exists():
+            if dst_criteria.exists():
+                shutil.rmtree(dst_criteria)
+            shutil.copytree(src_criteria, dst_criteria)
+            criteria_files = list(dst_criteria.rglob("*"))
+            print(f"✓ Copied judge_criteria ({len([f for f in criteria_files if f.is_file()])} files) → {dst_criteria}")
+        else:
+            print(f"  Warning: {src_criteria} not found, skipping judge_criteria copy")
+
+        # 3. 生成 revision 元数据
+        meta = {
+            "generated_at": __import__('datetime').datetime.now().isoformat(),
+            "sample_count": len(samples),
+            "check_count_per_sample": len(samples[0]["check_list"]) if samples else 0,
+            "data_ids": [s["data_id"] for s in samples],
+            "source_design_dir": str(self.base_dir),
+        }
+        meta_file = revision_path / "meta.json"
+        with open(meta_file, 'w', encoding='utf-8') as f:
+            json.dump(meta, f, ensure_ascii=False, indent=2)
+        print(f"✓ Written revision metadata → {meta_file}")
+
     def validate_samples(self, samples):
         """验证样本格式"""
         print("\nValidating samples...")
@@ -1009,21 +1084,28 @@ def main():
     parser = argparse.ArgumentParser(description='生成小说创作场景评测样本')
     parser.add_argument('--output', '-o', default='samples/eval_dsv1.jsonl',
                         help='输出文件路径 (默认: samples/eval_dsv1.jsonl)')
+    parser.add_argument('--export-check-revision', metavar='DIR',
+                        help='仅导出评测方案到指定 revision 目录（不生成完整样本）。'
+                             '示例: --export-check-revision check_revisions/rev_007')
     args = parser.parse_args()
 
     # 使用当前目录作为base_dir
     generator = NovelSampleGenerator(".")
 
-    # 生成样本
+    # 生成样本（两种模式都需要先生成内存中的样本以构建 checklist）
     samples = generator.generate_samples()
 
     # 验证样本
-    if generator.validate_samples(samples):
-        # 保存样本
-        generator.save_samples(samples, args.output)
-    else:
-        print("\n✗ Sample validation failed, not saving")
+    if not generator.validate_samples(samples):
+        print("\n✗ Sample validation failed")
         return 1
+
+    if args.export_check_revision:
+        # 仅导出评测方案模式
+        generator.export_check_revision(samples, args.export_check_revision)
+    else:
+        # 完整样本生成模式
+        generator.save_samples(samples, args.output)
 
     return 0
 

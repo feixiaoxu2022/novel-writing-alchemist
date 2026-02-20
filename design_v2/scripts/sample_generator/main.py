@@ -615,6 +615,10 @@ class NovelSampleGenerator:
                 if field in item:
                     check_item[field] = item[field]
 
+            # 保留源 YAML 中的语义化 check_id（如果有）
+            if 'check_id' in item:
+                check_item['check_id'] = item['check_id']
+
             converted.append(check_item)
 
         # 再添加模板特定检查项
@@ -684,11 +688,16 @@ class NovelSampleGenerator:
                 if field in item:
                     check_item[field] = item[field]
 
+            # 保留源 YAML 中的语义化 check_id（如果有）
+            if 'check_id' in item:
+                check_item['check_id'] = item['check_id']
+
             converted.append(check_item)
 
-        # 统一重新编号所有check_id（按合并后的顺序）
+        # 统一处理 check_id：保留已有的语义化 ID，为没有 ID 的项生成兜底编号
         for idx, check_item in enumerate(converted, 1):
-            check_item['check_id'] = f"check_{idx:02d}"
+            if 'check_id' not in check_item:
+                check_item['check_id'] = f"check_{idx:02d}"
 
         return converted
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-提取所有模型 DSV1/DSV2 的 rev006 check 结果，输出结构化 JSON 供分析使用。
+提取所有模型 DSV1/DSV2 的 rev007 check 结果，输出结构化 JSON 供分析使用。
 """
 import json
 import os
@@ -21,7 +21,6 @@ MODEL_MAP = {
     "ernie-5.0-thinking-preview": "ernie-5.0",
     "openai_EB5-0209-A35B-midtrain-128k-chat": "EB5-midtrain",
     "qwen3-max-2026-01-23": "qwen3-max",
-    "glm-4.7": "glm-4.7",
     "doubao-seed-2-0-pro-260215": "doubao-2.0-pro",
 }
 
@@ -107,12 +106,14 @@ SHARED_TASKS = {
     },
 }
 
-def load_check_result(env_dir):
-    """加载 rev006 check 结果"""
-    rev006_path = os.path.join(env_dir, "check_result_rev006.json")
-    if os.path.exists(rev006_path):
-        with open(rev006_path, "r", encoding="utf-8") as f:
-            return json.load(f)
+def load_check_result(env_dir, revision="008"):
+    """加载指定 revision 的 check 结果（向下兼容 rev007 → rev006）"""
+    # 按优先级尝试：指定 revision → rev007 → rev006
+    for rev in [revision, "007", "006"]:
+        path = os.path.join(env_dir, f"check_result_rev{rev}.json")
+        if os.path.exists(path):
+            with open(path, "r", encoding="utf-8") as f:
+                return json.load(f)
     return None
 
 def extract_scores(check_result):
@@ -168,6 +169,12 @@ def extract_subcategory_results(check_result):
     return subcats
 
 def main():
+    import argparse
+    parser = argparse.ArgumentParser(description="提取 check 结果数据")
+    parser.add_argument("--revision", default="008", help="check 结果修订版本（默认 008）")
+    args = parser.parse_args()
+    
+    revision = args.revision
     all_data = []
     
     for dirname in sorted(os.listdir(EVAL_DIR)):
@@ -189,9 +196,32 @@ def main():
                 continue
             
             sample_id = env_dirname.replace("_env", "")
-            check_result = load_check_result(env_path)
+            check_result = load_check_result(env_path, revision=revision)
             if check_result is None:
                 continue
+            
+            # 过滤 execution_status=error 且无章节产出的样本
+            # 有章节产出的 error 样本保留（可能是写了大量内容后超时中断）
+            sample_json_path = os.path.join(full_path, sample_id + ".json")
+            if os.path.exists(sample_json_path):
+                with open(sample_json_path, "r", encoding="utf-8") as sf:
+                    sample_meta = json.load(sf)
+                exec_status = sample_meta.get("execution_status")
+                if exec_status == "error":
+                    workspace_path = os.path.join(env_path, "workspace")
+                    has_chapters = False
+                    if os.path.isdir(workspace_path):
+                        for root, dirs, files in os.walk(workspace_path):
+                            if any(f.startswith("chapter_") and f.endswith(".md") for f in files):
+                                has_chapters = True
+                                break
+                    if not has_chapters:
+                        print(f"  ⚠️ 跳过无产出error样本: {dirname}/{sample_id} "
+                              f"(execution_status=error, 无章节文件)")
+                        continue
+                    else:
+                        print(f"  ℹ️ 保留有产出error样本: {dirname}/{sample_id} "
+                              f"(execution_status=error, 但有章节产出)")
             
             scores = extract_scores(check_result)
             subcats = extract_subcategory_results(check_result)
@@ -208,7 +238,8 @@ def main():
             all_data.append(record)
     
     # 输出
-    output_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "rev006_all_data.json")
+    output_filename = f"rev{revision}_all_data.json"
+    output_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), output_filename)
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(all_data, f, ensure_ascii=False, indent=2)
     

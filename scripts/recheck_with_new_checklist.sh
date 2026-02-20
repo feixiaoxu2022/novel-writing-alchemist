@@ -18,7 +18,7 @@ OUTPUT_SUFFIX=""     # 输出文件后缀，默认为空（覆盖原check_result
 MODEL="gpt-5.2"     # 默认使用gpt-5进行评估
 DATA_ID=""           # 可选，仅处理指定样本
 RESUME=false         # 新增：resume模式，跳过已有结果的样本
-ONLY_CHECKS=""       # 增量模式：只执行指定检查项（逗号分隔序号，如 33,35,36）
+ONLY_CHECKS=""       # 增量模式：只执行指定检查项（支持语义ID如'逻辑硬伤'，也兼容数字序号如'33,35,36'）
 ADD_MODE=false       # 增量模式：在已有结果上增跑新检查项
 
 # 解析参数
@@ -89,7 +89,7 @@ if [ -z "$AGENT_RESULTS_DIR" ]; then
     echo "    --revision <revision编号，如 003> \\"
     echo "    [--resume] \\"
     echo "    [--add] \\"
-    echo "    [--only-checks <检查项序号，如 33,35,36>] \\"
+    echo "    [--only-checks <检查项ID，如 '逻辑硬伤,章节克隆检测' 或 33,35,36>] \\"
     echo "    [--model <模型名，默认gpt-5.2>] \\"
     echo "    [--data-id <仅处理指定样本>]"
     echo ""
@@ -109,7 +109,7 @@ if [ -z "$AGENT_RESULTS_DIR" ]; then
     echo "  $0 \\"
     echo "    --agent-results evaluation_outputs/eval_v2_20260205_132400_claude-opus-4-5-20251101 \\"
     echo "    --revision 004 \\"
-    echo "    --only-checks 33,35,36"
+    echo "    --only-checks '逻辑硬伤,章节克隆检测'   # 也兼容数字: --only-checks 33,35,36"
     echo ""
     echo "  # add模式：在已有结果上增跑新增的检查项（跳过已有项）"
     echo "  $0 \\"
@@ -186,6 +186,11 @@ if [[ "$MODEL" == ernie-* ]]; then
     esac
 
     echo "✓ 检测到ERNIE模型，使用千帆API端点: $API_BASE"
+elif [[ "$MODEL" == glm-* ]]; then
+    # GLM模型使用智谱API
+    API_KEY="fc0dc81d18124abea8da832af681401b.QsiurjETpUArzi4C"
+    API_BASE="https://open.bigmodel.cn/api/paas/v4"
+    echo "✓ 检测到GLM模型，使用智谱API端点: $API_BASE"
 else
     # 其他模型使用内部API
     API_KEY="sk-3AYbtGCuXtiVmCDd8nfJoKwNibOagcDswEJiJLwJnOjwPVVF"

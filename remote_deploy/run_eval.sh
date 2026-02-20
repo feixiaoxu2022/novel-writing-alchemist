@@ -67,6 +67,11 @@ elif [[ "$AGENT_MODEL" == ernie5-midtrain ]]; then
     export OPENAI_API_KEY="dummy"
     export OPENAI_BASE_URL="http://10.95.226.225:8466/v1"
     AGENT_MODEL="openai/EB5-0209-A35B-midtrain-128k-chat"
+elif [[ "$AGENT_MODEL" == glm-* ]]; then
+    export OPENAI_API_KEY="fc0dc81d18124abea8da832af681401b.QsiurjETpUArzi4C"
+    export OPENAI_BASE_URL="https://open.bigmodel.cn/api/paas/v4"
+    export no_proxy="open.bigmodel.cn"
+    export NO_PROXY="open.bigmodel.cn"
 else
     export OPENAI_API_KEY="sk-3AYbtGCuXtiVmCDd8nfJoKwNibOagcDswEJiJLwJnOjwPVVF"
     export OPENAI_BASE_URL="http://yy.dbh.baidu-int.com/v1"

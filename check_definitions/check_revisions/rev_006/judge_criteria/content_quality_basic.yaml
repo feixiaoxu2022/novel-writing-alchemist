@@ -218,7 +218,7 @@ llm_judge_criteria: |
   - 如果是人物性格/行为问题 → 不属于本项，跳过
 
   **输出格式要求**：
-  对发现的每一处硬伤，必须标注**类型(type)**和**严重程度(severity)**。
+  对发现的每一处硬伤，必须标注**类型(type)**、**严重程度(severity)**和**可修复性(fixability)**。
 
   type 取值（四选一）：
   - `factual_consistency`：客观事实/数量/状态前后矛盾（时间线数字冲突、物品数量变化、生死判决翻转等）
@@ -231,8 +231,22 @@ llm_judge_criteria: |
   - `major`：明确的前后矛盾，缺少任何解释（数值冲突、规则覆盖）
   - `minor`：解释缺失但不绝对矛盾，存在勉强自洽的可能（铺垫极弱的转折、可解释但未解释的跳变）
 
+  fixability 取值（二选一）：
+  - `structural`：**结构性不可修**——矛盾深入多章情节因果链，修改此处会导致后续大量情节不成立，需要大幅重写才能修复。判断标准：(1)矛盾点被后续3+章的情节因果依赖，或(2)涉及核心角色的生死/身份/动机等情节主干，或(3)修复需要重写超过30%的已有内容
+  - `fixable`：**局部可修**——只需修改少量文字（几句话/几个数字/几个段落）即可消除矛盾，不影响情节主线。判断标准：(1)矛盾局限于1-2处具体描述，或(2)涉及的是装饰性细节（年龄、数量、外貌等），或(3)修改后下游情节仍然成立
+
+  **fixability 判断要点**：
+  - 关键问题：如果我改掉矛盾点A，后面的情节B、C、D还能成立吗？
+  - 能成立 → fixable（局部可修）
+  - 不能成立（要连锁改B、C、D） → structural（结构性不可修）
+  - 举例：
+    · "角色25岁→30岁" —— 改一个数字即可，fixable
+    · "角色第3章死了，但第7-12章是关键推动者" —— 改活会影响第3章的死亡情节线，改死会废掉7-12章，structural
+    · "枕巾40对→50对" —— 统一一个数字即可，fixable
+    · "角色身份是A→又是B→又是C，三条线索分别引出不同结局" —— structural
+
   请回复JSON格式：
-  - 有硬伤时：{"matched": false, "flaw_count": 3, "flaws": [{"type": "factual_consistency", "severity": "major", "location": "chapter_02 → chapter_03", "description": "倒计时从30天骤变为15天"}, {"type": "narrative_perspective_error", "severity": "major", "location": "chapter_05第3段", "description": "主角陈默的第一人称叙述中突然出现'她心想这个秘密不能让陈默知道'，打破了限制视角"}, ...], "reason": "存在3处逻辑硬伤...（总结性说明）"}
+  - 有硬伤时：{"matched": false, "flaw_count": 3, "flaws": [{"type": "factual_consistency", "severity": "major", "fixability": "fixable", "location": "chapter_02 → chapter_03", "description": "倒计时从30天骤变为15天"}, {"type": "narrative_perspective_error", "severity": "major", "fixability": "fixable", "location": "chapter_05第3段", "description": "主角陈默的第一人称叙述中突然出现'她心想这个秘密不能让陈默知道'，打破了限制视角"}, {"type": "worldbuilding_coherence", "severity": "critical", "fixability": "structural", "location": "chapter_03 → chapter_07-12", "description": "角色在第3章已确认死亡，但第7-12章均以该角色为核心推动情节"}], "reason": "存在3处逻辑硬伤，其中1处结构性不可修（角色生死矛盾贯穿多章），2处局部可修...（总结性说明）"}
   - 无硬伤时：{"matched": true, "flaw_count": 0, "flaws": [], "reason": "各章节客观事实、世界观、时空逻辑保持一致"}
 
 ---
@@ -1010,10 +1024,10 @@ llm_judge_criteria: |
   - 允许短篇小说整体章节都较短（但应该均匀短，而非前长后短）
 
   **检测方法（程序化）**：
-  1. 统计每章字数，计算前半部分平均值和后1/4平均值
-  2. 如果后1/4平均值 < 前半平均值 × 0.25（萎缩超过75%） → 不合格
-  3. 如果连续3章以上字数不足300字 → 不合格
-  4. 排除只有3章以下的短篇（样本太少不做判断）
+  1. 统计每章字数，计算前1/3平均值和后1/4平均值
+  2. 如果后1/4平均值 < 前1/3平均值 × 0.50（萎缩超过50%） → 不合格
+  3. 如果后1/4中任何单章不足200字 → 不合格
+  4. 排除只有6章以下的短篇（样本太少不做判断）
 
    请判断章节长度是否稳定，回复JSON格式：
    - 有问题时：{"matched": false, "first_half_avg": 2169, "last_quarter_avg": 376, "shrink_ratio": 0.17, "reason": "后1/4章节平均376字，仅为前半平均2169字的17%，严重萎缩"}

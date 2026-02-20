@@ -1,10 +1,10 @@
 # Check能力维度分层体系
 # 用于统计和分析模型在不同能力维度上的表现
 
-version: "2.9"
+version: "3.0"
 created_at: "2026-01-29"
-updated_at: "2026-02-14"
-description: "定义check_list检查项的能力维度分层。v2.9新增4个维度解决短篇区分度不足：imagery_system(意象系统)、emotional_gradient(情感弧线层次)、semantic_redundancy(语义重复P6级)、structural_design(结构功能性,短篇条件化)；强化narrative_density整合Show vs Tell评判"
+updated_at: "2026-02-17"
+description: "定义check_list检查项的能力维度分层。v3.0新增chapter_output_existence(替代sop_stage_coverage)和character_naming_quality(角色命名质量,DISPLAY_ONLY不计分)"
 
 # === 三层结构 ===
 # 第一层：能力大类（对应9大核心能力）
@@ -281,31 +281,33 @@ capability_dimensions:
 
       - subcategory_id: "character_presence_in_outline"
         subcategory_name: "角色大纲规划完整性"
-        cn_name: "设计的主角在大纲中有没有规划"
+        cn_name: "设计的角色（主角+配角）在大纲中有没有规划"
         sort_order: [3, 10]
         tier_level: "basic"
-        description: "characters.json中设计的main_characters必须在outline.json中规划出场，避免Plan阶段就遗漏角色导致后续剧情单薄"
+        description: "characters.json中设计的所有角色（main_characters + supporting_characters）必须在outline.json中规划出场。主角缺失=fail，配角缺失=pass但附带警告"
         check_types: ["entity_attribute_equals"]
         applicable_scenarios: ["original_creation", "adaptation"]
-        validation_method: "规则判断：检查characters.json中每个main_character的name是否在outline.json的文本中出现"
+        validation_method: "规则判断：检查characters.json中每个角色的name是否在outline.json的文本中出现（主角+配角分别统计）"
         examples:
-          - "✅ 合格：characters.json定义了['林羽', '幽灵']，outline.json中都提到了这两个角色"
-          - "❌ 不合格：characters.json定义了['林羽', '幽灵', '苏小满']，但outline.json中只提到了'林羽'和'幽灵'，遗漏了'苏小满'"
-        note: "这是Plan阶段的完整性检查，定位问题：设计了角色但大纲规划时就遗漏了"
+          - "✅ 合格：characters.json定义了主角['林羽', '幽灵'] + 配角['苏小满']，outline.json中都提到了"
+          - "❌ 不合格（主角缺失）：characters.json定义了主角['林羽', '幽灵']，但outline.json中只提到了'林羽'"
+          - "⚠️ pass但警告（仅配角缺失）：主角全部出现，但配角'苏小满'未在大纲中规划"
+        note: "这是Plan阶段的完整性检查。主角缺失直接fail，配角缺失不影响pass/fail但会记录在details中"
 
       - subcategory_id: "character_presence_in_chapters"
         subcategory_name: "角色正文出场完整性"
-        cn_name: "设计的主角在正文章节中出没出现"
+        cn_name: "设计的角色（主角+配角）在正文章节中出没出现"
         sort_order: [3, 11]
         tier_level: "basic"
-        description: "characters.json中设计的main_characters必须在chapters/正文中实际出现，避免规划了但Execute阶段遗漏导致剧情单薄"
+        description: "characters.json中设计的所有角色（main_characters + supporting_characters）必须在chapters/正文中实际出现。主角缺失=fail，配角缺失=pass但附带警告"
         check_types: ["entity_attribute_equals"]
         applicable_scenarios: ["original_creation", "adaptation"]
-        validation_method: "规则判断：检查characters.json中每个main_character的name是否在chapters/*.md的文本中出现"
+        validation_method: "规则判断：检查characters.json中每个角色的name是否在chapters/*.md的文本中出现（主角+配角分别统计）"
         examples:
-          - "✅ 合格：characters.json定义了['林羽', '幽灵']，chapters中都实际出现了这两个角色"
-          - "❌ 不合格：characters.json定义了['林羽', '幽灵', '苏小满']，但chapters中只出现了'林羽'和'幽灵'，'苏小满'完全未出现"
-        note: "这是Execute阶段的完整性检查，定位问题：大纲规划了但实际写作时遗漏了。与character_design_adherence区分：本项检查是否出现（存在性），后者检查表现质量（准确性）"
+          - "✅ 合格：characters.json定义了主角['林羽', '幽灵'] + 配角['老陈']，chapters中都出现了"
+          - "❌ 不合格（主角缺失）：characters.json定义了主角['林羽', '幽灵']，但chapters中只出现了'林羽'"
+          - "⚠️ pass但警告（仅配角缺失）：主角全部出现，但配角'老陈'在正文中完全未出场"
+        note: "这是Execute阶段的完整性检查。与character_design_adherence区分：本项检查是否出现（存在性），后者检查表现质量（准确性）"
 
       - subcategory_id: "character_trait_consistency"
         subcategory_name: "人物设定一致性"
@@ -323,13 +325,13 @@ capability_dimensions:
           - "❌ 不算崩坏：单纯的人经历背叛后变谨慎（有铺垫的性格成长）"
         note: "与character_design_adherence区分：本项检查execute内部一致性（chapter_01 vs chapter_02），character_design_adherence检查plan vs execute（设计文档 vs 实际表现）"
 
-      - subcategory_id: "logical_contradiction"
-        subcategory_name: "逻辑硬伤"
-        cn_name: "情节有没有逻辑硬伤（死人复活/前后矛盾）"
+      - subcategory_id: "structural_logic_defect"
+        subcategory_name: "结构性逻辑硬伤"
+        cn_name: "有没有不可修复的结构性逻辑矛盾（需大幅重写的严重问题）"
         sort_order: [3, 24]
         tier_level: "basic"
-        description: "无前后矛盾的硬伤（如同一个人前面说病死后面说自杀、同一场景下的地点在相邻两集发生跳跃等）。不包括铺垫不足、细节缺失等合理性问题。Judge输出包含结构化flaws数组，每处硬伤标注type(factual_consistency/worldbuilding_coherence/spatiotemporal_continuity)和severity(critical/major/minor)，用于统计层细分分析"
-        check_types: ["semantic_check", "cross_file_consistency"]
+        description: "不可修复的结构性逻辑矛盾——矛盾深入多章情节因果链，修复需大幅重写。与'可修复逻辑瑕疵'共享一次LLM judge调用，按fixability字段拆分。Judge输出包含结构化flaws数组，每处硬伤标注type/severity/fixability"
+        check_types: ["semantic_check"]
         applicable_scenarios: ["original_creation", "adaptation"]
         flaw_types:
           - id: "factual_consistency"
@@ -341,6 +343,9 @@ capability_dimensions:
           - id: "spatiotemporal_continuity"
             name: "时空转换断链"
             description: "地点无交代跳转、强制事件无故消失、场景连续性断裂等"
+          - id: "narrative_perspective_error"
+            name: "叙事视角/人称代词错乱"
+            description: "第一人称与第三人称混用、主语指代搞反、视角限制被打破"
         severity_levels:
           - id: "critical"
             name: "核心事实翻转"
@@ -348,14 +353,26 @@ capability_dimensions:
           - id: "major"
             name: "明确矛盾"
             description: "缺少任何解释（数值冲突、规则覆盖）"
-          - id: "minor"
-            name: "解释缺失"
-            description: "不绝对矛盾但存在勉强自洽的可能"
+        fixability_filter: "structural"
         examples:
-          - "✅ 真硬伤：episode20尸体腐烂 → episode27整容未死（死人复活）"
-          - "✅ 真硬伤：episode10判无期 → episode29判死刑（无解释的判决矛盾）"
-          - "❌ 不算硬伤：商业对手突然变弟弟（铺垫不足但不矛盾）"
-          - "❌ 不算硬伤：背景不清的女子选秀（合理性不足但不矛盾）"
+          - "✅ structural：角色第3章死亡，但第7-12章以该角色为核心推动情节（修复需重写6+章）"
+          - "✅ structural：角色身份A→B→C三种解释分别引出不同结局线（修复需重构全文）"
+          - "❌ 不属于本项：角色25岁→30岁（改一个数字即可修复 → fixable_logic_inconsistency）"
+
+      - subcategory_id: "fixable_logic_inconsistency"
+        subcategory_name: "可修复逻辑瑕疵"
+        cn_name: "有没有局部可修的逻辑不一致（改几句话就能修好的小问题）"
+        sort_order: [3, 25]
+        tier_level: "advanced"
+        description: "局部可修的逻辑不一致——只需修改少量文字即可消除矛盾，不影响情节主线和整体可用性。与'结构性逻辑硬伤'共享一次LLM judge调用，按fixability字段拆分"
+        check_types: ["semantic_check"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        fixability_filter: "fixable"
+        examples:
+          - "✅ fixable：角色年龄25岁→30岁（改一个数字即可）"
+          - "✅ fixable：枕巾数量40对→50对（统一数字即可）"
+          - "✅ fixable：人称代词在某段落内混用了一次（改几个字即可）"
+          - "❌ 不属于本项：角色死后复活且后续6章依赖其存活 → structural_logic_defect"
 
       - subcategory_id: "emotional_delivery_match"
         subcategory_name: "情感交付匹配度"
@@ -497,6 +514,19 @@ capability_dimensions:
           - "❌ 不合格（章节跑偏）：后期章节变成作者感想、番外预告、角色问答等"
           - "❌ 不合格（章节萎缩）：前期每章5000-20000字，后期每章几十到几百字"
         note: "从原late_stage_digression拆分出来的语义检查部分。白名单文件检查已拆分到workspace_file_compliance（business_rule_compliance维度）。与full_narrative_content区分：本项检查正文vs非正文乱内容，full_narrative_content检查大纲式vs正文"
+
+      # === P0 Gate: 章节产出存在性 ===
+      - subcategory_id: "chapter_output_existence"
+        subcategory_name: "章节产出存在性"
+        cn_name: "workspace中有没有章节文件（无章节=执行崩坏）"
+        sort_order: [3, -1]
+        tier_level: "basic"
+        is_gate: true
+        description: "Gate级检查。workspace中必须存在至少一个chapter_*.md文件。无章节文件说明Agent执行在写作阶段前崩坏（API崩溃/Simulator误判/模型能力不足），产出物不足以评估。替代旧的sop_stage_coverage（不再检查characters.json和outline.json等中间产物）"
+        check_types: ["sop_stage_coverage"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        replaces: "sop_stage_coverage"
+        note: "从sop_stage_coverage简化而来。旧检查要求characters.json+outline.json+chapters全存在，过于严格——doubao写了10章但缺outline.json即被gate，属于假阳性。简化为仅检查最终产出（章节文件）是否存在"
 
       # === P1-P5 程序化内容质量检查（零LLM成本，检测严重结构性缺陷）===
       - subcategory_id: "chapter_cloning"
@@ -749,6 +779,23 @@ capability_dimensions:
           - "❌ 拖沓收束：结尾反复解释/总结/抒情，不是有意识的收束设计"
         note: "深读对比发现：claude超短篇的首尾闭合结构本身表达了'时间闭环'主题，这是它与kimi/EB5之间最大的质量差距之一，但现有checker完全无法检测"
 
+      # v1.2新增：角色命名质量
+      - subcategory_id: "character_naming_quality"
+        subcategory_name: "角色命名质量"
+        cn_name: "角色名字有没有文化深度和辨识度（不是烂大街AI名）"
+        sort_order: [3, 49]
+        tier_level: "advanced"
+        description: "角色命名的文化深度、辨识度和角色-命运共振。核心区分'有设计感的好名字'vs'LLM默认通用美名（林晚/陈默/苏晚晴等烂大街名字）'。检查4个维度：角色-名字共振、文化深度、辨识度差异化、姓氏多样性"
+        check_types: ["semantic_check"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        priority: "medium"
+        validation_method: "llm_semantic_analysis"
+        examples:
+          - "✅ 有设计感：名字与角色命运/性格有映射关系，有文化典故或谐音含义"
+          - "❌ LLM默认名：林晚、陈默、苏晚晴、顾辞、沈念——高频AI生成名，无辨识度"
+          - "❌ 姓氏单一：5个角色中3个姓'林'，缺乏多样性"
+        note: "v1.2新增。审计发现大量模型使用同质化的'通用美名'，缺乏与角色特质的关联。DISPLAY_ONLY：不参与评分（77.6% fail率 + DSV1=DSV2零差异，binary pass/fail无法反映中等水平改善）"
+
       # === 挂起的维度（暂不启用）===
       # appeal_strength_advanced — 吸引力强度（LLM judge区分度低）
       # emotional_impact — 情感冲击力（LLM judge区分度低）
@@ -802,6 +849,13 @@ usage_notes: |
 # ============================================
 
 version_history:
+  - version: "3.0"
+    date: "2026-02-17"
+    changes:
+      - "【新增维度】content_quality基础层新增chapter_output_existence（章节产出存在性Gate项）：替代sop_stage_coverage，简化为仅检查章节文件是否存在"
+      - "【新增维度】content_quality优秀层新增character_naming_quality（角色命名质量）：评判命名的文化深度、辨识度和角色-命运共振"
+    rationale: "sop_stage_coverage要求characters.json+outline.json+chapters全存在才pass，doubao写了10章完整内容但缺outline.json即被gate触发，属于假阳性。简化为仅检查最终产出（章节文件）。角色命名质量从rev_007 REVISION_LOG中记录但未导出到checklist，本次补齐"
+
   - version: "2.9"
     date: "2026-02-14"
     changes:
@@ -820,7 +874,7 @@ version_history:
       - "P1 chapter_cloning（章节克隆检测）：连续>=2章完全克隆或>=3章前500字克隆。Gate项"
       - "P2 alternating_repetition（交替重复检测）：A-B-A-B等循环模式，连续>=4章。Gate项"
       - "P3 chapter_completion（章节完成度）：实际/大纲 < 0.5 即早期终止。Gate项"
-      - "P4 chapter_length_stability（章节长度稳定性）：后1/4均值 < 前1/3均值的30%"
+      - "P4 chapter_length_stability（章节长度稳定性）：后1/4均值 < 前1/3均值的50%"
       - "P5 paragraph_repetition（段落重复检测）：跨章>=5组或单章连续>=3"
       - "【新增维度】content_quality基础层新增outline_execution_fidelity（大纲执行忠实度）"
       - "大纲执行忠实度：Agent设计的outline.json与实际chapters的一致性，规划-执行一致性是底线"

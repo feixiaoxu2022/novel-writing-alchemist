@@ -682,10 +682,11 @@ class FileSystemChecker:
                 f"跨文件检查需要至少2个文件路径，收到：{target_id}"
             )
 
-        # 特殊处理：main_characters_in_outline 和 main_characters_in_chapters
-        if attribute_key == "main_characters_in_outline":
+        # 特殊处理：角色在大纲/正文中的出场检查
+        # 兼容新旧两种 attribute_key 命名
+        if attribute_key in ("main_characters_in_outline", "all_characters_in_outline"):
             return self._check_main_characters_in_outline(paths)
-        elif attribute_key == "main_characters_in_chapters":
+        elif attribute_key in ("main_characters_in_chapters", "all_characters_in_chapters"):
             return self._check_main_characters_in_chapters(paths)
         else:
             return create_check_item_result(
@@ -694,7 +695,7 @@ class FileSystemChecker:
             )
 
     def _check_main_characters_in_outline(self, paths: List[str]) -> Dict:
-        """检查主要角色是否在大纲中规划"""
+        """检查设计的角色是否在大纲中规划（包括主角和配角）"""
         # 第一个路径应该是characters.json
         characters_path = self.work_dir / paths[0]
         outline_path = self.work_dir / paths[1]
@@ -735,7 +736,7 @@ class FileSystemChecker:
             result["dependency_failure"] = True
             return result
 
-        # 提取主要角色名
+        # 提取角色名
         if not isinstance(characters_data, dict):
             result = create_check_item_result(
                 "skip", "前置条件失败（characters.json schema不合规）",
@@ -744,6 +745,8 @@ class FileSystemChecker:
             result["dependency_failure"] = True
             result["schema_violation"] = True
             return result
+
+        # 提取主角名
         main_characters = characters_data.get("main_characters", [])
         if not main_characters:
             result = create_check_item_result(
@@ -754,8 +757,8 @@ class FileSystemChecker:
             result["schema_violation"] = True
             return result
 
-        character_names = [char.get("name", "") for char in main_characters if isinstance(char, dict)]
-        if not character_names:
+        main_names = [char.get("name", "") for char in main_characters if isinstance(char, dict)]
+        if not main_names:
             result = create_check_item_result(
                 "skip", "前置条件失败（characters.json schema不合规）",
                 "main_characters中的角色对象缺少name字段"
@@ -763,6 +766,13 @@ class FileSystemChecker:
             result["dependency_failure"] = True
             result["schema_violation"] = True
             return result
+
+        # 提取配角名（可选字段，没有就跳过配角检查）
+        supporting_characters = characters_data.get("supporting_characters", [])
+        supporting_names = [
+            char.get("name", "") for char in supporting_characters
+            if isinstance(char, dict) and char.get("name")
+        ]
 
         # 读取outline.json
         outline_data = self._load_json_file(outline_path)
@@ -783,30 +793,53 @@ class FileSystemChecker:
             import json
             outline_text = json.dumps(outline_data, ensure_ascii=False)
 
-        # 检查每个角色是否在大纲中出现
-        found_characters = []
-        missing_characters = []
-
-        for name in character_names:
+        # 检查主角是否在大纲中出现
+        main_found = []
+        main_missing = []
+        for name in main_names:
             if name in outline_text:
-                found_characters.append(name)
+                main_found.append(name)
             else:
-                missing_characters.append(name)
+                main_missing.append(name)
 
-        # 判断结果
-        if not missing_characters:
+        # 检查配角是否在大纲中出现
+        supporting_found = []
+        supporting_missing = []
+        for name in supporting_names:
+            if name in outline_text:
+                supporting_found.append(name)
+            else:
+                supporting_missing.append(name)
+
+        # 判断结果：设计了的角色都必须在大纲中出现（不区分主角配角）
+        all_missing = main_missing + supporting_missing
+        details_parts = []
+        details_parts.append(f"主角 {len(main_found)}/{len(main_names)}: {', '.join(main_found) if main_found else '无'}")
+        if main_missing:
+            details_parts.append(f"主角缺失: {', '.join(main_missing)}")
+        if supporting_names:
+            details_parts.append(f"配角 {len(supporting_found)}/{len(supporting_names)}: {', '.join(supporting_found) if supporting_found else '无'}")
+            if supporting_missing:
+                details_parts.append(f"配角缺失: {', '.join(supporting_missing)}")
+
+        if not all_missing:
             return create_check_item_result(
-                "pass", "所有主要角色都在大纲中规划",
-                f"找到 {len(found_characters)} 个主要角色: {', '.join(found_characters)}"
+                "pass", "所有设计角色都在大纲中规划",
+                "; ".join(details_parts)
             )
         else:
+            missing_desc = []
+            if main_missing:
+                missing_desc.append(f"主角: {', '.join(main_missing)}")
+            if supporting_missing:
+                missing_desc.append(f"配角: {', '.join(supporting_missing)}")
             return create_check_item_result(
-                "fail", "部分主要角色未在大纲中规划",
-                f"找到 {len(found_characters)} 个角色: {', '.join(found_characters)}; 缺失 {len(missing_characters)} 个角色: {', '.join(missing_characters)}"
+                "fail", f"部分设计角色未在大纲中规划（{'; '.join(missing_desc)}）",
+                "; ".join(details_parts)
             )
 
     def _check_main_characters_in_chapters(self, paths: List[str]) -> Dict:
-        """检查主要角色是否在正文章节中出现"""
+        """检查设计的角色是否在正文章节中出现（包括主角和配角）"""
         # 第一个路径应该是characters.json
         characters_path = self.work_dir / paths[0]
         chapters_pattern = paths[1]  # 可能是"workspace/chapters/"
@@ -835,7 +868,7 @@ class FileSystemChecker:
             result["dependency_failure"] = True
             return result
 
-        # 提取主要角色名
+        # 提取角色名
         if not isinstance(characters_data, dict):
             result = create_check_item_result(
                 "skip", "前置条件失败（characters.json schema不合规）",
@@ -844,6 +877,8 @@ class FileSystemChecker:
             result["dependency_failure"] = True
             result["schema_violation"] = True
             return result
+
+        # 提取主角名
         main_characters = characters_data.get("main_characters", [])
         if not main_characters:
             result = create_check_item_result(
@@ -854,8 +889,8 @@ class FileSystemChecker:
             result["schema_violation"] = True
             return result
 
-        character_names = [char.get("name", "") for char in main_characters if isinstance(char, dict)]
-        if not character_names:
+        main_names = [char.get("name", "") for char in main_characters if isinstance(char, dict)]
+        if not main_names:
             result = create_check_item_result(
                 "skip", "前置条件失败（characters.json schema不合规）",
                 "main_characters中的角色对象缺少name字段"
@@ -863,6 +898,13 @@ class FileSystemChecker:
             result["dependency_failure"] = True
             result["schema_violation"] = True
             return result
+
+        # 提取配角名（可选字段，没有就跳过配角检查）
+        supporting_characters = characters_data.get("supporting_characters", [])
+        supporting_names = [
+            char.get("name", "") for char in supporting_characters
+            if isinstance(char, dict) and char.get("name")
+        ]
 
         # 匹配章节文件（容错处理）
         if chapters_pattern.endswith('/'):
@@ -896,26 +938,50 @@ class FileSystemChecker:
             result["dependency_failure"] = True
             return result
 
-        # 检查每个角色是否在章节中出现
-        found_characters = []
-        missing_characters = []
-
-        for name in character_names:
+        # 检查主角是否在章节中出现
+        main_found = []
+        main_missing = []
+        for name in main_names:
             if name in all_chapters_text:
-                found_characters.append(name)
+                main_found.append(name)
             else:
-                missing_characters.append(name)
+                main_missing.append(name)
 
-        # 判断结果
-        if not missing_characters:
+        # 检查配角是否在章节中出现
+        supporting_found = []
+        supporting_missing = []
+        for name in supporting_names:
+            if name in all_chapters_text:
+                supporting_found.append(name)
+            else:
+                supporting_missing.append(name)
+
+        # 判断结果：设计了的角色都必须在正文中出现（不区分主角配角）
+        all_missing = main_missing + supporting_missing
+        details_parts = []
+        details_parts.append(f"在{len(chapters_files)}个章节中检查")
+        details_parts.append(f"主角 {len(main_found)}/{len(main_names)}: {', '.join(main_found) if main_found else '无'}")
+        if main_missing:
+            details_parts.append(f"主角缺失: {', '.join(main_missing)}")
+        if supporting_names:
+            details_parts.append(f"配角 {len(supporting_found)}/{len(supporting_names)}: {', '.join(supporting_found) if supporting_found else '无'}")
+            if supporting_missing:
+                details_parts.append(f"配角缺失: {', '.join(supporting_missing)}")
+
+        if not all_missing:
             return create_check_item_result(
-                "pass", "所有主要角色都在正文中出现",
-                f"在 {len(chapters_files)} 个章节中找到 {len(found_characters)} 个主要角色: {', '.join(found_characters)}"
+                "pass", "所有设计角色都在正文中出现",
+                "; ".join(details_parts)
             )
         else:
+            missing_desc = []
+            if main_missing:
+                missing_desc.append(f"主角: {', '.join(main_missing)}")
+            if supporting_missing:
+                missing_desc.append(f"配角: {', '.join(supporting_missing)}")
             return create_check_item_result(
-                "fail", "部分主要角色未在正文中出现",
-                f"在 {len(chapters_files)} 个章节中找到 {len(found_characters)} 个角色: {', '.join(found_characters)}; 缺失 {len(missing_characters)} 个角色: {', '.join(missing_characters)}"
+                "fail", f"部分设计角色未在正文中出现（{'; '.join(missing_desc)}）",
+                "; ".join(details_parts)
             )
 
     def _check_attribute_value(self, data: Dict, attribute_key: str, expected_value: Any) -> Dict:
@@ -2571,6 +2637,22 @@ class SemanticChecker:
                     f"无法读取 {Path(file_path).name}: {str(e)}"
                 )
 
+        # 对文件按名称中的数字排序，确保章节顺序正确
+        import re as _re
+        def _extract_number(name):
+            """从文件名中提取数字用于排序"""
+            nums = _re.findall(r'\d+', name)
+            return int(nums[0]) if nums else 0
+
+        # 将文件名、内容、路径打包后按数字排序
+        sorted_items = sorted(
+            zip(file_names, all_contents, matched_files),
+            key=lambda x: _extract_number(x[0])
+        )
+        file_names = [item[0] for item in sorted_items]
+        all_contents = [item[1] for item in sorted_items]
+        matched_files = [item[2] for item in sorted_items]
+
         # 合并所有内容（如果有多个文件）
         if len(matched_files) == 1:
             combined_content = all_contents[0]
@@ -2579,7 +2661,12 @@ class SemanticChecker:
             combined_content = "\\n\\n=== 文件分隔 ===\\n\\n".join(
                 [f"文件: {name}\\n{content}" for name, content in zip(file_names, all_contents)]
             )
-            context_info = f"共{len(matched_files)}个文件: {', '.join(file_names[:3])}{'...' if len(file_names) > 3 else ''}"
+            # 提供完整文件列表和最后一个文件信息，帮助 LLM 判断"最后一章"
+            context_info = (
+                f"共{len(matched_files)}个文件（按章节顺序排列）: "
+                f"{', '.join(file_names)}; "
+                f"最后一个文件是 {file_names[-1]}"
+            )
 
         # 特殊处理：word_count_range检查（不使用LLM）
         if is_word_count_check:
@@ -2635,6 +2722,32 @@ class SemanticChecker:
 
         try:
             # 构造LLM prompt
+            # 如果 criteria 自身已包含结构化输出格式说明（如 flaws 数组），
+            # 不追加通用的简化格式提示，避免覆盖 criteria 的精确输出要求
+            criteria_has_structured_output = (
+                '"flaws"' in llm_judge_criteria or '"flaw_count"' in llm_judge_criteria
+            )
+
+            if criteria_has_structured_output:
+                # criteria 已定义了完整的输出格式（含 flaws 等结构化字段），
+                # 只添加内容说明，不追加简化的 JSON 格式模板
+                format_instruction = (
+                    "⚠️ 重要说明：\n"
+                    "- 内容可能是JSON格式，也可能不是，请关注语义本身，不要因格式问题影响评估\n"
+                    "- 如果内容被截断，请基于可见部分进行合理推断\n"
+                    "- 重点评估内容质量，而非格式规范\n"
+                    "- 务必严格按照上述业务标准中指定的JSON输出格式回复，包含所有必需字段"
+                )
+            else:
+                format_instruction = (
+                    "⚠️ 重要说明：\n"
+                    "- 内容可能是JSON格式，也可能不是，请关注语义本身，不要因格式问题影响评估\n"
+                    "- 如果内容被截断，请基于可见部分进行合理推断\n"
+                    "- 重点评估内容质量，而非格式规范\n\n"
+                    "请以JSON格式回复：\n"
+                    f'{{"matched": true/false, "reason": "详细说明评估依据，包括具体的优点或不足"}}'
+                )
+
             prompt = f"""请评估以下内容是否符合业务标准。
 
 **业务标准：**
@@ -2643,13 +2756,7 @@ class SemanticChecker:
 **待评估内容：** ({context_info})
 {combined_content}
 
-⚠️ 重要说明：
-- 内容可能是JSON格式，也可能不是，请关注语义本身，不要因格式问题影响评估
-- 如果内容被截断，请基于可见部分进行合理推断
-- 重点评估内容质量，而非格式规范
-
-请以JSON格式回复：
-{{"matched": true/false, "reason": "详细说明评估依据，包括具体的优点或不足"}}
+{format_instruction}
 """
 
             success, llm_response = request_llm_with_litellm(
@@ -2979,7 +3086,7 @@ class SemanticChecker:
 
         检测逻辑:
         1. 计算前1/3章节平均字数和后1/4章节平均字数
-        2. 后1/4 < 前1/3 × 0.25 → fail（严重崩塌）
+        2. 后1/4 < 前1/3 × 0.50 → fail（后段萎缩过半）
         3. 后1/4中任何单章 < 200字 → fail（极端退化）
         """
         n = len(all_contents)
@@ -3001,31 +3108,33 @@ class SemanticChecker:
         last_min = min(last_chars)
         last_min_idx = len(char_counts) - last_n + last_chars.index(last_min)
 
+        ratio = last_avg / first_avg if first_avg > 0 else 1.0
+        ratio_info = (
+            f"前{first_n}章均值{first_avg:.0f}字, 后{last_n}章均值{last_avg:.0f}字 "
+            f"(后/前比率{ratio:.2f})"
+        )
+
         # 极端退化：单章<200字
         if last_min < 200:
             return create_check_item_result(
                 "fail",
                 f"后期章节极端退化(最短{last_min}字)",
-                f"后{last_n}章中 {file_names[last_min_idx]} 仅{last_min}字; "
-                f"前{first_n}章均值{first_avg:.0f}字, 后{last_n}章均值{last_avg:.0f}字",
+                f"后{last_n}章中 {file_names[last_min_idx]} 仅{last_min}字; {ratio_info}",
             )
 
-        # 严重崩塌
-        if first_avg > 0:
-            ratio = last_avg / first_avg
-            if ratio < 0.25:
-                return create_check_item_result(
-                    "fail",
-                    f"章节长度严重崩塌(后期仅为前期{ratio:.0%})",
-                    f"前{first_n}章均值{first_avg:.0f}字, 后{last_n}章均值{last_avg:.0f}字 "
-                    f"(衰减至{ratio:.1%}); 后{last_n}章: {', '.join(f'{file_names[n-last_n+i]}={last_chars[i]}字' for i in range(last_n))}",
-                )
+        # 后段萎缩过半
+        if ratio < 0.50:
+            return create_check_item_result(
+                "fail",
+                f"章节长度严重萎缩(后期仅为前期{ratio:.0%})",
+                f"{ratio_info}; 后{last_n}章: "
+                f"{', '.join(f'{file_names[n-last_n+i]}={last_chars[i]}字' for i in range(last_n))}",
+            )
 
         return create_check_item_result(
             "pass",
             "章节长度稳定",
-            f"前{first_n}章均值{first_avg:.0f}字, 后{last_n}章均值{last_avg:.0f}字 "
-            f"(比率{last_avg/first_avg:.1%})" if first_avg > 0 else f"前{first_n}章均值{first_avg:.0f}字",
+            ratio_info,
         )
 
     def _check_paragraph_repetition(
@@ -3119,21 +3228,18 @@ class SemanticChecker:
 
 
 def _check_sop_stage_coverage(check_item: Dict, work_dir: Path) -> Dict:
-    """检查SOP执行完整性：Agent是否完成了核心工作流阶段。
+    """检查Agent是否产出了章节文件（Gate级）。
 
-    这是一个Gate级检查项。当章节写作阶段未完成时，说明Agent的执行流程
-    在中途崩坏（API崩溃/Simulator误判/模型能力不足），产出物不足以进行
-    内容质量评估。
+    这是一个Gate级检查项。当workspace中不存在任何章节文件时，说明Agent
+    的执行流程在写作阶段前就已崩坏（API崩溃/Simulator误判/模型能力不足），
+    产出物不足以进行内容质量评估。
+
+    仅检查 chapter_writing 阶段（workspace/chapters/chapter_*.md 是否存在），
+    不再检查 characters.json 或 outline.json 等中间产物。
 
     params中需要:
-      - required_stages: 必要阶段列表，每项包含:
-          - stage_id: 阶段标识
-          - description: 阶段描述
-          - evidence: 验证方式
-              - file_exists: 检查文件是否存在
-              - dir_has_files: 检查目录下是否有匹配文件（支持glob）
-              - min_count: dir_has_files的最低文件数（默认1）
-      - collapse_threshold: 触发"执行崩坏"判定的关键阶段ID
+      - required_stages: 必要阶段列表（兼容旧配置，仅使用 chapter_writing 阶段）
+      - collapse_threshold: 触发"执行崩坏"判定的关键阶段ID（默认 chapter_writing）
       - collapse_description: 崩坏时的描述信息
 
     Returns:
@@ -3142,92 +3248,78 @@ def _check_sop_stage_coverage(check_item: Dict, work_dir: Path) -> Dict:
     params = check_item.get("params", {})
     required_stages = params.get("required_stages", [])
     collapse_threshold = params.get("collapse_threshold", "chapter_writing")
-    collapse_description = params.get("collapse_description", "SOP执行崩坏")
+    collapse_description = params.get("collapse_description", "SOP执行崩坏：未产出任何章节文件")
 
-    stage_results = []
-    all_passed = True
-    collapse_triggered = False
-
+    # 仅检查 chapter_writing 阶段，忽略其他阶段
+    chapter_stage = None
     for stage in required_stages:
-        stage_id = stage.get("stage_id", "unknown")
-        description = stage.get("description", stage_id)
-        evidence = stage.get("evidence", {})
+        if stage.get("stage_id") == collapse_threshold:
+            chapter_stage = stage
+            break
 
-        stage_passed = False
+    if chapter_stage is None:
+        # 兜底：如果配置中没有 chapter_writing，按默认检查 workspace/chapters/chapter_*.md
+        chapter_stage = {
+            "stage_id": "chapter_writing",
+            "description": "章节写作阶段",
+            "evidence": {
+                "dir_has_files": "workspace/chapters/chapter_*.md",
+                "min_count": 1,
+            },
+        }
 
-        if "file_exists" in evidence:
-            file_path = work_dir / evidence["file_exists"]
-            # 容错：也检查嵌套路径 workspace/workspace/
-            if file_path.exists():
-                stage_passed = True
-            else:
-                # 尝试嵌套路径（Agent可能写了 workspace/workspace/xxx）
-                nested = evidence["file_exists"]
-                if nested.startswith("workspace/"):
-                    nested_path = work_dir / nested.replace("workspace/", "workspace/workspace/", 1)
-                    if nested_path.exists():
-                        stage_passed = True
+    evidence = chapter_stage.get("evidence", {})
+    description = chapter_stage.get("description", "章节写作阶段")
+    stage_passed = False
 
-        elif "dir_has_files" in evidence:
-            pattern = str(work_dir / evidence["dir_has_files"])
-            min_count = evidence.get("min_count", 1)
-            matched = glob_module.glob(pattern)
+    if "dir_has_files" in evidence:
+        pattern = str(work_dir / evidence["dir_has_files"])
+        min_count = evidence.get("min_count", 1)
+        matched = glob_module.glob(pattern)
 
-            # 容错1：扩展名不匹配（如Agent写了.tex/.json而非.md）
-            # 策略：保留文件名stem部分的glob，替换扩展名为通配符
-            if not matched and "." in pattern.rsplit("/", 1)[-1]:
-                stem_pattern = pattern.rsplit(".", 1)[0] + ".*"
-                matched = glob_module.glob(stem_pattern)
+        # 容错1：扩展名不匹配（如Agent写了.tex/.json而非.md）
+        if not matched and "." in pattern.rsplit("/", 1)[-1]:
+            stem_pattern = pattern.rsplit(".", 1)[0] + ".*"
+            matched = glob_module.glob(stem_pattern)
 
-            # 容错2：嵌套路径 workspace/workspace/
-            if not matched:
-                nested_pattern = evidence["dir_has_files"]
-                if nested_pattern.startswith("workspace/"):
-                    nested_pattern = nested_pattern.replace("workspace/", "workspace/workspace/", 1)
-                    full_nested = str(work_dir / nested_pattern)
-                    matched = glob_module.glob(full_nested)
-                    # 嵌套路径也做扩展名容错
-                    if not matched and "." in full_nested.rsplit("/", 1)[-1]:
-                        nested_stem = full_nested.rsplit(".", 1)[0] + ".*"
-                        matched = glob_module.glob(nested_stem)
+        # 容错2：嵌套路径 workspace/workspace/
+        if not matched:
+            nested_pattern = evidence["dir_has_files"]
+            if nested_pattern.startswith("workspace/"):
+                nested_pattern = nested_pattern.replace("workspace/", "workspace/workspace/", 1)
+                full_nested = str(work_dir / nested_pattern)
+                matched = glob_module.glob(full_nested)
+                if not matched and "." in full_nested.rsplit("/", 1)[-1]:
+                    nested_stem = full_nested.rsplit(".", 1)[0] + ".*"
+                    matched = glob_module.glob(nested_stem)
 
-            if len(matched) >= min_count:
-                stage_passed = True
+        if len(matched) >= min_count:
+            stage_passed = True
 
-        status_mark = "✓" if stage_passed else "✗"
-        stage_results.append(f"{status_mark} {description}({stage_id})")
+    elif "file_exists" in evidence:
+        file_path = work_dir / evidence["file_exists"]
+        if file_path.exists():
+            stage_passed = True
+        else:
+            nested = evidence["file_exists"]
+            if nested.startswith("workspace/"):
+                nested_path = work_dir / nested.replace("workspace/", "workspace/workspace/", 1)
+                if nested_path.exists():
+                    stage_passed = True
 
-        if not stage_passed:
-            all_passed = False
-            if stage_id == collapse_threshold:
-                collapse_triggered = True
-
-    detail_str = "; ".join(stage_results)
-
-    if all_passed:
+    if stage_passed:
         return create_check_item_result(
             "pass",
-            "SOP核心阶段全部完成",
-            f"阶段覆盖: {detail_str}"
+            "章节文件存在",
+            f"✓ {description}: 已产出章节文件"
         )
-
-    if collapse_triggered:
+    else:
         result = create_check_item_result(
             "fail",
             collapse_description,
-            f"阶段覆盖: {detail_str}。未达到关键阶段 {collapse_threshold}，"
-            f"后续内容质量评估不具参考价值。"
+            f"✗ {description}: 未找到任何章节文件，Agent执行流程在写作阶段前崩坏。"
         )
         result["execution_collapsed"] = True
-        return result
-    else:
-        # 部分阶段缺失但已过关键阶段（如有章节但没有characters.json）
-        result = create_check_item_result(
-            "fail",
-            f"SOP部分阶段缺失",
-            f"阶段覆盖: {detail_str}"
-        )
-        result["execution_collapsed"] = False
         return result
 
 
@@ -3292,6 +3384,67 @@ def _check_file_whitelist(check_item: Dict, work_dir: Path) -> Dict:
             "workspace中所有文件均在白名单内",
             f"白名单: {whitelist}"
         )
+
+
+def _split_result_by_fixability(original_result: Dict, fixability_filter: str, check_idx: str) -> Dict:
+    """根据 fixability 字段从共享的 LLM judge 结果中拆分出子结果。
+    
+    Args:
+        original_result: 原始 LLM judge 结果（含完整 flaws 数组）
+        fixability_filter: "structural" 或 "fixable"
+        check_idx: 当前检查项的 check_id（用于日志）
+    
+    Returns:
+        按 fixability 过滤后的检查结果
+    """
+    import copy
+    result = copy.deepcopy(original_result)
+    
+    flaws = result.get("flaws", [])
+    
+    if not flaws or not isinstance(flaws, list):
+        # 原始结果没有 flaws（可能是 pass 或 LLM 调用失败）
+        # structural 检查项：没有 structural flaw → pass
+        # fixable 检查项：没有 fixable flaw → pass
+        if result.get("check_result") == "pass":
+            return result
+        # 原始是 fail 但没有 flaws 结构（LLM 没按格式输出）→ 保守策略
+        if fixability_filter == "structural":
+            # structural 检查项：无法确认是否有结构性问题，保持 fail
+            result["reason"] = f"内容不符合标准（LLM未返回结构化flaws，无法拆分fixability，保守判定为fail）"
+            return result
+        else:
+            # fixable 检查项：无法确认是否有可修问题，判 pass（宽松策略，因为是 advanced 层）
+            result["check_result"] = "pass"
+            result["reason"] = f"LLM未返回结构化flaws，无法判断可修复逻辑瑕疵，默认pass"
+            return result
+    
+    # 按 fixability 过滤 flaws
+    filtered_flaws = [f for f in flaws if f.get("fixability") == fixability_filter]
+    
+    # 对没有 fixability 标注的 flaw，默认归入 structural（保守策略）
+    if fixability_filter == "structural":
+        unlabeled_flaws = [f for f in flaws if "fixability" not in f]
+        filtered_flaws.extend(unlabeled_flaws)
+    
+    result["flaws"] = filtered_flaws
+    result["flaw_count"] = len(filtered_flaws)
+    
+    if len(filtered_flaws) == 0:
+        result["check_result"] = "pass"
+        all_count = len(flaws)
+        other_filter = "fixable" if fixability_filter == "structural" else "structural"
+        result["reason"] = f"共发现{all_count}处逻辑问题，但均为{other_filter}类型，本项（{fixability_filter}）无命中"
+        result["details"] = f"过滤条件: fixability={fixability_filter}; 总flaws={all_count}, 命中=0"
+    else:
+        result["check_result"] = "fail"
+        shown = filtered_flaws[:5]
+        flaw_descs = "; ".join([f.get("description", "")[:200] for f in shown])
+        suffix = f" ...及其他{len(filtered_flaws) - len(shown)}处" if len(filtered_flaws) > len(shown) else ""
+        result["reason"] = f"发现{len(filtered_flaws)}处{fixability_filter}类型逻辑问题: {flaw_descs}{suffix}"
+        result["details"] = f"过滤条件: fixability={fixability_filter}; 总flaws={len(flaws)}, 命中={len(filtered_flaws)}"
+    
+    return result
 
 
 def execute_checks(sample_result: Dict, check_list: List[Dict],
@@ -3362,8 +3515,13 @@ def execute_checks(sample_result: Dict, check_list: List[Dict],
 
     # 执行所有检查
     check_details = {}
+    # 配对检查项缓存：存储共享 LLM judge 调用的原始结果（含完整 flaws）
+    # key = paired_check_id 或 check_id，value = 原始 LLM 结果（含 flaws 数组）
+    paired_check_cache = {}
+
     for i, check_item in enumerate(check_list, 1):
-        check_idx = f"检查项{i}"
+        # 优先使用语义化 check_id，兜底用位置编号（向后兼容）
+        check_idx = check_item.get("check_id", f"检查项{i}")
         check_type = check_item.get("check_type")
         description = check_item.get("description", "")
         
@@ -3384,34 +3542,52 @@ def execute_checks(sample_result: Dict, check_list: List[Dict],
             print(f"  ⊘ skip (ULTRA_SHORT不适用: {subcategory_id})", flush=True)
             continue
 
-        # 根据check_type分发到对应的checker
-        if check_type == "entity_attribute_equals":
-            result = fs_checker.check_entity_attribute_equals(check_item)
-        elif check_type == "create_operation_verified":
-            result = fs_checker.check_create_operation_verified(check_item)
-        elif check_type == "json_schema":
-            result = schema_checker.check(check_item.get("params", {}))
-        elif check_type == "cross_file_consistency":
-            result = cross_checker.check(check_item.get("params", {}))
-        elif check_type == "tool_called_with_params":
-            result = tool_checker.check(check_item.get("params", {}), conversation_history)
-        elif check_type == "tool_call_absence":
-            result = tool_absence_checker.check(check_item.get("params", {}), conversation_history)
-        elif check_type == "semantic_check":
-            if semantic_checker:
-                result = semantic_checker.check(check_item.get("params", {}), sample_result)
+        # 配对检查项：检查是否有已缓存的共享 LLM 结果可复用
+        params = check_item.get("params", {})
+        paired_check_id = params.get("paired_check_id")
+        fixability_filter = params.get("fixability_filter")
+
+        if paired_check_id and fixability_filter and paired_check_id in paired_check_cache:
+            # 复用已缓存的 LLM 结果，按 fixability_filter 拆分
+            cached_result = paired_check_cache[paired_check_id]
+            result = _split_result_by_fixability(cached_result, fixability_filter, check_idx)
+            print(f"  ↳ 复用配对检查 [{paired_check_id}] 的 LLM 结果，过滤 fixability={fixability_filter}", flush=True)
+        else:
+            # 正常执行检查
+            # 根据check_type分发到对应的checker
+            if check_type == "entity_attribute_equals":
+                result = fs_checker.check_entity_attribute_equals(check_item)
+            elif check_type == "create_operation_verified":
+                result = fs_checker.check_create_operation_verified(check_item)
+            elif check_type == "json_schema":
+                result = schema_checker.check(check_item.get("params", {}))
+            elif check_type == "cross_file_consistency":
+                result = cross_checker.check(check_item.get("params", {}))
+            elif check_type == "tool_called_with_params":
+                result = tool_checker.check(check_item.get("params", {}), conversation_history)
+            elif check_type == "tool_call_absence":
+                result = tool_absence_checker.check(check_item.get("params", {}), conversation_history)
+            elif check_type == "semantic_check":
+                if semantic_checker:
+                    result = semantic_checker.check(check_item.get("params", {}), sample_result)
+                else:
+                    result = create_check_item_result(
+                        "skip", "缺少LLM配置", "semantic_check需要LLM模型配置"
+                    )
+            elif check_type == "file_whitelist_check":
+                result = _check_file_whitelist(check_item, work_dir)
+            elif check_type == "sop_stage_coverage":
+                result = _check_sop_stage_coverage(check_item, work_dir)
             else:
                 result = create_check_item_result(
-                    "skip", "缺少LLM配置", "semantic_check需要LLM模型配置"
+                    "skip", f"不支持的检查类型: {check_type}", ""
                 )
-        elif check_type == "file_whitelist_check":
-            result = _check_file_whitelist(check_item, work_dir)
-        elif check_type == "sop_stage_coverage":
-            result = _check_sop_stage_coverage(check_item, work_dir)
-        else:
-            result = create_check_item_result(
-                "skip", f"不支持的检查类型: {check_type}", ""
-            )
+
+            # 如果当前检查项是配对检查的一方，缓存完整结果供配对方复用
+            if paired_check_id and fixability_filter:
+                paired_check_cache[check_idx] = result
+                # 对当前项也按 fixability_filter 拆分
+                result = _split_result_by_fixability(result, fixability_filter, check_idx)
 
         # 添加元信息
         result["description"] = description

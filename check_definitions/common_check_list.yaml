@@ -12,6 +12,28 @@ checks:
     skip_if_file_not_exists: true
   weight: 1.0
   is_critical: true
+# ========== P0 Gate：章节产出存在性（无章节=执行崩坏）==========
+- check_id: 章节产出存在性
+  check_name: workspace中必须存在至少一个章节文件
+  dimension_id: content_quality
+  subcategory_id: chapter_output_existence
+  quality_tier: basic
+  check_type: sop_stage_coverage
+  params:
+    required_stages:
+    - stage_id: chapter_writing
+      description: 章节写作阶段
+      evidence:
+        dir_has_files: workspace/chapters/chapter_*.md
+        min_count: 1
+    collapse_threshold: chapter_writing
+    collapse_description: SOP执行崩坏：未产出任何章节文件
+    # 增量recheck时清理旧的sop_stage_coverage结果
+    replaces:
+    - sop_stage_coverage
+  weight: 1.0
+  is_critical: true
+  is_gate: true
 # ========== P1-P5 程序化内容质量检查（零LLM成本，检测严重质量缺陷）==========
 - check_id: 章节克隆检测
   check_name: 不能出现连续章节内容完全重复（克隆）
@@ -68,8 +90,11 @@ checks:
     analysis_target: chapters/chapter_*.md
     validation_rules:
     - rule_id: chapter_length_stability
-      description: 后1/4章节平均长度不能低于前1/3章节平均长度的30%
+      description: 后1/4章节平均长度不能低于前1/3章节平均长度的50%
       validation_method: chapter_length_stability
+    # 增量recheck时清理旧的位置编号key
+    replaces:
+    - chapter_length_stability
   weight: 1.0
   is_critical: true
 - check_id: 段落重复检测
@@ -364,10 +389,10 @@ checks:
       validation_method: llm_semantic_analysis
   weight: 1.0
   is_critical: true
-- check_id: 逻辑硬伤
-  check_name: 无逻辑硬伤
+- check_id: 结构性逻辑硬伤
+  check_name: 无结构性逻辑硬伤
   dimension_id: content_quality
-  subcategory_id: logical_contradiction
+  subcategory_id: structural_logic_defect
   quality_tier: basic
   check_type: semantic_check
   params:
@@ -375,11 +400,37 @@ checks:
     llm_judge_criteria_file: judge_criteria/content_quality_basic.yaml
     llm_judge_criteria_section: 逻辑硬伤
     validation_rules:
-    - rule_id: no_logical_contradiction
-      description: 无前后矛盾（死人复活、判决矛盾、时间线错乱等）
+    - rule_id: no_structural_logic_defect
+      description: 无不可修复的结构性逻辑矛盾（深入情节因果链，修复需大幅重写）
       validation_method: llm_semantic_analysis
+    # 特殊标记：与"可修复逻辑瑕疵"共享一次 LLM judge 调用
+    paired_check_id: 可修复逻辑瑕疵
+    fixability_filter: structural
+    # 替代旧的"逻辑硬伤"检查项（增量recheck时自动清理旧结果）
+    replaces:
+    - 逻辑硬伤
+    - logical_contradiction
   weight: 1.0
   is_critical: true
+- check_id: 可修复逻辑瑕疵
+  check_name: 可修复逻辑瑕疵数量
+  dimension_id: content_quality
+  subcategory_id: fixable_logic_inconsistency
+  quality_tier: advanced
+  check_type: semantic_check
+  params:
+    analysis_target: chapters/chapter_*.md
+    llm_judge_criteria_file: judge_criteria/content_quality_basic.yaml
+    llm_judge_criteria_section: 逻辑硬伤
+    validation_rules:
+    - rule_id: fixable_logic_inconsistency_count
+      description: 局部可修的逻辑不一致（改几句话即可修复，不影响整体可用性）
+      validation_method: llm_semantic_analysis
+    # 特殊标记：与"结构性逻辑硬伤"共享一次 LLM judge 调用
+    paired_check_id: 结构性逻辑硬伤
+    fixability_filter: fixable
+  weight: 0.5
+  is_critical: false
 - check_id: 语言纯净性
   check_name: 无不合理的多语言混用
   dimension_id: content_quality
@@ -492,23 +543,6 @@ checks:
       validation_method: llm_semantic_analysis
   weight: 1.0
   is_critical: true
-- check_id: workspace文件规范
-  check_name: workspace中不能有白名单之外的文件
-  dimension_id: business_rule_compliance
-  subcategory_id: workspace_file_compliance
-  quality_tier: basic
-  check_type: file_whitelist_check
-  params:
-    analysis_target: workspace/
-    required_files:
-    - creative_intent.json
-    - characters.json
-    - outline.json
-    - writing_log.md
-    - chapters/
-    - .hitl_context.json
-  weight: 1.0
-  is_critical: true
 - check_id: 叙事调性匹配
   check_name: 文笔风格必须与题材类型匹配
   dimension_id: content_quality
@@ -542,7 +576,7 @@ checks:
   weight: 1.0
   is_critical: true
 - check_id: 角色大纲规划完整性
-  check_name: 设计的主要角色必须在大纲中规划
+  check_name: 设计的角色必须在大纲中规划
   dimension_id: content_quality
   subcategory_id: character_presence_in_outline
   quality_tier: basic
@@ -550,12 +584,15 @@ checks:
   params:
     entity_type: file
     target_id: workspace/characters.json + workspace/outline.json
-    attribute_key: main_characters_in_outline
+    attribute_key: all_characters_in_outline
     expected_value: true
+    # 增量recheck时清理旧的位置编号key
+    replaces:
+    - character_presence_in_outline
   weight: 1.0
   is_critical: true
 - check_id: 角色正文出场完整性
-  check_name: 设计的主要角色必须在正文中出现
+  check_name: 设计的角色必须在正文中出现
   dimension_id: content_quality
   subcategory_id: character_presence_in_chapters
   quality_tier: basic
@@ -563,8 +600,11 @@ checks:
   params:
     entity_type: file
     target_id: workspace/characters.json + workspace/chapters/
-    attribute_key: main_characters_in_chapters
+    attribute_key: all_characters_in_chapters
     expected_value: true
+    # 增量recheck时清理旧的位置编号key
+    replaces:
+    - character_presence_in_chapters
   weight: 1.0
   is_critical: true
 - check_id: writing_log文件创建
@@ -774,6 +814,23 @@ checks:
     validation_rules:
     - rule_id: structural_design
       description: 结构设计是否服务于主题（首尾呼应、视角切换、非线性时间等），短篇尤为重要
+      validation_method: llm_semantic_analysis
+  weight: 1.0
+  is_critical: false
+# ========== v1.2新增：角色命名质量（advanced层LLM judge）==========
+- check_id: 角色命名质量
+  check_name: 角色命名有文化深度、辨识度和角色-命运共振
+  dimension_id: content_quality
+  subcategory_id: character_naming_quality
+  quality_tier: advanced
+  check_type: semantic_check
+  params:
+    analysis_target: characters.json + chapters/chapter_*.md
+    llm_judge_criteria_file: judge_criteria/content_quality_advanced.yaml
+    llm_judge_criteria_section: 角色命名质量
+    validation_rules:
+    - rule_id: character_naming_quality
+      description: 命名是否有文化深度和辨识度，而非LLM默认的通用美名（林晚/陈默/苏晚晴等烂大街名字）
       validation_method: llm_semantic_analysis
   weight: 1.0
   is_critical: false

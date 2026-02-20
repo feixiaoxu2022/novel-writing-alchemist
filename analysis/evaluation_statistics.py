@@ -19,6 +19,19 @@ from collections import defaultdict
 import pandas as pd
 import yaml
 from typing import Dict, List, Any, Optional, Tuple
+import re
+
+
+def _check_id_sort_key(check_id: str):
+    """check_id 排序辅助函数，兼容新旧两种格式。
+    
+    - 旧格式 "检查项26" → (0, 26, "")  按数字排序
+    - 新格式 "逻辑硬伤"  → (1, 0, "逻辑硬伤")  按字符串排序，排在旧格式之后
+    """
+    m = re.match(r'^检查项(\d+)$', check_id)
+    if m:
+        return (0, int(m.group(1)), "")
+    return (1, 0, check_id)
 
 
 class EvaluationStatistics:
@@ -412,7 +425,7 @@ class EvaluationStatistics:
 
         # 计算通过率
         rows = []
-        for check_id in sorted(checklist_stats.keys(), key=lambda x: int(x.replace('检查项', ''))):
+        for check_id in sorted(checklist_stats.keys(), key=lambda x: _check_id_sort_key(x)):
             metadata = check_metadata[check_id]
             row = {
                 'check_id': check_id,

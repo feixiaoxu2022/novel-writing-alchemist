@@ -13,7 +13,7 @@
 #        --revision NNN
 #   4. 在本文件中记录新 revision 和关联的评测批次
 
-latest_revision: "006"
+latest_revision: "008"
 
 # 绑定的执行样本（checklist从该样本体系生成，data_id与之对齐）
 execution_sample: eval_dsv2.jsonl
@@ -187,6 +187,152 @@ revisions:
       
       变更4 - sample_generator validator修正:
       DSV2 main.py的validation_method白名单新增P1-P5程序化方法名，解决rev_005以来的校验报错。
+    status: superseded
+
+  "007":
+    date: "2026-02-16"
+    description: "逻辑硬伤拆分(structural/fixable) + 角色覆盖(含配角) + semantic ID + LLM prompt format fix + 角色命名质量"
+    check_count_per_sample: "55-58"
+    check_dimensions:
+      format_compliance: 4
+      business_rule_compliance: 22
+      content_quality: 31
+      memory_management: 2
+    judge_criteria_files:
+      - content_quality_basic.yaml     # v1.9
+      - content_quality_advanced.yaml  # v1.2 (新增角色命名质量)
+      - emotional_delivery.yaml        # v1.0
+    changes: |
+      变更1 - 逻辑硬伤拆分为2个检查项:
+      原"逻辑硬伤"(check_id: logical_contradiction) 拆分为：
+      1. 结构性逻辑硬伤(structural_logic_defect, basic层, is_critical=true, weight=1.0)
+         → fixability=structural的硬伤，深入情节因果链，修复需大幅重写
+      2. 可修复逻辑瑕疵(fixable_logic_inconsistency, advanced层, is_critical=false, weight=0.5)
+         → fixability=fixable的瑕疵，改几句话即可修复，不影响整体可用性
+      
+      共享LLM调用：paired_check_cache机制，两个检查项共享同一次LLM judge调用，
+      按fixability字段分流结果，节省50% LLM成本。
+      
+      变更2 - 角色覆盖检查扩展到配角:
+      角色大纲规划完整性 + 角色正文出场完整性 现在检查 main_character + supporting_character。
+      如果Agent设计了配角(supporting_character)，该角色必须在outline和chapters中出现。
+      
+      变更3 - Semantic check_id:
+      所有检查项使用语义化中文ID（如"结构性逻辑硬伤"而非"检查项19"），
+      通过replaces机制在增量recheck时自动清理旧的位置编号key。
+      4个replaces映射: 逻辑硬伤→结构性逻辑硬伤, logical_contradiction→结构性逻辑硬伤,
+      character_presence_in_outline→角色大纲规划完整性, character_presence_in_chapters→角色正文出场完整性,
+      chapter_length_stability→章节长度稳定性。
+      
+      变更4 - LLM prompt format fix (重大修复):
+      checker_execute.py在构建LLM judge prompt时，会在末尾追加通用的
+      {"matched": true/false, "reason": "..."} 格式模板。
+      这会覆盖judge_criteria中已定义的结构化输出格式（如flaws[]）。
+      修复：检测criteria内容中是否已包含"flaws"关键词，如有则跳过通用模板。
+      结果：结构化flaws输出率从~53%提升到94.5%。
+      
+      变更5 - 新增角色命名质量检查项 (content_quality: 30→31):
+      character_naming_quality（advanced层, weight=1.0, is_critical=false）
+      评判命名的文化深度、辨识度和角色-命运共振。
+      核心：区分"有设计感的好名字"vs"LLM默认通用美名(林晚/陈默/苏晚晴等烂大街名字)"。
+      检查4个维度: 角色-名字共振、文化深度、辨识度差异化、姓氏多样性。
+      
+      变更6 - glm-4.7清理:
+      删除glm-4.7的评测目录(eval_dsv1/dsv2_*_glm-4.7, 共143MB)、Agent日志(123MB)、
+      Python脚本中的模型映射（analyze_dsv1_vs_dsv2.py, extract_judge_reasons.py, extract_rev006_data.py）。
+      
+      变更7 - Gate fail过滤规则:
+      analyze_dsv1_vs_dsv2.py新增规则：配对样本中gate fail率>50%的模型自动排除出paired comparison summary，
+      并在表格中标注⚠️gate标记。避免EB5-midtrain等gate fail严重的模型的随机波动影响DSV1 vs DSV2结论。
+      
+      Recheck结果概要 (218样本, 16模型目录):
+      - 结构性逻辑硬伤: pass 46.8%, fail 53.2% (94.5% structured output)
+      - 可修复逻辑瑕疵: pass 12.4%, fail 87.6% (94.5% structured output)
+      - 角色大纲规划完整性: pass 47.2%, fail 34.4%, skip 18.3%
+      - 角色正文出场完整性: pass 50.9%, fail 30.7%, skip 18.3%
+      - 章节长度稳定性: pass 66.1%, fail 5.5%, skip 28.4%
+    status: superseded
+
+  "008":
+    date: "2026-02-17"
+    description: "chapter_output_existence(替代sop_stage_coverage) + 角色命名质量(补齐rev_007未导出项)"
+    check_count_per_sample: "58-61"
+    check_dimensions:
+      format_compliance: 4
+      business_rule_compliance: 22
+      content_quality: 33
+      memory_management: 2
+    judge_criteria_files:
+      - content_quality_basic.yaml     # v1.9
+      - content_quality_advanced.yaml  # v1.2 (含角色命名质量)
+      - emotional_delivery.yaml        # v1.0
+    changes: |
+      变更1 - sop_stage_coverage → chapter_output_existence (Gate项重构):
+      原sop_stage_coverage要求3个阶段文件全部存在（characters.json + outline.json + chapters/），
+      任一缺失即Gate触发。doubao写了10章完整内容但缺outline.json即被Gate，属于假阳性。
+      
+      简化为chapter_output_existence：仅检查workspace/chapters/chapter_*.md是否存在。
+      无章节文件=执行崩坏(Gate fail)，有章节文件=通过(其他文件由output_completeness单独检查)。
+      
+      使用replaces机制：增量recheck时自动清理旧的sop_stage_coverage结果。
+      checker_execute.py中_check_sop_stage_coverage()函数逻辑已在上一session修改。
+      checker_score.py中GATE_SUBCATEGORIES已包含chapter_output_existence和sop_stage_coverage双向兼容。
+      
+      变更2 - 角色命名质量(补齐):
+      character_naming_quality在rev_007的REVISION_LOG中记录，common_check_list.yaml和
+      judge_criteria/content_quality_advanced.yaml(v1.2)中均已定义，但导出rev_007 checklist时
+      因capability_taxonomy中缺少subcategory定义而被跳过。本次补齐taxonomy(v3.0)后正常导出。
+      
+      变更3 - check_capability_taxonomy.yaml升级到v3.0:
+      新增chapter_output_existence和character_naming_quality两个subcategory定义。
+      
+      预期影响:
+      - doubao 2个假Gate样本(NW_CLEAR_SHORT_ANGSTY_001, NW_ULTRA_SHORT_ANGSTY_003)应改为pass
+      - 角色命名质量为新增advanced检查项，预计pass率与角色设计遵循度接近
+      
+      变更4 - character_naming_quality设为DISPLAY_ONLY（不参与评分）:
+      checker_score.py中 DISPLAY_ONLY_SUBCATEGORIES = {"character_naming_quality"}
+      原因：77.6% fail率 + DSV1=DSV2零差异，说明是"优秀级"标准，binary pass/fail无法
+      反映中等水平的质量改善。保留在check_details中供参考，但不影响维度分数。
+      
+      变更5 - workspace_file_compliance批量删除:
+      使用scripts/batch_remove_and_rescore.py从222个rev008结果文件中删除。
+      原因：24%样本因合理文件（outline_act*.json、README.md、merge_outline.py）而fail，噪音过大。
+      
+      变更6 - 恢复3个意外丢失的content basic检查项 (2026-02-17):
+      rev008增量recheck(--only-checks chapter_output_existence,character_naming_quality)
+      因replaces机制bug导致3个检查项意外丢失：
+      1. 角色大纲规划完整性 (character_presence_in_outline) - content basic
+      2. 角色正文出场完整性 (character_presence_in_chapters) - content basic
+      3. 章节长度稳定性 (chapter_length_stability) - content basic
+      
+      根因：checker.py的replaces清理扫描完整checklist而非--only-checks过滤后的子集，
+      导致这3项的旧key被删除但新key未被执行写入。
+      
+      影响：basic_layer total从17-18降至14-15，DSV1 samples得到更大分数膨胀（因DSV1在这些项
+      上fail率更高），导致claude-4.6 Δcontent从+2.76(rev007)翻转为-0.49。
+      
+      修复：bash scripts/batch_recheck.sh --revision 008 --pattern "eval_*" \
+            --only-checks "角色大纲规划完整性,角色正文出场完整性,章节长度稳定性" --add --parallel 4
+      222个文件全部成功恢复。恢复后Δcontent从+0.8恢复至+3.0（6/7模型正向）。
+      
+      修复后检查项统计:
+      - 角色大纲规划完整性: pass 103, fail 75, skip 44 (DSV1 fail 65.0% → DSV2 fail 23.6%, -41.4pp)
+      - 角色正文出场完整性: pass 111, fail 67, skip 44 (DSV1 fail 48.3% → DSV2 fail 33.3%, -15.0pp)
+      - 章节长度稳定性: pass 144, fail 16, skip 62
+      
+      变更7 - repeated_endings judge criteria 修正 (2026-02-18):
+      两处修正：
+      1. 分幕标记白名单：在 judge criteria 中明确 "第X幕·完" 等分幕过渡标记不算全书结局标记，
+         避免将正常分幕结构误判为反复结局。
+      2. 最后一章收尾格式：修正判断标准，全书结局标记仅出现在最后一个文件中即合格，
+         最后文件内出现多个收尾标记（如"全文完→后记→END"）属于正常收尾格式，不算反复结局。
+         原标准要求"只在最后文件出现1次"过于严格。
+      3. context_info增强：checker_execute.py中对文件按数字排序，
+         并在context_info中包含完整文件列表和"最后一个文件是X"的明确提示。
+      
+      影响：repeated_endings fail率从修正前的 DSV1=25.4%/DSV2=30.2% 降至 DSV1=9.0%/DSV2=10.4%。
+      配对 Δ 从 +4.8pp 降至 +1.5pp。整体 Δcontent 从 +3.0 降至 +0.9（5/7模型正向）。
     status: active
 
 # 评测批次与 revision 的映射关系
