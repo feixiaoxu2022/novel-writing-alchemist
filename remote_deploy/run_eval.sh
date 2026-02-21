@@ -72,11 +72,7 @@ elif [[ "$AGENT_MODEL" == ernie5-midtrain ]]; then
 elif [[ "$AGENT_MODEL" == glm-* ]]; then
     export OPENAI_API_KEY="fc0dc81d18124abea8da832af681401b.QsiurjETpUArzi4C"
     export OPENAI_BASE_URL="https://open.bigmodel.cn/api/paas/v4"
-    # 必须 unset https_proxy，否则 Python httpx 会忽略 no_proxy 强行走代理
-    unset https_proxy
-    unset HTTPS_PROXY
-    export no_proxy="open.bigmodel.cn"
-    export NO_PROXY="open.bigmodel.cn"
+    # GLM 需要走代理才能连通（跟 ernie 相反），保留 https_proxy 不动
 else
     export OPENAI_API_KEY="sk-3AYbtGCuXtiVmCDd8nfJoKwNibOagcDswEJiJLwJnOjwPVVF"
     export OPENAI_BASE_URL="http://yy.dbh.baidu-int.com/v1"
