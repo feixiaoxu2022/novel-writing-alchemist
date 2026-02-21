@@ -72,7 +72,9 @@ elif [[ "$AGENT_MODEL" == ernie5-midtrain ]]; then
 elif [[ "$AGENT_MODEL" == glm-* ]]; then
     export OPENAI_API_KEY="fc0dc81d18124abea8da832af681401b.QsiurjETpUArzi4C"
     export OPENAI_BASE_URL="https://open.bigmodel.cn/api/paas/v4"
-    # GLM 需要走代理才能连通（跟 ernie 相反），保留 https_proxy 不动
+    # GLM 需要走代理才能连通，显式设置确保子进程继承
+    export https_proxy="http://agent.baidu.com:8891"
+    export HTTPS_PROXY="http://agent.baidu.com:8891"
 else
     export OPENAI_API_KEY="sk-3AYbtGCuXtiVmCDd8nfJoKwNibOagcDswEJiJLwJnOjwPVVF"
     export OPENAI_BASE_URL="http://yy.dbh.baidu-int.com/v1"
