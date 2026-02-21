@@ -1,11 +1,12 @@
 #!/bin/bash
 # 使用新的checklist重新评测已有的agent执行结果
 #
-# 支持两种模式：
+# 支持三种模式：
 #   模式1（旧）：--samples 从样本文件中提取checklist
 #   模式2（新）：--revision 从 check_revisions/rev_NNN/ 读取checklist
+#   模式3（inline）：--inline check_list内嵌在样本JSON中，bench=result
 #
-# 推荐使用模式2，无需重新生成完整样本即可迭代评测方案。
+# novel_to_script场景推荐使用模式3（--inline）。
 
 set -e
 
@@ -20,6 +21,7 @@ DATA_ID=""           # 可选，仅处理指定样本
 RESUME=false         # 新增：resume模式，跳过已有结果的样本
 ONLY_CHECKS=""       # 增量模式：只执行指定检查项（支持语义ID如'逻辑硬伤'，也兼容数字序号如'33,35,36'）
 ADD_MODE=false       # 增量模式：在已有结果上增跑新检查项
+INLINE_MODE=false    # inline模式：check_list内嵌在样本JSON中，bench=result
 
 # 解析参数
 while [[ $# -gt 0 ]]; do
@@ -62,6 +64,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --add)
             ADD_MODE=true
+            shift
+            ;;
+        --inline)
+            INLINE_MODE=true
             shift
             ;;
         *)
@@ -133,13 +139,15 @@ fi
 
 # 确定工作模式
 MODE=""
-if [ -n "$REVISION" ]; then
+if [ "$INLINE_MODE" = true ]; then
+    MODE="inline"
+elif [ -n "$REVISION" ]; then
     MODE="revision"
 elif [ -n "$SAMPLES_FILE" ]; then
     MODE="samples"
 else
-    echo "错误: 必须指定 --revision 或 --samples 之一"
-    exit 1
+    # novel_to_script默认使用inline模式
+    MODE="inline"
 fi
 
 # Revision 模式：设置路径
@@ -222,6 +230,8 @@ if [ "$MODE" = "revision" ]; then
     echo "Revision: $REVISION"
     echo "Checklist: $CHECKLIST_FILE"
     echo "Judge Criteria: $CRITERIA_DIR"
+elif [ "$MODE" = "inline" ]; then
+    echo "模式: inline（check_list内嵌在样本JSON中）"
 else
     echo "样本文件: $SAMPLES_FILE"
 fi
@@ -288,11 +298,15 @@ for result_json in "$AGENT_RESULTS_DIR"/*.json; do
     echo "------------------------------------------"
     echo "处理样本: $basename"
 
-    # 构造bench.json
-    temp_bench="$env_dir_abs/temp_bench_recheck.json"
+    # 构造bench.json（或直接使用result_json）
+    temp_bench=""
 
-    if [ "$MODE" = "revision" ]; then
+    if [ "$MODE" = "inline" ]; then
+        # Inline 模式：bench=result（check_list内嵌在样本JSON中）
+        temp_bench="$result_json_abs"
+    elif [ "$MODE" = "revision" ]; then
         # Revision 模式：从 checklist.jsonl 提取，并部署 judge_criteria
+        temp_bench="$env_dir_abs/temp_bench_recheck.json"
         python3 "$SCRIPT_DIR/extract_bench_from_revision.py" \
             --checklist "$CHECKLIST_FILE" \
             --data-id "$basename" \
@@ -301,6 +315,7 @@ for result_json in "$AGENT_RESULTS_DIR"/*.json; do
             --env-dir "$env_dir_abs"
     else
         # Samples 模式（旧）：从样本文件提取
+        temp_bench="$env_dir_abs/temp_bench_recheck.json"
         python3 "$SCRIPT_DIR/extract_bench_from_sample.py" \
             --samples "$SAMPLES_FILE" \
             --data-id "$basename" \
@@ -353,8 +368,10 @@ for result_json in "$AGENT_RESULTS_DIR"/*.json; do
         FAILED_COUNT=$((FAILED_COUNT + 1))
     fi
 
-    # 清理临时文件并返回原目录
-    rm -f "$temp_bench"
+    # 清理临时文件并返回原目录（inline模式无需清理）
+    if [ "$MODE" != "inline" ]; then
+        rm -f "$temp_bench"
+    fi
     cd - > /dev/null
 done
 
