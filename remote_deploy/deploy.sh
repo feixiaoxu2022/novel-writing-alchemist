@@ -157,7 +157,7 @@ python3 -c "
 import requests
 try:
     r = requests.get('http://yy.dbh.baidu-int.com/v1/models', timeout=10,
-                     headers={'Authorization': 'Bearer sk-3AYbtGCuXtiVmCDd8nfJoKwNibOagcDswEJiJLwJnOjwPVVF'})
+                     headers={'Authorization': 'Bearer sk-9l6YZYau2dgCoziKh6bWNkF0p1ho5mSVHz39jZivtMTmb48i'})
     if r.status_code < 500:
         print('  ✓ LLM API (yy.dbh.baidu-int.com) 可达')
     else:

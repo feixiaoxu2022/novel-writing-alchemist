@@ -82,14 +82,14 @@ elif [[ "$AGENT_MODEL" == kimi-* ]]; then
     export https_proxy="http://agent.baidu.com:8891"
     export HTTPS_PROXY="http://agent.baidu.com:8891"
 else
-    export OPENAI_API_KEY="sk-3AYbtGCuXtiVmCDd8nfJoKwNibOagcDswEJiJLwJnOjwPVVF"
+    export OPENAI_API_KEY="sk-9l6YZYau2dgCoziKh6bWNkF0p1ho5mSVHz39jZivtMTmb48i"
     export OPENAI_BASE_URL="http://yy.dbh.baidu-int.com/v1"
 fi
 
 # User Simulator 配置
 SIMULATOR_MODEL="${USER_SIMULATOR_MODEL:-gemini-3-pro-preview}"
 export USER_SIMULATOR_MODEL="$SIMULATOR_MODEL"
-export USER_SIMULATOR_MODEL_API_KEY="sk-3AYbtGCuXtiVmCDd8nfJoKwNibOagcDswEJiJLwJnOjwPVVF"
+export USER_SIMULATOR_MODEL_API_KEY="sk-9l6YZYau2dgCoziKh6bWNkF0p1ho5mSVHz39jZivtMTmb48i"
 export USER_SIMULATOR_MODEL_BASE_URL="http://yy.dbh.baidu-int.com/v1"
 
 # Framework 路径
