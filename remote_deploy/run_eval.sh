@@ -75,6 +75,12 @@ elif [[ "$AGENT_MODEL" == glm-* ]]; then
     # GLM 需要走代理才能连通，显式设置确保子进程继承
     export https_proxy="http://agent.baidu.com:8891"
     export HTTPS_PROXY="http://agent.baidu.com:8891"
+elif [[ "$AGENT_MODEL" == kimi-* ]]; then
+    export OPENAI_API_KEY="sk-1SEAgqXCSMB6mplJMKWHvz58GIS00dkS8wUDPxYnvjJNMtSy"
+    export OPENAI_BASE_URL="https://api.moonshot.cn/v1"
+    # Kimi 同样需要 proxy 连通外网 HTTPS
+    export https_proxy="http://agent.baidu.com:8891"
+    export HTTPS_PROXY="http://agent.baidu.com:8891"
 else
     export OPENAI_API_KEY="sk-3AYbtGCuXtiVmCDd8nfJoKwNibOagcDswEJiJLwJnOjwPVVF"
     export OPENAI_BASE_URL="http://yy.dbh.baidu-int.com/v1"
