@@ -22,6 +22,7 @@ MODEL_MAP = {
     "openai_EB5-0209-A35B-midtrain-128k-chat": "EB5-midtrain",
     "qwen3-max-2026-01-23": "qwen3-max",
     "doubao-seed-2-0-pro-260215": "doubao-2.0-pro",
+    "glm-5": "glm-5",
 }
 
 def extract_model_name(dirname):

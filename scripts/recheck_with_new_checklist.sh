@@ -245,6 +245,8 @@ echo ""
 
 # 获取脚本所在目录（可能在前面已经设置过）
 SCRIPT_DIR="${SCRIPT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}"
+# SCENARIO_ROOT 在 revision 模式的 if 块内赋值，samples 模式下需要 fallback
+SCENARIO_ROOT="${SCENARIO_ROOT:-$SCRIPT_DIR/..}"
 
 # 遍历agent执行结果
 for result_json in "$AGENT_RESULTS_DIR"/*.json; do

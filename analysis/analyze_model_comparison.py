@@ -25,19 +25,19 @@ with open(DATA_FILE, "r", encoding="utf-8") as f:
 
 MODELS_ORDERED = [
     "claude-4.6", "gemini-3-pro", "claude-4.5",
-    "doubao-2.0-pro", "qwen3-max", "kimi-k2.5", "ernie-5.0",
+    "doubao-2.0-pro", "qwen3-max", "kimi-k2.5", "glm-5", "ernie-5.0",
     "EB5-midtrain"
 ]
 
 TIER_MAP = {
     "claude-4.6": "强", "gemini-3-pro": "强", "claude-4.5": "强",
-    "doubao-2.0-pro": "中", "qwen3-max": "中", "kimi-k2.5": "中", "ernie-5.0": "中",
+    "doubao-2.0-pro": "中", "qwen3-max": "中", "kimi-k2.5": "中", "glm-5": "中", "ernie-5.0": "中",
     "EB5-midtrain": "弱"
 }
 
 TIERS = {
     "强": ["claude-4.6", "gemini-3-pro", "claude-4.5"],
-    "中": ["doubao-2.0-pro", "qwen3-max", "kimi-k2.5", "ernie-5.0"],
+    "中": ["doubao-2.0-pro", "qwen3-max", "kimi-k2.5", "glm-5", "ernie-5.0"],
     "弱": ["EB5-midtrain"]
 }
 
