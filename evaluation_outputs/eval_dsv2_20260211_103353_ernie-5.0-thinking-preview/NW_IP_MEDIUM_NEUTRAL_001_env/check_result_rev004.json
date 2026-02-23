@@ -1,0 +1,96 @@
+{
+  "check_version": "novel_writing_v1.0",
+  "sample_id": "NW_IP_MEDIUM_NEUTRAL_001",
+  "check_timestamp": 1770963487,
+  "dimension_scores": {
+    "business_rule_compliance": {
+      "pass_rate": 1.0,
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "failed_items": []
+    },
+    "content_quality": {
+      "overall_score": 0.0,
+      "quality_level": "unqualified",
+      "basic_layer": {
+        "pass_rate": 0.0,
+        "total": 1,
+        "passed": 0,
+        "failed": 1,
+        "skipped": 2,
+        "failed_items": [
+          "检查项34"
+        ]
+      },
+      "advanced_layer": {
+        "pass_rate": 0.0,
+        "total": 0,
+        "passed": 0,
+        "failed": 0,
+        "skipped": 0,
+        "failed_items": []
+      }
+    }
+  },
+  "overall_result": {
+    "status": "Poor",
+    "total_score": 50.0,
+    "total_checks": 2,
+    "passed_checks": 1,
+    "failed_checks": 1,
+    "pass_rate": 0.5
+  },
+  "check_details": {
+    "检查项33": {
+      "check_result": "pass",
+      "reason": "workspace中所有文件均在白名单内",
+      "details": "白名单: ['creative_intent.json', 'characters.json', 'outline.json', 'writing_log.md', 'chapters/', '.hitl_context.json']",
+      "description": "workspace中不能有白名单之外的文件",
+      "check_type": "file_whitelist_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "workspace_file_compliance",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "检查项35": {
+      "check_result": "skip",
+      "reason": "前置条件失败（characters.json schema不合规）",
+      "details": "main_characters字段为空或不存在，实际顶层字段: characters, relationship_dynamics",
+      "dependency_failure": true,
+      "schema_violation": true,
+      "description": "设计的主要角色必须在大纲中规划",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_presence_in_outline",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "检查项36": {
+      "check_result": "skip",
+      "reason": "前置条件失败（characters.json schema不合规）",
+      "details": "main_characters字段为空或不存在，实际顶层字段: characters, relationship_dynamics",
+      "dependency_failure": true,
+      "schema_violation": true,
+      "description": "设计的主要角色必须在正文中出现",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_presence_in_chapters",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "检查项34": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了14个文件; LLM评估: 不合格：chapters后期出现明显非正文跑偏内容，且并非故事叙事。\n1) 非正文跑偏：存在多份明显的作者/交付/总结/检查类文档（如 FINAL_DELIVERY.md、writing_log.md、consistency_check.md、MASTER_SUMMARY.md、DELIVERY_CONFIRMATION.md），内容包含“项目统计/创作日志/一致性检查报告/交付确认/致谢/客户反馈”等，属于作者视角的创作说明、数据统计与交付材料，不是小说正文叙事。这类内容在后期文件中占比很高，符合标准中的“作者感想/创作数据统计/报告类”跑偏情形。\n2) 正文章节本身：已展示的 chapter_01~chapter_09.tex 均为场景化叙事（有地点人物情节推进），未见在章节末尾插入“感谢阅读/互动征集/番外预告/角色问答”等典型跑偏段落；chapter_09 结尾虽有“（全书完）”，但仍是正常收尾叙事的一部分。\n3) 章节长度萎缩：从可见的 chapter_01~chapter_09 片段看，章节体量相对稳定，未发现后期突然缩成几十到几百字的敷衍章节；不合格的主要原因不是萎缩，而是 chapters（交付中列入 chapters 目录）混入大量非正文材料导致后期内容跑偏。",
+      "description": "后期章节不能跑偏写非正文内容（作者感想、读者互动、番外预告等）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "late_stage_digression",
+      "quality_tier": "basic",
+      "is_critical": true
+    }
+  },
+  "completion_status": "completed"
+}
