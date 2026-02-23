@@ -3505,11 +3505,13 @@ def execute_checks(sample_result: Dict, check_list: List[Dict],
         )
 
     # 篇幅自适应：ULTRA_SHORT 样本跳过不适用的流程类检查项
+    # 注意：required_skill_reading 不在此列——ultra_short 环境中仍部署了部分 skill 文件
+    # （CHARACTER_NAMING_GUIDE、schemas、SHORT_STORY_GUIDE 等），agent 必须读取存在的 skill。
+    # 是否 skip 由 checklist 中的 skip_if_file_not_exists 控制（文件不存在→skip，存在→正常判定）。
     ULTRA_SHORT_SKIP_SUBCATEGORIES = {
         "sop_compliance",           # 超短篇不需要复杂SOP流程
         "log_file_usage",           # 超短篇不需要读写 writing_log
         "log_file_creation",        # 超短篇不需要创建 writing_log
-        "required_skill_reading",   # 超短篇不需要阅读大量技能资料
     }
     is_ultra_short = "ULTRA_SHORT" in sample_id
 

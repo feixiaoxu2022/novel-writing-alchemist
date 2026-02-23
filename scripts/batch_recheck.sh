@@ -165,8 +165,8 @@ elif [ -z "$SAMPLES_FILE" ]; then
     AUTO_SAMPLES=""
     for search_dir in "$SCENARIO_ROOT"/design_v*/samples "$SCENARIO_ROOT"/samples; do
         if [ -d "$search_dir" ]; then
-            # 找最新的 .jsonl 文件（排除 backup/readable）
-            candidate=$(find "$search_dir" -maxdepth 1 -name "*.jsonl" ! -name "*backup*" ! -name "*readable*" -type f 2>/dev/null | sort -r | head -1)
+            # 找最新的 .jsonl 文件（排除 backup/readable/ultra_short/rev旧版）
+            candidate=$(find "$search_dir" -maxdepth 1 -name "*.jsonl" ! -name "*backup*" ! -name "*readable*" ! -name "*ultra_short*" ! -name "*rev[0-9]*" -type f 2>/dev/null | sort -r | head -1)
             if [ -n "$candidate" ]; then
                 AUTO_SAMPLES="$candidate"
             fi

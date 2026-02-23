@@ -101,6 +101,10 @@ elif [[ "$AGENT_MODEL" == ernie5-midtrain ]]; then
     AGENT_MODEL="openai/EB5-0209-A35B-midtrain-128k-chat"
     echo "✓ 检测到ernie5-midtrain模型，使用内部API端点: $OPENAI_BASE_URL"
     echo "✓ 已将模型名映射为: $AGENT_MODEL"
+elif [[ "$AGENT_MODEL" == glm-* ]]; then
+    export OPENAI_API_KEY="fc0dc81d18124abea8da832af681401b.QsiurjETpUArzi4C"
+    export OPENAI_BASE_URL="https://open.bigmodel.cn/api/paas/v4"
+    echo "✓ 检测到GLM模型，使用智谱API端点: $OPENAI_BASE_URL"
 else
     # 其他模型使用内部API
     export OPENAI_API_KEY="sk-3AYbtGCuXtiVmCDd8nfJoKwNibOagcDswEJiJLwJnOjwPVVF"

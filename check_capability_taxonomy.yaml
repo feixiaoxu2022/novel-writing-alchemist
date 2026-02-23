@@ -205,6 +205,41 @@ capability_dimensions:
         description: "关键阶段完成后的HITL确认"
         check_types: ["tool_called_with_params"]
 
+  # 维度4.5：数据一致性
+  - dimension_id: "data_consistency"
+    dimension_name: "数据一致性"
+    core_capability: "跨文件数据一致性"
+    description: "验证不同输出文件之间的数据引用是否一致（如角色在大纲和正文中的出场完整性）"
+
+    subcategories:
+      - subcategory_id: "character_presence_in_outline"
+        subcategory_name: "角色大纲规划完整性"
+        cn_name: "设计的角色（主角+配角）在大纲中有没有规划"
+        sort_order: [3, 10]
+        description: "characters.json中设计的所有角色（main_characters + supporting_characters）必须在outline.json中规划出场。主角缺失=fail，配角缺失=pass但附带警告"
+        check_types: ["entity_attribute_equals"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        validation_method: "规则判断：检查characters.json中每个角色的name是否在outline.json的文本中出现（主角+配角分别统计）"
+        examples:
+          - "✅ 合格：characters.json定义了主角['林羽', '幽灵'] + 配角['苏小满']，outline.json中都提到了"
+          - "❌ 不合格（主角缺失）：characters.json定义了主角['林羽', '幽灵']，但outline.json中只提到了'林羽'"
+          - "⚠️ pass但警告（仅配角缺失）：主角全部出现，但配角'苏小满'未在大纲中规划"
+        note: "这是Plan阶段的完整性检查。主角缺失直接fail，配角缺失不影响pass/fail但会记录在details中"
+
+      - subcategory_id: "character_presence_in_chapters"
+        subcategory_name: "角色正文出场完整性"
+        cn_name: "设计的角色（主角+配角）在正文章节中出没出现"
+        sort_order: [3, 11]
+        description: "characters.json中设计的所有角色（main_characters + supporting_characters）必须在chapters/正文中实际出现。主角缺失=fail，配角缺失=pass但附带警告"
+        check_types: ["entity_attribute_equals"]
+        applicable_scenarios: ["original_creation", "adaptation"]
+        validation_method: "规则判断：检查characters.json中每个角色的name是否在chapters/*.md的文本中出现（主角+配角分别统计）"
+        examples:
+          - "✅ 合格：characters.json定义了主角['林羽', '幽灵'] + 配角['老陈']，chapters中都出现了"
+          - "❌ 不合格（主角缺失）：characters.json定义了主角['林羽', '幽灵']，但chapters中只出现了'林羽'"
+          - "⚠️ pass但警告（仅配角缺失）：主角全部出现，但配角'老陈'在正文中完全未出场"
+        note: "这是Execute阶段的完整性检查。与character_design_adherence区分：本项检查是否出现（存在性），后者检查表现质量（准确性）"
+
   # 维度5：内容创作质量
   - dimension_id: "content_quality"
     dimension_name: "内容创作质量"
@@ -278,36 +313,6 @@ capability_dimensions:
           - "❌ 不符合设计：characters.json定义'聪明绝顶' → chapters中表现愚钝、判断力差"
           - "❌ 不符合设计：characters.json定义动机是'复仇' → chapters中完全不提复仇，只关心赚钱"
         note: "与character_trait_consistency区分：本项检查plan vs execute（设计文档 vs 实际表现），character_trait_consistency检查execute内部（chapter_01 vs chapter_02）"
-
-      - subcategory_id: "character_presence_in_outline"
-        subcategory_name: "角色大纲规划完整性"
-        cn_name: "设计的角色（主角+配角）在大纲中有没有规划"
-        sort_order: [3, 10]
-        tier_level: "basic"
-        description: "characters.json中设计的所有角色（main_characters + supporting_characters）必须在outline.json中规划出场。主角缺失=fail，配角缺失=pass但附带警告"
-        check_types: ["entity_attribute_equals"]
-        applicable_scenarios: ["original_creation", "adaptation"]
-        validation_method: "规则判断：检查characters.json中每个角色的name是否在outline.json的文本中出现（主角+配角分别统计）"
-        examples:
-          - "✅ 合格：characters.json定义了主角['林羽', '幽灵'] + 配角['苏小满']，outline.json中都提到了"
-          - "❌ 不合格（主角缺失）：characters.json定义了主角['林羽', '幽灵']，但outline.json中只提到了'林羽'"
-          - "⚠️ pass但警告（仅配角缺失）：主角全部出现，但配角'苏小满'未在大纲中规划"
-        note: "这是Plan阶段的完整性检查。主角缺失直接fail，配角缺失不影响pass/fail但会记录在details中"
-
-      - subcategory_id: "character_presence_in_chapters"
-        subcategory_name: "角色正文出场完整性"
-        cn_name: "设计的角色（主角+配角）在正文章节中出没出现"
-        sort_order: [3, 11]
-        tier_level: "basic"
-        description: "characters.json中设计的所有角色（main_characters + supporting_characters）必须在chapters/正文中实际出现。主角缺失=fail，配角缺失=pass但附带警告"
-        check_types: ["entity_attribute_equals"]
-        applicable_scenarios: ["original_creation", "adaptation"]
-        validation_method: "规则判断：检查characters.json中每个角色的name是否在chapters/*.md的文本中出现（主角+配角分别统计）"
-        examples:
-          - "✅ 合格：characters.json定义了主角['林羽', '幽灵'] + 配角['老陈']，chapters中都出现了"
-          - "❌ 不合格（主角缺失）：characters.json定义了主角['林羽', '幽灵']，但chapters中只出现了'林羽'"
-          - "⚠️ pass但警告（仅配角缺失）：主角全部出现，但配角'老陈'在正文中完全未出场"
-        note: "这是Execute阶段的完整性检查。与character_design_adherence区分：本项检查是否出现（存在性），后者检查表现质量（准确性）"
 
       - subcategory_id: "character_trait_consistency"
         subcategory_name: "人物设定一致性"

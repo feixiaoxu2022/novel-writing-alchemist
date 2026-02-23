@@ -111,11 +111,12 @@ class LocalReader:
 class NWStatisticsAnalyzer:
     """NW (Novel Writing Alchemist) 评测统计分析器"""
 
-    # NW 的 4 个能力维度（固定顺序）
+    # NW 的 5 个能力维度（固定顺序）
     DIMENSIONS = [
         "format_compliance",
         "business_rule_compliance",
         "memory_management",
+        "data_consistency",
         "content_quality"
     ]
 
@@ -123,6 +124,7 @@ class NWStatisticsAnalyzer:
         "format_compliance": "格式规范遵循",
         "business_rule_compliance": "业务规则遵循",
         "memory_management": "记忆管理",
+        "data_consistency": "数据一致性",
         "content_quality": "内容创作质量"
     }
 
@@ -217,15 +219,34 @@ class NWStatisticsAnalyzer:
             status = sample_json.get("execution_status", "unknown")
             self.sample_statuses[sample_id] = status
 
-            if status != "success":
-                print(f"  跳过 {sample_id}: execution_status={status}")
-                continue
-
             # 读取 check_result*.json（revision模式）
             env_dir = f"{sample_id}_env"
             env_entries = self.reader.list_dir(f"{eval_path}/{env_dir}")
 
             check_filename = self._find_latest_check_result(env_entries)
+
+            if status != "success":
+                # error/unknown 样本：只有当 check_result 存在且 process_score > 0 时才纳入
+                # （说明跑了大部分流程，只是最后阶段崩了，结果仍有参考价值）
+                if check_filename is None:
+                    print(f"  跳过 {sample_id}: execution_status={status}, 无 check_result")
+                    continue
+                check_result_path = f"{eval_path}/{env_dir}/{check_filename}"
+                check_result = self.reader.read_json(check_result_path)
+                if check_result is None:
+                    print(f"  跳过 {sample_id}: execution_status={status}, 无法读取 check_result")
+                    continue
+                process_score = check_result.get("overall_result", {}).get("process_score", 0)
+                if not process_score or process_score <= 0:
+                    print(f"  跳过 {sample_id}: execution_status={status}, process_score={process_score}")
+                    continue
+                # 纳入统计
+                self.check_results[sample_id] = check_result
+                self.check_revision_used[sample_id] = check_filename
+                total_score = check_result.get("overall_result", {}).get("total_score", "N/A")
+                print(f"  + {sample_id}: total_score={total_score} ({check_filename}) [execution_status={status}, process_score={process_score}]")
+                continue
+
             if check_filename is None:
                 print(f"  警告: {sample_id} 没有 check_result (checker未运行?)")
                 continue

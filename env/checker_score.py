@@ -26,11 +26,12 @@ from pathlib import Path
 # 1. 常量定义
 # =========================================
 
-# 4个能力维度
+# 5个能力维度
 CAPABILITY_DIMENSIONS = [
     "format_compliance",           # 格式规范遵循
     "business_rule_compliance",    # 业务规则遵循
     "memory_management",           # 记忆管理
+    "data_consistency",            # 数据一致性
     "content_quality"              # 内容创作质量
 ]
 
@@ -324,7 +325,7 @@ def calculate_dimension_scores(check_details: Dict, capability_taxonomy: Dict = 
 
     # 流程分数（format + business + memory 等权平均）
     process_scores = []
-    for dim_id in ["format_compliance", "business_rule_compliance", "memory_management"]:
+    for dim_id in ["format_compliance", "business_rule_compliance", "memory_management", "data_consistency"]:
         dim = dimension_scores.get(dim_id, {})
         if dim.get("total", 0) > 0:
             process_scores.append(dim["pass_rate"] * 100)
