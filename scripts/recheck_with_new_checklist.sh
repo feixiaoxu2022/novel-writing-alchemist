@@ -323,6 +323,21 @@ for result_json in "$AGENT_RESULTS_DIR"/*.json; do
             --deploy-env-dir "$env_dir_abs"
     fi
 
+    # 补充部署 judge_criteria（samples 的 environment 字段可能不包含 judge_criteria）
+    # 自动查找最新的 rev_NNN/judge_criteria/ 目录
+    if [ ! -d "$env_dir_abs/judge_criteria" ]; then
+        AUTO_CRITERIA_DIR=""
+        for rev_dir in "$SCENARIO_ROOT"/check_definitions/check_revisions/rev_*; do
+            if [ -d "$rev_dir/judge_criteria" ]; then
+                AUTO_CRITERIA_DIR="$rev_dir/judge_criteria"
+            fi
+        done
+        if [ -n "$AUTO_CRITERIA_DIR" ]; then
+            cp -r "$AUTO_CRITERIA_DIR" "$env_dir_abs/judge_criteria"
+            echo "  ✓ 自动补充部署 judge_criteria (from $(basename $(dirname "$AUTO_CRITERIA_DIR")))"
+        fi
+    fi
+
     if [ $? -ne 0 ]; then
         echo "❌ $basename: 构造bench.json失败"
         FAILED_COUNT=$((FAILED_COUNT + 1))

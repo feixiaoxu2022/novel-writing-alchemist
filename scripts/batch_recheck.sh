@@ -148,19 +148,39 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+# ==================== 路径设置 ====================
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCENARIO_ROOT="$SCRIPT_DIR/.."
+
 # 确定 checklist 来源模式
-# 优先级：--samples > --revision > inline（默认）
+# 优先级：--samples > --revision > 自动查找samples > inline（最后手段）
 INLINE_FLAG=""
 SAMPLES_FLAG=""
 if [ -n "$SAMPLES_FILE" ]; then
     SAMPLES_FLAG="--samples $SAMPLES_FILE"
-elif [ -z "$REVISION" ]; then
-    INLINE_FLAG="--inline"
+elif [ -n "$REVISION" ]; then
+    : # revision 模式，不需要额外 flag
+elif [ -z "$SAMPLES_FILE" ]; then
+    # 自动查找 samples 目录下的 jsonl 文件（支持 design_v*/samples/ 和 samples/ 两种布局）
+    AUTO_SAMPLES=""
+    for search_dir in "$SCENARIO_ROOT"/design_v*/samples "$SCENARIO_ROOT"/samples; do
+        if [ -d "$search_dir" ]; then
+            # 找最新的 .jsonl 文件（排除 backup/readable）
+            candidate=$(find "$search_dir" -maxdepth 1 -name "*.jsonl" ! -name "*backup*" ! -name "*readable*" -type f 2>/dev/null | sort -r | head -1)
+            if [ -n "$candidate" ]; then
+                AUTO_SAMPLES="$candidate"
+            fi
+        fi
+    done
+    if [ -n "$AUTO_SAMPLES" ]; then
+        SAMPLES_FILE="$AUTO_SAMPLES"
+        SAMPLES_FLAG="--samples $SAMPLES_FILE"
+        echo "✓ 自动检测到 samples 文件: $SAMPLES_FILE"
+    else
+        echo "⚠️  未找到 samples 文件，回退到 inline 模式（judge_criteria 将不会被部署）"
+        INLINE_FLAG="--inline"
+    fi
 fi
-
-# ==================== 路径设置 ====================
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SCENARIO_ROOT="$SCRIPT_DIR/.."
 EVAL_OUTPUTS_DIR="$SCENARIO_ROOT/evaluation_outputs"
 RECHECK_SCRIPT="$SCRIPT_DIR/recheck_with_new_checklist.sh"
 
