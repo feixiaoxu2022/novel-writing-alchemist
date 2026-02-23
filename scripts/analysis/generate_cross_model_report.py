@@ -311,20 +311,17 @@ def generate_data_tables(model_data: Dict[str, List[Dict]], config: Dict) -> Lis
     # ── 1. 总分排名 ──
     _gen_overview_table(lines, models, model_data, model_stats)
 
-    # ── 2. 总分分布（稳定性） ──
-    _gen_stability_table(lines, models, model_data, model_stats)
-
-    # ── 3. 分数段分布 ──
+    # ── 2. 分数段分布 ──
     _gen_score_distribution(lines, models, model_data)
 
-    # ── 4. 内容质量三层通过率 ──
-    _gen_content_layer_table(lines, models, model_data)
+    # ── 3. 内容与流程的关系 ──
+    _gen_content_process_gap(lines, models, model_data)
 
-    # ── 5. 流程维度通过率 ──
+    # ── 4. 一级维度通过率 ──
     _gen_process_dimension_table(lines, models, model_data, config)
 
-    # ── 6. 逐检查项通过率（按维度/tier分组） ──
-    _gen_per_check_item_tables(lines, models, model_data, config)
+    # ── 5. 逐检查项通过率（按 check_name 展开） ──
+    _gen_per_check_name_tables(lines, models, model_data, config)
 
     return lines
 
@@ -380,7 +377,7 @@ def _gen_stability_table(lines, models, model_data, model_stats):
 
 def _gen_score_distribution(lines, models, model_data):
     """表3: 分数段分布"""
-    lines.append("## 3. 分数段分布")
+    lines.append("## 2. 分数段分布")
     lines.append("")
     lines.append("| 模型 | <30 | 30-50 | 50-70 | 70-85 | ≥85 | 优秀率(≥85) |")
     lines.append("|------|-----|-------|-------|-------|-----|------------|")
@@ -404,6 +401,50 @@ def _gen_score_distribution(lines, models, model_data):
         n = len(scores)
         exc_rate = f"{bins['gte85']/n*100:.0f}%" if n > 0 else "-"
         lines.append(f"| {model} | {bins['lt30']} | {bins['30_50']} | {bins['50_70']} | {bins['70_85']} | {bins['gte85']} | {exc_rate} |")
+
+    lines.append("")
+
+
+def _gen_content_process_gap(lines, models, model_data):
+    """表3: 内容与流程的关系"""
+    lines.append("## 3. 内容与流程的关系")
+    lines.append("")
+    lines.append("| 模型 | 内容分 | 流程分 | 差值(C-P) | 流程>70但内容<50 |")
+    lines.append("|------|--------|--------|-----------|-----------------|")
+
+    for model in models:
+        samples = model_data[model]
+        content_scores = []
+        process_scores = []
+        gap_count = 0  # 流程>70 但内容<50 的样本数
+
+        for s in samples:
+            cr = s["check_result"]
+            cs = cr["overall_result"].get("content_score")
+            ps = cr["overall_result"].get("process_score")
+            if cs is not None:
+                content_scores.append(cs)
+            if ps is not None:
+                process_scores.append(ps)
+            if cs is not None and ps is not None:
+                if ps > 70 and cs < 50:
+                    gap_count += 1
+
+        c_mean = safe_mean(content_scores)
+        p_mean = safe_mean(process_scores)
+        if c_mean is not None and p_mean is not None:
+            gap = c_mean - p_mean
+            gap_str = f"+{gap:.1f}" if gap > 0 else f"{gap:.1f}"
+            # Bold extreme gaps
+            if abs(gap) >= 15:
+                gap_str = f"**{gap_str}**"
+            # Bold gap_count if > 0
+            gap_count_str = f"**{gap_count}**" if gap_count > 0 else "0"
+        else:
+            gap_str = "-"
+            gap_count_str = "-"
+
+        lines.append(f"| {model} | {fmt(c_mean)} | {fmt(p_mean)} | {gap_str} | {gap_count_str} |")
 
     lines.append("")
 
@@ -451,24 +492,26 @@ def _gen_content_layer_table(lines, models, model_data):
 
 
 def _gen_process_dimension_table(lines, models, model_data, config):
-    """表5: 流程维度通过率"""
+    """表2: 所有一级维度通过率（流程维度 + 内容质量）"""
     proc_dims = config.get("process_dimensions", [])
     dim_names = config.get("dimension_names", {})
 
-    lines.append("## 5. 流程维度通过率")
+    # 所有维度 = 流程维度 + content_quality
+    all_dims = list(proc_dims) + ["content_quality"]
+
+    lines.append("## 4. 一级维度通过率")
     lines.append("")
 
     header = "| 模型 |"
-    for dim in proc_dims:
+    for dim in all_dims:
         header += f" {dim_names.get(dim, dim)} |"
-    header += " 流程均分 |"
+    header += " 总分 |"
     lines.append(header)
-    lines.append("|------|" + "------|" * len(proc_dims) + "------|")
+    lines.append("|------|" + "------|" * len(all_dims) + "------|")
 
     for model in models:
         samples = model_data[model]
-        dim_rates = {dim: [] for dim in proc_dims}
-        process_scores = []
+        dim_rates = {dim: [] for dim in all_dims}
 
         for s in samples:
             cr = s["check_result"]
@@ -480,15 +523,20 @@ def _gen_process_dimension_table(lines, models, model_data, config):
                 if total > 0:
                     dim_rates[dim].append(passed / total)
 
-            ps = cr["overall_result"].get("process_score")
-            if ps is not None:
-                process_scores.append(ps)
+            # 内容质量用 content_score
+            cs = cr["overall_result"].get("content_score")
+            if cs is not None:
+                dim_rates["content_quality"].append(cs / 100.0)
+
+        total_scores = [s["check_result"]["overall_result"]["total_score"]
+                        for s in samples
+                        if s["check_result"]["overall_result"].get("total_score") is not None]
 
         row = f"| {model} |"
-        for dim in proc_dims:
+        for dim in all_dims:
             r = safe_mean(dim_rates[dim])
             row += f" {fmt_pct(r*100 if r is not None else None)} |"
-        row += f" {fmt(safe_mean(process_scores))} |"
+        row += f" {fmt(safe_mean(total_scores))} |"
         lines.append(row)
 
     lines.append("")
@@ -503,8 +551,9 @@ def _gen_per_check_item_tables(lines, models, model_data, config):
     lines.append("## 6. 按子类聚合通过率")
     lines.append("")
 
-    # 按 (subcategory_id, model) 聚合 pass/fail/skip
-    # subcat_stats[subcat_id][model] = {pass: N, fail: N, skip: N}
+    # 按 (subcategory_id, quality_tier, model) 聚合 pass/fail/skip
+    # 使用 (sub_id, tier) 作为 key，避免同一 subcategory 下 Basic/Advanced 被合并
+    # subcat_stats[(sub_id, tier)][model] = {pass: N, fail: N, skip: N}
     subcat_stats = defaultdict(lambda: defaultdict(lambda: {"pass": 0, "fail": 0, "skip": 0}))
     # subcat 元信息（dimension_id, quality_tier, description）
     subcat_meta = {}
@@ -517,26 +566,28 @@ def _gen_per_check_item_tables(lines, models, model_data, config):
                 if not sub_id:
                     continue
 
+                tier = check_info.get("quality_tier", "")
+                agg_key = (sub_id, tier)
+
                 # 记录元信息（取第一次遇到的）
-                if sub_id not in subcat_meta:
-                    subcat_meta[sub_id] = {
+                if agg_key not in subcat_meta:
+                    subcat_meta[agg_key] = {
                         "dimension_id": check_info.get("dimension_id", ""),
-                        "quality_tier": check_info.get("quality_tier", ""),
+                        "quality_tier": tier,
                         "description": check_info.get("description", ""),
                     }
-                # 有些检查项在不同版本间 quality_tier 可能不同，优先保留非空值
-                if not subcat_meta[sub_id]["quality_tier"] and check_info.get("quality_tier"):
-                    subcat_meta[sub_id]["quality_tier"] = check_info["quality_tier"]
 
                 result = check_info.get("check_result", "")
                 if result in ("pass", "fail", "skip"):
-                    subcat_stats[sub_id][model][result] += 1
+                    subcat_stats[agg_key][model][result] += 1
 
     # 按维度分组
     dim_groups = defaultdict(list)  # dim_id -> [(sub_id, meta, {model: stats})]
-    for sub_id, meta in subcat_meta.items():
+    for agg_key, meta in subcat_meta.items():
         dim_id = meta.get("dimension_id", "unknown")
-        model_stats = {m: dict(subcat_stats[sub_id][m]) for m in models}
+        model_stats = {m: dict(subcat_stats[agg_key][m]) for m in models}
+        # 展示用的 sub_id 仍然是原始 subcategory_id（不含 tier 后缀）
+        sub_id = agg_key[0]
         dim_groups[dim_id].append((sub_id, meta, model_stats))
 
     dim_names = config.get("dimension_names", {})
@@ -613,6 +664,128 @@ def _append_subcat_table(lines, items, models, config):
             s = model_stats.get(model, {"pass": 0, "fail": 0, "skip": 0})
             p, f, sk = s["pass"], s["fail"], s["skip"]
             effective = p + f
+            if effective > 0:
+                rate = round(p / effective * 100)
+                cell = f"{rate}% ({p}/{effective})"
+                row += f" {cell} |"
+            elif sk > 0:
+                row += f" skip({sk}) |"
+            else:
+                row += " - |"
+        lines.append(row)
+
+
+def _gen_per_check_name_tables(lines, models, model_data, config):
+    """表7: 逐检查项（按 check_name 展开）通过率。
+
+    与 Section 6（按 subcategory 聚合）不同，本表按每个 check_name 单独展示，
+    使得同一 subcategory 下的多个检查项可以分别看到各模型的通过率。
+    """
+    lines.append("## 5. 逐检查项通过率（按 check_name 展开）")
+    lines.append("")
+
+    # 按 (check_name, model) 聚合 pass/fail/skip
+    check_stats = defaultdict(lambda: defaultdict(lambda: {"pass": 0, "fail": 0, "skip": 0}))
+    # check 元信息
+    check_meta = {}  # check_name -> {dimension_id, subcategory_id, quality_tier, description}
+
+    for model in models:
+        for s in model_data[model]:
+            details = s["check_result"].get("check_details", {})
+            for check_name, check_info in details.items():
+                # 记录元信息（取第一次遇到的）
+                if check_name not in check_meta:
+                    check_meta[check_name] = {
+                        "dimension_id": check_info.get("dimension_id", ""),
+                        "subcategory_id": check_info.get("subcategory_id", ""),
+                        "quality_tier": check_info.get("quality_tier", ""),
+                        "description": check_info.get("description", ""),
+                    }
+
+                result = check_info.get("check_result", "")
+                if result in ("pass", "fail", "skip"):
+                    check_stats[check_name][model][result] += 1
+
+    # 按维度分组
+    dim_groups = defaultdict(list)  # dim_id -> [(check_name, meta, {model: stats})]
+    for check_name, meta in check_meta.items():
+        dim_id = meta.get("dimension_id", "unknown")
+        model_stats_map = {m: dict(check_stats[check_name][m]) for m in models}
+        dim_groups[dim_id].append((check_name, meta, model_stats_map))
+
+    dim_names = config.get("dimension_names", {})
+
+    # 维度输出顺序
+    dim_order = list(config.get("process_dimensions", [])) + ["content_quality"]
+    for dim_id in dim_groups:
+        if dim_id not in dim_order:
+            dim_order.append(dim_id)
+
+    for dim_id in dim_order:
+        if dim_id not in dim_groups:
+            continue
+
+        dim_label = dim_names.get(dim_id, dim_id)
+        items = dim_groups[dim_id]
+
+        if dim_id == "content_quality":
+            _gen_content_quality_check_names(lines, items, models, dim_label)
+        else:
+            lines.append(f"### {dim_label}")
+            lines.append("")
+            _append_check_name_table(lines, items, models)
+            lines.append("")
+
+
+def _gen_content_quality_check_names(lines, items, models, dim_label):
+    """内容质量按 gate/basic/advanced 分组，逐 check_name 展开"""
+    tier_groups = {"gate": [], "basic": [], "advanced": [], "": []}
+
+    for check_name, meta, model_stats in items:
+        tier = meta.get("quality_tier") or ""
+        if tier not in tier_groups:
+            tier_groups.setdefault("", []).append((check_name, meta, model_stats))
+        else:
+            tier_groups[tier].append((check_name, meta, model_stats))
+
+    lines.append(f"### {dim_label}")
+    lines.append("")
+
+    for tier, label in [("gate", "Gate层"), ("basic", "Basic层"), ("advanced", "Advanced层"), ("", "其他")]:
+        tier_items = tier_groups.get(tier, [])
+        if not tier_items:
+            continue
+        lines.append(f"#### {label}")
+        lines.append("")
+        _append_check_name_table(lines, tier_items, models)
+        lines.append("")
+
+
+def _append_check_name_table(lines, items, models):
+    """输出按 check_name 展开的通过率表格"""
+    # 按 check_name 排序
+    items.sort(key=lambda x: x[0])
+
+    header = "| 检查项 | 子类 | 描述 |"
+    for m in models:
+        header += f" {m} |"
+    lines.append(header)
+    sep = "|--------|------|------|"
+    for _ in models:
+        sep += "------|"
+    lines.append(sep)
+
+    for check_name, meta, model_stats in items:
+        sub_id = meta.get("subcategory_id", "")
+        desc = meta.get("description", "")
+        if len(desc) > 30:
+            desc = desc[:28] + ".."
+
+        row = f"| {check_name} | {sub_id} | {desc} |"
+        for model in models:
+            s = model_stats.get(model, {"pass": 0, "fail": 0, "skip": 0})
+            p, f_cnt, sk = s["pass"], s["fail"], s["skip"]
+            effective = p + f_cnt
             if effective > 0:
                 rate = round(p / effective * 100)
                 cell = f"{rate}% ({p}/{effective})"
