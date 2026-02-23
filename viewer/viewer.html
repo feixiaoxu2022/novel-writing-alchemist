@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>小说创作Agent评测结果查看器</title>
+    <title>三场景评测结果统一查看器</title>
     <style>
         * {
             margin: 0;
@@ -818,20 +818,19 @@
 
     <!-- Header -->
     <div class="header">
-        <h1><svg width="24" height="24" style="vertical-align: middle; margin-right: 8px;"><use href="#icon-book"/></svg>小说创作Agent评测结果查看器</h1>
+        <h1><svg width="24" height="24" style="vertical-align: middle; margin-right: 8px;"><use href="#icon-book"/></svg>三场景评测结果统一查看器</h1>
         <div class="header-controls">
-            <button id="showSpecsBtn" class="btn-specs">
-                <svg width="16" height="16" style="vertical-align: middle; margin-right: 4px;"><use href="#icon-file-text"/></svg>
-                能力体系 &amp; Criteria
-            </button>
-            <select id="batchSelector">
-                <option value="">请选择批次...</option>
+            <select id="scenarioSelector">
+                <option value="">请选择场景...</option>
+            </select>
+            <select id="batchSelector" disabled>
+                <option value="">请先选择场景...</option>
             </select>
             <span class="batch-stats" id="batchStats"></span>
         </div>
     </div>
 
-    <!-- Specs Modal -->
+    <!-- Specs Modal (placeholder, TODO: per-scenario) -->
     <div id="specsModal" class="modal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
@@ -839,13 +838,8 @@
                 <button class="modal-close" id="closeSpecsModal">&times;</button>
             </div>
             <div class="modal-body">
-                <div class="specs-tabs">
-                    <div class="specs-tab active" data-spec="capability">能力体系</div>
-                    <div class="specs-tab" data-spec="criteria_basic">内容质量Criteria</div>
-                    <div class="specs-tab" data-spec="criteria_emotional">情感交付Criteria</div>
-                </div>
                 <div class="specs-content" id="specsContent">
-                    <pre>加载中...</pre>
+                    <pre>暂未适配多场景</pre>
                 </div>
             </div>
         </div>
@@ -897,11 +891,13 @@
     <script>
         // Global State
         const state = {
+            currentScenario: null,
             currentBatch: null,
             currentSample: null,
             currentModel: null,
             currentTab: 'task',
             currentFile: null,
+            scenarios: [],
             batches: [],
             samples: [],
             sampleDetail: null
@@ -912,10 +908,66 @@
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
-            loadBatches();
+            loadScenarios();
             setupEventListeners();
             initGlobalResizeHandle();
         });
+
+        // Load Scenarios
+        async function loadScenarios() {
+            try {
+                const response = await fetch(`${API_BASE}/api/v3/scenarios`);
+                const data = await response.json();
+                state.scenarios = data.scenarios;
+                renderScenarioSelector();
+            } catch (error) {
+                console.error('Failed to load scenarios:', error);
+            }
+        }
+
+        // Render Scenario Selector
+        function renderScenarioSelector() {
+            const selector = document.getElementById('scenarioSelector');
+            selector.innerHTML = '<option value="">请选择场景...</option>';
+
+            state.scenarios.forEach(scenario => {
+                const option = document.createElement('option');
+                option.value = scenario.id;
+                const availTag = scenario.available ? '' : ' [不可用]';
+                option.textContent = `${scenario.name}${availTag}`;
+                option.disabled = !scenario.available;
+                selector.appendChild(option);
+            });
+        }
+
+        // Select Scenario
+        async function selectScenario(scenarioId) {
+            state.currentScenario = scenarioId;
+            state.currentBatch = null;
+            state.currentSample = null;
+            state.currentModel = null;
+            state.sampleDetail = null;
+            state.samples = [];
+            state.batches = [];
+
+            // Reset UI
+            document.getElementById('batchSelector').disabled = false;
+            document.getElementById('batchStats').textContent = '';
+            document.getElementById('sampleList').innerHTML = '<li class="empty-state"><p>请选择批次</p></li>';
+            document.getElementById('contentArea').innerHTML = `
+                <div class="empty-state">
+                    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="100" cy="100" r="80" fill="none" stroke="currentColor" stroke-width="4"/>
+                        <path d="M60 100 L90 130 L140 70" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                    </svg>
+                    <h3>请从左侧选择样本</h3>
+                    <p>选择一个样本以查看多个模型的评测结果对比</p>
+                </div>
+            `;
+
+            // Load batches for this scenario
+            await loadBatches();
+        }
 
         // 初始化全局分隔条（样本列表 <-> 主内容区域）
         function initGlobalResizeHandle() {
@@ -959,8 +1011,9 @@
 
         // Load Batches
         async function loadBatches() {
+            if (!state.currentScenario) return;
             try {
-                const response = await fetch(`${API_BASE}/api/v2/batches`);
+                const response = await fetch(`${API_BASE}/api/v3/${state.currentScenario}/batches`);
                 const data = await response.json();
                 state.batches = data.batches;
                 renderBatchSelector();
@@ -988,7 +1041,7 @@
             showLoading('sampleList');
 
             try {
-                const response = await fetch(`${API_BASE}/api/v2/batch/${batchName}/samples`);
+                const response = await fetch(`${API_BASE}/api/v3/${state.currentScenario}/batch/${batchName}/samples`);
                 const data = await response.json();
                 state.samples = data.samples;
 
@@ -1048,7 +1101,7 @@
             showLoading('contentArea');
 
             try {
-                const response = await fetch(`${API_BASE}/api/v2/sample/${dataId}?batch_name=${state.currentBatch}`);
+                const response = await fetch(`${API_BASE}/api/v3/${state.currentScenario}/sample/${dataId}?batch_name=${state.currentBatch}`);
                 const data = await response.json();
                 state.sampleDetail = data;
 
@@ -1606,6 +1659,8 @@
                 'format_compliance': '格式规范',
                 'business_rule_compliance': '业务规则遵循',
                 'memory_management': '记忆管理',
+                'data_consistency': '数据一致性',
+                'interaction_completeness': '交互完整性',
                 'content_quality': '内容质量'
             };
             return names[dimId] || dimId;
@@ -2164,7 +2219,7 @@
 
                 // 保存到第一个模型（作为样本级的跨模型标注）
                 try {
-                    const response = await fetch(`${API_BASE}/api/v2/annotation/sample`, {
+                    const response = await fetch(`${API_BASE}/api/v3/${state.currentScenario}/annotation/sample`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -2192,7 +2247,7 @@
         // Save Sample Annotation
         async function saveSampleAnnotation(annotation) {
             try {
-                const response = await fetch(`${API_BASE}/api/v2/annotation/sample`, {
+                const response = await fetch(`${API_BASE}/api/v3/${state.currentScenario}/annotation/sample`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -2220,7 +2275,7 @@
         // Save File Annotation
         async function saveFileAnnotation(filePath, annotation) {
             try {
-                const response = await fetch(`${API_BASE}/api/v2/annotation/file`, {
+                const response = await fetch(`${API_BASE}/api/v3/${state.currentScenario}/annotation/file`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -2265,6 +2320,14 @@
 
         // Event Listeners
         function setupEventListeners() {
+            // Scenario selector
+            document.getElementById('scenarioSelector').addEventListener('change', (e) => {
+                const scenarioId = e.target.value;
+                if (scenarioId) {
+                    selectScenario(scenarioId);
+                }
+            });
+
             // Batch selector
             document.getElementById('batchSelector').addEventListener('change', (e) => {
                 const batchName = e.target.value;
@@ -2284,79 +2347,18 @@
                     }
                 });
             });
-
-            // Specs Modal
-            setupSpecsModal();
         }
 
-        // ==================== 规范文档模态框 ====================
+        // ==================== 规范文档模态框（暂未适配多场景）====================
         
         function setupSpecsModal() {
-            const modal = document.getElementById('specsModal');
-            const showBtn = document.getElementById('showSpecsBtn');
-            const closeBtn = document.getElementById('closeSpecsModal');
-            const specsTabs = document.querySelectorAll('.specs-tab');
-            const specsContent = document.getElementById('specsContent');
-
-            // 显示模态框
-            showBtn.addEventListener('click', () => {
-                modal.style.display = 'flex';
-                // 默认加载第一个Tab的内容
-                loadSpecContent('capability');
-            });
-
-            // 关闭模态框 - 点击关闭按钮
-            closeBtn.addEventListener('click', () => {
-                modal.style.display = 'none';
-            });
-
-            // 关闭模态框 - 点击遮罩层
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.style.display = 'none';
-                }
-            });
-
-            // 关闭模态框 - 按ESC键
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && modal.style.display === 'flex') {
-                    modal.style.display = 'none';
-                }
-            });
-
-            // Tab切换
-            specsTabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    // 更新Tab激活状态
-                    specsTabs.forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                    // 加载对应内容
-                    const specName = tab.dataset.spec;
-                    loadSpecContent(specName);
-                });
-            });
+            // Specs modal is currently disabled for multi-scenario viewer
         }
 
-        // 加载规范文档内容
+        // 加载规范文档内容（暂未适配多场景）
         async function loadSpecContent(specName) {
             const specsContent = document.getElementById('specsContent');
-            specsContent.innerHTML = '<pre>加载中...</pre>';
-
-            try {
-                const response = await fetch(`${API_BASE}/api/v2/specs/${specName}`);
-                const data = await response.json();
-
-                if (data.error) {
-                    specsContent.innerHTML = `<pre style="color: #c62828;">错误: ${data.error}</pre>`;
-                    return;
-                }
-
-                // 显示YAML内容（不做高亮，避免问题）
-                specsContent.innerHTML = `<pre style="white-space: pre-wrap; font-size: 13px;">${escapeHtml(data.content)}</pre>`;
-            } catch (error) {
-                console.error('Failed to load spec:', error);
-                specsContent.innerHTML = `<pre style="color: #c62828;">加载失败: ${error.message}</pre>`;
-            }
+            specsContent.innerHTML = '<pre>暂未适配多场景</pre>';
         }
 
         // YAML语法高亮
