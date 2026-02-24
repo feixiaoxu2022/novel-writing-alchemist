@@ -1,9 +1,9 @@
 # Novel Writing Alchemist 评测统计报告
 
 - **模型**: `claude-opus-4-6`
-- **生成时间**: 2026-02-23T12:03:44.809610
-- **评测目录**: `eval_dsv2_20260211_204123_claude-opus-4-6`
-- **Revision**: `rev008` (实际: check_result_rev008.json)
+- **生成时间**: 2026-02-24T00:33:27.815467
+- **评测目录**: `evaluation_outputs/eval_dsv2_20260211_204123_claude-opus-4-6`
+- **Revision**: `latest` (实际: check_result_rev008.json)
 
 ## 1. 总览
 

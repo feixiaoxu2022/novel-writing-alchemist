@@ -234,22 +234,26 @@ def calculate_content_quality_score(basic_checks: List[Dict],
 
 def determine_status(total_score: float) -> str:
     """
-    根据总分判定status
+    根据总分判定status（与横评报告分数段对齐）
+
+    5档: Excellent(≥85) / Good(70-85) / Fair(50-70) / Poor(30-50) / Failed(<30)
 
     Args:
         total_score: 总分(0-100)
 
     Returns:
-        Excellent / Good / Fair / Poor
+        Excellent / Good / Fair / Poor / Failed
     """
-    if total_score >= 90:
+    if total_score >= 85:
         return "Excellent"
     elif total_score >= 70:
         return "Good"
     elif total_score >= 50:
         return "Fair"
-    else:
+    elif total_score >= 30:
         return "Poor"
+    else:
+        return "Failed"
 
 
 # =========================================

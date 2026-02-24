@@ -1227,6 +1227,10 @@
                     <path d="M24 14V28M24 34V34.01" stroke="#ff9800" stroke-width="3" stroke-linecap="round"/>
                 </svg>`,
                 statusPoor: `<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="24" cy="24" r="22" fill="#fff3e0" stroke="#e65100" stroke-width="2"/>
+                    <path d="M24 14V28M24 34V34.01" stroke="#e65100" stroke-width="3" stroke-linecap="round"/>
+                </svg>`,
+                statusFailed: `<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="24" cy="24" r="22" fill="#ffebee" stroke="#f44336" stroke-width="2"/>
                     <path d="M16 16L32 32M32 16L16 32" stroke="#f44336" stroke-width="3" stroke-linecap="round"/>
                 </svg>`
@@ -1236,7 +1240,8 @@
                 if (status === 'Excellent') return icons.statusExcellent;
                 if (status === 'Good') return icons.statusGood;
                 if (status === 'Fair') return icons.statusFair;
-                return icons.statusPoor;
+                if (status === 'Poor') return icons.statusPoor;
+                return icons.statusFailed;
             };
 
             const getCheckIcon = (result) => {
@@ -1271,7 +1276,7 @@
 
             // Overall Result Section
             const overall = checkResult.overall_result;
-            const statusClass = overall.status === 'Excellent' ? 'excellent' : (overall.status === 'Good' ? 'good' : (overall.status === 'Fair' ? 'fair' : 'poor'));
+            const statusClass = overall.status === 'Excellent' ? 'excellent' : (overall.status === 'Good' ? 'good' : (overall.status === 'Fair' ? 'fair' : (overall.status === 'Poor' ? 'poor' : 'failed')));
             const statusIcon = getStatusIcon(overall.status);
 
             // Dimension Scores Section
@@ -1392,7 +1397,8 @@
                     .overall-info .status-badge.excellent { background: #e0f2f1; color: #00695c; }
                     .overall-info .status-badge.good { background: #e8f5e9; color: #2e7d32; }
                     .overall-info .status-badge.fair { background: #fff3e0; color: #ef6c00; }
-                    .overall-info .status-badge.poor { background: #ffebee; color: #c62828; }
+                    .overall-info .status-badge.poor { background: #fbe9e7; color: #bf360c; }
+                    .overall-info .status-badge.failed { background: #ffebee; color: #c62828; }
                     .overall-stats {
                         display: flex;
                         gap: 20px;
