@@ -1212,6 +1212,12 @@
                     <path d="M7 1L13 12H1L7 1Z" stroke="#ef6c00" stroke-width="1.5" stroke-linejoin="round"/>
                     <path d="M7 5V8M7 10V10.01" stroke="#ef6c00" stroke-width="1.5" stroke-linecap="round"/>
                 </svg>`,
+                statusExcellent: `<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="24" cy="24" r="22" fill="#e0f2f1" stroke="#00897b" stroke-width="2"/>
+                    <path d="M14 24L21 31L34 17" stroke="#00897b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="37" cy="13" r="5" fill="#ffd54f" stroke="#00897b" stroke-width="1.5"/>
+                    <path d="M37 10L37.9 12.8H40.8L38.5 14.5L39.3 17.3L37 15.6L34.7 17.3L35.5 14.5L33.2 12.8H36.1Z" fill="#00897b"/>
+                </svg>`,
                 statusGood: `<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="24" cy="24" r="22" fill="#e8f5e9" stroke="#4caf50" stroke-width="2"/>
                     <path d="M14 24L21 31L34 17" stroke="#4caf50" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1227,6 +1233,7 @@
             };
 
             const getStatusIcon = (status) => {
+                if (status === 'Excellent') return icons.statusExcellent;
                 if (status === 'Good') return icons.statusGood;
                 if (status === 'Fair') return icons.statusFair;
                 return icons.statusPoor;
@@ -1264,7 +1271,7 @@
 
             // Overall Result Section
             const overall = checkResult.overall_result;
-            const statusClass = overall.status === 'Good' ? 'good' : (overall.status === 'Fair' ? 'fair' : 'poor');
+            const statusClass = overall.status === 'Excellent' ? 'excellent' : (overall.status === 'Good' ? 'good' : (overall.status === 'Fair' ? 'fair' : 'poor'));
             const statusIcon = getStatusIcon(overall.status);
 
             // Dimension Scores Section
@@ -1382,6 +1389,7 @@
                         font-weight: 600;
                         font-size: 14px;
                     }
+                    .overall-info .status-badge.excellent { background: #e0f2f1; color: #00695c; }
                     .overall-info .status-badge.good { background: #e8f5e9; color: #2e7d32; }
                     .overall-info .status-badge.fair { background: #fff3e0; color: #ef6c00; }
                     .overall-info .status-badge.poor { background: #ffebee; color: #c62828; }
