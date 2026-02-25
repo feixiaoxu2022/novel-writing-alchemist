@@ -153,7 +153,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCENARIO_ROOT="$SCRIPT_DIR/.."
 
 # 确定 checklist 来源模式
-# 优先级：--samples > --revision > 自动查找samples > inline（最后手段）
+# 优先级：--samples > --revision > 自动检测最新revision > 自动查找samples > inline（最后手段）
 INLINE_FLAG=""
 SAMPLES_FLAG=""
 if [ -n "$SAMPLES_FILE" ]; then
@@ -161,24 +161,43 @@ if [ -n "$SAMPLES_FILE" ]; then
 elif [ -n "$REVISION" ]; then
     : # revision 模式，不需要额外 flag
 elif [ -z "$SAMPLES_FILE" ]; then
-    # 自动查找 samples 目录下的 jsonl 文件（支持 design_v*/samples/ 和 samples/ 两种布局）
-    AUTO_SAMPLES=""
-    for search_dir in "$SCENARIO_ROOT"/design_v*/samples "$SCENARIO_ROOT"/samples; do
-        if [ -d "$search_dir" ]; then
-            # 找最新的 .jsonl 文件（排除 backup/readable/ultra_short/rev旧版）
-            candidate=$(find "$search_dir" -maxdepth 1 -name "*.jsonl" ! -name "*backup*" ! -name "*readable*" ! -name "*ultra_short*" ! -name "*rev[0-9]*" -type f 2>/dev/null | sort -r | head -1)
-            if [ -n "$candidate" ]; then
-                AUTO_SAMPLES="$candidate"
+    # 自动检测最新 revision 目录
+    REVISIONS_BASE="$SCENARIO_ROOT/check_definitions/check_revisions"
+    if [ -d "$REVISIONS_BASE" ]; then
+        LATEST_REV_DIR=$(find "$REVISIONS_BASE" -maxdepth 1 -type d -name "rev_*" 2>/dev/null | sort | tail -1)
+        if [ -n "$LATEST_REV_DIR" ] && [ -f "$LATEST_REV_DIR/checklist.jsonl" ]; then
+            # 提取版本号（rev_008 -> 008）
+            REVISION=$(basename "$LATEST_REV_DIR" | sed 's/rev_//')
+            echo "✓ 自动检测到最新 revision: rev_${REVISION}"
+            # 自动设置 output-suffix（如果用户没有手动指定）
+            if [ -z "$OUTPUT_SUFFIX" ]; then
+                OUTPUT_SUFFIX="_rev${REVISION}"
+                echo "✓ 自动设置 output-suffix: ${OUTPUT_SUFFIX}"
             fi
         fi
-    done
-    if [ -n "$AUTO_SAMPLES" ]; then
-        SAMPLES_FILE="$AUTO_SAMPLES"
-        SAMPLES_FLAG="--samples $SAMPLES_FILE"
-        echo "✓ 自动检测到 samples 文件: $SAMPLES_FILE"
-    else
-        echo "⚠️  未找到 samples 文件，回退到 inline 模式（judge_criteria 将不会被部署）"
-        INLINE_FLAG="--inline"
+    fi
+
+    # 如果没有 revision 目录，fallback 到 samples 模式
+    if [ -z "$REVISION" ]; then
+        # 自动查找 samples 目录下的 jsonl 文件（支持 design_v*/samples/ 和 samples/ 两种布局）
+        AUTO_SAMPLES=""
+        for search_dir in "$SCENARIO_ROOT"/design_v*/samples "$SCENARIO_ROOT"/samples; do
+            if [ -d "$search_dir" ]; then
+                # 找最新的 .jsonl 文件（排除 backup/readable/ultra_short/rev旧版）
+                candidate=$(find "$search_dir" -maxdepth 1 -name "*.jsonl" ! -name "*backup*" ! -name "*readable*" ! -name "*ultra_short*" ! -name "*rev[0-9]*" -type f 2>/dev/null | sort -r | head -1)
+                if [ -n "$candidate" ]; then
+                    AUTO_SAMPLES="$candidate"
+                fi
+            fi
+        done
+        if [ -n "$AUTO_SAMPLES" ]; then
+            SAMPLES_FILE="$AUTO_SAMPLES"
+            SAMPLES_FLAG="--samples $SAMPLES_FILE"
+            echo "✓ 自动检测到 samples 文件: $SAMPLES_FILE"
+        else
+            echo "⚠️  未找到 samples 文件，回退到 inline 模式（judge_criteria 将不会被部署）"
+            INLINE_FLAG="--inline"
+        fi
     fi
 fi
 EVAL_OUTPUTS_DIR="$SCENARIO_ROOT/evaluation_outputs"
