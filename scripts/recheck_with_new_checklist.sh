@@ -201,7 +201,7 @@ elif [[ "$MODEL" == glm-* ]]; then
     echo "✓ 检测到GLM模型，使用智谱API端点: $API_BASE"
 else
     # 其他模型使用内部API
-    API_KEY="sk-3AYbtGCuXtiVmCDd8nfJoKwNibOagcDswEJiJLwJnOjwPVVF"
+    API_KEY="sk-9l6YZYau2dgCoziKh6bWNkF0p1ho5mSVHz39jZivtMTmb48i"
     API_BASE="http://yy.dbh.baidu-int.com/v1"
     echo "✓ 使用内部API端点: $API_BASE"
 fi
