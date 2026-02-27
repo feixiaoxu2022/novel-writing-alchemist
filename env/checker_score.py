@@ -302,7 +302,8 @@ def calculate_dimension_scores(check_details: Dict, capability_taxonomy: Dict = 
             # 如果是content_quality，进一步分层
             if dimension_id == "content_quality":
                 quality_tier = result.get("quality_tier", "")
-                if quality_tier == "basic":
+                if quality_tier in ("basic", "gate"):
+                    # gate检查项也放入basic列表，后续由separate_gate_checks分离
                     content_quality_basic.append(check_data)
                 elif quality_tier == "advanced":
                     content_quality_advanced.append(check_data)

@@ -339,6 +339,21 @@ for result_json in "$AGENT_RESULTS_DIR"/*.json; do
         echo "  ✓ 部署 judge_criteria (from $(basename $(dirname "$AUTO_CRITERIA_DIR")))"
     fi
 
+    # 强制部署 data_pools（从对应 design 版本的 data_pools 覆盖，确保 dsv1/dsv2 内容正确）
+    # 根据 eval 目录名判断 design 版本：eval_dsv1_* → design_v1, eval_dsv2_* → design_v2
+    AGENT_DIR_NAME=$(basename "$AGENT_RESULTS_DIR")
+    DATA_POOLS_SRC=""
+    if [[ "$AGENT_DIR_NAME" == eval_dsv1_* ]] && [ -d "$SCENARIO_ROOT/design_v1/data_pools" ]; then
+        DATA_POOLS_SRC="$SCENARIO_ROOT/design_v1/data_pools"
+    elif [[ "$AGENT_DIR_NAME" == eval_dsv2_* ]] && [ -d "$SCENARIO_ROOT/design_v2/data_pools" ]; then
+        DATA_POOLS_SRC="$SCENARIO_ROOT/design_v2/data_pools"
+    fi
+    if [ -n "$DATA_POOLS_SRC" ]; then
+        rm -rf "$env_dir_abs/data_pools"
+        cp -r "$DATA_POOLS_SRC" "$env_dir_abs/data_pools"
+        echo "  ✓ 部署 data_pools (from $(basename $(dirname "$DATA_POOLS_SRC")))"
+    fi
+
     if [ $? -ne 0 ]; then
         echo "❌ $basename: 构造bench.json失败"
         FAILED_COUNT=$((FAILED_COUNT + 1))
