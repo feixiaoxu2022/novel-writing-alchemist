@@ -1,0 +1,824 @@
+{
+  "check_version": "novel_writing_v1.0",
+  "sample_id": "NW_ULTRA_SHORT_ANGSTY_001",
+  "check_timestamp": 1772181423,
+  "dimension_scores": {
+    "format_compliance": {
+      "pass_rate": 0.5,
+      "total": 4,
+      "passed": 2,
+      "failed": 2,
+      "skipped": 0,
+      "failed_items": [
+        "characters格式",
+        "outline格式"
+      ]
+    },
+    "business_rule_compliance": {
+      "pass_rate": 0.933,
+      "total": 15,
+      "passed": 14,
+      "failed": 1,
+      "skipped": 6,
+      "failed_items": [
+        "读取短篇skill"
+      ]
+    },
+    "content_quality": {
+      "overall_score": 56.56,
+      "quality_level": "unqualified",
+      "gate_layer": {
+        "pass_rate": 1.0,
+        "total": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 1,
+        "failed_items": []
+      },
+      "basic_layer": {
+        "pass_rate": 0.579,
+        "total": 19,
+        "passed": 11,
+        "failed": 8,
+        "skipped": 0,
+        "failed_items": [
+          "人物设定一致性",
+          "人物设计遵循度",
+          "结构性逻辑硬伤",
+          "叙事调性匹配",
+          "大纲执行忠实度",
+          "智斗逻辑合理性",
+          "语义重复检测",
+          "角色动机设计深度"
+        ]
+      },
+      "advanced_layer": {
+        "pass_rate": 0.545,
+        "total": 11,
+        "passed": 6,
+        "failed": 5,
+        "skipped": 1,
+        "failed_items": [
+          "可修复逻辑瑕疵",
+          "角色语言辨识度",
+          "叙事密度",
+          "题材契合度",
+          "角色成长弧线设计"
+        ]
+      },
+      "gate_triggered": false,
+      "score_breakdown": {
+        "base": 60.0,
+        "gate_penalty": -0.0,
+        "basic_deduction": -25.26,
+        "advanced_bonus": 21.82
+      }
+    }
+  },
+  "overall_result": {
+    "status": "Fair",
+    "total_score": 61.09,
+    "content_score": 56.56,
+    "process_score": 71.65,
+    "content_weight": 0.7,
+    "process_weight": 0.3,
+    "gate_triggered": false,
+    "total_checks": 52,
+    "passed_checks": 36,
+    "failed_checks": 16,
+    "pass_rate": 0.692
+  },
+  "check_details": {
+    "读取配方知识库": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/RECIPE_KNOWLEDGE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取RECIPE_KNOWLEDGE.md（配方知识库）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节产出存在性": {
+      "check_result": "pass",
+      "reason": "章节文件存在",
+      "details": "✓ 章节写作阶段: 已产出章节文件",
+      "description": "workspace中必须存在至少一个章节文件",
+      "check_type": "sop_stage_coverage",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_output_existence",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节克隆检测": {
+      "check_result": "pass",
+      "reason": "未检测到章节克隆",
+      "details": "共7章，无连续完全克隆或近似克隆",
+      "description": "不能出现连续章节内容完全重复（克隆）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_cloning",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "交替重复检测": {
+      "check_result": "skip",
+      "reason": "章节数不足",
+      "details": "仅7章，跳过交替重复检测（需>=8章）",
+      "description": "不能出现A-B-A-B交替循环的章节内容",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "alternating_repetition",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节完成度": {
+      "check_result": "pass",
+      "reason": "完成7章",
+      "details": "无法从大纲推断规划章节数，实际完成7章",
+      "description": "实际写作章节数必须达到大纲规划的合理比例",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_completion",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "段落重复检测": {
+      "check_result": "pass",
+      "reason": "段落重复在可接受范围",
+      "details": "同章内重复0处, 跨章重复0组 (阈值: 同章>=2, 跨章>=5)",
+      "description": "不能出现大量段落在不同章节间重复",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "paragraph_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取大纲设计指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/OUTLINE_DESIGN_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取OUTLINE_DESIGN_GUIDE.md（大纲设计指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取写作技巧指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/WRITING_TECHNIQUE_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取WRITING_TECHNIQUE_GUIDE.md（写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取设定一致性管理指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/CONSISTENCY_MANAGEMENT_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取CONSISTENCY_MANAGEMENT_GUIDE.md（设定一致性管理指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取命名skill": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取CHARACTER_NAMING_GUIDE.md（角色命名规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取creative_intent的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取creative_intent.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取characters的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取characters.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取outline的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取outline.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节命名格式": {
+      "check_result": "pass",
+      "reason": "所有文件命名符合规范",
+      "details": "检查了 7 个文件; chapter_05.md: 匹配; chapter_01.md: 匹配; chapter_02.md: 匹配; chapter_03.md: 匹配; chapter_04.md: 匹配; chapter_07.md: 匹配; chapter_06.md: 匹配",
+      "description": "章节文件命名必须为chapter_NN.md格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "naming_convention",
+      "is_critical": true
+    },
+    "creative_intent格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "creative_intent.json: 字段完整",
+      "description": "creative_intent.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "characters格式": {
+      "check_result": "fail",
+      "reason": "部分文件结构不完整",
+      "details": "characters.json: JSON格式不合法（行31列36）",
+      "description": "characters.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "outline格式": {
+      "check_result": "fail",
+      "reason": "部分文件结构不完整",
+      "details": "outline.json: JSON格式不合法（行23列63）",
+      "description": "outline.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "X轴模式ID格式": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.x_axis_mode_id = D23，符合预期",
+      "description": "X轴模式ID必须匹配^[A-G]\\d{1,2}$格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签枚举": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['双向暗恋', '重生/穿越', '规则怪谈']，符合预期",
+      "description": "Y轴标签必须在12种枚举中",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签数量": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['双向暗恋', '重生/穿越', '规则怪谈']，符合预期",
+      "description": "Y轴标签数量必须为2-3个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "forbidden_elements存在性": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.forbidden_elements = ['不要出现大团圆结局', '不要主角突然失忆洗白', '不要第三人称上帝视角剧透']，符合预期",
+      "description": "forbidden_elements必须至少有1个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "配方选择交互": {
+      "check_result": "skip",
+      "reason": "ULTRA_SHORT篇幅不适用",
+      "details": "subcategory=sop_compliance",
+      "description": "配方选择阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "写作准备确认": {
+      "check_result": "skip",
+      "reason": "ULTRA_SHORT篇幅不适用",
+      "details": "subcategory=sop_compliance",
+      "description": "写作准备阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "主题一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 全篇从开篇到结尾始终围绕同一核心主题展开：一段被“未来来信/时间闭环”裹挟的爱情与宿命选择（不要爱上他—却不可避免地爱上—以杀/死来达成闭环或破局）。各章主要情节（倒计时来信、两人靠近相爱、预言逼近、被迫/主动的杀与离别、写信回到过去、循环与终局在另一时间线重逢）都在推进“爱与命运/循环”这一主线，没有中途转为无关的题材类型（如商战、探案、修仙等）导致主题类型被替换；后期出现的“时间邮递员/时间线”也仍是为同一爱情宿命主题服务，属于表现手段升级而非主题漂移。",
+      "description": "故事主题一致",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "theme_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "主要角色一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 主角从开篇到结尾持续存在且保持核心地位：\n- 明确主角：沈念为第一主角，陆沉为关键第二主角/男主。\n- chapter_01-05：叙事始终围绕沈念收到信、调查与情感推进展开，陆沉作为“那个男人”持续登场并与沈念形成主线关系。\n- chapter_06：陆沉短暂“离开/消失”有明确剧情交代（纸条“我去去就回”），随后当章回归并推动高潮（真相揭示与死亡事件），并未无故消失。\n- chapter_07：沈念持续作为叙事中心推进循环与选择；新增“邮递员/时间的邮递员”虽占一定篇幅，但其功能是解释机制与推动沈念决策，未抢占到让主角失去核心地位的程度（仍是沈念的选择与行动主导结局）。\n- 未出现主角被替换、身份断裂（沈念始终是同一人；陆沉在不同时间线/循环中仍是同一核心对象），也不存在双主角中某一主角被遗忘（陆沉即便死亡，仍以信、纸条、时间线等待等形式持续作为叙事核心牵引）。",
+      "description": "主要角色一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "main_character_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设定一致性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 同一角色在章节间的核心认知/动机与行为决策出现多次“无铺垫翻转”，导致内部一致性不足。\n\n- 沈念：前3章呈现为“习惯掌控、理性求证”的人（搜证、守邮递员、试图搞清信的来源与含义），但第4章迅速滑向“无可救药地爱上他、情绪驱动直接逼问‘你爱我吗’并同居”，从谨慎到沉溺的跃迁缺少足够的章节内过渡（前章仍在怀疑/不确定，后章直接确认深爱且进入稳定同居）。之后她的应对策略也反复摇摆：第5章一度相信“自己未来会杀他、要打破循环”而持刀；到第5章末又被陆沉一句“信是我写的”立即改写她对信的归因；第6章开头又强硬否定预言并要求陆沉离开（以避免自己杀他），但当陆沉回归受伤提出“杀了我”时，她立刻执行刺杀——从“坚决不杀”到“在同一章内完成杀人”虽有情境压力，但缺少足够的内在心理转折描写来支撑如此极端的行为变化。\n\n- 陆沉：其对“信是谁写的/目的是什么”的自述在第5章与第6章发生互相冲突式切换：第5章宣称“那些信是我写的，是我的请求”，第6章再次重复“是我写的”且称“我设计了这一切、给自己写剧本”，但第6章末又出现“对不起，我爱你。——沈念”指向沈念为写信者；第7章又引入“时间邮递员”并称“这是你写的第一封信”。这些设定变化如果仅看人物层面，会表现为陆沉对关键事实的态度/说法不断反转，且缺少能解释他为何前后说法不一的稳定动机支撑（是隐瞒、试探、还是记忆被改写），从而让同一角色的行为逻辑显得不连续。\n\n综合来看，本文本中两位核心角色的认知归因与关键决策在相邻章节多次急转，缺少足够铺垫来说明是“合理成长/剧情驱动转变”，更像是为推进反转而造成的性格与行为模式不稳定，因此判定为不符合本项标准。",
+      "description": "人物设定一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_trait_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设计遵循度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 对比characters.json（Plan）与chapter_01-07（Execute），两位主角的人设出现多处“核心设定反向/缺失”，属于严重不符。\n\n1) 沈念（设计：理性、外冷内热、好奇心强、执念、决绝；动机：验证预言/破解循环；隐秘动机：掌控命运）\n- 设计中的“理性/掌控感”在前两章较符合：chapter_01-02里她拍照检索、守邮递员、追问来源，体现好奇心与求证。\n- 但从chapter_04起，核心行为模式明显偏离“理性与克制”，转为强情绪驱动与冲动式关系推进：chapter_04直接逼问“你爱我吗”、迅速“沉溺”并搬去同住，叙事里她多次以“控制不住”“疯了”自述，主导特质更像情绪化/失控，而不是“理性但执念”。（这不是节奏问题，因为文本呈现的主导人格就是失控与冲动。）\n- 更关键的是隐藏连接被改写：characters.json写明“她就是未来的自己——她写的信，她将杀的人”，chapter_04确实出现“她是写信的人”这一点，但chapter_05-06又反复改口为“那些信是我（陆沉）写的”，使沈念“未来的自己写信”不再是稳定设定，而变成摇摆叙述，导致Plan中的核心定位无法落地。\n\n2) 陆沉（设计：温柔、包容、神秘、洞察、坦然；表层动机：经营咖啡店过平静生活；隐秘动机：陪伴接纳对他防备的女人；隐秘恐惧：被遗忘/存在感消失；误解：以为沈念冷漠邻居；隐藏连接：早知预言且是“被选择的那一个”）\n- 早期表现基本贴合：chapter_01-03里他温柔包容、说话慢、洞察她的异样并不逼问，符合“温柔/包容/洞察/神秘”。\n- 但从chapter_05开始，他的核心动机与行为模式发生方向性变化：他宣称“信是我写的”“我设计了这一切”“等你拿起刀”“宁愿死在你手里”，这将角色从“温柔包容、过平静生活、接纳她防备”改成了“主动操盘预言/推动她行凶的设计者”。这种变化不是合理深化，而是把角色的驱动从‘平静生活与陪伴接纳’扭转为‘以死亡闭环为目标的操控’，属于核心动机偏离。\n- 设计中的secret_fear“被彻底遗忘/存在感消失”在章节中几乎未体现，反而他的恐惧与诉求变成“让她结束痛苦/完成闭环”。\n- 设计的hidden_connection是“他早已知道预言存在——因为他是被选择的那一个”。执行中虽然有“他一直都知道/神秘组织找到了我/时间线”等，但被写成“我设计了这一切、信是我写的剧本”，性质从“知情者/被选择者”变成“创造者/操控者”，与Plan的连接定义不一致。\n\n3) 关系设定（从陌生→防御/敌意→沉溺恋爱）\n- 大方向（从陌生到恋爱沉溺）是有呈现的；但Plan明确包含“最初沈念认为陆沉危险陌生人，后来发现他温柔本身”。执行里沈念的“危险判断”很快被否定，且后续的核心矛盾更多来自预言闭环而非对陆沉“危险性”的持续认知与转变，导致该误解设定未被稳定体现。\n\n综上：虽然前期若干段落能看到与设计一致的性格影子（沈念的求证、陆沉的温柔），但中后期对“信的作者/隐藏连接/陆沉的核心动机与行为模式”进行了实质性改写，并让沈念长期呈现失控冲动而非理性执念型推进，属于Plan vs Execute严重不一致，因此 matched=false。",
+      "description": "实际表现符合设计文档",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构性逻辑硬伤": {
+      "check_result": "fail",
+      "reason": "发现3处structural类型逻辑问题: 时间机制/闭环规则前后冲突：chapter_04-05宣称“无法打破的闭环/结局已写好”；chapter_06又出现“沈念拒绝杀→仍可相处且陆沉可离开再返回”；chapter_07进一步引入“另一时间线+需自杀切换”。核心世界观从“单一闭环宿命”变成“可分叉多时间线且可用自杀跨线”，规则覆盖且缺少解释，导致设定不自洽。; chapter_06结尾写明沈念刺下去并在chapter_07开头确认“陆沉逐渐冰凉/已死”；但chapter_07中又出现“陆沉没死、在另一个时间线活着”，同时同一段对话又说“死了，被你杀死的”。对“陆沉的生死状态”与“是否存在同一主体”给出互斥结论，且未用清晰规则区分（本体/分身/时间线拷贝）。; chapter_02出现“普通邮递员”送信且声称不知道寄件人；chapter_07同一人/同职能角色被定义为“时间的邮递员”，能操控/解释跨时间线与自杀换线规则。若同一实体，其前期“普通到会忘记”可接受，但“不了解寄件人/仅负责送信”与后期“掌握全部真相并主导规则”冲突，需要补足其伪装/限制/权限边界，否则规则体系前后不一致。",
+      "details": "过滤条件: fixability=structural; 总flaws=6, 命中=3",
+      "flaw_count": 3,
+      "flaws": [
+        {
+          "type": "worldbuilding_coherence",
+          "severity": "major",
+          "fixability": "structural",
+          "location": "chapter_04 → chapter_06 → chapter_07",
+          "description": "时间机制/闭环规则前后冲突：chapter_04-05宣称“无法打破的闭环/结局已写好”；chapter_06又出现“沈念拒绝杀→仍可相处且陆沉可离开再返回”；chapter_07进一步引入“另一时间线+需自杀切换”。核心世界观从“单一闭环宿命”变成“可分叉多时间线且可用自杀跨线”，规则覆盖且缺少解释，导致设定不自洽。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "structural",
+          "location": "chapter_06结尾 → chapter_07开头/中段",
+          "description": "chapter_06结尾写明沈念刺下去并在chapter_07开头确认“陆沉逐渐冰凉/已死”；但chapter_07中又出现“陆沉没死、在另一个时间线活着”，同时同一段对话又说“死了，被你杀死的”。对“陆沉的生死状态”与“是否存在同一主体”给出互斥结论，且未用清晰规则区分（本体/分身/时间线拷贝）。"
+        },
+        {
+          "type": "worldbuilding_coherence",
+          "severity": "major",
+          "fixability": "structural",
+          "location": "chapter_02邮递员 → chapter_07“时间的邮递员”身份揭示",
+          "description": "chapter_02出现“普通邮递员”送信且声称不知道寄件人；chapter_07同一人/同职能角色被定义为“时间的邮递员”，能操控/解释跨时间线与自杀换线规则。若同一实体，其前期“普通到会忘记”可接受，但“不了解寄件人/仅负责送信”与后期“掌握全部真相并主导规则”冲突，需要补足其伪装/限制/权限边界，否则规则体系前后不一致。"
+        }
+      ],
+      "description": "无结构性逻辑硬伤",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_logic_defect",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "可修复逻辑瑕疵": {
+      "check_result": "fail",
+      "reason": "发现3处fixable类型逻辑问题: chapter_04明确反转为“她是写信的人（杀死陆沉之后寄回）”；但chapter_05与chapter_06又多次改口为“那些信是陆沉写的”。同一组信件作者在主线内出现互斥结论，且无统一解释（不同批次/冒名/伪造/多时间线未在此处澄清）。; 邮戳日期倒计时序列自相矛盾：chapter_01为2027-09-15；chapter_02为2026-09-15；第三天却跳到2025-03-15（未先到2025-09-15）；随后第四天又到2025-01-15；chapter_03再出现“今天=2025-01-15”；chapter_04又出现“最后一封=今天=2025-02-15”。若设定为每日递减一年/逐步逼近，3/15插入与2/15“最; chapter_03末手机显示日期为2025-01-15并承接“那封信来了”；但chapter_04直接进入“第二个月…最后一封邮戳是今天=2025-02-15”，中间缺少时间推进交代（从1/15到2/15的关键一月如何对应“每天来信”机制、以及为何2/15被称为“最后一封”）。",
+      "details": "过滤条件: fixability=fixable; 总flaws=6, 命中=3",
+      "flaw_count": 3,
+      "flaws": [
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_04 → chapter_05/06",
+          "description": "chapter_04明确反转为“她是写信的人（杀死陆沉之后寄回）”；但chapter_05与chapter_06又多次改口为“那些信是陆沉写的”。同一组信件作者在主线内出现互斥结论，且无统一解释（不同批次/冒名/伪造/多时间线未在此处澄清）。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_01 → chapter_02 → chapter_03 → chapter_04",
+          "description": "邮戳日期倒计时序列自相矛盾：chapter_01为2027-09-15；chapter_02为2026-09-15；第三天却跳到2025-03-15（未先到2025-09-15）；随后第四天又到2025-01-15；chapter_03再出现“今天=2025-01-15”；chapter_04又出现“最后一封=今天=2025-02-15”。若设定为每日递减一年/逐步逼近，3/15插入与2/15“最后一封”的说法冲突，缺少解释（多批次/非每日/非线性规则）。"
+        },
+        {
+          "type": "spatiotemporal_continuity",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_03 → chapter_04",
+          "description": "chapter_03末手机显示日期为2025-01-15并承接“那封信来了”；但chapter_04直接进入“第二个月…最后一封邮戳是今天=2025-02-15”，中间缺少时间推进交代（从1/15到2/15的关键一月如何对应“每天来信”机制、以及为何2/15被称为“最后一封”）。"
+        }
+      ],
+      "description": "可修复逻辑瑕疵数量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "fixable_logic_inconsistency",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语言纯净性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 全文主要叙事语言为中文，未发现无意义的中英/中日夹杂表达。仅出现少量阿拉伯数字（如日期2027年9月15日、房号308/307）与文件名/章节标识（chapter_xx.md），不属于外语混用问题。对话与叙事均为中文，未出现大段外语且无翻译的情况，整体语言使用纯净、统一，符合标准。",
+      "description": "无不合理的多语言混用",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "language_purity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "creative_intent文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/creative_intent.json 存在",
+      "description": "creative_intent.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "characters文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/characters.json 存在",
+      "description": "characters.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "outline文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/outline.json 存在",
+      "description": "outline.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "chapters目录存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/chapters/ 存在",
+      "description": "chapters/目录必须存在且有章节文件",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "情节推进": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 合格（matched: true）。整体有明确且持续的情节推进，故事事件密度高，远超“至少2-3个事件”的要求。\n\n1) 故事事件数量（核心推进事件举例，远≥2-3个）：\n- ch1：沈念收到“未来邮戳”的匿名警告信；下班遇到新邻居陆沉（关键人物登场）。\n- ch2：连续多日收到不同未来日期的信形成“倒计时”；沈念蹲守发现“邮递员投递”；主动去找陆沉并在咖啡店摊牌沟通。\n- ch3：两周相处推进关系与信息收集；梦境与“邮戳日期=当天”对应；当天再次收到同日邮戳信，确认异常机制。\n- ch4：沈念主动表白/确认恋爱；同居生活推进；发现最后一封信邮戳=当天并推断“自己将杀陆沉”的闭环（重大转折）。\n- ch5：沈念夜里取刀准备刺杀（外部行动+冲突升级）；陆沉夺刀并反转自称写信、推动“循环结束”的逻辑。\n- ch6：沈念拒绝杀人改为让陆沉离开（重大选择）；陆沉离开后又带伤归来；沈念最终刺杀陆沉；次日收到“对不起，我爱你——沈念”的信，闭环落地。\n- ch7：沈念再次投信巩固循环；出现纸条“我一直在等你”；“时间邮递员”登场解释多时间线；提出“杀死自己”条件；沈念自杀并切换到另一时间线与陆沉重逢（结局事件）。\n\n2) 内容占比分析：\n- 叙事以“收信—调查—恋爱—预言揭示—持刀冲突—离开/归来—刺杀—投信—时间线解释—自杀—重逢”这一串连续事件驱动；对话与心理描写服务于决策与转折，不构成>70%的静态停滞。\n- 事件推进占比显著≥40%：每章都有外部动作（收信、蹲守、见面、同居、拿刀、离开、巷口相遇、刺杀、投信、自杀等）和明确转折。\n\n3) 时间/空间变化与逻辑关联：\n- 时间推进清晰：清晨收信的重复结构、邮戳日期变化、两周/三个月等时间跳跃。\n- 空间推进明显：公寓走廊/邮箱、咖啡店、同居住所、街巷相遇、关门咖啡店等。\n- 事件逻辑链条完整：异常信件→怀疑与调查→与陆沉靠近→预言/闭环揭示→冲突选择→死亡达成闭环→时间线再解释与终局选择。\n\n结论：并非“俩人站着聊天/大段独白无事件”，而是高事件密度、转折明确、行动驱动的剧情结构，因此符合“有基本情节推进”的业务标准。",
+      "description": "章节情节推进质量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "plot_progression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "完整叙事文本": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 7个文件内容均为连贯的小说正文而非大纲：1）无“核心事件/情感基调/关键场景/本章悬念/字数预估”等创作规划元数据或结构化提纲标题；2）全文以场景化叙事推进（如公寓邮箱、咖啡店、雨夜、卧室持刀、小巷相遇等），有明确时间地点与氛围描写；3）大量完整对话与人物动作/心理（例如沈念拆信、守候邮递员、与陆沉对质、持刀犹豫、拥抱亲吻等），不是用要点列举或“→”流程式罗列；4）章节结构为正常分段叙事，虽有“---”“三个月后”等时间跳转，但仍保持故事场景与叙事文本形态，属于“叙事简略/跳切”而非大纲。",
+      "description": "章节内容必须是完整正文而非大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "full_narrative_content",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "反复结局": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 共7个文件，最后一个文件为chapter_07.md。逐章扫描全书级结局标记（如“全文完/全书完/完结/后记/尾声/终章/（完）/【完】/THE END”等）：chapter_01.md~chapter_06.md未出现上述全书结局标记（其中仅有章节标题、正文叙事，无“后记/尾声/终章/完结”等独立结局段落标题）。chapter_07.md末尾出现“（完）”，属于全书结局标记且出现在最后文件中。未发现任何非最后文件出现全书结局标记，因此不存在‘中途全文完后又续写’或‘多次非末章收尾’的反复结局问题，判定合格。",
+      "description": "不能出现多次结局标记（全文完/全书完/后记）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "repeated_endings",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "workspace文件规范": {
+      "check_result": "pass",
+      "reason": "workspace中所有文件均在白名单内",
+      "details": "白名单: ['creative_intent.json', 'characters.json', 'outline.json', 'writing_log.md', 'chapters/', '.hitl_context.json']",
+      "description": "workspace中不能有白名单之外的文件",
+      "check_type": "file_whitelist_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "workspace_file_compliance",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "叙事调性匹配": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 题材与应有调性：creative_intent.json标注reaction_strength=↘，并融合“规则怪谈/时间闭环”设定。整体应偏“虐心向+规则怪谈”：氛围应更克制压抑、冷感紧绷，信息（规则/代价/约束）应更高密度推进；爱情部分可以细腻，但不应长期覆盖怪谈的压迫感与规则感。\n\n实际章节文笔特征：文本大量使用甜宠/言情化的互动与抒情表达，节奏舒缓，环境与对话更偏“暧昧温柔、撒糖、煽情”，怪谈的冷硬压迫与规则推进被稀释。\n- 明显言情甜宠调性段落（与规则怪谈主调不符）：chapter_02出现“拉花是一颗小心形”“这杯叫『初遇』。所有故事，都从一杯咖啡开始。”；chapter_03大量日常温柔细节“默默给她加水…留一盏灯…递过来一把伞”，整体像都市甜恋日常；chapter_04直接进入高浓度情感戏与拥抱落泪：“『你爱我吗？』…『我爱你。』…『我不会离开你。』…他们就这样抱着”。这些段落占比很高，读感更像言情/虐恋而非“规则怪谈式”压迫。\n- 语气与修辞偏煽情宣言式：chapter_06“去他的。”、“没有什么可是。”、“因为我爱你。比任何人都爱。”；chapter_07“爱一个人，就是愿意为他去死。” 这类价值宣告/情感口号在篇幅中反复出现，削弱悬疑怪谈所需的克制与冷感。\n- 规则怪谈表达偏口头化、解释性与戏剧化转折，缺少冷硬的规则呈现与信息博弈：例如chapter_05、06多次用人物台词直接抛设定（“只有你真的想杀我，预言才会成真。这个循环才能结束。”“时间闭环就会闭合。”），更像言情戏里塞设定，而非怪谈文常见的“规则清单/代价验证/失败惩罚/层层逼近”的紧迫结构。\n\n结论：虽然主题内容确实是“宿命虐恋+时间循环”，但叙事调性整体更偏言情虐恋（大量温柔日常、撒糖与煽情宣言），规则怪谈应有的冷硬紧凑、压迫感与信息密度不足，整体画风与“规则怪谈+虐心向”组合的主调性错位，故matched=false。",
+      "description": "文笔风格必须与题材类型匹配",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_tone_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "后期章节跑偏": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: chapters共7章均为连续的小说叙事正文，包含明确场景（公寓/咖啡店/小巷等）、人物行动与对话、情节推进与收束（信件-预言闭环-冲突-死亡/时间线解释-结局），未出现作者感想、读者互动引导、番外/彩蛋预告、角色问答、数据统计等“非正文跑偏内容”。后期章节（06-07）篇幅未出现明显异常萎缩，仍保持完整叙事强度与结尾收束，不属于几十到几百字的敷衍章节。因此符合该检查项业务标准。",
+      "description": "后期章节不能跑偏写非正文内容（作者感想、读者互动、番外预告等）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "late_stage_digression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "writing_log文件创建": {
+      "check_result": "skip",
+      "reason": "ULTRA_SHORT篇幅不适用",
+      "details": "subcategory=log_file_creation",
+      "description": "必须创建writing_log.md记录创作进度",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_creation",
+      "is_critical": true
+    },
+    "writing_log文件读取": {
+      "check_result": "skip",
+      "reason": "ULTRA_SHORT篇幅不适用",
+      "details": "subcategory=log_file_usage",
+      "description": "必须读取writing_log.md了解前文内容",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_usage",
+      "is_critical": true
+    },
+    "大纲执行忠实度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 正文前6章整体基本按大纲推进：第1章收到三年后邮戳的“不要爱上那个男人”并注意到新邻居陆沉；第2章连续来信且邮戳逼近并开始接近陆沉；第3章去咖啡店刻意接近与观察；第4章沉溺相爱并逐步意识到信与自身相关；第6章也写到“写信/投信/走向陆沉”并最终完成闭环，这些都与outline的核心事件高度一致。但从第5章开始出现关键转折偏离：大纲第5章核心反转是‘沈念意识到自己是在杀死陆沉之后写信的人’，而实际第5章先写成该顿悟，随后又强行改为‘那些信是陆沉写的’（直接推翻大纲设定与前文因果），导致act_two的turning_point（她将杀死他且不可逃避）在语义上被替换为‘陆沉设计预言并引导她动手’，属于主线机制替换。更严重的是结局方向偏离：大纲第7章明确为开放式结局（刀举起/放下、循环闭合/打破均可的悬置），而实际第7章给出明确的多时间线设定、时间邮递员、要求自杀换到另一时间线，并以‘在另一个时间线里永远在一起’的确定性HE收束，已不再是大纲所述的开放式抉择画面与悬置余韵，属于结局走向的实质改变。因此判定为不忠实执行大纲。",
+      "description": "实际章节内容必须忠实于自己设计的大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_execution_fidelity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色语言辨识度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 未达“优秀（角色对话有明显风格差异）”标准。全文主要对话集中在沈念、陆沉、邮递员（时间邮递员）三类角色，但语言风格区分度弱，存在明显同质化与模板化表达：1）共享话术模板：多处关键对话采用同一套“宿命/预言/你还不明白吗”式的戏剧化、哲理化话术，陆沉与邮递员的台词都大量使用抽象概念推进（预言、闭环、时间线、机会、唯一办法），遮住角色名后可互换性较强；典型如多次出现的“你还不明白吗？”、“这是唯一的办法”、“时间闭环就会闭合/已经闭合”、“因为我爱你”等结构，角色之间缺少稳定的口头禅、句式习惯或语气差异。2）跨角色台词克隆/可互换：陆沉与“时间的邮递员”都用相似的冷静解释口吻进行设定宣告（“告诉你真相”“因为你没有选择”“一个机会”等），两者都像‘作者代言人’在讲规则，互换身份读起来违和感不强。3）身份语言不区分：邮递员作为普通职业角色，本应更口语、更具现实感，但实际使用大量抽象设定术语与戏剧化论断（时间线、改变过去、必须死等），语言层次与陆沉高度接近；沈念在高压情境下的表达也常与两者共享同一套抒情宣言式句法（“没有你我活着有什么意义”“爱一个人就是愿意为他去死”），缺少更个人化、生活化的表达特征。综合来看，主要角色对话在用词、句式长短、语气（抒情/宣告/设定解释）上趋同，难以通过盲测仅凭台词识别说话者，因此判定 matched=false。",
+      "description": "不同角色对话必须有可辨识的语言风格差异",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "dialogue_character_distinction",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "叙事密度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 整体具备“场景起笔+悬念装置”的优势（如chapter_01邮箱、信封、邮戳等物件细节较具体，环境与动作也能支撑画面感），但从第二章后叙事逐渐转向用概念解释与情绪直述推动：频繁出现“她终于明白/她开始害怕/她知道/她控制不住/这是循环宿命”等Tell句式，关键高潮（表白、决定同居、发现真相、举刀刺下、时间线反转）多用直接宣告结果，缺少与之匹配的感官/动作/心理的层层递进来让读者‘看见’转折如何发生。并且多处用总结段落快速交代关系发展（如‘后来日子像偷来的’、‘正式在一起了…生活简单而幸福’），削弱叙事密度与可信度。对话虽多，但对话间的动作调度、空间细节、微表情与具体行为支撑不足，导致整体更像“情节梗概+情绪宣言”的快进叙事，未达到优秀标准要求的细腻高密度Show主导。",
+      "description": "章节叙事应有足够的场景描写、感官细节和心理活动，情感传达以Show为主",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_density",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "智斗逻辑合理性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 题材包含悬疑/时空信件/循环规则，适用本检查项。文本中的关键谜题是‘信件真相+时间闭环规则+如何打破循环’，但核心解释在ch4~ch7多次互相推翻（沈念写→陆沉写→陆沉设计→沈念写→时间邮递员介入→多时间线与自杀切换），且每次转折缺少可复核的线索支撑，导致线索与结论断裂、推理链不自洽，属于假推理链/设定任意改写的逻辑崩坏，因此matched=false。",
+      "description": "谜题/智斗的推理逻辑必须自洽",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "puzzle_logic_validity",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "题材契合度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 配方为「必须牺牲所爱（D23）+双向暗恋+重生/穿越+规则怪谈」。文本在“题材特征精致度/化学反应”上未达优秀标准，主要问题如下：\n1) 规则怪谈的“规则”缺乏设计与推演：核心规则几乎等同于一句口号式宿命（会爱上→会杀他），没有可操作的条目、触发条件、代价机制与递进升级（例如违反规则会怎样、邮箱为何是唯一出口、时间如何惩罚/修正）。所谓怪谈规则无法被角色聪明地利用/破解，导致规则怪谈停留在氛围标签。\n2) 重生/穿越与循环逻辑自洽性不足，反转偏“作者宣布”：信件来源在中后段反复改口（先是未来的沈念写、后变成陆沉写、又出现“时间的邮递员”、再变成多时间线+必须自杀切线），关键因果与机制缺少铺垫与约束，更多是为了推进虐点而不断追加设定，推理深度与“层层剥茧”的烧脑感不够。\n3) X轴“必须牺牲所爱”的牺牲选择缺少博弈与来回：女主的选择主要在“我要/我不要”之间摇摆，缺少基于规则的多方案尝试、失败与升级（验证—破局—反噬—再破局的链条不够精密），因此牺牲的必然性更像被剧情按下去，而非被机制逼出来。\n4) 双向暗恋呈现更接近直线甜虐推进：前期靠咖啡店日常与告白迅速确认关系，“暗恋”的双向克制、误解拉扯、信息不对称驱动的酸楚不足，更多是常见温柔男主模板+女主被预言折磨的单向痛感，互动火花与记忆点有（如“初遇”咖啡、雨天告白），但层次仍偏流水线。\n5) 标签融合偏拼接而非化学反应：理想的融合应是“规则→迫使策略选择→推动恋爱加深→反过来让规则更残酷”，而实际呈现中恋爱段落与设定解释段落分离；后段更以新增设定（邮递员/时间线/自杀换线）强行收束，未形成规则与情感互相咬合的精密结构。\n结论：方向与氛围（宿命论浪漫、虐心、闭环意象）是对的，也有若干画面感，但题材机制（规则怪谈+时间循环）设计粗糙、反转逻辑多次改写且缺少推演支撑，导致X-Y轴的“化学反应”不足，整体停留在表面标签与情绪推动，未达到“精致且有深度”的优秀标准。",
+      "description": "题材特征精致度和X-Y轴化学反应效果",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "genre_fit",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "剧情节奏合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 整体节奏有清晰层次：前两章用“未来邮戳+重复警告”快速立悬念并持续加码（日期递近形成天然推进），第3章进入相处与信息收集作为必要的情绪缓冲与铺垫，第4章先给情感高点再用“她才是写信者/会杀他”的大转折把强度抬升；第5-6章集中爆发（持刀、坦白、抉择、离开、回归受伤、最终刺杀）构成主高潮且占据足够篇幅，没有把关键事件挤压到最后几段；第7章在主高潮后先做余波与空缺感，再引入“邮递员/多时间线/自杀换线”的终局冲刺，形成‘高潮后回落→再冲顶→收束’的波形，过渡大体顺畅，读者能明确指出最精彩段落在第5-6章并理解其前置铺垫与后置回报关系。",
+      "description": "高潮低谷分布合理、情绪曲线有层次感",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "pacing_rationality_advanced",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "钩子设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 整体符合“优秀钩子”标准：关键转折处多次设置具体、带信息差的悬念，并且章节结尾普遍能形成强续读驱动力。\n\n1) 章节结尾悬念密度高且连续：\n- 第1章以“新邻居陆沉出现”叠加“不要爱上那个男人”的指向，形成命运启动的悬念（读者会追问：这个男人是谁/为何被警告）。\n- 第2章结尾用“陆沉眼神复杂，仿佛等这一刻很久”制造人物动机谜团（他知道什么？在等什么？）。\n- 第3章结尾明确揭示“今天=邮戳日期”，并给出新认知“不是倒计时，是未来已发生在等待实现”，属于强反转钩子。\n- 第4章结尾大反转：沈念意识到“信可能是自己写的、且会杀陆沉”，这是核心转折点钩子，信息具体且冲击强。\n- 第5章结尾行动悬念定格在“举刀将刺”，强推进型钩子。\n- 第6章在“刺下去”后给出“信背面小字”确认为闭环关键证据，且仍留有更大真相空间。\n- 第7章继续用“纸条‘我一直在等你’→邮递员/时间线真相→必须杀掉另一个自己”的层层揭示与选择困境，直到结局才收束。\n\n2) 钩子质量：具体化+信息差充分\n悬念不是泛泛的‘更大风暴’，而是明确问题与证据驱动（邮戳日期递减、‘今天’对齐、信的作者身份、为何必须杀、陆沉/邮递员的真实身份与目的、时间线规则）。每次揭示都“放出一部分、保留关键机制”，形成持续的信息差。\n\n3) 多样性：反转/身份谜团/规则谜团/行动悬念/两难抉择\n既有身份反转（信是谁写的）、规则反转（倒计时→闭环）、行动定格（举刀）、也有更高层机制（时间邮递员/平行时间线）与道德两难（杀他/杀自己）。不属于单一模板化结尾。\n\n因此可判定 matched=true。",
+      "description": "关键转折处有有效的悬念钩子设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "hook_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "意象系统": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 文本具备清晰的意象系统：同一具象（信/邮戳/信封）贯穿全篇高频重复，且每次出现都承担不同意义与叙事功能（从疑云、预警、倒计时，到身份揭示、忏悔遗书、闭环证明、时间线切换的指令）。“邮箱/投递/邮递员”作为配套意象线，进一步把抽象的时间机制落到可感知的场景与动作上，并在结尾实体化为“时间的邮递员”，形成隐性叙事线。整体不是装饰性重复，而是随剧情推进不断加深与反转，符合优秀标准。",
+      "description": "核心意象贯穿全文并发生意义变奏",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "imagery_system",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "情感弧线层次": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 主角沈念的情感弧线具备多层递进且关键转折均由具体事件触发，不是无缘无故的情绪跳变。可辨识的情感层至少包括：①掌控感/日常稳定→②困惑与警惕（收到无寄件人、未来邮戳的信）→③恐惧与不安升级（连续多封信、邮戳“倒计时”逼近）→④试探与求证/靠近（守邮递员、转而向陆沉求助并频繁去咖啡店以观察他）→⑤心动与沉溺（相处中的安全感与温柔照料促成告白与在一起）→⑥预知导致的自责与绝望（发现信件细节后意识到“自己会杀他”的闭环）→⑦强烈矛盾与挣扎（拿刀却下不了手、在“杀他/不杀他”之间摇摆）→⑧决绝的反抗与分离（扔刀、强迫他离开以避免预言）→⑨崩溃与悔恨/宿命感（陆沉受伤回归、请求完成闭环后她刺下去；之后写信回过去）。这些变化由“发现未来邮戳”“邮戳倒计时逼近到今天”“与陆沉对话/告白”“发现自己是写信者/必将杀他”“陆沉揭露信件作者版本”“陆沉离开又重伤出现并要求被杀”“杀后收到带署名的小字”等明确事件逐步推动，整体从‘怀疑-求证-投入-觉悟-挣扎-反抗-崩坏’朝闭环终点推进，层次丰富且非同义词堆叠。",
+      "description": "主角情感发展有多层递进变化",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_gradient",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语义重复检测": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 存在≥3处“结论反刍/语义层面重复”。主要问题集中在中后段对同一核心设定（信的来源、预言/闭环的不可打破、‘我会杀他’的宿命）以不同措辞反复“终于明白/再次确认”，且在chapter_05-06-07之间还出现作者身份解释的来回翻案再落回，导致信息增量偏小、读者感受为在同一结论上打转。前3章的推进（倒计时→接近→日期命中）相对有效，但从chapter_04起多次用类似段落重申同一结论，已超过容错阈值。",
+      "description": "不能出现大量语义级别的内容重复（P6级）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "semantic_redundancy",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构功能性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 文本的叙事结构明显服务于“时间闭环/宿命论的浪漫”这一主题，而非机械线性推进：1）时间结构设计：以“邮戳日期倒计时（未来→现在）”作为章节推进的骨架，读者获得的不是单纯事件顺序，而是被结构强制体验‘命运逼近/不可逃脱’；第3章明确点破“不是倒计时，是已经发生的未来在等待被实现”，把结构本身升格为主题表达。2）首尾关系：开篇以“邮箱+第一封信+不要爱上那个男人”启动循环机制，结尾（第6-7章）回到“杀死后写信、投进邮箱、成为过去”，实现闭合与自洽，形成结构上的回环（结构形式=宿命闭环）。3）章节编排具有设计感：以“信件出现—关系推进—真相翻转—执行预言—写回第一封信—再度扩展到时间线选择”递进，核心信息（谁写信/谁是‘时间执行者’）被刻意延后揭示，并在第5-6章做关键翻转（‘信是陆沉写的’→‘最后确实是沈念写的’），属于结构性揭示而非平铺。4）结尾收束方式：第6章用“收到带署名的小字”把因果闭环钉死；第7章再加一层‘时间邮递员/多时间线’的开放-再收束，最终以“信停止了”完成主题性收束。整体上读完会对‘故事是怎么讲的（以信件与邮戳构成闭环）’留下强记忆点，符合结构功能性优秀标准。",
+      "description": "叙事结构服务于主题表达（短篇尤重）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色命名质量": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 主要问题在于主角组命名缺乏“读名即联想”的独特设计与文化支撑：男主“陆沉”直接命中黑名单且强烈通用；女主“沈念”虽未在黑名单中，但属于常见情绪抽象字组合，容易与同类题材女主互换而不违和。配角“林姨/邮递员”偏功能称呼，尤其“邮递员”在故事里承担时间规则具象化与终局引导的关键作用，却没有专属姓名来承载象征与记忆点，进一步拉低整体命名的设计感与辨识度。因此整体未达‘优秀（matched=true）’标准。",
+      "description": "角色命名有文化深度、辨识度和角色-命运共振",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_naming_quality",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "超短篇字数": {
+      "check_result": "pass",
+      "reason": "字数符合要求",
+      "details": "总字数 10615 在范围 [5850, 11000] 内; 共7个文件（按章节顺序排列）: chapter_01.md, chapter_02.md, chapter_03.md, chapter_04.md, chapter_05.md, chapter_06.md, chapter_07.md; 最后一个文件是 chapter_07.md",
+      "description": "总字数应在5850-11000之间（基于query要求6500-10000，±10%浮动）",
+      "check_type": "semantic_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "range_constraint",
+      "is_critical": true
+    },
+    "情感交付虐心": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 整体情感基调明确为虐心向，且虐点贯穿主线而非点缀：1）核心虐点强且直击人物底线：沈念在“爱上陆沉”与“预言/闭环必将亲手杀死他”之间被迫两难（chapter_04 发现信来自自己、指向“我会杀了他”；chapter_05-06 多次出现“杀了我/我不会杀你”的对抗与牺牲）。2）悲剧氛围持续压抑：倒计时式来信带来持续恐惧与宿命感（chapter_01-03 连续来信与未来邮戳；chapter_03 明确“已经发生的未来在等待被实现”），后续即使短暂甜蜜也被“偷来的幸福”与必失去的阴影笼罩（chapter_04）。3）实质性情感打击与不可逆伤害：沈念最终亲手刺死陆沉并写下“对不起，我爱你”（chapter_06-07），构成明确悲剧高潮；结局进一步以“必须自杀换另一个时间线相见”加深牺牲与无奈（chapter_07）。4）读者体验预判为揪心/心痛：多处以“我宁愿死在你手里”“没有你我活着有什么意义”“爱一个人结局就是毁灭”等情感宣言强化痛感与宿命悲剧。整体不属于甜爽或假虐，虐点深、冲突不可调和，符合reaction_strength=↘所需的虐心基调。",
+      "description": "实际内容必须是虐心向",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取短篇skill": {
+      "check_result": "fail",
+      "reason": "工具未被调用或参数不匹配",
+      "details": "工具 'novel_writing_service__read_file' 匹配调用 0 次，期望 ≥1",
+      "description": "必须读取SHORT_STORY_GUIDE.md（短篇创作指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "角色关系设计张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 整体可判定为 pass：核心关系具备明确且内生的矛盾与演化空间。优点：1）内在矛盾源清晰：沈念的显性目标是“破解预言/时间循环”，隐性目标是“掌控命运、不被未来的自己摆布”，而隐藏连接又指向“她就是未来的自己——她写的信，她将杀的人”，这天然制造了自我对抗与命运悖论；同时她对陆沉的初始误判（危险陌生人）与后续认知反转（温柔本身）形成信息不对称与信任危机。陆沉“想要平静生活”与“被选择的那一个/早知预言存在”的设定，意味着他可能在关键处隐瞒、引导甚至‘顺从预言’，与沈念的抗拒命运形成立场张力。2）关系有变化空间：relationship_dynamics明确给出从陌生→防御/敌对→爱情沉溺，并在“越靠近越绝望”处埋下由亲密走向崩坏/背叛/牺牲的转折可能。3）冲突源于角色本身：张力主要来自沈念的控制欲与恐惧（害怕失控/害怕爱后失去）、陆沉的存在焦虑（害怕被遗忘）以及双方对预言的不同态度与信息掌握，而非外部事件硬推。不足/风险点：配角关系张力较弱（林姨偏工具人、邮递员更像机制化设定），且陆沉的核心目标与预言立场目前描述偏暧昧，若后续不落到具体‘会对沈念做什么选择’（保守预言/违背预言/牺牲谁），张力可能停留在抒情层面。",
+      "description": "角色关系设计具有叙事张力，能驱动剧情",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_relationship_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色动机设计深度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 未通过（fail）：虽然两位主角都有 overt/covert 字段，且“表层要做什么”与“深层需要什么”在表述上有区分，但深层动机的“具体来源”基本缺失，更多是主题性口号/抽象心理诉求，难以体现由个人经历推导出的驱动力。\n\n具体分析：\n- 沈念：overt_motivation 为“验证预言信的真假，破解时间循环的谜题”，covert_motivation 为“掌控自己的命运，不被未来的自己摆布”。二者确实不同层（行动目标 vs 控制感需求），secret_fear“失去对人生的控制，以及真正爱上某人后的失去”也强化了深层心理。但文档未给出她为何如此执着“控制/命运”的个人经历来源（如童年/职业挫败/亲密关系创伤等），只有身份“普通白领、独居”与 traits，无法支撑动机从何而来。hidden_connection“她就是未来的自己——她写的信，她将杀的人”更像剧情设定与悬念，并未补足动机成因。\n- 陆沉：overt_motivation“经营咖啡店，过平静的生活”，covert_motivation“陪伴和接纳这个对他充满防备的女人”，secret_fear“被彻底遗忘，存在感消失”。表层/深层也有区分（生活愿景 vs 关系/存在感需求），但同样缺少“为什么他害怕被遗忘、为什么他把陪伴她当作核心需要”的具体背景触发点。hidden_connection“早已知道预言的存在——因为他就是被选择的那一个”仍是设定标签，没有交代被选择的代价、过去经历或形成该动机的关键事件。\n\n结论：标准要求“至少两个主角”的动机既要有层次区分、又要有具体来源。目前两位主角均满足前者，但均未满足“动机有具体来源”的硬性条件，因此 matched=false。",
+      "description": "角色动机设计有深度，有表层和深层动机区分",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_motivation_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色成长弧线设计": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: 结论：fail（不符合“主角有清晰成长/变化弧线且在大纲中落地”的业务标准）。\n\n优点（有弧线雏形）：\n- 起点可辨识：characters.json里沈念的起始状态清晰——理性控场、强烈“掌控命运”的隐性动机（covert_motivation），对亲密关系有恐惧（secret_fear），对陆沉的认知从“危险陌生人”到“温柔本身”（misperception_of_other）。\n- 变化触发具备逻辑基础：预言信与时间循环机制，直接击中她“失控/失去所爱”的恐惧，使她从“理性分析”被推向“不得不面对情感与宿命”。relationship_dynamics也写了从防御到沉溺的关系推进。\n\n关键不足（导致不通过）：\n- 终点状态不清晰：outline的act_three给的是“开放式结局（刀举起/放下，循环完成/打破）”，而turning_point强调“无论杀或不杀，她都已经成为写下预言的人”。这更像是情节闭环（身份/因果的揭示），而不是主角内在层面明确的终态（例如：从控制欲到放手/从逃避亲密到选择承担/从宿命论到主动打破规则）。读者无法从大纲明确判断“故事结束时沈念与开始时具体有什么不同”。\n- 弧线更偏‘揭示’而非‘成长/变化’：章节3-6主要推进的是接近—爱上—顿悟“我就是写信的人”—去写信完成循环。这里的核心是信息揭露与命运闭环，并未在章节规划中明确呈现沈念价值观/选择模式发生了可验证的转变（她依然被“预言/命运”牵引，终局也未落到一个明确的心理立场）。\n- 章节层面缺少可落地的“情感转折节点”：outline用emotional_tone描述情绪（困惑/恐惧/沉溺/绝望/决绝），但缺少明确的emotional_shift或冲突点来标记她如何一步步改变核心信念（例如从“必须掌控”到“愿意承担失控的代价”，或从“把陆沉当变量”到“把他当主体去尊重其选择”）。\n\n综合判断：目前能看出关系推进与命运真相揭示，但无法从大纲确认主角在结局达成了明确、可复述的内在终点，因此不满足“有可辨识的起点和终点”“弧线在章节规划中有所体现”的pass条件。",
+      "description": "主角有清晰的成长/变化弧线设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_arc_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "outline结构完整性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass。该大纲结构完整且可支撑写作。\n1) 章节覆盖：明确给出1-7章，并按act_one/act_two/act_three覆盖从引子（收到未来信）到核心反转（她是写信/将杀他）再到结局抉择（循环闭合或打破），属于全程覆盖，并非只停留在前几章。\n2) 每章实质内容：每章都有core_event、emotional_tone与key_scenes，信息量足以指导场景展开，不是只有标题。\n3) 冲突/转折：核心冲突清晰（“不要爱上他”警告 vs 不可避免的吸引；命运循环 vs 主动选择），且在第5章给出强转折（自我即预言/杀人因果），各幕均有turning_point。\n4) 三幕结构可辨识：明确act_one建立规则与触发事件、act_two推进关系并加压至重大反转、act_three进入终局执行与选择，结构分层明显。\n潜在不足（不影响通过）：第7章为开放式结局，具体动作与后果分支较多，若用于长篇可再细化为更明确的场景链/冲突推进；但作为7章短篇大纲密度已达标。",
+      "description": "大纲结构完整，信息密度足以指导写作",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_structure_completeness",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "outline叙事张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（叙事张力持续且递进）。\n\n1）信息落差/悬念设计明确：第1章抛出“未来邮戳的匿名信+不要爱上那个男人”的核心谜团；第2章通过邮戳日期迅速逼近制造倒计时压力，但并未解释信的来源与机制；直到第5章才揭示“她就是写信的人、并将在未来杀死他”，属于典型的“提出问题→延迟回答”。\n\n2）张力递进成立：前段是困惑与调查（小危机：恶作剧/预言真假），中段升级为情感沉溺与倒计时逼近（个人情感与命运冲突加剧），第5章进一步把冲突抬升到“必将杀死所爱之人”的不可逆宿命；三幕后段进入“执行/抉择”阶段，紧张度高于开端。\n\n3）意外/转折存在且相对有力：第5章“警告并非警告，而是因果闭环/她是写信者且杀人者”的反转不可从第1章直接推到，属于有效转折；第6章再将其落地为“她主动写下最初那封信”形成闭环，也算第二个转折/确认。\n\n潜在不足（不影响通过，但可优化）：第7章开放式处理可能造成‘前紧后松’的观感，建议在开放结局下仍给出更明确的情感/因果落点（例如：她选择打破循环的代价、或杀/不杀分别对应的后果线索），以维持收束力度并避免读者觉得悬念只停在氛围层面。",
+      "description": "大纲有持续的叙事张力和悬念驱动",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_narrative_tension",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色大纲规划完整性": {
+      "check_result": "skip",
+      "reason": "前置条件失败（characters.json读取失败）",
+      "details": "无法读取 workspace/characters.json: JSON格式不合法（行31列36）",
+      "dependency_failure": true,
+      "description": "设计的角色必须在大纲中规划",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_outline",
+      "is_critical": true
+    },
+    "角色正文出场完整性": {
+      "check_result": "skip",
+      "reason": "前置条件失败（characters.json读取失败）",
+      "details": "无法读取 workspace/characters.json: JSON格式不合法（行31列36）",
+      "dependency_failure": true,
+      "description": "设计的角色必须在正文中出现",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_chapters",
+      "is_critical": true
+    }
+  },
+  "completion_status": "completed"
+}

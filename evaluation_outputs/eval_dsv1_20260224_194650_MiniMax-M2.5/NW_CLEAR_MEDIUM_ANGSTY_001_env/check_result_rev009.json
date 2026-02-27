@@ -1,0 +1,811 @@
+{
+  "check_version": "novel_writing_v1.0",
+  "sample_id": "NW_CLEAR_MEDIUM_ANGSTY_001",
+  "check_timestamp": 1772181403,
+  "dimension_scores": {
+    "format_compliance": {
+      "pass_rate": 0.75,
+      "total": 4,
+      "passed": 3,
+      "failed": 1,
+      "skipped": 0,
+      "failed_items": [
+        "章节命名格式"
+      ]
+    },
+    "business_rule_compliance": {
+      "pass_rate": 0.938,
+      "total": 16,
+      "passed": 15,
+      "failed": 1,
+      "skipped": 5,
+      "failed_items": [
+        "中篇字数"
+      ]
+    },
+    "memory_management": {
+      "pass_rate": 0.5,
+      "total": 2,
+      "passed": 1,
+      "failed": 1,
+      "skipped": 0,
+      "failed_items": [
+        "writing_log文件读取"
+      ]
+    },
+    "data_consistency": {
+      "pass_rate": 0.0,
+      "total": 1,
+      "passed": 0,
+      "failed": 1,
+      "skipped": 1,
+      "failed_items": [
+        "角色大纲规划完整性"
+      ]
+    },
+    "content_quality": {
+      "overall_score": 0.0,
+      "quality_level": "gate_failed",
+      "gate_layer": {
+        "pass_rate": 0.0,
+        "total": 4,
+        "passed": 0,
+        "failed": 4,
+        "skipped": 0,
+        "failed_items": [
+          "章节产出存在性",
+          "章节克隆检测",
+          "交替重复检测",
+          "章节完成度"
+        ]
+      },
+      "basic_layer": {
+        "pass_rate": 0.158,
+        "total": 19,
+        "passed": 3,
+        "failed": 16,
+        "skipped": 0,
+        "failed_items": [
+          "段落重复检测",
+          "主题一致性",
+          "主要角色一致性",
+          "人物设定一致性",
+          "结构性逻辑硬伤",
+          "语言纯净性",
+          "情节推进",
+          "完整叙事文本",
+          "反复结局",
+          "叙事调性匹配",
+          "后期章节跑偏",
+          "大纲执行忠实度",
+          "智斗逻辑合理性",
+          "语义重复检测",
+          "情感交付虐心",
+          "角色动机设计深度"
+        ]
+      },
+      "advanced_layer": {
+        "pass_rate": 0.273,
+        "total": 11,
+        "passed": 3,
+        "failed": 8,
+        "skipped": 1,
+        "failed_items": [
+          "角色语言辨识度",
+          "叙事密度",
+          "剧情节奏合理性",
+          "钩子设计",
+          "意象系统",
+          "情感弧线层次",
+          "结构功能性",
+          "角色成长弧线设计"
+        ]
+      },
+      "gate_triggered": true,
+      "score_breakdown": {
+        "base": 60.0,
+        "gate_penalty": -80.0,
+        "basic_deduction": -50.53,
+        "advanced_bonus": 10.91
+      }
+    }
+  },
+  "overall_result": {
+    "status": "Failed",
+    "total_score": 16.41,
+    "content_score": 0.0,
+    "process_score": 54.7,
+    "content_weight": 0.7,
+    "process_weight": 0.3,
+    "gate_triggered": true,
+    "total_checks": 57,
+    "passed_checks": 25,
+    "failed_checks": 32,
+    "pass_rate": 0.439
+  },
+  "check_details": {
+    "读取配方知识库": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/RECIPE_KNOWLEDGE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取RECIPE_KNOWLEDGE.md（配方知识库）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节产出存在性": {
+      "check_result": "fail",
+      "reason": "SOP执行崩坏：未产出任何章节文件",
+      "details": "✗ 章节写作阶段: 未找到任何章节文件，Agent执行流程在写作阶段前崩坏。",
+      "execution_collapsed": true,
+      "description": "workspace中必须存在至少一个章节文件",
+      "check_type": "sop_stage_coverage",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_output_existence",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节克隆检测": {
+      "check_result": "fail",
+      "reason": "未找到匹配文件",
+      "details": "模式 'chapters/chapter_*.md' 未匹配任何文件",
+      "description": "不能出现连续章节内容完全重复（克隆）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_cloning",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "交替重复检测": {
+      "check_result": "fail",
+      "reason": "未找到匹配文件",
+      "details": "模式 'chapters/chapter_*.md' 未匹配任何文件",
+      "description": "不能出现A-B-A-B交替循环的章节内容",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "alternating_repetition",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节完成度": {
+      "check_result": "fail",
+      "reason": "未找到匹配文件",
+      "details": "模式 'chapters/chapter_*.md' 未匹配任何文件",
+      "description": "实际写作章节数必须达到大纲规划的合理比例",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_completion",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "段落重复检测": {
+      "check_result": "fail",
+      "reason": "未找到匹配文件",
+      "details": "模式 'chapters/chapter_*.md' 未匹配任何文件",
+      "description": "不能出现大量段落在不同章节间重复",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "paragraph_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取大纲设计指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/OUTLINE_DESIGN_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取OUTLINE_DESIGN_GUIDE.md（大纲设计指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取写作技巧指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/WRITING_TECHNIQUE_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取WRITING_TECHNIQUE_GUIDE.md（写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取设定一致性管理指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/CONSISTENCY_MANAGEMENT_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取CONSISTENCY_MANAGEMENT_GUIDE.md（设定一致性管理指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取命名skill": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取CHARACTER_NAMING_GUIDE.md（角色命名规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取creative_intent的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取creative_intent.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取characters的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取characters.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取outline的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取outline.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节命名格式": {
+      "check_result": "fail",
+      "reason": "目录为空",
+      "details": "目录 workspace/chapters/ 中没有文件",
+      "description": "章节文件命名必须为chapter_NN.md格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "naming_convention",
+      "is_critical": true
+    },
+    "creative_intent格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "creative_intent.json: 字段完整",
+      "description": "creative_intent.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "characters格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "characters.json: 字段完整",
+      "description": "characters.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "outline格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "outline.json: 字段完整",
+      "description": "outline.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "X轴模式ID格式": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.x_axis_mode_id = D20，符合预期",
+      "description": "X轴模式ID必须匹配^[A-G]\\d{1,2}$格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签枚举": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['系统流', '刑侦悬疑', '双向暗恋']，符合预期",
+      "description": "Y轴标签必须在12种枚举中",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签数量": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['系统流', '刑侦悬疑', '双向暗恋']，符合预期",
+      "description": "Y轴标签数量必须为2-3个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "forbidden_elements存在性": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.forbidden_elements = ['不要出现\"系统可以被打败/破解\"的机械降神结局', '不要让男主轻易逃避命运（否则失去虐心张力）', '不要写成\"其实她不是真凶\"的金手指', '不要有\"系统消失/失效\"的突兀转折']，符合预期",
+      "description": "forbidden_elements必须至少有1个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "配方选择交互": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "配方选择阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "写作准备确认": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "写作准备阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "主题一致性": {
+      "check_result": "fail",
+      "reason": "未找到匹配文件",
+      "details": "模式 'chapters/chapter_*.md' 未匹配任何文件",
+      "description": "故事主题一致",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "theme_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "主要角色一致性": {
+      "check_result": "fail",
+      "reason": "未找到匹配文件",
+      "details": "模式 'chapters/chapter_*.md' 未匹配任何文件",
+      "description": "主要角色一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "main_character_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设定一致性": {
+      "check_result": "fail",
+      "reason": "未找到匹配文件",
+      "details": "模式 'chapters/chapter_*.md' 未匹配任何文件",
+      "description": "人物设定一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_trait_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设计遵循度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 本次仅提供了Plan阶段的characters.json设计文档，未提供Execute阶段的chapters/*.md实际章节内容，因此无法进行“设计 vs 实际表现”的一致性对比；在缺少对话/行动/心理描写等执行证据的情况下，无法判定存在偏离，按可评估范围只能视为未发现不一致而通过。当前characters.json内部对主角/副主角的人设要素（traits、显性/隐性动机、secret_fear、misperception、hidden_connection、关系动力）定义清晰且相互支撑：沈凌的理性冷峻与深情挣扎、‘阻止未婚妻杀他/仍要拯救她’的动机闭环明确；苏晚的冷静专业与复杂决绝、‘隐藏计划/必须杀他以阻止更大灾难’的动机也自洽，并与relationship_dynamics中的“倒计时对立”一致。若需严格评估本检查项，请补充chapters/*.md文本以核对上述核心特质与动机是否在实际剧情中被持续体现。",
+      "description": "实际表现符合设计文档",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构性逻辑硬伤": {
+      "check_result": "fail",
+      "reason": "内容不符合标准（LLM未返回结构化flaws，无法拆分fixability，保守判定为fail）",
+      "details": "模式 'chapters/chapter_*.md' 未匹配任何文件",
+      "description": "无结构性逻辑硬伤",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_logic_defect",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "可修复逻辑瑕疵": {
+      "check_result": "pass",
+      "reason": "LLM未返回结构化flaws，无法判断可修复逻辑瑕疵，默认pass",
+      "details": "模式 'chapters/chapter_*.md' 未匹配任何文件",
+      "description": "可修复逻辑瑕疵数量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "fixable_logic_inconsistency",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语言纯净性": {
+      "check_result": "fail",
+      "reason": "未找到匹配文件",
+      "details": "模式 'chapters/chapter_*.md' 未匹配任何文件",
+      "description": "无不合理的多语言混用",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "language_purity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "creative_intent文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/creative_intent.json 存在",
+      "description": "creative_intent.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "characters文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/characters.json 存在",
+      "description": "characters.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "outline文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/outline.json 存在",
+      "description": "outline.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "chapters目录存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/chapters/ 存在",
+      "description": "chapters/目录必须存在且有章节文件",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "情节推进": {
+      "check_result": "fail",
+      "reason": "未找到匹配文件",
+      "details": "模式 'chapters/chapter_*.md' 未匹配任何文件",
+      "description": "章节情节推进质量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "plot_progression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "完整叙事文本": {
+      "check_result": "fail",
+      "reason": "未找到匹配文件",
+      "details": "模式 'chapters/chapter_*.md' 未匹配任何文件",
+      "description": "章节内容必须是完整正文而非大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "full_narrative_content",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "反复结局": {
+      "check_result": "fail",
+      "reason": "未找到匹配文件",
+      "details": "模式 'chapters/chapter_*.md' 未匹配任何文件",
+      "description": "不能出现多次结局标记（全文完/全书完/后记）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "repeated_endings",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "workspace文件规范": {
+      "check_result": "pass",
+      "reason": "workspace中所有文件均在白名单内",
+      "details": "白名单: ['creative_intent.json', 'characters.json', 'outline.json', 'writing_log.md', 'chapters/', '.hitl_context.json']",
+      "description": "workspace中不能有白名单之外的文件",
+      "check_type": "file_whitelist_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "workspace_file_compliance",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "叙事调性匹配": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 题材/应有调性：creative_intent.json标注reaction_strength=✷，y_axis_tags为“系统流+刑侦悬疑+双向暗恋”，且强调“12小时紧迫”“高密度悬疑”“不可更改的规则”。因此叙事调性应偏冷硬克制、信息密度高、节奏紧凑、压迫感强；对话应以信息博弈/试探为主，情感线应更像暗流而非抒情外放。\n\n实际文本的文笔特征：待评估内容只有创意/梗概与配方说明，并非章节正文；其表述是策划案式/说明书式的“设定罗列+功能解释”，例如“警察男主绑定‘犯罪预警系统’…系统提示‘不可更改’”“他必须在12小时内破解这个‘未来命案’”“高潮是发现她杀他的动机是为了阻止他去救一个会导致更大灾难的证人（D20为理想牺牲）”。这些句子以概念解释为主，缺少悬疑正文常用的现场感、压迫氛围营造、短句推进、线索呈现与信息落点（没有可抽样的叙述段落/对话来体现“冷硬紧凑”的阅读体感）。同时“(D20为理想牺牲)”“y_axis_combination_effect”“reaction_formula”等明显是产品配方/元叙述语言，不是刑侦悬疑正文应有的叙事语气。\n\n匹配结论：由于当前内容不是章节文本，无法按标准对“叙事调性（文笔风格/节奏/修辞/语气）”进行抽样验证；就可见部分而言，其呈现为策划说明而非悬疑叙事，整体‘画风’不满足刑侦悬疑应有的冷硬紧凑阅读体验，因此判定matched=false（证据即上述大量设定说明与配方术语表述）。若需准确判定，请提供实际章节正文片段（前/中/后各1-2段）。",
+      "description": "文笔风格必须与题材类型匹配",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_tone_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "后期章节跑偏": {
+      "check_result": "fail",
+      "reason": "未找到匹配文件",
+      "details": "模式 'chapters/' 未匹配任何文件",
+      "description": "后期章节不能跑偏写非正文内容（作者感想、读者互动、番外预告等）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "late_stage_digression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "writing_log文件创建": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/writing_log.md 存在",
+      "description": "必须创建writing_log.md记录创作进度",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_creation",
+      "is_critical": true
+    },
+    "writing_log文件读取": {
+      "check_result": "fail",
+      "reason": "工具未被调用或参数不匹配",
+      "details": "工具 'novel_writing_service__read_file' 匹配调用 0 次，期望 ≥1",
+      "description": "必须读取writing_log.md了解前文内容",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_usage",
+      "is_critical": true
+    },
+    "大纲执行忠实度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 当前仅提供了outline.json（大纲），未提供任何实际章节正文（chapters/*.md）内容，无法执行“规划-执行一致性”（outline vs 正文）对照检查，因此不能判断是否忠实执行大纲。要完成评估需补充至少：各章节正文或章节摘要/关键情节列表（尤其是转折点与结局部分）。",
+      "description": "实际章节内容必须忠实于自己设计的大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_execution_fidelity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色语言辨识度": {
+      "check_result": "fail",
+      "reason": "未找到匹配文件",
+      "details": "模式 'chapters/chapter_*.md' 未匹配任何文件",
+      "description": "不同角色对话必须有可辨识的语言风格差异",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "dialogue_character_distinction",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "叙事密度": {
+      "check_result": "fail",
+      "reason": "未找到匹配文件",
+      "details": "模式 'chapters/chapter_*.md' 未匹配任何文件",
+      "description": "章节叙事应有足够的场景描写、感官细节和心理活动，情感传达以Show为主",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_density",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "智斗逻辑合理性": {
+      "check_result": "fail",
+      "reason": "未找到匹配文件",
+      "details": "模式 'chapters/chapter_*.md' 未匹配任何文件",
+      "description": "谜题/智斗的推理逻辑必须自洽",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "puzzle_logic_validity",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "题材契合度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 配方清晰且题材特征呈现精致：X轴“为理想牺牲(D20)”与Y轴“系统流+刑侦悬疑+双向暗恋”不是简单拼贴，而是互相增幅。系统流的‘额头倒计时’与‘不可更改’把悬疑从常规查案升级为“已被宣判的未来命案”，并天然制造12小时倒计时节奏与信息控制（男主不能让她察觉防备）这一高完成度的戏剧机制；刑侦悬疑的核心问题不是‘她是不是真凶’的低阶反转，而是‘为何必须杀你/如何在不可更改中寻找唯一解’，使推理方向与系统规则强绑定；双向暗恋/未婚妻身份让每一次试探、取证、接近都自带情感代价，形成“爱与自保”的持续拉扯。高潮动机（她杀他是为阻止更大灾难、并指向更高价值的证人牺牲）把D20的道德困境落到具体选择上，避免口号化牺牲。且明确规避“系统可被轻易打败/其实她不是真凶/系统失效”等机械降神风险，保证虐心与悬疑张力可持续。整体已体现‘做得好’的化学反应与题材潜力开发，而非表面标签。",
+      "description": "题材特征精致度和X-Y轴化学反应效果",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "genre_fit",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "剧情节奏合理性": {
+      "check_result": "fail",
+      "reason": "未找到匹配文件",
+      "details": "模式 'chapters/chapter_*.md' 未匹配任何文件",
+      "description": "高潮低谷分布合理、情绪曲线有层次感",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "pacing_rationality_advanced",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "钩子设计": {
+      "check_result": "fail",
+      "reason": "未找到匹配文件",
+      "details": "模式 'chapters/chapter_*.md' 未匹配任何文件",
+      "description": "关键转折处有有效的悬念钩子设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "hook_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "意象系统": {
+      "check_result": "fail",
+      "reason": "未找到匹配文件",
+      "details": "模式 'chapters/chapter_*.md' 未匹配任何文件",
+      "description": "核心意象贯穿全文并发生意义变奏",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "imagery_system",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "情感弧线层次": {
+      "check_result": "fail",
+      "reason": "未找到匹配文件",
+      "details": "模式 'chapters/chapter_*.md' 未匹配任何文件",
+      "description": "主角情感发展有多层递进变化",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_gradient",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语义重复检测": {
+      "check_result": "fail",
+      "reason": "未找到匹配文件",
+      "details": "模式 'chapters/chapter_*.md' 未匹配任何文件",
+      "description": "不能出现大量语义级别的内容重复（P6级）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "semantic_redundancy",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构功能性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 当前内容是“故事设定/卖点+情节梗概”，尚未体现任何可评估的“叙事结构设计”（章节编排、时间结构、视角结构、首尾关系、对称/镜像、留白/收束方式等）。可见信息里只有线性推进的紧迫框架（12小时倒计时→调查→高潮揭示动机），这更像剧情机制/节奏装置，而非结构层面的主题承载；也未提供开头意象与结尾回扣、视角切换用于真相反转、双线交叉（现在侦查/过去因果）等设计，因此按标准应判为结构功能性不足（偏机械的线性叙述预期）。若后续补充如“倒计时分段章节+双线交叉+首尾闭合回到同一时刻/同一证词场景”等，并说明其如何表达‘命运不可更改/牺牲’主题，则可转为matched=true。",
+      "description": "叙事结构服务于主题表达（短篇尤重）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色命名质量": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 主要角色命名缺乏文化深度与角色-命运的独特共振，且命中“LLM通用美名”高频模板：女主/女二位的“苏晚”直接落在黑名单高频组合（苏+晚），属于典型万金油清冷名；男主“沈凌”虽未在黑名单中，但“沈”属于高频“高级感”姓氏，且“凌”常见、与角色设定（刑警队长/预警系统/倒计时命运对抗）的隐性关联不明显，整体仍偏通用。配角中“陆征”（陆为高频姓）、“林小满”（林为高频姓，且“小满”偏常见可爱化取名）、“程澈”（常见清透系双字名）也都较模板化；只有“陈建国”更具现实质感与区分度。整体差异化中等偏低：大多是两字“清冷/简洁风”，缺少能让读者一眼联想到身份、命运或反讽意味的设计点，因此按标准未达优秀（matched=false）。",
+      "description": "角色命名有文化深度、辨识度和角色-命运共振",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_naming_quality",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "中篇字数": {
+      "check_result": "fail",
+      "reason": "未找到匹配文件",
+      "details": "模式 'chapters/chapter_*.md' 未匹配任何文件",
+      "description": "总字数应在108000-132000之间（基于query要求120000，±10%浮动）",
+      "check_type": "semantic_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "range_constraint",
+      "is_critical": true
+    },
+    "情感交付虐心": {
+      "check_result": "fail",
+      "reason": "未找到匹配文件",
+      "details": "模式 'chapters/chapter_*.md' 未匹配任何文件",
+      "description": "实际内容必须是虐心向",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取感情线写作指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/ROMANCE_WRITING_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "涉及感情线时必须读取ROMANCE_WRITING_GUIDE.md（感情线写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": false
+    },
+    "角色关系设计张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（符合“关系具备叙事张力”的业务标准）。\n\n1) 关系有内在矛盾源：沈凌与苏晚在核心目标上直接冲突——沈凌要阻止“未婚妻杀他”的未来并拯救她；苏晚的隐性目标却是“为阻止更大灾难必须杀他”。同时存在明显的信息不对称（沈凌知道倒计时但需伪装；苏晚不知道系统存在）与立场对立（刑警队长/法医未婚妻变为潜在凶手/受害者）。\n\n2) 关系有变化空间：两人关系从“未婚夫妻”可向多方向演化：信任崩塌→对抗；揭露真相→共同对抗更大灾难；沈凌为救她可能包庇/牺牲→引发道德与法律边界的重新定位；苏晚可能因爱与理想的拉扯而动摇或反转。这些都具备从A到B的可变轨迹，不是静态标签。\n\n3) 冲突源于角色本身：张力主要来自两人的动机结构（爱与职责/理想与牺牲）、背景牵连（三年前案件、苏晚父亲之死、沈凌受恩）、以及各自的误解/认知盲区，而非单靠外部怪物或任务推动。倒计时系统是机制放大器，但核心矛盾仍是“她为何必须杀他/他为何必须救她”的人物内在冲突。\n\n补充观察：配角目前更多是功能位（证人/助力/阻碍/上级压力），与主线关系张力的绑定点尚可进一步补强（例如：程澈与苏晚‘必须灭口’的道德冲突、陆征对沈凌异常行为的怀疑、陈建国隐藏身份与三年前案的直接利益关联），但不影响核心角色关系已达标。",
+      "description": "角色关系设计具有叙事张力，能驱动剧情",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_relationship_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色动机设计深度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 整体不达标（fail）。虽然两位主角都填写了 overt_motivation / covert_motivation，并且有 secret_fear、hidden_connection 等支撑，但“表层动机 vs 深层动机”的区分不够成立：\n1) 沈凌：overt 是“破解未婚妻要杀他的未来命案，阻止悲剧”，covert 是“即使牺牲自己也要拯救她，不惜对抗命运”。这两者本质仍在同一目标线上（阻止她杀人/拯救她/逆转命运），更像行动策略与决心升级，而不是更深层心理需求（如自责、赎罪、被认可、恐惧再次失去等）。secret_fear“无能为力”提供了情绪张力，但未明确指向一个与表层目标不同的内在缺口。\n2) 苏晚：overt 是“维持表面平静…执行任务”，covert 是“为阻止他接触证人…她必须杀他”。这更像‘表层伪装/手段’与‘真实计划’，属于信息隐藏，而非深层心理驱动（她真正需要什么、为何宁可走极端）。secret_fear提到“真的爱上他无法下手”有潜在深层矛盾，但仍未落到更根源的心理需求与创伤来源。\n3) 动机来源方面：文档给了背景钩子（沈凌“受她父亲救命之恩”、苏晚“父亲死于三年前案件/关键人物”），但这些背景主要被用于剧情因果与立场冲突；并没有把它们清晰地转译成‘深层动机’的心理成因（例如沈凌因救命之恩/未能保护而形成的赎罪强迫，苏晚因父亲之死形成的道德洁癖/控制欲/殉道倾向等）。因此“动机有具体来源”虽有雏形，但与深层驱动的映射不够明确。\n结论：至少两个主角未能清楚满足“表层动机与深层动机有区分”这一硬指标，所以 matched=false。",
+      "description": "角色动机设计有深度，有表层和深层动机区分",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_motivation_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色成长弧线设计": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: 整体冲突与情感张力很强，但按“主角成长/变化弧线”业务标准仍不足，主要问题在于：1）起点到终点的“内在状态变化”不够清晰落地。沈凌开篇是理性冷峻、深情但孤独的刑警队长，结尾（第30章）仍是刑警队长且更沉默寡言；中间第23-27章出现“从警察到复仇猎人”的外在身份/行动转变，但并未被明确写成价值观/认知层面的完成式转变（例如从‘相信程序正义’到‘接受灰色正义’、从‘控制命运’到‘接受不可控’、从‘误解苏晚’到‘理解并放下’等），更多是情节推动下的情绪反应与行为升级。2）变化的内在逻辑虽可推导（误解→真相→创伤→复仇），但大纲章节的 emotional_tone 多为“崩溃/绝望/虐心/愤怒”，缺少标注或安排能体现“认知更新—选择改变—新自我形成”的节点章节（例如明确的自我反思、原则重建、与系统/职业伦理的和解或决裂的确认）。3）苏晚的弧线相对清楚（隐瞒计划、在爱与责任间挣扎→坦白→从杀沈凌转为自杀/自我牺牲→为救他而死），但她在 characters.json 中是 deuteragonist；标准要求“至少一个主角（protagonist）有明确弧线”，当前沈凌更像经历悲剧与创伤后变得更冷、更执念，属于‘状态恶化/创伤后改变’的方向，但文档未把它明确为设计目标的弧线终点，也缺少阶段性落地（尤其第28-30章更偏余韵而非完成弧线的收束）。因此不满足‘可辨识的起点和终点’以及‘章节规划中体现弧线落地’这两项的严格要求。",
+      "description": "主角有清晰的成长/变化弧线设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_arc_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "outline结构完整性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass。1) 章节覆盖完整：大纲按三幕结构覆盖第1-30章，从开端（系统能力与未婚妻死亡预言）到结局/尾声（复仇、清算、余生悬念）闭合完整，未出现只到前几章就中断的问题。2) 每章有实质性内容：30章均提供core_event（多为明确行动+信息揭示+后果），并配有情绪基调与关键场景，信息量足以指导写作，不是仅标题罗列。3) 冲突/转折充分：主冲突（预言系统 vs 自由意志；沈凌生存 vs 阻止更大灾难；苏晚动机与道德困境）贯穿，且关键转折清晰（如第8章‘干预加速预言’、第13章动机揭露、第19章预言改为自杀、第21章枪击牺牲、第25章内鬼/陷阱、第27章同归于尽与系统∞）。场景级细化通过key_scenes呈现，情绪转折也被标注。4) 幕结构可辨识：act_one/act_two/act_three均有description与turning_point，章节分配比例也与三幕节奏匹配。小建议：若作为可直接落笔的写作大纲，可在部分章补充更具体的对抗过程与因果链（如第24章“一个个解决他们”的实施方式、警方身份变化的合法性/代价、系统规则在终局‘∞’的解释），以避免后续写作出现逻辑跳跃。",
+      "description": "大纲结构完整，信息密度足以指导写作",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_structure_completeness",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "outline叙事张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 整体符合“持续叙事张力”的业务标准，且三项必须条件均满足。\n\n1）信息落差设计充足：第2章抛出核心谜团“苏晚将在今晚23:00杀害你”，第3章进一步加码“不可更改”，但直到第9-13章才逐步揭示动机（程澈/毒品集团威胁/父亲旧案），并在第19章再把“她杀他”改写为“她将自杀”，形成多段“提出问题→延迟回答→再反转”的悬念链；第25章“头目竟是警局内部的人”也属于后置揭示。\n\n2）张力递进明确：第一幕是私人层面的亲密关系危机与倒计时恐惧（怀疑未婚妻要杀自己）；第二幕升级为电车难题与城市级风险（50人报复、毒品战争），并推进到仓库对峙+倒计时逼近；第三幕进一步外化为直接暴力对抗与复仇行动（毒品集团追杀、内鬼、最终对决），整体紧张度在中后段显著高于开端。\n\n3）意外/转折存在且有效：至少两处强转折——第17章“苏晚不是杀沈凌而是要杀程澈”、第19章“预言变更为她将自杀”；第21章“苏晚被枪击身亡”将情感线与主线危机合并推进；尾声第30章“疑似苏晚背影”制造余味悬念。\n\n补充观察：后段（24-27）存在一定‘复仇清单式推进’风险，若章节呈现为连续‘定位→解决’会趋同质化，建议强化每次行动的代价/反制/信息揭示以保持非重复张力；但从大纲现有信息看仍有陷阱（25）与倒计时压力（26）来维持张力，因此不影响通过。",
+      "description": "大纲有持续的叙事张力和悬念驱动",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_narrative_tension",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色大纲规划完整性": {
+      "check_result": "fail",
+      "reason": "部分设计角色未在大纲中规划（配角: 林小满, 陈建国）",
+      "details": "主角 2/2: 沈凌, 苏晚; 配角 2/4: 程澈, 陆征; 配角缺失: 林小满, 陈建国",
+      "description": "设计的角色必须在大纲中规划",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_outline",
+      "is_critical": true
+    },
+    "角色正文出场完整性": {
+      "check_result": "skip",
+      "reason": "前置条件失败（章节文件不存在）",
+      "details": "模式 'workspace/chapters/' 未匹配任何章节文件",
+      "dependency_failure": true,
+      "description": "设计的角色必须在正文中出现",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_chapters",
+      "is_critical": true
+    }
+  },
+  "completion_status": "completed"
+}

@@ -1,0 +1,816 @@
+{
+  "check_version": "novel_writing_v1.0",
+  "sample_id": "NW_CLEAR_MEDIUM_ADVENTURE_001",
+  "check_timestamp": 1772181472,
+  "dimension_scores": {
+    "format_compliance": {
+      "pass_rate": 1.0,
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "failed_items": []
+    },
+    "business_rule_compliance": {
+      "pass_rate": 0.95,
+      "total": 20,
+      "passed": 19,
+      "failed": 1,
+      "skipped": 0,
+      "failed_items": [
+        "中篇字数_冒险"
+      ]
+    },
+    "memory_management": {
+      "pass_rate": 0.5,
+      "total": 2,
+      "passed": 1,
+      "failed": 1,
+      "skipped": 0,
+      "failed_items": [
+        "writing_log文件读取"
+      ]
+    },
+    "data_consistency": {
+      "pass_rate": 1.0,
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "failed_items": []
+    },
+    "content_quality": {
+      "overall_score": 79.45,
+      "quality_level": "unqualified",
+      "gate_layer": {
+        "pass_rate": 1.0,
+        "total": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 1,
+        "failed_items": []
+      },
+      "basic_layer": {
+        "pass_rate": 0.9,
+        "total": 20,
+        "passed": 18,
+        "failed": 2,
+        "skipped": 0,
+        "failed_items": [
+          "后期章节跑偏",
+          "智斗逻辑合理性"
+        ]
+      },
+      "advanced_layer": {
+        "pass_rate": 0.636,
+        "total": 11,
+        "passed": 7,
+        "failed": 4,
+        "skipped": 1,
+        "failed_items": [
+          "可修复逻辑瑕疵",
+          "题材契合度",
+          "钩子设计",
+          "结构功能性"
+        ]
+      },
+      "gate_triggered": false,
+      "score_breakdown": {
+        "base": 60.0,
+        "gate_penalty": -0.0,
+        "basic_deduction": -6.0,
+        "advanced_bonus": 25.45
+      }
+    }
+  },
+  "overall_result": {
+    "status": "Good",
+    "total_score": 81.49,
+    "content_score": 79.45,
+    "process_score": 86.25,
+    "content_weight": 0.7,
+    "process_weight": 0.3,
+    "gate_triggered": false,
+    "total_checks": 62,
+    "passed_checks": 54,
+    "failed_checks": 8,
+    "pass_rate": 0.871
+  },
+  "check_details": {
+    "读取配方知识库": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取RECIPE_KNOWLEDGE.md（配方知识库）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节产出存在性": {
+      "check_result": "pass",
+      "reason": "章节文件存在",
+      "details": "✓ 章节写作阶段: 已产出章节文件",
+      "description": "workspace中必须存在至少一个章节文件",
+      "check_type": "sop_stage_coverage",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_output_existence",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节克隆检测": {
+      "check_result": "pass",
+      "reason": "未检测到章节克隆",
+      "details": "共6章，无连续完全克隆或近似克隆",
+      "description": "不能出现连续章节内容完全重复（克隆）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_cloning",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "交替重复检测": {
+      "check_result": "skip",
+      "reason": "章节数不足",
+      "details": "仅6章，跳过交替重复检测（需>=8章）",
+      "description": "不能出现A-B-A-B交替循环的章节内容",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "alternating_repetition",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节完成度": {
+      "check_result": "pass",
+      "reason": "章节完成度合格(100%)",
+      "details": "大纲规划6章，实际完成6章 (完成率100.0%)",
+      "description": "实际写作章节数必须达到大纲规划的合理比例",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_completion",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "段落重复检测": {
+      "check_result": "pass",
+      "reason": "段落重复在可接受范围",
+      "details": "同章内重复0处, 跨章重复0组 (阈值: 同章>=2, 跨章>=5)",
+      "description": "不能出现大量段落在不同章节间重复",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "paragraph_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取大纲设计指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取OUTLINE_DESIGN_GUIDE.md（大纲设计指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取写作技巧指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取WRITING_TECHNIQUE_GUIDE.md（写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取设定一致性管理指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取CONSISTENCY_MANAGEMENT_GUIDE.md（设定一致性管理指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取命名skill": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取CHARACTER_NAMING_GUIDE.md（角色命名规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取creative_intent的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取creative_intent.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取characters的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取characters.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取outline的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取outline.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节命名格式": {
+      "check_result": "pass",
+      "reason": "所有文件命名符合规范",
+      "details": "检查了 6 个文件; chapter_05.md: 匹配; chapter_01.md: 匹配; chapter_02.md: 匹配; chapter_03.md: 匹配; chapter_04.md: 匹配; chapter_06.md: 匹配",
+      "description": "章节文件命名必须为chapter_NN.md格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "naming_convention",
+      "is_critical": true
+    },
+    "creative_intent格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "creative_intent.json: 字段完整",
+      "description": "creative_intent.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "characters格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "characters.json: 字段完整",
+      "description": "characters.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "outline格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "outline.json: 字段完整",
+      "description": "outline.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "X轴模式ID格式": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.x_axis_mode_id = F28，符合预期",
+      "description": "X轴模式ID必须匹配^[A-G]\\d{1,2}$格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签枚举": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['刑侦悬疑', '规则怪谈']，符合预期",
+      "description": "Y轴标签必须在12种枚举中",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签数量": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['刑侦悬疑', '规则怪谈']，符合预期",
+      "description": "Y轴标签数量必须为2-3个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "forbidden_elements存在性": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.forbidden_elements = ['鬼怪', '法术', '系统', '穿越']，符合预期",
+      "description": "forbidden_elements必须至少有1个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "配方选择交互": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "配方选择阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "写作准备确认": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "写作准备阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "主题一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 从开篇到结尾的核心主题始终围绕“追寻父辈失踪真相/探险求生并完成情感与心结的救赎”展开：第1章确立父亲失踪与“黑石之下，生门所在”的线索并踏上寻找之路；第2-4章通过进山、断路、鬼哭谷与黑石寨围猎等情节持续推进同一主线目标（进入黑石谷、活下去并逼近真相）；第5章在倒悬之城直接揭示父辈结局与危险根源，将主题从‘寻找’推进到‘面对与处理’；第6章以“生门”逃出生天并完成对父辈意义的重新理解与自我和解收束，全程没有从探险寻真/救赎主线跳转为无关的商战、恋爱或修仙等其他主题类型，仅在同一主题框架内加入追杀、机关、诡异真菌等要素作为推进方式，因此主题一致、主线清晰。",
+      "description": "故事主题一致",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "theme_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "主要角色一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 主角（林砚、秦烈）从chapter_01开篇即确立为双主角，并在chapter_01-06全程持续出现且共同推动剧情：chapter_01两人分别登场并形成“进山寻父”共同目标；chapter_02两人一起进山、车辆坠崖后仍共同求生；chapter_03-04两人始终在同一行动线中（林砚负责解读线索/破阵、秦烈负责战斗/决策），叙事中心未被他人取代；chapter_05两人发现父辈遗骸并共同做出引爆逃生的关键决策，追兵桑吉虽占一定篇幅但属于配角反派线，未抢占叙事中心；chapter_06两人共同脱险并返回，完成主线闭环。不存在主角中途消失、被替换、身份断裂或被配角长期挤占（>70%）视角的问题，因此符合主角存续性标准。",
+      "description": "主要角色一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "main_character_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设定一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 整体来看，主要角色在6章内的性格底色、行为模式与核心动机保持一致，没有出现无铺垫的“真崩坏”。\n\n- 秦烈：从第1章起就是强硬、务实、风险意识强、战斗/求生能力突出且有保护欲的人设——先反对进山（基于危险评估），但被“父亲失踪”触发后立刻转为行动派并接管指挥；第2-4章持续体现其冷静判断、战术反应与保护林砚（跳车推人、夜里守火、识破陷阱、掩护撤离）；第5章见到父亲遗物后情绪崩溃是与其长期心结一致的合理爆发，但关键决策仍偏务实（戴面具、撤离、爆破）；第6章回归到更柔和的情绪收束（释怀、回北京），属于事件结束后的合理缓和，不构成性格摇摆。\n\n- 林砚：第1章起核心动机明确（寻找父亲真相/生门线索），性格偏理性执拗、学术型；第2章在高压环境下恐惧与手足无措符合其“非野外型”特征，但仍坚持前进；第3-4章在发现符咒/阵法时进入高度专注并发挥专业能力，形成“体能弱但知识强”的稳定行为模式；第5章对真菌/机关的判断与提出利用通风口逃生，属于其专业驱动的主动性增强，是在连续生存压力与关键线索出现后的合理成长，而非无缘无故变强或降智；第6章能在激流中反向救秦烈，属于危机下的肾上腺素爆发且前文已铺垫其“决绝/不再退缩”的变化轨迹，仍可接受为合理变化。\n\n- 两人关系/互动：从第1章的微妙疏离到共同历险后的信任加深，推进连续且由事件驱动（共患难、互相救命、共同面对父辈真相），不存在章节间突兀反转。\n\n因此在“同一角色跨章节一致性”维度判定为合格。",
+      "description": "人物设定一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_trait_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设计遵循度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 总体符合characters.json的核心人设设定，Plan（characters.json）与Execute（chapter_01-06）在性格特质、动机方向、能力与关系基调上基本一致。\n\n1) 秦烈（protagonist）\n- traits匹配：\n  - “野外生存专家/实用主义”：chapter_01对装备清单直接做取舍（“把你那些没用的考古仪器扔掉一半，换成急救包和信号弹”）；chapter_02滑坡中判断与驾驶、跳车决策与急救包扎；chapter_03生火、判断高反失温；chapter_03-04对狼群/陷阱的战术应对；整体体现强烈的生存与风险优先。\n  - “护短”：chapter_02跳车时先把林砚推出去；chapter_03整夜警戒狼群、把冲锋衣给林砚；chapter_04箭袭时第一时间扑倒林砚并带他逃。\n  - “创伤应激（PTSD倾向）”：chapter_01提到父亲失踪与母亲病逝是“死穴”、一触即发（攥紧酒瓶、情绪明显波动）；后续在高压场景中呈现高度警觉、几乎不睡（chapter_04“几乎一夜没合眼…依然保持警觉”）可视作应激/过度警戒的外化表现。虽未出现明确闪回或惊恐发作，但“创伤驱动+过度警觉”已被表达。\n- motivation匹配：\n  - overt“保护林砚进山、找父亲遗骸带回安葬”：chapter_01答应同行并以“命更贵”“一切听我的”来保证林砚安全；chapter_05发现秦山遗体并强烈情感反应，且整体行动围绕深入遗址与带出真相/遗骸展开。\n  - covert“追父亲进山真相、解开被遗弃心结”：chapter_01被林砚一句“你就不想知道…为什么抛下生病的阿姨”击中并立刻改变决定；chapter_06“他们不是抛弃了我们…是英雄”的和解式结论，对应心结被解。\n- misperception_of_other匹配：\n  - 认为林砚“温室花朵/送死”：chapter_01多次贬低其体能（“跑个一千米都要死要活”）；chapter_03直接骂“废物”；直到chapter_04-05看到其解阵与专业价值才转向尊重（符合“初期看不上→能力互补后尊重”的设计）。\n\n2) 林砚（deuteragonist）\n- traits匹配：\n  - “博闻强记/古文字专家/逻辑缜密”：chapter_01识别南诏古彝文并解读；chapter_03辨认镇魂咒与符号体系、比对拓片；chapter_04快速识别并破解“八阵图变种”；chapter_05识别真菌与孢子致幻机制并做风险判断。\n  - “体力废柴”：chapter_02晕车、chapter_03高反失温、频繁体力崩溃与拖累队伍；整体持续呈现。\n  - “执拗”：chapter_01坚持进山、在秦烈反对下仍推进；chapter_02向导拒绝仍决定深入；面对桑吉威胁仍坚持用知识博弈。\n- motivation匹配：\n  - overt“找南诏古城、证明父亲推断正确”：chapter_01-03全程以铜牌铭文、日记与地形比对为线索推进；chapter_05“倒悬之城”出现后其学术信念得到验证。\n  - covert“获得父亲认可/摆脱书呆子标签”：chapter_01对父亲日记的执念与“我们来了”的宣誓；中后段在关键节点用专业能力主导解阵、提出逃生方案（chapter_05“我有办法”）并赢得秦烈尊重，符合“证明自己”的内在驱动。\n- misperception_of_other匹配：\n  - 认为秦烈“莽夫不懂文化价值”：chapter_01虽未直说这句，但其对秦烈“粗鲁/只懂暴力”的互动张力存在（被嘲“盗墓”、仪器价值争执），且关系走向按设计由轻视到互信。\n\n3) 关系设定（relationship_dynamics）匹配\n- “发小但互相看不顺眼”到“被迫同盟”：chapter_01酒局冲突+最终同行；\n- “灾难中秦烈救林砚建立信任”：chapter_02跳车救命、chapter_03护持过夜；\n- “黑石寨围困，林砚用知识破机关带秦烈逃生，秦烈开始尊重”：chapter_04迷阵由林砚主导破解，秦烈明确跟随；chapter_03秦烈评价“不是完全没用”是尊重萌芽；\n- “后期解开心结、成为生死兄弟”：chapter_06对父辈牺牲达成共同理解与情感升华（握手回程、玩笑结账）符合“兄弟感”。\n\n4) 可能的轻微不足（但不构成严重偏离）\n- 秦烈的“创伤应激/PTSD”更多以“高度警觉+情绪触发点”呈现，缺少更典型的PTSD症状描写（闪回、回避、惊恐发作等）。但这属于表现强度问题，并未与设定相反。\n\n结论：两位主角的核心traits、动机方向、能力结构与关系基调均被章节持续体现，属于合理发挥范围内的一致呈现。",
+      "description": "实际表现符合设计文档",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构性逻辑硬伤": {
+      "check_result": "pass",
+      "reason": "共发现4处逻辑问题，但均为fixable类型，本项（structural）无命中",
+      "details": "过滤条件: fixability=structural; 总flaws=4, 命中=0",
+      "flaw_count": 0,
+      "flaws": [],
+      "description": "无结构性逻辑硬伤",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_logic_defect",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "可修复逻辑瑕疵": {
+      "check_result": "fail",
+      "reason": "发现4处fixable类型逻辑问题: chapter_01明确写林砚父亲“在横断山脉失踪”“所有人都说遭遇泥石流”“连一点残骸都留不下”；但chapter_02阿木称其“死在鬼哭谷”，chapter_05又出现可辨认的林教授干尸。前文将状态设为“失踪且无残骸”，后文变为“已确认死亡且遗体可见”，缺少任何解释（如后来发现遗体/地方口述误传/尸体来源等）。; chapter_02泥石流封路后两人只有“两包基础求生工具和三天口粮”，且“帐篷、发电机、精密仪器，全没了”；但chapter_03-04在高海拔寒夜仍能稳定生火、并在chapter_03出现“你就往火里扔镁粉”的明确物资指令，未交代镁粉/点火助燃物等是否在幸存背包中，形成关键求生物资的状态缺口。; chapter_04黑石寨巡逻队“手持土制猎枪”并追击；chapter_05进入倒悬城广场后“快戴上！秦烈从包里掏出仅有的两个防毒面具”。但chapter_02已说明大量装备随车坠崖，仅剩基础求生包；后续也未铺垫两人仍携带防毒面具这一“专业防护装备”。与此前装备损失设定不一致。; 倒悬城被描述为“亭台楼阁、城墙街道，全部都是倒着的。重力在这里仿佛失去了作用”；但两人“顺着石柱攀爬而上，翻过倒悬的城墙，进入古城内部”，进入后仍以常规重力逻辑行走、尸体“倒在地上”、村民坠落“坠入深渊”。若重力失效/反向，应交代明确规则（局部重力场、城内外重力方向不同、为何可行走与坠落）。当前同一空间内重力规则表述互相打架。",
+      "details": "过滤条件: fixability=fixable; 总flaws=4, 命中=4",
+      "flaw_count": 4,
+      "flaws": [
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_01 → chapter_02",
+          "description": "chapter_01明确写林砚父亲“在横断山脉失踪”“所有人都说遭遇泥石流”“连一点残骸都留不下”；但chapter_02阿木称其“死在鬼哭谷”，chapter_05又出现可辨认的林教授干尸。前文将状态设为“失踪且无残骸”，后文变为“已确认死亡且遗体可见”，缺少任何解释（如后来发现遗体/地方口述误传/尸体来源等）。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_02 → chapter_03-04",
+          "description": "chapter_02泥石流封路后两人只有“两包基础求生工具和三天口粮”，且“帐篷、发电机、精密仪器，全没了”；但chapter_03-04在高海拔寒夜仍能稳定生火、并在chapter_03出现“你就往火里扔镁粉”的明确物资指令，未交代镁粉/点火助燃物等是否在幸存背包中，形成关键求生物资的状态缺口。"
+        },
+        {
+          "type": "worldbuilding_coherence",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_04 → chapter_05",
+          "description": "chapter_04黑石寨巡逻队“手持土制猎枪”并追击；chapter_05进入倒悬城广场后“快戴上！秦烈从包里掏出仅有的两个防毒面具”。但chapter_02已说明大量装备随车坠崖，仅剩基础求生包；后续也未铺垫两人仍携带防毒面具这一“专业防护装备”。与此前装备损失设定不一致。"
+        },
+        {
+          "type": "worldbuilding_coherence",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_05（倒悬城物理规则描述）",
+          "description": "倒悬城被描述为“亭台楼阁、城墙街道，全部都是倒着的。重力在这里仿佛失去了作用”；但两人“顺着石柱攀爬而上，翻过倒悬的城墙，进入古城内部”，进入后仍以常规重力逻辑行走、尸体“倒在地上”、村民坠落“坠入深渊”。若重力失效/反向，应交代明确规则（局部重力场、城内外重力方向不同、为何可行走与坠落）。当前同一空间内重力规则表述互相打架。"
+        }
+      ],
+      "description": "可修复逻辑瑕疵数量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "fixable_logic_inconsistency",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语言纯净性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 通篇叙事语言为中文，未发现无意义的中英/日文夹杂（如“very生气”“这个idea”等）。文本中出现的外来元素均为中文语境下的正常用词或专有名词/术语表达（如“T恤”“DNA/AI”类并未出现；“牧马人”属车型俗称/品牌指代；“八阵图”等为中文文化术语），且无大段外语未翻译的情况，也不存在为炫技而插入外语的现象。因此语言使用纯净、合理，符合业务标准。",
+      "description": "无不合理的多语言混用",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "language_purity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "creative_intent文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/creative_intent.json 存在",
+      "description": "creative_intent.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "characters文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/characters.json 存在",
+      "description": "characters.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "outline文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/outline.json 存在",
+      "description": "outline.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "chapters目录存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/chapters/ 存在",
+      "description": "chapters/目录必须存在且有章节文件",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "情节推进": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 合格：整体情节推进明确且事件密度高，远超“静态对话/独白”为主的标准。\n\n1) 故事事件数量（按章节累计，远≥2-3个）：\n- 第1章：发现铜牌铭文与父亲日记线索（发现/转折）；联系秦烈并达成进山行动同盟（决策事件/关系推进）。\n- 第2章：向导拒绝并显露“黑石谷”禁忌（冲突/阻碍）；暴雨引发山体滑坡、车辆坠崖爆炸（重大危机）；秦烈受伤+装备损失+退路被封，被迫徒步深入（状态改变/目标升级）。\n- 第3章：高反失温与野外生存处置（行动）；发现镇魂咒/古道入口线索（发现）；遭遇狼群夜袭并对峙（外部冲突）。\n- 第4章：发现捕兽夹与埋伏（危险预警）；遭箭袭追杀（冲突）；陷入迷阵并由林砚解阵脱困（能力发挥/推进）；被黑石寨围捕后跳入暗河逃生（转折/场景切换）。\n- 第5章：暗河冲刷进入倒悬古城（重大场景变化/发现）；发现父辈遗体与“真菌致幻”真相（核心揭秘）；追兵闯入触发孢子导致内乱（冲突升级）；进入大殿布置炸药并引爆（高潮事件）。\n- 第6章：爆炸后被气浪推出溶洞并漂流上岸（结局事件）；返程回北京（时间推进/收束）。\n\n2) 内容占比分析：\n- 多数段落为行动、遭遇、逃生、发现、对抗与决策（滑坡坠车、徒步、狼群对峙、追杀、破阵、跳河、探索古城、孢子爆发、爆破逃生等），事件驱动明显；对话/内心主要服务于信息交代与角色动机，不构成>70%的主体。综合看事件占比显著≥40%。\n\n3) 时间/空间推进与逻辑链：\n- 空间连续推进：北京博物馆→安保基地→烧烤摊→黑石镇→深山伐木道→鬼哭谷→迷阵出口/黑石寨围捕→地下暗河→倒悬城→溶洞外河滩→返程大巴。\n- 时间推进清晰（“三天后”“清晨”“三天后回程”等）。\n- 事件逻辑闭环：铜牌/日记线索驱动进山→向导拒绝与自然灾害迫使深入→古道/阵法/守陵人冲突逐步揭示真相→倒悬城与真菌解释“诅咒”并找到父辈结局→爆破埋葬隐患并逃出生天。\n\n结论：具备持续的外部事件与冲突升级、场景与时间推进、角色具体行动与因果链条，符合“合格（matched: true）”标准。",
+      "description": "章节情节推进质量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "plot_progression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "完整叙事文本": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 6个章节均为连贯的小说正文而非大纲：包含明确的场景描写（如国博修复室、黑石镇、鬼哭谷、地下河与倒悬城等）、人物动作与细节（跳车、包扎、攀爬、布置炸药等）、完整对话推进（林砚与秦烈的约见/争执/协作，桑吉对峙等）、以及连续的叙事流。未出现“核心事件/情感基调/关键场景/本章悬念/字数预估”等创作规划元信息，也没有以要点列举、流程箭头等方式罗列事件，因此符合‘完整小说正文’的底线标准。",
+      "description": "章节内容必须是完整正文而非大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "full_narrative_content",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "反复结局": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 共6个文件，最后一个文件为chapter_06.md。扫描全书级结局标记后发现：仅chapter_06.md末尾出现全书结局标记“（全文完）”。chapter_01.md~chapter_05.md未出现“全文完/全书完/完结/后记/尾声/终章/（完）/【完】/THE END”等全书级结局标记，也未见独立段落标题形式的“后记/尾声/终章”。因此不存在“非最后文件出现全书结局标记、结局后又续写”的反复结局问题，判定合格。",
+      "description": "不能出现多次结局标记（全文完/全书完/后记）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "repeated_endings",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "workspace文件规范": {
+      "check_result": "pass",
+      "reason": "workspace中所有文件均在白名单内",
+      "details": "白名单: ['creative_intent.json', 'characters.json', 'outline.json', 'writing_log.md', 'chapters/', '.hitl_context.json']",
+      "description": "workspace中不能有白名单之外的文件",
+      "check_type": "file_whitelist_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "workspace_file_compliance",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "叙事调性匹配": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 题材应有调性（基于creative_intent.json：绝境求生×刑侦悬疑/规则怪谈，reaction_strength=✷）：整体应偏冷硬紧凑、压迫感强，信息密度较高；对话以生存决策/信息博弈为主；环境描写服务于危险与诡异氛围，但最终可理性解释，避免温情散文化、言情腔和大段抒情。\n\n实际章节文笔特征与证据：\n1）紧张、冷硬、求生向节奏明显：chapter_02滑坡跳车段落用短促动作句推进（“不好！”“跳车！”“抓紧！”），并以硬核生存判断驱动（“这地方全是滑坡区，停车就是等死”“从现在开始，没有退路了。要么走出去，要么死在这里”），符合绝境求生与✷强反应的压迫感。\n2）诡异氛围营造但不靠抒情：chapter_03用峡谷风啸塑造“鬼哭谷”（“那声音像极了无数冤魂在哭泣…让人头皮发麻”），随后迅速落回现实威胁（高反、失温、狼群围逼：“狼群…一共七只…它们怕火”），氛围与危险绑定，节奏紧凑。\n3）信息导向/博弈型对话占主导：chapter_01两人谈判以“装备清单、急救包、信号弹、进山听谁的”为核心（“把你的装备清单发给我…命更贵…进山之后，一切听我的”），chapter_04面对村寨枪口与寨主对峙，林砚以知识与话术争取生机（“你是守陵人…黑龙图腾…如果杀了我们，封印就会失效”），都更像生存/对抗场景的机锋与赌局，而非情感絮语。\n4）“规则怪谈感”以自然/人为规则呈现：chapter_04捕兽夹、毒箭、迷阵与围猎（“这种布局…是用来围猎…人”“不是鬼打墙…八阵图的变种”）把“禁地规则/村寨禁忌”写成具体机制，符合配方要求。\n5）理性解释倾向基本成立：chapter_05将“诅咒”落到真菌致幻孢子（“会释放致幻孢子…最后自相残杀而死。这就是所谓的‘诅咒’”），与“最终都有科学解释”的意图一致。\n\n小幅偏离点（但未到错位）：chapter_06结尾出现较多温情收束与抒情化总结（如“他们不是抛弃了我们…他们是英雄”“历史的真相…比传说更沉重…”），以及chapter_05“倒悬之城/恶魔/封印”等措辞带一点玄秘史诗感。整体仍以生存险境、冷硬行动、压迫氛围为主，抒情占比不高，属于允许的短暂调性缓冲。\n\n结论：整体画风读感更接近紧张硬核的悬疑探险/绝境求生（带规则压迫与理性解谜），并未写成言情或散文体，叙事调性与题材基本匹配，因此matched=true。",
+      "description": "文笔风格必须与题材类型匹配",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_tone_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "后期章节跑偏": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 后期章节存在明显“非正文收尾/后记化”倾向：chapter_06.md 末尾以“（全文完）”直接收束，并插入林砚在大巴上写“主题句/感想式总结”的段落，更接近作者性总结/点题后记而非继续展开的叙事场景推进（虽仍以角色动作包装，但核心功能是总结与宣告完结）。章节长度方面：整体前后长度未出现断崖式萎缩到几十/几百字的敷衍（chapter_06 仍有较完整篇幅），不构成‘写不动了’式极短章节问题；不合格点主要在于末章出现“总结+全文完”的非纯叙事收尾标记与感想式文本，属于标准中强调的后期跑偏风险。",
+      "description": "后期章节不能跑偏写非正文内容（作者感想、读者互动、番外预告等）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "late_stage_digression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "writing_log文件创建": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/writing_log.md 存在",
+      "description": "必须创建writing_log.md记录创作进度",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_creation",
+      "is_critical": true
+    },
+    "writing_log文件读取": {
+      "check_result": "fail",
+      "reason": "工具未被调用或参数不匹配",
+      "details": "工具 'novel_writing_service__read_file' 匹配调用 0 次，期望 ≥1",
+      "description": "必须读取writing_log.md了解前文内容",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_usage",
+      "is_critical": true
+    },
+    "大纲执行忠实度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 整体执行高度忠实于outline.json：章节编号与标题一一对应（1-6均存在），每章核心事件与关键场景在正文中都有明确落地（铜牌线索与旧友集结、黑石镇碰壁+泥石流断路、鬼哭谷高反/镇魂咒/狼群、黑石寨围猎+八阵解阵+跳暗河、倒悬城真菌真相+桑吉覆灭+爆破抉择、崩塌逃亡+激流出山+释怀尾声）。结局方向与大纲一致（摧毁威胁并生还回到地面、情绪治愈收束）。唯一明显偏差是act_two的turning_point里提到“暗河后发现父亲营地遗迹与绝笔信、得知生化武器/真菌封印、动机从寻找转为阻止”的信息，在正文中被“直接在倒悬城发现尸体与真菌机制/威胁”所替代，未出现‘绝笔信/营地遗迹’这一具体载体；但核心转折（父辈死亡真相与真菌封印性质揭示、目标从寻找变为摧毁/阻止并逃生）仍然发生且驱动后续高潮，因此属于可接受的细节实现方式调整，不构成严重偏离。",
+      "description": "实际章节内容必须忠实于自己设计的大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_execution_fidelity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色语言辨识度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 主要角色对话具备可辨识的语言风格差异，遮住角色名也较容易判断说话者。\n\n1) 林砚：学术/考据型表达明显——常用解释、定义、引用与比对的句式（如“这是唐代的镇魂咒”“按乾、坤、震、巽排列”“尸香魔芋的伴生菌”“释放致幻孢子”），说话更长、更谨慎且带推理链条；同时夹杂知识自证与求证（“你看这行小字…”“我查了三个月…”）。把这些台词换给秦烈会明显违和。\n\n2) 秦烈：行动/命令型、短句硬口吻——高频祈使与否定打断（“上车”“坐稳了”“跳车”“别叫唤”“闭嘴，省点力气”“把清单发我”），并带军旅/训练场语感和风险清单式表达（滑坡、毒蛇等），情绪外露更少、以执行为中心。把秦烈的台词换给林砚会显得不符合其表达习惯。\n\n3) 桑吉与阿木大叔：地方性与威胁/禁忌语气突出——桑吉语言更简短、威慑式与口音标记（“外乡人…擅闯禁地者，死”“追”）；阿木大叔以粗粝排斥、带地域词汇与恐惧反应（“鬼哭谷”“吃人的地方”“滚！”）。与两位主角的现代都市/职业化表达有明显区隔。\n\n整体未出现‘所有人共享神秘暗示体/哲理感悟体’的模板化同质问题；也未出现跨角色对同一事件的近乎复读式回应。次要角色（村民）虽群像化，但在容错范围内，不影响主要角色辨识度。",
+      "description": "不同角色对话必须有可辨识的语言风格差异",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "dialogue_character_distinction",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "叙事密度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 整体符合“优秀”标准：多数章节具备清晰场景、感官细节与具体动作推进，关键情绪与紧张感多以Show呈现，叙事层次足够丰富。\n\n1) 叙事密度（场景/感官/动作）充足：\n- chapter_01开篇即用环境与气味建立空间质感与职业氛围：如“地下二层…低频嗡鸣…陈旧纸张特有的霉味…修复用的化学试剂气息”“墨迹未干…淡淡的松烟香”，并配合手部动作（戴手套、抚过宣纸）形成画面。\n- chapter_02泥石流段落具备强烈的动作链条与感官冲击：如“豆大的雨点…倾盆大雨…挡风玻璃瞬间龟裂”“一块巨石砸在车顶…金属扭曲声”“越野车翻滚着坠入…爆炸声…火光在雨幕中一闪”，属于典型的高密度场景化叙事。\n- chapter_03鬼哭谷以声音意象+地形压迫构建氛围：“风…凄厉尖啸…像极了无数冤魂在哭泣”，并落到角色生理反应（高反、失温）与救助动作（扶起、递水、升火、盖衣）上，不是空泛渲染。\n- chapter_05“倒悬之城”用明确视觉结构（洞顶倒悬古城、石柱如树根）制造奇观，随后以“干尸+菌丝”推进惊悚与信息揭示，场景与事件互相咬合。\n\n2) Show vs Tell：以Show为主，但存在少量功能性Tell与结尾议论性总结（可接受）：\n- Show表现紧张/恐惧/压迫感较到位：\n  - chapter_02中“秦烈双手紧握方向盘，青筋暴起”“跳车”“滚落在泥泞草丛”等，通过动作与身体反应传递恐惧与危机。\n  - chapter_04中“箭擦着肩膀飞过…箭簇泛着幽蓝的光”以及“黑洞洞的枪口”直接把危险具象化，而非只说“他们很危险”。\n  - chapter_06中“指甲几乎嵌入对方的肉里”“身体重重地撞在岩壁上”用身体痛感传递生死边缘。\n- Tell的使用主要集中在：\n  - 情绪/主题的直述与收束句（结尾更明显）。例如chapter_06：“他们不是抛弃了我们…他们是英雄”“他们守住了那座城…守住了我们”“但这就够了”，以及最后的格言式句子“历史的真相…”。这些属于总结性Tell/主题升华，比例不高，但确实让尾声更“宣言化”。\n  - 部分信息解释以讲解推进（如阵法、真菌机理），但多嵌入危机场景中，仍然服务叙事，不至于退化成议论文。\n\n3) 心理层次：整体“适中”，更多依赖动作与对话承载，少量段落略直白但未构成过度Tell堆叠：\n- chapter_01关于父亲失踪的执念，有内心推理与比喻（“像钥匙咔哒插进锁孔”）并配合手抖、停顿、深吸气等动作，心理呈现较自然。\n- 但也存在较多直接结论式心理句，如chapter_02“他突然意识到…必须变成另一个人”、chapter_06对父辈意义的直白定性。若追求更高上限，可用更具体的行为细节替代部分价值判断。\n\n4) 低密度退化检测：未见对话骨架/流水账/人物列表/长篇观点阐述等问题；6章中每章都有明确的场景落点与动作组织，后期（5-6章）密度不降反升，维持了画面感。\n\n综合判断：文本在多数关键段落以场景细节与动作驱动情绪（Show主导），叙事层次丰富；虽然结尾与部分主题句偏Tell，但比例与位置（收束段）在容错范围内，因此matched=true。",
+      "description": "章节叙事应有足够的场景描写、感官细节和心理活动，情感传达以Show为主",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_density",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "智斗逻辑合理性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 本故事属于冒险/悬疑类，存在至少两个需要智力或策略解法的关键节点（chapter_04迷阵脱困、chapter_05爆破逃生）。但核心问题在于：结论（走法/逃生机制）并非由可核对的线索→推理→验证推导出来，而是以‘角色懂阵法/懂物理’直接给出答案，缺少中间推理环节与可验证依据，属于评分标准中的“假推理链”。另外，chapter_04中林砚对桑吉的“守陵人/封印失效”说辞也更像临场话术赌博，文本未提供足够前置线索支撑其必然性，但该处主要影响对峙策略可信度，仍以迷阵与爆破两处作为主要不达标点。",
+      "description": "谜题/智斗的推理逻辑必须自洽",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "puzzle_logic_validity",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "题材契合度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 配方为F28绝境求生（障碍）×[刑侦悬疑+规则怪谈]。文本在“绝境求生/写实探险”这一轴上完成度较高：滑坡断路导致装备损失并封死退路、失温高反、狼群对峙、陷阱围猎、地下河逃生等障碍链条清晰，且双主角能力互补（秦烈负责战术与生存，林砚负责古文字/阵法辨识）形成一定协作火花。但作为‘优秀’标准，本作的Y轴标签与X轴的化学反应不够精致，整体更像探险动作线强、悬疑与规则怪谈呈现偏表层。具体不足：1）刑侦悬疑（历史解谜）深度不够：核心谜题（铜牌、黑石谷、古道入口、村寨身份、倒悬城真相）多为“发现—解释”直给式推进，缺少证据链的层层递进、推理中的误导/排除与攻守转换，反转也较少。2）规则怪谈融合偏标签化：村寨‘禁地/守陵’、‘鬼哭谷’、‘鬼打墙’、‘镇魂咒’等怪谈外壳出现频繁，但多依赖角色一句话科普（阵法、咒文是警示等）来落地，规则本身缺少可操作的条目化约束与升级机制（触犯什么→后果→如何利用/破解→下一层规则），因此压迫感更多来自追杀与环境而非“规则”。3）科学解释与写实取向出现张力：倒悬之城的宏大视觉、真菌孢子群体致幻导致集体失控并自相残杀、以及用爆炸气浪把人从通风口‘冲出去’等设定，虽给出自然解释（真菌/排气），但实现方式偏戏剧化，削弱了“硬核写实+理性解构恐惧”的精致感，也让规则怪谈更像玄奇奇观而非可验证的自然法则。综合来看，题材方向对、节奏与场面有效，但刑侦悬疑与规则怪谈的‘规则设计/推理深度/融合互动’未被充分开发，化学反应不足，未达优秀标准。",
+      "description": "题材特征精致度和X-Y轴化学反应效果",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "genre_fit",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "剧情节奏合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 整体节奏与情绪曲线层次清晰，高潮低谷分布合理，起承转合自然流畅。\n\n1) 情绪曲线有起伏且递进：第1章以“铜牌/日记”悬念低开并完成动机组队；第2章突发暴雨滑坡+车辆坠谷，强度陡升形成第一波危机；第3章在高反与夜宿中短暂回落、补足信息（镇魂咒/入口线索），再以狼群逼近拉起紧张；第4章遭围猎与迷阵、跳入暗河构成中段小高潮并完成场景切换；第5章“倒悬之城”揭示与父辈尸体真相+毒菌爆发+追兵失控，情绪强度达到全篇峰值并引出爆破逃生；第6章从爆炸余波与落水求生的余紧张，平稳过渡到生还与情感收束，完成回落收尾。\n\n2) 高潮位置合理且醒目：最大高潮集中在第5章（约全篇70%-85%区间），包含核心揭示（父辈结局/诅咒机制）与高风险决策（摧毁中枢、共同引爆），读者易明确指出“最精彩段落”。\n\n3) 铺垫-回报比协调：第1章的“黑石/生门”悬念与父辈失踪动机，在第5章获得强回报（倒悬城、父辈遗骸与真相、‘生门’的实际含义与代价），并在第6章完成主题落点，没有出现铺垫过长而回报仓促的问题。\n\n4) 过渡自然、无明显断裂：从镇子拒绝向导→强行进山→滑坡断路→峡谷夜宿→围猎坠河→地下城揭示→爆破逃生→返程收束，因果链清晰；紧张段落间穿插必要喘息（夜宿、解阵、情感确认、返程车上），避免“全程高潮”疲劳，也没有突兀从生死到日常的硬切。总体属于节奏控制良好、层次分明的安排。",
+      "description": "高潮低谷分布合理、情绪曲线有层次感",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "pacing_rationality_advanced",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "钩子设计": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 整体叙事张力足，但按“关键转折处有效悬念钩子”标准未达优秀：前5章多以动作悬念收尾（如第2章“没有退路了”、第3章“狼群逼近”、第4章“跳进暗河+追杀令”、第5章“爆炸逃生”），属于具体且与主线相关的钩子，但类型相对单一、偏“险境推进”。更关键的问题在于收束阶段（第6章）直接给出大结局并以“（全文完）”结束，没有在最终关键节点留下任何信息差或后续期待（例如铜牌/‘生门’更深层含义、黑石寨守陵体系、父辈失踪背后是否有人为因素等均被一次性定性为‘英雄守护’并封口），导致整体钩子设计缺少‘关键转折处精心设计的悬念’这一加分项，只能算合格推进而非优秀钩子结构。",
+      "description": "关键转折处有有效的悬念钩子设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "hook_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "意象系统": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 存在明确且贯穿全文的核心意象，并在不同阶段发生了与主题紧密咬合的意义变奏。\n\n1) 核心意象明确、反复出现：以“生门/黑石之下，生门所在”（铜牌铭文、父亲日记、迷阵的‘生门’、最终逃出生天的结局章名与情节）为主轴，至少在第1/4/6章及多处情节节点出现或被直接驱动。\n\n2) 意义变奏清晰（非装饰性重复）：\n- 第1章：铜牌铭文中的“生门”=线索/钥匙，开启二十年前失踪之谜（驱动行动）。\n- 第2章：断路与滑坡封死退路，“生门”由抽象线索转为“唯一活路/不得不向前”的生存命题（从解谜转向求生）。\n- 第4章：迷阵中明确出现“生门”概念（阵法结构的出口），并与“守陵/封印”叙事结合，使其成为“选择与代价”的关口（从地理活路转为结构性命运之门）。\n- 第5-6章：倒悬城与毒菌封印下，“生门”进一步升格为“牺牲与守护换来的生路”（父辈以命守住封印，子辈通过爆破与通风口逃出），最终第6章题名“生门”完成主题落点与收束。\n\n3) 与主题关联度强：故事主题指向“真相的沉重/父辈牺牲的意义/后人继承与和解”。‘生门’从寻父线索→绝境求生→阵法出口→以牺牲换取的生还与回家，形成一条与主线并行的隐性叙事线，承载“活下去的资格从何而来”的价值转译。\n\n4) 辅助意象也有一定呼应但不喧宾夺主：如“黑石/封印/地下河/倒悬城”反复出现并服务于“生门”主意象的推进（从地表到地下、从入口到出口的空间对照），整体构成较完整的意象系统。\n\n因此符合优秀标准（matched=true）。",
+      "description": "核心意象贯穿全文并发生意义变奏",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "imagery_system",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "情感弧线层次": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 主角（林砚）的情感弧线具备多层递进，且关键转折均由具体事件驱动，不是无缘由突变。\n\n1) 情感层次≥4且性质不同（递进清晰）：\n- 安心/沉浸（修复室“最让他安心的味道”）→ 被唤醒的执念与不安（铜牌铭文与父亲日记“黑石”互相咬合）\n- 犹豫与抗拒（不想联系秦烈但不得不）→ 求助/决心（主动约见、提出进山）\n- 挫败与恐惧（向导拒绝、暴雨滑坡翻车、装备尽失）→ 绝望边缘的决绝（“从这一刻起…必须变成另一个人”“走”）\n- 自我否定/愧疚（高反拖累“我是累赘”）→ 被重新点燃的兴奋与自信（发现镇魂咒/入口、学术能力发挥作用）\n- 惊惧（狼群、围猎）→ 信任与协作（把命交托给秦烈；第四章反过来由林砚解阵带路）\n- 震撼与悲痛（第五章确认父亲遗体）→ 理解/释然与价值重建（第六章“他们不是抛弃了我们…是英雄”）→ 平静收束（回程写下“真相更沉重”的总结）\n\n2) 每次转折有明确触发事件：\n- 执念被唤醒：铜牌铭文=父亲日记关键字“黑石”\n- 决心升级：与秦烈摊牌、点出秦父失踪与母亲去世的旧伤\n- 从可控到绝境：暴雨+滑坡翻车+退路被封死\n- 从自我否定到自信：发现岩壁咒文/古道入口并完成比对\n- 从恐惧到信任协作：狼群对峙中秦烈保护与布置应对；随后迷阵由林砚主导破解\n- 从仇怨/疑问到释然：确认父辈遗体+真菌致幻真相+“守护”事实，最终在生还后完成价值重建\n\n3) 弧线方向感：整体从“追索父亲失踪真相的执念”推进到“理解父辈牺牲意义、完成心理和解并获得平静”，不是随机波动。\n\n因此符合“优秀/丰富情感层次”的业务标准。",
+      "description": "主角情感发展有多层递进变化",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_gradient",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语义重复检测": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 整体无严重语义级重复。六章推进的信息与情境持续变化：ch01提出“铜牌铭文+父辈失踪之谜+组队动机”；ch02发生拒绝向导与泥石流断路、装备损失、被迫深入（新冲突）；ch03高反/失温危机并首次发现入口咒文与狼群威胁（新线索+新危机）；ch04陷阱与追杀、迷阵解法、首次正面遭遇黑石寨势力并坠入暗河（新对抗与转场）；ch05揭示倒悬城与父辈遗骸、真菌致幻机制、追兵团灭、引爆计划（核心揭示与解决方案）；ch06完成逃生与主题收束（结局信息）。\n轻微重复点主要是对“黑石之下，生门所在/父辈失踪”动机的多次提及，以及多次强调“无退路/必须继续走”，但这些重复分别发生在不同阶段（入山前→断路后→核心揭示后），承担提示动机与情绪递进功能，且每次都伴随新的事件/信息（向导反应、滑坡断路、古城真相与牺牲意义），不构成≥3处‘换词不增量’的语义重复，也不存在连续多章结尾反复得出同一结论的结论反刍。未见情境模板复制（各章开场/危机结构不同）。",
+      "description": "不能出现大量语义级别的内容重复（P6级）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "semantic_redundancy",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构功能性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 可见的结构设计点（如把最后一章命名为《生门》、结尾的返程与‘请吃烤鸭’呼应兄弟情）更多停留在主题总结与情节收束层面，而非“结构即意义”。即使存在弱呼应（从北京出发又回北京；从父辈线索到父辈结局），它并未通过章节组织方式被强化为读者会记住的叙事结构特征：父辈线始终以道具/尸体揭示的单点方式出现，没有与现在线形成交叉对照；也没有通过不可靠叙述、文本嵌套（日记/笔记贯穿并在结尾补全）、镜像章法（开头“黑石之下”与结尾“生门”形成明确闭合）来让结构本身表达“宿命循环/代际因果/理性解构恐惧”等主题。因此更符合‘机械线性排列’，达到基本可读，但未达本项优秀标准。",
+      "description": "叙事结构服务于主题表达（短篇尤重）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色命名质量": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 主要角色命名整体达优秀标准：\n1) 文化深度/角色共振：\n-「秦烈」：烈字有火与刚猛之势，贴合退伍侦察兵、行动派、爆发力与“护短”的人格底色；同时其人生主线是直面父亲之死与PTSD，“烈”也带有灼痛与燃烧感，和他被创伤驱动的命运有隐性共振，但并非“冷=寒/黑=夜”式直白标签。\n-「林砚」：砚与墨、文字、学术强相关，天然指向“古文字专家/考古研究生”的身份设定；且“砚”不只是温润好看，而是有明确职业联想与书卷气，读者见名即能联想到其学者型角色功能。\n2) 识别度与差异化：\n- 「秦烈」(硬朗、短促、爆裂感) 与「林砚」(文雅、器物意象)在音韵手感与美学风格上形成明显对照，符合“能力互补/冲突搭档”的关系动态；读者不易混淆。\n- 配角「阿木大叔」具地域口语化辨识度，「桑吉」具民族地区姓名特征，与主角组的汉文化命名风格拉开层次，避免“一家人风格”。\n3) 黑名单/通用模板风险：\n- 未命中所列烂大街黑名单；也未集中使用苏/林/沈/顾/陆/陈+清/夜/晚/寒/墨/默/辰/岚的模板。虽有「林」姓为高频姓之一，但整体并未扎堆在“高级感姓氏组合”，且「林砚」不属于LLM高频清冷美名套路。\n4) 直白标签问题：\n- 名字未直接等于情绪标签（如“安宁/苏柔/沈夜/萧寒”）；“烈/砚”更多是气质与身份指向，属于可接受的隐性设计而非贴标签。\n综合看，主配角命名具备明确联想点、文化器物意象与角色功能映射，同时组内风格差异明显，因此判定 matched=true。",
+      "description": "角色命名有文化深度、辨识度和角色-命运共振",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_naming_quality",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "中篇字数_冒险": {
+      "check_result": "fail",
+      "reason": "字数不符合要求",
+      "details": "总字数 11742 不在范围 [108000, 132000] 内; 共6个文件（按章节顺序排列）: chapter_01.md, chapter_02.md, chapter_03.md, chapter_04.md, chapter_05.md, chapter_06.md; 最后一个文件是 chapter_06.md",
+      "description": "总字数应在108000-132000之间（基于query要求120000，±10%浮动）",
+      "check_type": "semantic_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "range_constraint",
+      "is_critical": true
+    },
+    "情感交付冒险": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 整体符合“热血冒险向”标准：主线驱动力是深入横断山脉寻找父辈失踪真相、穿越禁地并克服生存与敌对威胁（冒险/探索与生存挑战为核心），并非以恋爱推动。\n\n1) 逆境不退缩：第二章泥石流翻车、装备损失且退路被封后，秦烈明确“没有退路了…要么走出去要么死在这里”，林砚从提出“回去？”到选择“走”，完成面对死亡风险的主动前进；第四章被黑石寨围猎、枪口包围仍跳入暗河求生；第五章孢子致幻与追兵夹击下仍冲向中枢大殿破局。\n\n2) 成长轨迹清晰：林砚开局是“跑两步就喘”的文保书生（第一章秦烈质疑体能），在第三章高反濒临崩溃、承认“我是累赘”，到第四章关键时刻用专业知识识破“八阵图”并带路脱困，成为团队不可替代的脑力核心；第五章更提出利用通风口“气浪”逃生方案并与秦烈“一起按”引爆，体现从依赖到承担决策的成长。\n\n3) 挑战具备实质性与压迫感：有具体环境与资源限制（暴雨+滑坡、车辆与装备尽失、缺氧失温、狼群夜袭、迷阵、村民猎枪与毒箭追杀、地下河与溶洞攀爬、致幻孢子），且多次造成真实代价（秦烈手臂重伤、父辈确认死亡、敌对势力追击）。\n\n4) 关键突破节点：第二章“车没了+回不去”迫使角色从计划型探险转为极限求生；第四章林砚解阵带队是能力与自信的转折；第五章两人共同引爆并借气浪逃生是“突破自我+团队信任”的高潮节点。\n\n5) 团队协作与羁绊：秦烈提供战术与生存能力（急救、对狼群防御、战斗决断），林砚提供知识解码与机关/阵法判断；多处互救与信任建立（第二章秦烈推林砚跳车、第三章给衣保暖、六章激流中林砚反过来救秦烈）。\n\n6) 基调热血向上：虽然有父辈死亡与危险，但结尾将其定义为“英雄”、完成使命并生还返程（第六章“他们不是抛弃了我们…他们是英雄”“阳光正好，前路漫漫”），读感偏燃与希望。",
+      "description": "实际内容必须是热血冒险向",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "非恋爱主线检查": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 核心关系线为非恋爱类型，主角林砚与秦烈是“发小/旧友+搭档/战友”式羁绊，驱动力来自共同追寻父辈失踪真相与求生任务，而非爱情。具体互动体现为并肩行动与互相救命：如第2章泥石流时秦烈“抓住林砚的衣领将他推了出去”救命；第3章高反失温时秦烈“脱下自己的冲锋衣盖在他身上”并守夜对峙狼群；第6章激流中林砚反过来“抓住他的衣领…向上提了一把”互救。剧情关键转折由线索（铜牌铭文、父亲日记）、生存危机（断路滑坡、狼群、黑石寨追杀、地下毒菌）与任务决策（炸毁中枢逃生）推动。全文未出现恋人关系建立、追求/维护爱情的行动动机，也无明显恋爱戏份占比（接近0%），因此符合“非恋爱主线”标准。",
+      "description": "核心关系线不能是恋爱",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色关系设计张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（符合“关系具备叙事张力”的业务标准）。\n\n1) 关系有内在矛盾源：秦烈与林砚在价值与目标层面存在天然摩擦——秦烈以生存与“带回遗骸/保护”为先、强实用主义且PTSD导致过度保护；林砚以学术证明与自我认同为先、执拗冒进。双方互相贴标签（莽夫/温室花朵）构成认知冲突；同时存在信息不对称与潜在背叛点：林砚从日记得知“秦山似有隐情”却不敢告知秦烈，且秦烈对父辈关系的“保护说”可能是自我安慰的误判，这些都能直接制造悬念与爆点。\n\n2) 关系有变化空间：relationship_dynamics明确给出从“互相看不顺眼→被迫同盟→互相尊重→兄弟般和解”的阶段性演化路径，并通过具体事件节点（山洪救援、黑石寨围困、机关破解、最终真相揭露）承载转折，不是静态标签关系。\n\n3) 冲突源于角色本身：核心张力主要来自人物内在动机与伤口——秦烈的创伤应激与强控制欲、对父亲的弃家心结；林砚的自我证明需求与对父亲评价的执念、对信仰崩塌的恐惧。外部事件（山洪、围困）更多是“放大器/试金石”，推动两人性格与选择碰撞，而非纯外力硬拽。\n\n补充评价：配角桑吉的阻碍动机并非单纯‘坏’，而是“封印瘟疫”的防御性立场，能与主角‘探索/揭露’形成更复杂的道德冲突，进一步增强整体张力。潜在不足是后期走向已被明确写成‘和解与升华’，如果正文缺少一次更尖锐的价值抉择或信任破裂（例如林砚隐瞒日记被揭穿的代价），张力可能在后段偏顺滑，但不影响本次角色关系设计达标。",
+      "description": "角色关系设计具有叙事张力，能驱动剧情",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_relationship_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色动机设计深度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（符合业务标准）。\n\n1) 表层动机与深层动机有清晰区分（至少两位主角都满足）：\n- 秦烈：overt 是“保护林砚进山、带回父亲遗骸安葬”，covert 是“追问父亲为何抛下病母执意进山，解开被遗弃的心结”。两者分别对应行动目标 vs 情感创伤/身份认同修复，明显不只是换说法。\n- 林砚：overt 是“找到南诏古城、证明父亲学术推断正确”，covert 是“证明自己比父亲更强/获得父亲认可、摆脱‘书呆子’标签”。外在是学术与发现，内在是认可需求与自我价值焦虑，层次分明。\n\n2) 动机有具体来源，能回扣经历/背景而非模板：\n- 秦烈的深层驱动来自家庭创伤（父亲失踪、母亲生病被‘抛下’的叙事）与创伤应激（secret_fear 指向“战友牺牲PTSD导致害怕再次无力”），让“保护/追真相”有明确心理根源。\n- 林砚的深层驱动与身份背景强相关（研究生/古文字专家、长期被贴“书呆子”标签），secret_fear 也指向“父亲之死若源于愚蠢错误/古城不存在导致信仰崩塌”，将其执拗与求证冲动绑定到父亲遗产与自我证明上。\n\n3) 至少两个主角满足以上两条：秦烈与林砚均满足；并且 secret_fear、misperception_of_other、hidden_connection 提供了额外的内在冲突与关系张力，进一步支撑动机深度（如林砚“发现日记隐情但不敢告诉秦烈”直接制造内疚/隐瞒压力，能反哺其深层需求与关系弧线）。\n\n加分点：relationship_dynamics 中“揭开父辈牺牲真相→解开心结”的后期走向，与两位主角的 covert_motivation（秦烈的被遗弃心结、林砚的父亲认可执念）形成闭环，不是孤立设定。配角虽不要求多层动机，但桑吉的阻碍理由（防止触动‘瘟疫’封印）也具备具体且非脸谱化的行为逻辑。",
+      "description": "角色动机设计有深度，有表层和深层动机区分",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_motivation_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色成长弧线设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: 结论：pass（符合“至少一个主角有清晰成长/变化弧线且在大纲中落地”的业务标准）。\n\n1) 起点与终点清晰：\n- 秦烈起点：带PTSD的实用主义者、强控制欲/护短，把林砚当“累赘”（misperception），核心心结是“被父亲抛下/再次失去”的恐惧（covert_motivation+secret_fear）。终点：在结局“拿出合影终于释怀”，并与林砚成为“生死与共的兄弟”（relationship_dynamics后期），完成从不信任/控制到尊重/并肩、从执念追寻遗骸到理解父辈牺牲并放下心结。\n- 林砚起点：执拗的学术理想主义+自我证明欲（covert_motivation），轻视秦烈“莽夫”（misperception），对父亲真相与古城存在有信仰型恐惧（secret_fear）。终点：经历多次生死与真相揭露后，在尾声写下“历史真相更沉重”，呈现从“证明父亲/证明自己”到“接受真相并更成熟”的价值观转向。\n\n2) 变化有内在逻辑：\n- 两人的变化都由既定动机与恐惧驱动：秦烈的失控/控制来自创伤与失去恐惧，真相（父辈为封印病毒牺牲）直接击中其“被遗弃”的误解，提供了解结逻辑；林砚的执拗来自寻求认可与身份焦虑，野外残酷与多次依赖秦烈、以及知识在关键处发挥作用，让他从“书本优越/轻视体能与经验”走向更综合、更谦逊的成熟。\n\n3) 章节规划中有落地体现（非空泛口号）：\n- Act1：频繁争吵（价值观冲突）→山洪救援（被迫同盟/初步信任），并在act_one turning_point里明确“强弱关系微妙变化”。\n- Act2：林砚用知识破迷雾、出阵、震慑守陵人（能力互补被证明）→找到绝笔信，动机从“寻找”转为“阻止/承担”，这是典型的中段弧线拐点。\n- Act3：秦烈把唯一防毒面具让给林砚、准备断后（从控制到牺牲式保护/接纳）→最终共同逃生与“释怀”，relationship_dynamics所述“和解与升华”在第5-6章的情绪转折与结局动作中具体呈现。\n\n总体评价：文档虽未提供显式character_arc字段，但通过traits/motivation/secret_fear + relationship_dynamics，并在outline各幕的关键事件与emotional_shift里形成可追踪的、逐步推进的内在弧线，因此符合标准。",
+      "description": "主角有清晰的成长/变化弧线设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_arc_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "outline结构完整性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：符合业务标准（pass）。\n\n1) 章节覆盖完整：大纲明确分为act_one/act_two/act_three三幕，并给出从出发入山→深入禁地→进入古城真相→逃出生天的完整闭环；共列出1-6章，覆盖到“全书完”的结局，没有只写前几章就中断的问题。\n\n2) 每章有实质性内容描述：6个章节均提供chapter_synopsis，且均为多句、包含关键事件与因果（动机、遭遇、损失、发现、抉择、结果），信息密度足以指导展开写作，不是只有标题或一句话。\n\n3) 包含冲突/转折信息：每章均配置scene_sequence，含conflict_point与emotional_shift；冲突类型多样（人与自然：山洪/泥石流/狼群；人与人：桑吉与村民围猎；人与未知：真菌感染与机关；内在冲突：理想主义vs现实主义、生死抉择）。同时每幕给出turning_point（车毁断路、动机从寻找转为阻止、最终定向爆破逃生），转折清晰。\n\n4) 三幕结构可辨识：结构层次明确（act_one/act_two/act_three），每幕都有description与story_synopsis，并通过turning_point衔接升级，节奏与目标递进清楚。\n\n可改进点（不影响通过）：目前仅列6章，若计划写作是中长篇/更长章节数，后续可在每幕内再细分更多章节节点（例如暗河探索、父亲遗信细读、与桑吉阵营更多对抗、古城机关解谜分段等），以增强篇幅可控性与铺垫力度。",
+      "description": "大纲结构完整，信息密度足以指导写作",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_structure_completeness",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "outline叙事张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 整体符合“持续叙事张力”的业务标准（pass）。\n\n1) 信息落差设计：开篇即抛出父亲失踪与铜牌线索（“黑石之下，生门所在”）以及“拓片与父亲日记‘死路’矛盾”，并未立刻解释；第2幕末才通过“父亲绝笔信”揭示真实任务是“封印生化真菌”而非寻宝；“闹鬼/吃人的雾”先以民俗恐怖呈现，后续用地貌与真菌逐步科学化解释，形成持续悬念与延迟回答。\n\n2) 张力递进：冲突从“理念争吵+进山”升级到“车辆坠崖断路、受伤与物资短缺”的生存绝境；再升级到“被黑石寨围猎、献祭威胁”的人为对抗；最终升级为“倒悬古城机关崩塌+真菌感染扩散+限时逃亡”的复合危机，中后段明显更紧张、更复杂，符合递进。\n\n3) 意外/转折：至少有两处有效转折——(a) 逃避追捕时发现“古战场尸骨/守护者信物”，将敌我关系与古城背景拉深；(b) 第2幕关键反转：父辈并非寻宝而是封印致命真菌，主角目标从“寻找真相/遗骸”转为“阻止灾难/摧毁源头”；(c) “倒悬城”与“神树=真菌宿主”也构成视觉与认知层面的意外。\n\n补充小问题（不影响通过，但可优化）：第3幕信息揭示密度偏高（真菌机制、机关、反派崩溃几乎集中在第5章），可以考虑在第3-4章埋更明确的微线索（如孢子迹象/旧队伍记录碎片）以让终局反转更有层层递进的必然性。总体仍属于有伏笔基础的转折，不算生硬。",
+      "description": "大纲有持续的叙事张力和悬念驱动",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_narrative_tension",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色大纲规划完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在大纲中规划",
+      "details": "主角 2/2: 秦烈, 林砚; 配角 2/2: 阿木大叔, 桑吉",
+      "description": "设计的角色必须在大纲中规划",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_outline",
+      "is_critical": true
+    },
+    "角色正文出场完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在正文中出现",
+      "details": "在6个章节中检查; 主角 2/2: 秦烈, 林砚; 配角 2/2: 阿木大叔, 桑吉",
+      "description": "设计的角色必须在正文中出现",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_chapters",
+      "is_critical": true
+    }
+  },
+  "completion_status": "completed"
+}

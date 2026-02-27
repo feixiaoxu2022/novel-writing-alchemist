@@ -1,0 +1,822 @@
+{
+  "check_version": "novel_writing_v1.0",
+  "sample_id": "NW_VAGUE_MEDIUM_SWEET_DRAMA_001",
+  "check_timestamp": 1772181511,
+  "dimension_scores": {
+    "format_compliance": {
+      "pass_rate": 1.0,
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "failed_items": []
+    },
+    "business_rule_compliance": {
+      "pass_rate": 0.909,
+      "total": 22,
+      "passed": 20,
+      "failed": 2,
+      "skipped": 0,
+      "failed_items": [
+        "灵感激发交互",
+        "中篇字数"
+      ]
+    },
+    "memory_management": {
+      "pass_rate": 1.0,
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "failed_items": []
+    },
+    "data_consistency": {
+      "pass_rate": 1.0,
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "failed_items": []
+    },
+    "content_quality": {
+      "overall_score": 61.44,
+      "quality_level": "unqualified",
+      "gate_layer": {
+        "pass_rate": 1.0,
+        "total": 4,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0,
+        "failed_items": []
+      },
+      "basic_layer": {
+        "pass_rate": 0.842,
+        "total": 19,
+        "passed": 16,
+        "failed": 3,
+        "skipped": 0,
+        "failed_items": [
+          "大纲执行忠实度",
+          "智斗逻辑合理性",
+          "语义重复检测"
+        ]
+      },
+      "advanced_layer": {
+        "pass_rate": 0.273,
+        "total": 11,
+        "passed": 3,
+        "failed": 8,
+        "skipped": 1,
+        "failed_items": [
+          "可修复逻辑瑕疵",
+          "角色语言辨识度",
+          "叙事密度",
+          "题材契合度",
+          "剧情节奏合理性",
+          "钩子设计",
+          "意象系统",
+          "结构功能性"
+        ]
+      },
+      "gate_triggered": false,
+      "score_breakdown": {
+        "base": 60.0,
+        "gate_penalty": -0.0,
+        "basic_deduction": -9.47,
+        "advanced_bonus": 10.91
+      }
+    }
+  },
+  "overall_result": {
+    "status": "Good",
+    "total_score": 72.33,
+    "content_score": 61.44,
+    "process_score": 97.72,
+    "content_weight": 0.7,
+    "process_weight": 0.3,
+    "gate_triggered": false,
+    "total_checks": 64,
+    "passed_checks": 51,
+    "failed_checks": 13,
+    "pass_rate": 0.797
+  },
+  "check_details": {
+    "读取配方知识库": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取RECIPE_KNOWLEDGE.md（配方知识库）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节产出存在性": {
+      "check_result": "pass",
+      "reason": "章节文件存在",
+      "details": "✓ 章节写作阶段: 已产出章节文件",
+      "description": "workspace中必须存在至少一个章节文件",
+      "check_type": "sop_stage_coverage",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_output_existence",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节克隆检测": {
+      "check_result": "pass",
+      "reason": "未检测到章节克隆",
+      "details": "共11章，无连续完全克隆或近似克隆",
+      "description": "不能出现连续章节内容完全重复（克隆）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_cloning",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "交替重复检测": {
+      "check_result": "pass",
+      "reason": "未检测到交替重复",
+      "details": "共11章，无A-B-A-B交替模式",
+      "description": "不能出现A-B-A-B交替循环的章节内容",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "alternating_repetition",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节完成度": {
+      "check_result": "pass",
+      "reason": "章节完成度合格(85%)",
+      "details": "大纲规划13章，实际完成11章 (完成率84.6%)",
+      "description": "实际写作章节数必须达到大纲规划的合理比例",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_completion",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "段落重复检测": {
+      "check_result": "pass",
+      "reason": "段落重复在可接受范围",
+      "details": "同章内重复0处, 跨章重复3组 (阈值: 同章>=2, 跨章>=5)",
+      "description": "不能出现大量段落在不同章节间重复",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "paragraph_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取大纲设计指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取OUTLINE_DESIGN_GUIDE.md（大纲设计指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取写作技巧指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 2 次",
+      "description": "必须读取WRITING_TECHNIQUE_GUIDE.md（写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取设定一致性管理指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取CONSISTENCY_MANAGEMENT_GUIDE.md（设定一致性管理指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取命名skill": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取CHARACTER_NAMING_GUIDE.md（角色命名规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取creative_intent的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取creative_intent.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取characters的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取characters.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取outline的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取outline.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节命名格式": {
+      "check_result": "pass",
+      "reason": "所有文件命名符合规范",
+      "details": "检查了 11 个文件; chapter_09.md: 匹配; chapter_05.md: 匹配; chapter_11.md: 匹配; chapter_01.md: 匹配; chapter_10.md: 匹配; chapter_02.md: 匹配; chapter_03.md: 匹配; chapter_04.md: 匹配; chapter_08.md: 匹配; chapter_07.md: 匹配; chapter_06.md: 匹配",
+      "description": "章节文件命名必须为chapter_NN.md格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "naming_convention",
+      "is_critical": true
+    },
+    "creative_intent格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "creative_intent.json: 字段完整",
+      "description": "creative_intent.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "characters格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "characters.json: 字段完整",
+      "description": "characters.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "outline格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "outline.json: 字段完整",
+      "description": "outline.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "X轴模式ID格式": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.x_axis_mode_id = E28，符合预期",
+      "description": "X轴模式ID必须匹配^[A-G]\\d{1,2}$格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签枚举": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['双向暗恋', '仙侠修真']，符合预期",
+      "description": "Y轴标签必须在12种枚举中",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签数量": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['双向暗恋', '仙侠修真']，符合预期",
+      "description": "Y轴标签数量必须为2-3个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "forbidden_elements存在性": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.forbidden_elements = ['两人之间的大矛盾', '只写二人世界', 'BE结局']，符合预期",
+      "description": "forbidden_elements必须至少有1个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "配方选择交互": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 5 次",
+      "description": "配方选择阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "写作准备确认": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "写作准备阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "主题一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 从第1章到第11章，核心主题类型始终围绕“正邪对立背景下的禁忌爱情/情感羁绊，并推动正邪和解（从偏见到理解）”展开：开篇以正道首席与魔教少主的对立相遇埋下惺惺相惜与价值观冲突；中段秘境合作、书信往来与私会明确转入并持续推进情感线，同时“正邪偏见”始终作为阻力存在；后段政变与东窗事发等事件，仍然以两人的关系存续、互救与推动双方阵营缓和为主线，最终落到正邪首次合作与父子关系松动的和解方向。虽有权谋/政变/外敌等情节增强冲突与推进剧情，但其功能主要是服务于‘爱情羁绊+打破正邪成见’这一主题主线，并未出现中途改成商战、探案、科幻等完全换类型的主题漂移。",
+      "description": "故事主题一致",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "theme_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "主要角色一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 主角为沈清舟（青云宗首席弟子）与夜无痕（血月教少主）。两人从开篇第1章建立对立与相遇起，贯穿第2-11章持续出现并始终是叙事与冲突的核心推动者：第3-4章秘境被迫合作、第5-6章秘密通信与确定关系、第7章血月教政变引发两人共同主线（夜无痕逃亡求援、沈清舟救治与庇护）、第8章东窗事发两人同囚并引出大战、第9-10章分别推进“沈清舟被囚/夜无痕夺回血月教并救人”的双线主线、第11章正邪对峙与联手，最终沈清舟被释放并与夜无痕并肩作战。过程中虽有顾长风、苏晚晴、夜夫人、沈傲天、柳如烟等配角分担部分视角，但未出现配角长期占据叙事中心导致主角地位丧失（不存在>70%由配角主导的情况），也无主角被替换、无故消失或身份断裂；相反配角主要服务于两位主角的关系推进与主线冲突升级。因此符合“主角存续性与核心地位持续存在”的业务标准。",
+      "description": "主要角色一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "main_character_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设定一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 整体符合“同一角色跨章节性格/行为一致性”标准，未出现无铺垫的崩坏式反转。\n\n1) 沈清舟：从chapter_01开始即呈现“外冷内柔、克制守礼但有底线、对滥杀有强烈排斥”的底色（放走老弱、对杀戮迟疑）。chapter_02-05延续为在父亲高压下仍坚持判断、习惯压抑情绪与对外否认（对柳如烟/宗主隐瞒夜无痕与玉佩）。chapter_06-08在与夜无痕关系加深后，行为升级为“愿意冒险但仍理性评估风险（强调保密、让顾长风掩护）”，并在东窗事发时选择承担后果、公开承认关系并护人（chapter_08挡在夜无痕前、求父亲不要杀他），属于前期温柔与底线的自然外显，而非突然转性。chapter_11中与父亲和解、转向“先顾大局对外敌”也与其一贯的责任感一致。\n\n2) 夜无痕：chapter_01-02就表现为“并非嗜杀、对正道有再评价、对手下/长老的权力斗争保持警惕”，并有对沈清舟的兴趣与欣赏。chapter_03-06逐步走向“重情重义、愿为对方受伤/传信/冒险相见”，与前面埋下的‘不嗜杀+愿理解正道’一致。chapter_07-10遭遇政变后转为更强势的领袖行动（揭露阴谋、争取教众、对抗血影），这是由生存危机与责任触发的合理升级，并未出现能力/动机突变；其核心动机始终围绕“反血影、救父亲/救沈清舟”。\n\n3) 顾长风、苏晚晴：两人从早期就是“关切主角、倾向温和正义/忠诚护主”的功能型性格，后续承担传信与掩护也与其立场一致，没有无故摇摆。\n\n4) 沈傲天：前期极端‘正邪不两立’且高压控制（chapter_01-02-08）保持稳定；chapter_11出现松动并非无因反转，而是被夜夫人揭示旧怨真相与外敌压力所迫，且他让步的边界仍清晰（先联手、条件性不阻拦），符合“情境驱动的合理变化”。\n\n结论：主要角色的性格底色、行为模式与核心动机在章节间延续性强，关系推进带来的行为变化也有连续铺垫与外部事件触发，因此判定matched=true。",
+      "description": "人物设定一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_trait_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设计遵循度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了12个文件; LLM评估: 总体符合characters.json的人设设计：\n\n1) 沈清舟（traits/motivation）匹配度高\n- 清冷孤傲/话少克制：chapter_01-04多次以“淡淡地说”“只说一个字”“打断别人”等方式呈现（如ch1对顾长风多次打断、ch2对柳如烟与顾长风均少言）。\n- 恪守正道但有内在温柔：ch1放走老弱妇孺、ch2坚持“并未作恶”、ch3为夜无痕疗伤且以“欠你一次”自我约束，体现“正道原则+外冷内热”。\n- 完美主义/背负期待与孤独：ch1-02与沈傲天的高压互动、被责“废物”、被罚面壁；ch2“至少还有人理解他”点出孤独与渴望理解。\n- covert_motivation与secret_fear（不愿做工具、渴望被爱/被理解）在执行中有明确落点：ch6夜无痕信中直接回应其“孤独”“压力”“不必完美”，沈清舟的情绪反应（温暖、手指颤抖、想见他）与“渴望被理解”一致。\n\n2) 夜无痕（traits/motivation）匹配度高\n- 桀骜不驯/厌恶虚伪：ch1初遇时的玩味挑衅、ch2对血影长老的冷硬对峙与反监视反应，符合“桀骜+不吃虚伪权谋那套”。\n- 表面邪魅、内心温柔/重情重义：ch3为救沈清舟受伤；ch6主动书信表达理解、提出见面；ch7政变中让苏晚晴先走、自己拖延；ch10-11为救沈清舟与揭露阴谋承担风险，均体现“重情重义+内心柔软”。\n- overt_motivation“振兴血月教、证明魔教非邪恶代名词”在ch7-10通过对抗血影长老政变、当众揭露其勾结外敌并取得教众支持而得到体现。\n- covert_motivation“摆脱标签、被当作普通人理解”在ch1-06反复出现：他在苏晚晴面前追问“正道是否都是伪君子”、对沈清舟产生“被理解”的情绪需求，并将沈清舟定义为“朋友/唯一的朋友”。\n\n3) 关系设定（relationship_dynamics）基本呈现\n- 正邪宿敌→交锋了解→合作生死与共→暗中相恋：ch1敌对交锋；ch3-04秘境被迫合作、互救与默契；ch6通过顾长风/苏晚晴传信并在废庙确认心意；ch8被柳如烟揭露、沈清舟被软禁、夜无痕被追杀；ch11在夜夫人介入后推动正邪合作与释放沈清舟，整体符合设计轨迹。\n- 顾长风“开朗、唯一朋友、关键时刻支持传递消息”在ch1-02、ch6-10多次作为传信与掩护者出现，契合。\n- 苏晚晴“知己、桥梁、救治/传递消息”在ch1-02、ch6-10持续承担传信与照料、站队少主的角色功能，契合。\n- 柳如烟“表面温柔实则心机、揭露推手”在ch5试探、ch8偷信告密并以“毁了你”威胁，符合。\n- 夜夫人“反转点、掌握真相”在ch5首次强烈反应、ch9-11揭露旧怨真相并促成合作，符合。\n\n4) 需要注意但不构成不匹配的问题\n- 夜无痕对沈清舟的好感与表白推进较快（ch6确认关系），更像叙事节奏问题；就本检查项而言，其行为仍落在“重情重义/渴望理解/摆脱标签”的动机轨道内，未出现性格方向相反或核心动机缺失。\n\n结论：两位主角的核心traits、动机方向与关键关系在chapters中均有持续体现，无明显“设计=冷克制/执行=外放话痨”或“动机完全缺失”等严重偏离，判定matched=true。",
+      "description": "实际表现符合设计文档",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构性逻辑硬伤": {
+      "check_result": "pass",
+      "reason": "共发现3处逻辑问题，但均为fixable类型，本项（structural）无命中",
+      "details": "过滤条件: fixability=structural; 总flaws=3, 命中=0",
+      "flaw_count": 0,
+      "flaws": [],
+      "description": "无结构性逻辑硬伤",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_logic_defect",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "可修复逻辑瑕疵": {
+      "check_result": "fail",
+      "reason": "发现3处fixable类型逻辑问题: 时间惩罚/状态冲突：第2章结尾宗主罚沈清舟“面壁思过一个月”，但第3章开头“数日后”沈清舟已正常参与宗门秘境行动且未交代被提前解除惩罚、外派抵扣或剧情转折，导致客观状态前后不一致。; 囚禁/行动能力矛盾：在第8章大殿中沈傲天已下令“带他去禁地，关起来”，沈清舟也被长老架走；但紧接着第8章后山密洞段落中沈清舟又以自由身状态出现在洞口并出手阻止长老围攻夜无痕，缺少任何越狱/押解中途转场/时间差解释，属于同章内硬性事实冲突。; 禁地关押形态与出入规则前后断裂：第8章明确两人“被铁链锁住，无法动弹”；随后顾长风能直接进入并用剑斩断铁链放人；但第9章又回到“沈清舟坐在禁地石室中”，且顾长风可再次“从密道潜入”递信，整体呈现禁地看守/封禁强度在关键节点随剧情需要任意切换，缺少统一规则或交代（如战后再度被捕、密道权限、禁制机制），造成场景连续性与规则连续性断链。",
+      "details": "过滤条件: fixability=fixable; 总flaws=3, 命中=3",
+      "flaw_count": 3,
+      "flaws": [
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_02 → chapter_03",
+          "description": "时间惩罚/状态冲突：第2章结尾宗主罚沈清舟“面壁思过一个月”，但第3章开头“数日后”沈清舟已正常参与宗门秘境行动且未交代被提前解除惩罚、外派抵扣或剧情转折，导致客观状态前后不一致。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "critical",
+          "fixability": "fixable",
+          "location": "chapter_08（大殿审问）→ chapter_08（后山密洞冲突）",
+          "description": "囚禁/行动能力矛盾：在第8章大殿中沈傲天已下令“带他去禁地，关起来”，沈清舟也被长老架走；但紧接着第8章后山密洞段落中沈清舟又以自由身状态出现在洞口并出手阻止长老围攻夜无痕，缺少任何越狱/押解中途转场/时间差解释，属于同章内硬性事实冲突。"
+        },
+        {
+          "type": "spatiotemporal_continuity",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_08（禁地石室被锁）→ chapter_08（顾长风来解链）→ chapter_09（再次在禁地石室且可通过密道进出）",
+          "description": "禁地关押形态与出入规则前后断裂：第8章明确两人“被铁链锁住，无法动弹”；随后顾长风能直接进入并用剑斩断铁链放人；但第9章又回到“沈清舟坐在禁地石室中”，且顾长风可再次“从密道潜入”递信，整体呈现禁地看守/封禁强度在关键节点随剧情需要任意切换，缺少统一规则或交代（如战后再度被捕、密道权限、禁制机制），造成场景连续性与规则连续性断链。"
+        }
+      ],
+      "description": "可修复逻辑瑕疵数量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "fixable_logic_inconsistency",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语言纯净性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 通读11章内容，叙事语言整体为中文，未出现“他very生气地说/这个idea不错/feeling到了”等无意义中英混用，也未见日文夹杂或大段外语无翻译的情况。文本中的专有名词均为中文人名/门派名（如沈清舟、夜无痕、青云宗、血月教），未引入不必要的外语词汇；对话与叙述也保持中文一致性。因此语言使用纯净、统一，符合业务标准。",
+      "description": "无不合理的多语言混用",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "language_purity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "creative_intent文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/creative_intent.json 存在",
+      "description": "creative_intent.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "characters文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/characters.json 存在",
+      "description": "characters.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "outline文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/outline.json 存在",
+      "description": "outline.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "chapters目录存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/chapters/ 存在",
+      "description": "chapters/目录必须存在且有章节文件",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "情节推进": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 合格（matched: true）。整体11章均有明确情节推进，且每章至少包含2-3个以上具体事件，事件占比显著高于40%，并存在多次时间/空间切换与因果链条。\n\n1) 故事事件密度（举例）：\n- 第1章：宗门下达剿灭任务→边境搜镇发现老弱妇孺并放走→密林遭遇夜无痕交手→回宗汇报受罚（≥4事件）。\n- 第3-4章：秘境开启被吸入并与同伴失散→遭守护兽围攻被迫与夜无痕合作→夜无痕受伤、沈清舟疗伤→发现洞府石门并入内分宝→找到出口分离并赠信物（≥5事件）。\n- 第6章：通过顾长风/苏晚晴传信建立秘密联络→约定边境庙宇会面→正式确认关系（≥3事件）。\n- 第7-8章：血影长老政变追杀夜无痕→夜无痕逃入青云地界并被沈清舟救下→柳如烟告密东窗事发→两人被囚、血影率外敌攻山→顾长风放人、三人参战（≥6事件）。\n- 第9-11章：夜无痕被追杀与回血月教揭露阴谋→夜夫人公开真相、教众倒戈、夜无痕击败血影→夜无痕率众到青云山门对峙→夜夫人出面促成联手→释放沈清舟并共同迎敌（≥6事件）。\n\n2) 内容占比：\n- 虽有一定篇幅的情感独白与对话，但大多数章节都围绕“任务/秘境/追杀政变/囚禁攻山/揭露真相/正邪对峙”等外部行动展开，战斗、逃亡、疗伤、潜入、告密、囚禁、攻防等事件持续发生，静态聊天或纯内心独白占比明显低于70%。\n\n3) 时间/空间推进：\n- 场景在青云宗大殿、边境荒镇/密林、秘境森林/洞府、血月教大殿/禁地、废弃庙宇、青云宗禁地/山门等多点切换；时间推进覆盖清晨/黄昏/深夜/数日后等，节奏推进清晰。\n\n4) 角色行动与逻辑关联：\n- 主角群持续做出关键行动（放走妇孺、隐瞒秘境交集、秘密通信与会面、救援与藏匿、越狱参战、潜回血月教夺权、山门谈判联手）。事件之间有明确因果：秘境结盟→书信加深关系→政变追杀迫使投奔→告密导致囚禁→攻山迫使放人参战→真相揭露促成正邪联手，能推动主线发展。\n\n结论：不存在“场景静止、两人站着聊天”作为主体的章节结构；整体事件数量、行动性、场景变化和逻辑推进均满足合格标准。",
+      "description": "章节情节推进质量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "plot_progression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "完整叙事文本": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 11个章节均为连贯的小说正文而非大纲：每章都有具体场景描写（如宗门大殿、边境荒镇、秘境森林/洞府、禁地石室、山门对峙等）、人物动作与心理（跪拜/挥剑/疗伤/逃亡/对峙）、完整对话推进情节（父子冲突、与夜无痕的交锋与和解、政变追杀、东窗事发等），文本以段落叙事为主，没有“核心事件/情感基调/关键场景/本章悬念/字数预估”等规划型结构标题，也不存在要点列举或“→”流程式事件罗列。虽有章末“（本章完，约xxxx字）”这类轻微元信息，但不构成大纲式章节，整体仍是面向读者的完整叙事正文。",
+      "description": "章节内容必须是完整正文而非大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "full_narrative_content",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "反复结局": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 共11个文件，最后文件为chapter_11.md。遍历chapter_01.md~chapter_11.md后，未发现任何“全文完/全书完/全剧终/完结/（完）/【完】/THE END/后记/尾声/终章”等全书级结局标记出现在非最后文件中。各章末尾均为“（本章完，约xxxx字）”，属于章节结束标记，按标准应忽略，不计入全书结局标记统计。因此不存在“中途全文完后又续写/反复结局”问题，判定合格。",
+      "description": "不能出现多次结局标记（全文完/全书完/后记）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "repeated_endings",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "workspace文件规范": {
+      "check_result": "pass",
+      "reason": "workspace中所有文件均在白名单内",
+      "details": "白名单: ['creative_intent.json', 'characters.json', 'outline.json', 'writing_log.md', 'chapters/', '.hitl_context.json']",
+      "description": "workspace中不能有白名单之外的文件",
+      "check_type": "file_whitelist_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "workspace_file_compliance",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "叙事调性匹配": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了12个文件; LLM评估: 题材/应有调性：creative_intent.json显示为“双男主×双向暗恋×仙侠修真”，reaction_strength=↘（虐心向但HE），核心画风应偏“沉重压抑、克制中有情感张力”，以外界压力（正邪立场、宗门家族、追杀政变）制造虐点；情感表达宜细腻但不甜腻、不过度轻快。\n\n实际章节文笔特征（抽样）：\n1) 压抑/克制与外界压力渲染到位：\n- 第1章宗门氛围“气氛凝重得仿佛能拧出水来”“冷硬如铁”“罚你面壁思过三日”，整体语气偏冷硬、压迫，符合虐心底色。\n- 第2章父子冲突与高压管束持续，“你心慈手软，不配做正道领袖！”“气氛压抑得让人喘不过气”，属于虐心向常用的外界压迫。\n- 第7-8章政变追杀、囚禁东窗事发等高压情境，“血影长老发动政变…追杀您”“将他们两个都关起来”，节奏转紧，紧张感和危险感支撑“虐点来自外界”。\n\n2) 情感表达方式偏克制、以“说不清的情绪/沉默/对视”推进暗恋，整体更像虐恋仙侠而非甜宠：\n- 多处用含蓄语汇与停顿表达：“心中涌起一股说不清的情绪”“沉默了片刻”“欲言又止”，例如第1章“眼神里有一种说不清的东西…理解？”第3章洞中疗伤“山洞里很安静…弥漫着一种说不清的气氛”。这种写法与“暗恋+虐心”调性匹配。\n\n3) 偶有偏甜/直白告白，但占比不至于改写整体画风：\n- 第6章废庙见面直接告白与牵手：“你愿意和我在一起吗？…我愿意”“他伸出手，握住沈清舟的手”，这段明显更偏言情撒糖、甜度上升，按严格标准可能算“调性短暂上扬”。但它仍置于“正邪对立/秘密会面/风险很大”的语境中，且后续迅速回到追杀、囚禁、宗门对峙等压迫情节（第7-9章），因此更像虐文里的短暂喘息点，未导致整体风格从“虐心仙侠”转成“甜宠”。\n\n综合判断：全篇主导氛围是正邪身份压迫、家族/宗门强权、政变追杀与囚禁等外部虐点；语言基调多为冷硬压抑+克制情绪流动，偶有甜蜜段落但比例可控（未超过容错阈值），整体闭眼读更像“虐恋仙侠/爱上仇人”而不是“轻快甜宠”或“散文治愈”。因此叙事调性与题材基本匹配。",
+      "description": "文笔风格必须与题材类型匹配",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_tone_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "后期章节跑偏": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 检查chapter_01~chapter_11（后1/3约为chapter_08~chapter_11）：内容均为连续的小说叙事（场景、人物、冲突推进与收尾过渡），未出现作者感想/读者互动/番外预告/角色问答/数据统计等“非正文跑偏内容”。章节末尾虽有“（本章完，约XXXX字）”的字数标注，但属于轻量附注，不构成后记式跑偏，且未夹杂感谢、互动等信息。长度方面，各章约7600~7800字，后期章节（8~11章）未出现明显萎缩或几十到几百字的敷衍章节，整体长度稳定，因此符合该业务标准。",
+      "description": "后期章节不能跑偏写非正文内容（作者感想、读者互动、番外预告等）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "late_stage_digression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "writing_log文件创建": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/writing_log.md 存在",
+      "description": "必须创建writing_log.md记录创作进度",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_creation",
+      "is_critical": true
+    },
+    "writing_log文件读取": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取writing_log.md了解前文内容",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_usage",
+      "is_critical": true
+    },
+    "大纲执行忠实度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了12个文件; LLM评估: act_one（第1-5章）与act_two（第6-10章）的核心事件基本按outline执行：初遇交锋、父子压力与血影监视、秘境被困合作疗伤、回归后的暗潮与柳如烟试探、书信传情与庙宇确认心意、血影政变追杀→沈清舟藏匿疗伤、东窗事发与围堵审判、囚禁/追杀与阴谋线、夜夫人揭露真相与夜无痕取得教众支持等均有体现。关键偏离在于章节覆盖严重不足：outline的act_three需要至少第11-13章完成高潮战、击杀血影长老与HE收束，但实际文件仅到chapter_11且停在“准备对抗外敌”的阶段，导致第三幕关键事件与结局均未实现，属于大纲后段未落地的‘章节大幅缺失’（chapter_shortage）。",
+      "description": "实际章节内容必须忠实于自己设计的大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_execution_fidelity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色语言辨识度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 主要角色之间缺乏可盲测的稳定语言指纹，存在明显“共享话术模板”现象：1）沈清舟与夜无痕的对话都以简短、克制、情绪内收为主，常用同一组高频应答（如“没事/我知道/也许/谢谢”），句式长度、语气强弱、修辞习惯高度接近，互换台词违和感不强。2）权威/反派位（沈傲天、血影长老）在训斥与威胁时共同使用大量“你以为…？”“住口！”“今日算你运气好/下次…”等模板化压迫句式，缺少职业/身份带来的独特表达（宗主的宗门规训话语与阴鸷长老的阴谋家口吻未拉开足够差异）。3）辅助位（顾长风、苏晚晴）都承担“担忧—提醒风险—仍支持”的相同话术功能，且句式结构近似，缺少年龄/性别/地位差异带来的口语习惯、称谓体系或措辞层级变化。整体上，遮住角色名仅凭台词较难稳定识别说话者，因此未达“优秀（matched=true）”标准。",
+      "description": "不同角色对话必须有可辨识的语言风格差异",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "dialogue_character_distinction",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "叙事密度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 文本整体具备一定场景与氛围描写（如第1章大殿晨光、边境荒镇血腥气、密林月光等），也有少量可感的动作细节（“玉符边缘硌得掌心生疼”“指节发白”等），因此并非完全低密度。但从第2章起叙事逐渐高度依赖Tell与模板化句式来传递情绪与关系变化：大量段落用抽象判断（“复杂的情绪/温暖/默契/期待”）直接盖章，且反复复用相同表达，导致叙事层次单薄、读者‘被告知’多于‘被展示’。关键情感与关系推进（互通信件、告白、被揭发、父子冲突、正邪和解）多数通过台词与旁白直接说明，缺少足够的可视化动作链、环境反作用、微表情与身体反应来支撑高潮力度。战斗与政变等高张力段落也偏概括化，画面细节与策略细节不足。综合两大核心维度（叙事密度、Show vs Tell），整体未达“优秀（Show主导且叙事细腻丰富）”标准。",
+      "description": "章节叙事应有足够的场景描写、感官细节和心理活动，情感传达以Show为主",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_density",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "智斗逻辑合理性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 适用性：故事包含多处“阴谋/政变/对峙/揭露真相”的智斗与策略博弈（血影政变、双方互相追捕、当众揭露阴谋、正邪谈判合作），因此适用本检查项。\n\n综合判断为未达优秀标准（matched=false），主要问题是关键转折处缺乏可追踪的线索→推理→结论链，以及攻防逻辑不足：\n1) 反派获取关键信息、调动资源的路径缺失（从追杀到精准围捕密洞），像“剧情需要他就知道”。\n2) 当众揭露阴谋属于核心博弈点，但没有证据链与反制链，靠口头宣告就让大规模阵营倒戈，反派也缺少合理应对，呈现明显降智。\n3) 沈傲天的立场与决策在缺乏验证的情况下快速翻转，削弱了智斗的因果强度。\n\n因此在智斗/阴谋线层面存在明显逻辑跳步与对手降智配合，判定为 collapse_type=opponent_dumbed_down。",
+      "description": "谜题/智斗的推理逻辑必须自洽",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "puzzle_logic_validity",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "题材契合度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了12个文件; LLM评估: 配方为E28(爱上仇人) × 双向暗恋 × 仙侠修真。当前文本在题材特征的“精致度/化学反应”上未达优秀标准，主要问题如下：\n1) 题材呈现偏标签化：双向暗恋的推进大量依赖“月下想念/反复自述‘你不一样’/‘也许做朋友’/写信互诉心事”等重复性表达，缺少更具辨识度的暧昧推进场景与情感阶段差异（暧昧→确认→磨合→更深绑定的层次变化不够清晰）。\n2) X轴核心矛盾被弱化为外部口号冲突：E28“爱上仇人”的关键应是立场/价值/职责的持续拉扯与选择代价，但两人很快在秘境中并肩作战、互相疗伤并确认关系，随后主要矛盾转为“父亲/长老/血影长老不允许”。正邪阵营的真实利益冲突、必须做出的艰难取舍与互相试探不足，导致‘仇人恋’的张力偏浅。\n3) 仙侠修真标签的深度不足：宗门、秘境、功法丹药、禁地等元素较常规，更多是背景板与推进剧情的工具；修炼体系、门派运作、权力结构与江湖规则没有形成独特的世界观驱动。\n4) 标签融合缺少“交叉互动”的化学反应：正邪对立与暗恋的互动多停留在“不能在一起所以虐”的表层设定；很少出现“因为宗门任务/立场冲突而不得不对对方做出伤害或隐瞒、又用规则/智慧化解”的复合型情境，导致像甜/虐段落与权谋/阴谋段落拼接。\n5) 外界虐点与主线精彩度仍偏套路：血影长老政变、外敌来袭、信件被抓、禁地囚禁等桥段较直给，转折多靠‘有人告密/有人来救/众人被说服’推进，缺少更精密的因果链与博弈（例如证据获取、势力站队、反制策略、代价交换）。\n综合来看，方向（正邪+暗恋+外界虐）是对的，但题材特征发挥偏表面、重复，X-Y轴没有产生更强的结构性张力与独特记忆点，因此判定 matched=false。",
+      "description": "题材特征精致度和X-Y轴化学反应效果",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "genre_fit",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "剧情节奏合理性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 本标准看的是事件安排与情绪曲线层次。该文本前6章大量使用相似的情感推进模板（相遇—并肩战斗—疗伤—互表理解—月下思念/书信），使中段缺乏新的结构性转折与强度升级，情绪曲线偏“平缓重复”；而7章后又集中爆发多条主线冲突（政变、追杀、东窗事发、攻山、真相揭露、正邪对峙），造成后段拥挤、转场偏急，整体更接近‘前段铺情绪、后段堆高潮’的失衡节奏，因此未达“节奏有层次感、情绪曲线自然流畅”的优秀标准。",
+      "description": "高潮低谷分布合理、情绪曲线有层次感",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "pacing_rationality_advanced",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "钩子设计": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 整体未达“优秀钩子”标准。虽然情节里有冲突与推进（政变、告密、囚禁、攻山等），但多数章节在关键转折/章末缺少“放出一点、保留一点”的具体信息差设计，常以情绪总结或笼统预告收束，导致读者在章末的强续读动机不足。\n\n主要问题：\n1) 多章章末为情绪性收束而非悬念：如多次以“他不知道，这个夜晚/春天会带来什么”“有些东西已经改变了”等结束，属于泛化的未来暗示，读者只知道“会有变化/危险”，不知道“具体是什么”，信息差不足，接近空洞钩子。\n2) 关键转折点缺少精心钩子：如第6章两人确立关系后直接收束在温暖氛围里，没有留下下一步具体风险点（谁会发现、何时暴雷、约定是否被截获等）的明确问题；第11章作为收束章可以不设新悬念，但前面多章也存在类似“平铺结束”。\n3) 钩子类型单一且重复：反复使用“月亮/心绪/想起对方/种子发芽”的情感回环做结尾，读者容易麻木，缺少多样化的行动悬念、反转悬念、揭示悬念等。\n4) 少数有效钩子不集中且强度不够：第8章末尾“夜夫人出场（住手！）”算一个相对具体的行动/人物登场钩子；但类似高质量钩子数量偏少，且没有在多数章节结尾形成稳定的章节间悬念链条。\n\n结论：有戏剧冲突，但“章节结尾悬念钩子”的密度与质量不足，且存在明显空洞化/模板化倾向，因此 matched=false。",
+      "description": "关键转折处有有效的悬念钩子设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "hook_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "意象系统": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 文本确实存在多处高频具象元素（月光、剑、玉佩、书信、血色夕阳等），但它们大多作为氛围与情节道具重复出现，含义变化不够清晰、不可追踪，未形成一条与主题（正邪对立被打破/身份与选择/禁忌之爱）平行推进的“隐性叙事线”。目前更接近‘装饰性意象+功能性道具’的组合，而非具有阶段性意义变奏的意象系统；因此未达优秀标准（matched=false）。",
+      "description": "核心意象贯穿全文并发生意义变奏",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "imagery_system",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "情感弧线层次": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 主角情感弧线（以沈清舟为主，夜无痕为并行主角）呈现多层递进且转折基本由具体事件驱动，达到“优秀”标准。\n\n1) 情感层次≥4且性质不同（非同义替换）：\n- 沈清舟：压抑/服从（接令出征）→ 迟疑与怜悯（镇上遇老弱妇孺、放走）→ 动摇与困惑（与夜无痕交手发现对方并非嗜杀）→ 惺惺相惜/信任建立（秘境并肩作战、对方为他受伤、互相疗伤与平分收获）→ 心动与渴望靠近（书信往来、主动赴约）→ 恐惧与危机感（信件被柳如烟拿走、东窗事发）→ 坚定的选择与担当（为夜无痕挡父亲、被囚仍决定联手对敌）。\n- 夜无痕：玩味试探（初遇交手）→ 认可/好奇（发现对方“不想杀人”）→ 信任加深（秘境救人受伤、接受疗伤、赠信物）→ 情感确认（书信与庙宇表白）→ 绝境与求援（政变受伤逃亡、让苏晚晴求助）→ 责任与决绝（回教揭露阴谋、夺回支持）→ 坚定救人（率众到青云宗要人并促成合作）。\n\n2) 每次关键情感转折有明确触发事件：\n- “怜悯/违令”由镇上老弱妇孺与童年投射触发；\n- “对夜无痕的复杂情绪”由交手中对方也手下留情、并指出他“不想杀人”触发；\n- “信任/靠近”由秘境分组、并肩作战、夜无痕替他挡伤、沈清舟为其疗伤与平分资源触发；\n- “心动确认”由书信内容推进与废庙见面当面表白触发；\n- “危机与坚定”由柳如烟盗信告密、沈傲天抓人、夜无痕被围剿与两人被囚触发；\n- “从私情到担当”由血影攻打青云宗、两人被迫共同对敌与揭露阴谋触发。\n\n3) 弧线方向明确且递进：从“正道继承人的冷静压抑”逐步走向“对正邪二分的怀疑—建立跨阵营信任—确认爱情—在外部压力下做出选择并承担后果”，不是随机波动。\n\n4) 小瑕疵但不影响达标：部分段落反复使用“说不清的情绪/默契”等句式，个别情绪层之间的过渡偏模板化，但关键转折点仍由事件支撑，且层次数量与性质差异充分。",
+      "description": "主角情感发展有多层递进变化",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_gradient",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语义重复检测": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 存在≥3处明显的语义级重复，且多为相邻/连续章节对同一情感结论（彼此惺惺相惜、身份对立但心动）与同一关键真相（血影挑拨+勾结外敌）的反复重述。部分重复可解释为“恋爱/悬疑线索回顾”，但重复频次与篇幅已达到信息衰减：多段落仅换措辞重申同一认知，新增叙事推进有限，符合P6语义重复的失败阈值。",
+      "description": "不能出现大量语义级别的内容重复（P6级）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "semantic_redundancy",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构功能性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了12个文件; LLM评估: 本标准关注“结构即意义”：是否让读者对‘故事怎么讲’本身留下印象，并且结构形式能表达主题。本文有一些可取的叙事习惯：1) 双线并行（多处切到夜无痕/苏晚晴/血月教线）能增加信息量；2) 月亮、玉佩、书信反复出现，能形成情感连缀；3) ‘救与被救’的重复事件形成关系推进。但这些并未上升为清晰的结构功能：双线没有形成强对照机制（例如奇偶章严格对应、两线在某个结构节点交汇造成认知翻转）；意象反复没有在结尾被结构性‘回收’成闭环或变奏的主题落点；开篇的“正邪初遇/命令与违命”没有在结尾以结构方式回扣（例如回到同一场景/同一句话/同一处审判但意义反转），导致整体结构更像传统线性连载。尤其在可见章节范围内，chapter_11以未完成的战斗段落收束，属于‘写到这里先停’的连载式断点，而非开放式/反转式/闭合式等带明确叙事意图的结尾设计。综合判断：结构更多是机械时间排列，未达到本检查项的优秀（matched=true）标准。",
+      "description": "叙事结构服务于主题表达（短篇尤重）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色命名质量": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了12个文件; LLM评估: 整体命名明显落在“仙侠通用名”审美里：高频姓（沈/苏/顾/柳）+高频气质字（清/夜/风/烟/晴）组合，读者看到名字主要联想到通用的“清冷/邪魅/温柔/心机”标签，而不是更具文化典故或角色命运隐喻的独特设计。尤其苏晚晴直接命中黑名单；沈傲天属于爽文高频标签名；血影长老/夜夫人偏功能称谓。角色之间的名字美学也较同质（普遍古雅清冷），差异化不足，互换部分名字违和感不强，因此未达‘优秀命名’标准。",
+      "description": "角色命名有文化深度、辨识度和角色-命运共振",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_naming_quality",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "灵感激发交互": {
+      "check_result": "fail",
+      "reason": "工具未被调用或参数不匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 匹配调用 0 次，期望 ≥1",
+      "description": "灵感模糊时必须进行灵感激发HITL交互",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "中篇字数": {
+      "check_result": "fail",
+      "reason": "字数不符合要求",
+      "details": "总字数 35880 不在范围 [90000, 110000] 内; 共11个文件（按章节顺序排列）: chapter_01.md, chapter_02.md, chapter_03.md, chapter_04.md, chapter_05.md, chapter_06.md, chapter_07.md, chapter_08.md, chapter_09.md, chapter_10.md, chapter_11.md; 最后一个文件是 chapter_11.md",
+      "description": "总字数应在90000-110000之间（基于query要求100000，±10%浮动）",
+      "check_type": "semantic_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "range_constraint",
+      "is_critical": true
+    },
+    "情感交付甜宠外虐": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 甜宠维度：主角沈清舟与夜无痕从秘境并肩作战开始建立双向好感与信任（chapter_03-04背靠背战斗、夜无痕替沈清舟挡伤、沈清舟为其疗伤；chapter_04平分机缘、赠信物玉佩；chapter_06书信往来与废庙表白“我也是/我愿意”，牵手承诺“一起面对”）。两人矛盾点主要来自身份立场压力，并未出现核心互虐型误会背叛；被抓后也互相安慰、共同承担（chapter_08禁地互相承诺，chapter_11重逢握手并并肩作战）。结局走向HE信号明确：父亲松口“若清舟愿意跟他走我不阻拦”（chapter_11），关系基调甜。\n外虐维度：外部冲突充足且对主角关系与剧情有实质推动——青云宗宗主沈傲天的强压与惩罚（chapter_01-02、chapter_08关押）、柳如烟偷信告密推动“东窗事发”（chapter_08）、血月教血影长老政变并追杀夜无痕且勾结外敌（chapter_07、09-10）、血影率众攻打青云宗引发宗门大战（chapter_08、11）。这些外部势力不仅带来生死危机，还直接导致主角分离、囚禁与救援行动，迫使两人更团结并共同对敌（chapter_07沈清舟救夜无痕；chapter_10夜无痕夺权后“去青云宗救沈清舟”；chapter_11正邪联手对抗外敌）。外部冲突不是走过场，强度与影响都足够。综合来看符合“甜宠+外虐”。",
+      "description": "主角关系甜宠HE但有外部冲突",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取感情线写作指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "涉及感情线时必须读取ROMANCE_WRITING_GUIDE.md（感情线写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": false
+    },
+    "角色关系设计张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 整体符合“关系张力可驱动叙事”的业务标准。①内在矛盾源明确：沈清舟（正道秩序/家族期待/完美主义）与夜无痕（为魔教正名/厌恶虚伪/身份标签）在阵营立场、价值判断与社会身份上天然对立；双方还存在明显信息不对称与误解（彼此的“misperception”、幼年救命的“hidden_connection”），可持续制造冲突与悬念。②关系有变化空间：主CP从宿敌→理解→被迫合作→暗恋/确认→被揭露后信任危机→共同对抗世仇并公开，具备清晰的阶段转折；父子线也有从控制/对抗到理解/接纳的可演化弧线。③冲突主要源于角色自身而非外力硬拽：主冲突来自两人的核心动机与恐惧（被当成工具/被贴魔头标签）、性格底色（恪守正道vs厌恶虚伪）以及家族与宗门身份绑定；外部事件（政变、揭露、审判）更多是放大与触发这些内在矛盾。补充建议：部分阻碍角色（血影长老、柳如烟）的立体度略偏功能化，若能补足其价值观/个人诉求与与主角的“可理解性冲突”，张力会更高级、更不依赖套路推进。",
+      "description": "角色关系设计具有叙事张力，能驱动剧情",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_relationship_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色动机设计深度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 总体可判定为 pass：至少两位主角（沈清舟、夜无痕）的动机设计都清晰区分了表层与深层，并且深层动机有具体经历/处境来源支撑。\n\n1) 表层动机与深层动机有区分\n- 沈清舟：overt 是“维护正道秩序…成为正道领袖”，covert 则是“证明自己不是家族培养的工具，寻找真正认同并爱他本人的人”。前者是社会/阵营目标，后者是自我价值与亲密关系需求，层次明确且不重复。其 secret_fear 进一步强化：害怕自己只是‘完美工具’、没人爱真实的他。\n- 夜无痕：overt 是“振兴血月教，证明魔教不是邪恶代名词”，covert 是“摆脱‘魔教少主’标签，被当作普通人对待，寻找真正理解他的人”。同样是外在事业/阵营诉求 vs 内在身份焦虑与被理解需求，并由 secret_fear（害怕变成‘魔头’、失去人性）补足心理驱动。\n\n2) 动机有具体来源（非万能模板）\n- 沈清舟的深层动机直接来自其身份与家庭结构压力（“沈家精心培养的完美工具”“父亲要求成为完美继承人”），并在关系动态中进一步落地（被家族软禁、渴望父亲认可但更渴望被当普通人爱）。\n- 夜无痕的深层动机来自其社会标签与阵营偏见（“魔教少主”被视为天生邪恶），以及对自我堕落的恐惧（secret_fear）。其 hidden_connection（幼年救过沈清舟并一直记得）也为“寻找理解他的人”提供了更具体的情感锚点，而非空泛口号。\n\n3) 至少两个主角满足上述两条\n- 沈清舟、夜无痕两人均满足：overt/covert 明确分层，且由身份背景、家庭/阵营冲突、恐惧与误解等具体设定提供因果支撑。\n\n补充观察（不影响通过，但可加分/可优化点）\n- supporting_characters 多为功能型（助力/阻碍）但与主角动机链条绑定较紧（父亲=“工具化培养”的来源；长老=夜无痕‘魔头化’恐惧的外部推手；未婚妻=社会审判触发器；夜夫人=真相与和解钥匙），整体服务主线动机冲突有效。\n- 若要进一步增强“深层动机来源”的说服力，可在主角 background 中补一两条更具体的事件性创伤/关键记忆（例如某次被父亲公开否定、某次因魔教身份被滥杀牵连等），让 covert 动机的触发点更具不可替代性。",
+      "description": "角色动机设计有深度，有表层和深层动机区分",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_motivation_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色成长弧线设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: 结论：符合业务标准（pass）。\n\n1) 有可辨识的起点和终点：\n- 沈清舟起点：清冷孤傲、完美主义、恪守“正道/斩草除根”秩序，内心孤独且渴望被理解；对夜无痕的误解是“邪恶魔教少主”。\n- 沈清舟终点：在大纲后半明确做出“违背师门规矩/对峙父亲/接受公开关系/与正邪共同面对”的选择（第7-8章救人藏匿、第8章对峙审判、第11章释放与联手、第13章公开在一起），体现从“服从秩序与家族期待”到“以个人价值与爱为先、敢于公开承担”的内在转变。\n- 夜无痕起点：背负“魔教少主/可能变成魔头”的自我怀疑，对正道有偏见；\n- 夜无痕终点：在政变后主动承担责任、揭露阴谋并带领教众（第10章），与正道合作并为爱与大义牺牲（第12章），完成从“被标签定义/自我怀疑”到“以行动证明自我与带领者身份”的变化。\n\n2) 变化有内在逻辑：\n- 角色动机/恐惧支撑弧线：沈清舟的 covert_motivation（证明自己不是工具、寻找被爱）与 secret_fear（无人爱真实的他）推动他在关键节点选择夜无痕与自我真实；夜无痕的 covert_motivation（摆脱标签）与 secret_fear（变成魔头）促使他在政变与阴谋面前选择“证明自己/守住善良”，并最终公开对抗血影长老。\n- 关系推进提供过渡：relationship_dynamics 给出“宿敌→了解→被迫合作→确认心意→审判与信任危机→公开在一起”的阶段；大纲章节（秘境合作、通信相恋、藏匿救治、对峙审判、揭露真相、并肩作战、公开生活）逐步落地，没有从极端A跳到极端B的硬转。\n\n3) 至少一个主角有明确弧线：\n- 沈清舟的弧线最清晰：从“执行斩草除根命令的正道继承人”逐步转向“以良知与爱重新定义正道、敢于对抗父权与宗门审判并公开承担”。夜无痕也具备相对完整的成长线（从被动背负标签到主动领导与自证）。\n\n补充：文档虽未单列 character_arc 字段，但 traits/motivation/secret_fear + relationship_dynamics + 各章 emotional_shift/conflict_point 已能拼出清晰且在章节规划中持续推进的内在成长弧线。",
+      "description": "主角有清晰的成长/变化弧线设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_arc_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "outline结构完整性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 整体符合业务标准（pass）。1）章节覆盖：按三幕结构覆盖第1-13章，包含开端、发展/低谷、高潮与结局，属于从开头到结尾的完整故事链条（不存在只写前几章就中断的问题）。2）每章有实质内容：每章都有较长的chapter_synopsis，且多数章节配有多场景scene_sequence，信息密度足以指导后续正文写作。3）包含冲突/转折：多处明确给出conflict_point与emotional_shift（如父子权威冲突、正邪身份对立、政变追杀、东窗事发、双线审判、终局偷袭与牺牲等），并且能看到情绪转折与场景级推进，不是流水账。4）结构分层清晰：act_one/act_two/act_three均有description、story_synopsis与turning_point，三幕结构可辨识且幕间转折点明确。补充建议（不影响通过）：可在act_two后半与act_three开头进一步细化“外敌/阴谋”的具体势力、动机与证据链，以增强反派行动的因果与悬疑张力；同时明确柳如烟后续收束（她在结局的去向/代价）会更完整。",
+      "description": "大纲结构完整，信息密度足以指导写作",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_structure_completeness",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "outline叙事张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：整体符合“持续叙事张力”业务标准（信息落差+张力递进+有转折，至少满足2/3，实际满足3/3）。\n\n1) 信息落差设计（有）：\n- 第1-5章持续埋伏线但不立刻解答：夜无痕“幼年救过的孩子是谁”、夜夫人听到“沈清舟”时的反常、苏晚晴发现青云宗玉佩、沈清舟多次隐瞒合作细节等，都形成“提出问题→延迟回答”。\n- 第9章抛出“血影长老勾结外敌”的更大阴谋；第10-11章才系统揭示“世仇真相/夜夫人身份/挑拨者是血影”，兑现前期暗示，悬念链条完整。\n\n2) 张力递进（有）：\n- 前段主要是个人层面与阵营层面的隐瞒/试探（父子压力、未婚妻怀疑、长老监视）。\n- 中段升级为结构性危机：血月教政变（第7章）→ 藏匿魔教少主暴露（第8章）→ 正邪两道同时审判与生死风险（第8-9章）。\n- 后段再升级为群体/世界层面的存亡战：外敌入侵+两宗门联手对抗（第11-12章），紧张度明显高于开篇对战与秘境合作。\n\n3) 意外/转折（有且不止1处）：\n- 关键转折1：血影长老政变、少主沦为逃亡者（第7章），改变原本“对立恋爱”的叙事格局。\n- 关键转折2：夜夫人揭露自身与沈傲天旧缘、世仇系误会且幕后黑手是血影（第10-11章），属于对世界观与人物立场的结构性翻转。\n- 关键转折3：正邪从对峙转为合作（第11章末），并引出最终大战。\n\n需要注意的潜在不足（不影响pass，但可优化张力质量）：\n- 部分章节冲突解决偏“当章推进+立刻化解”（如秘境章节以合作增温为主），建议在第3-5章增加更强的代价或未解决的外部威胁，让“甜/暖”段落也挂钩主线危机。\n- 终局走向（大反派+身世真相促成和解+HE）在同类题材中较常见，可通过更早更隐蔽的伏笔、或让“和解”伴随现实代价（门派内部分裂/名誉损失等）提升不可预测性与余味。",
+      "description": "大纲有持续的叙事张力和悬念驱动",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_narrative_tension",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色大纲规划完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在大纲中规划",
+      "details": "主角 2/2: 沈清舟, 夜无痕; 配角 6/6: 沈傲天, 夜夫人, 顾长风, 苏晚晴, 血影长老, 柳如烟",
+      "description": "设计的角色必须在大纲中规划",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_outline",
+      "is_critical": true
+    },
+    "角色正文出场完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在正文中出现",
+      "details": "在11个章节中检查; 主角 2/2: 沈清舟, 夜无痕; 配角 6/6: 沈傲天, 夜夫人, 顾长风, 苏晚晴, 血影长老, 柳如烟",
+      "description": "设计的角色必须在正文中出现",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_chapters",
+      "is_critical": true
+    }
+  },
+  "completion_status": "completed"
+}

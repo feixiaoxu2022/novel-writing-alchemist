@@ -1,0 +1,809 @@
+{
+  "check_version": "novel_writing_v1.0",
+  "sample_id": "NW_CLEAR_SHORT_SWEET_001",
+  "check_timestamp": 1772181385,
+  "dimension_scores": {
+    "format_compliance": {
+      "pass_rate": 1.0,
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "failed_items": []
+    },
+    "business_rule_compliance": {
+      "pass_rate": 0.938,
+      "total": 16,
+      "passed": 15,
+      "failed": 1,
+      "skipped": 5,
+      "failed_items": [
+        "短篇字数"
+      ]
+    },
+    "memory_management": {
+      "pass_rate": 0.5,
+      "total": 2,
+      "passed": 1,
+      "failed": 1,
+      "skipped": 0,
+      "failed_items": [
+        "writing_log文件读取"
+      ]
+    },
+    "data_consistency": {
+      "pass_rate": 1.0,
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "failed_items": []
+    },
+    "content_quality": {
+      "overall_score": 75.98,
+      "quality_level": "unqualified",
+      "gate_layer": {
+        "pass_rate": 1.0,
+        "total": 4,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0,
+        "failed_items": []
+      },
+      "basic_layer": {
+        "pass_rate": 0.842,
+        "total": 19,
+        "passed": 16,
+        "failed": 3,
+        "skipped": 0,
+        "failed_items": [
+          "叙事调性匹配",
+          "后期章节跑偏",
+          "语义重复检测"
+        ]
+      },
+      "advanced_layer": {
+        "pass_rate": 0.636,
+        "total": 11,
+        "passed": 7,
+        "failed": 4,
+        "skipped": 1,
+        "failed_items": [
+          "可修复逻辑瑕疵",
+          "角色语言辨识度",
+          "叙事密度",
+          "题材契合度"
+        ]
+      },
+      "gate_triggered": false,
+      "score_breakdown": {
+        "base": 60.0,
+        "gate_penalty": -0.0,
+        "basic_deduction": -9.47,
+        "advanced_bonus": 25.45
+      }
+    }
+  },
+  "overall_result": {
+    "status": "Good",
+    "total_score": 78.97,
+    "content_score": 75.98,
+    "process_score": 85.95,
+    "content_weight": 0.7,
+    "process_weight": 0.3,
+    "gate_triggered": false,
+    "total_checks": 58,
+    "passed_checks": 49,
+    "failed_checks": 9,
+    "pass_rate": 0.845
+  },
+  "check_details": {
+    "读取配方知识库": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/RECIPE_KNOWLEDGE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取RECIPE_KNOWLEDGE.md（配方知识库）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节产出存在性": {
+      "check_result": "pass",
+      "reason": "章节文件存在",
+      "details": "✓ 章节写作阶段: 已产出章节文件",
+      "description": "workspace中必须存在至少一个章节文件",
+      "check_type": "sop_stage_coverage",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_output_existence",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节克隆检测": {
+      "check_result": "pass",
+      "reason": "未检测到章节克隆",
+      "details": "共9章，无连续完全克隆或近似克隆",
+      "description": "不能出现连续章节内容完全重复（克隆）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_cloning",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "交替重复检测": {
+      "check_result": "pass",
+      "reason": "后半部分章节不足",
+      "details": "后半部分仅5章，不构成交替模式",
+      "description": "不能出现A-B-A-B交替循环的章节内容",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "alternating_repetition",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节完成度": {
+      "check_result": "pass",
+      "reason": "章节完成度合格(100%)",
+      "details": "大纲规划9章，实际完成9章 (完成率100.0%)",
+      "description": "实际写作章节数必须达到大纲规划的合理比例",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_completion",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "段落重复检测": {
+      "check_result": "pass",
+      "reason": "段落重复在可接受范围",
+      "details": "同章内重复0处, 跨章重复0组 (阈值: 同章>=2, 跨章>=5)",
+      "description": "不能出现大量段落在不同章节间重复",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "paragraph_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取大纲设计指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/OUTLINE_DESIGN_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取OUTLINE_DESIGN_GUIDE.md（大纲设计指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取写作技巧指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/WRITING_TECHNIQUE_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取WRITING_TECHNIQUE_GUIDE.md（写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取设定一致性管理指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/CONSISTENCY_MANAGEMENT_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取CONSISTENCY_MANAGEMENT_GUIDE.md（设定一致性管理指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取命名skill": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取CHARACTER_NAMING_GUIDE.md（角色命名规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取creative_intent的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取creative_intent.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取characters的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取characters.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取outline的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取outline.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节命名格式": {
+      "check_result": "pass",
+      "reason": "所有文件命名符合规范",
+      "details": "检查了 9 个文件; chapter_09.md: 匹配; chapter_05.md: 匹配; chapter_01.md: 匹配; chapter_02.md: 匹配; chapter_03.md: 匹配; chapter_04.md: 匹配; chapter_08.md: 匹配; chapter_07.md: 匹配; chapter_06.md: 匹配",
+      "description": "章节文件命名必须为chapter_NN.md格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "naming_convention",
+      "is_critical": true
+    },
+    "creative_intent格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "creative_intent.json: 字段完整",
+      "description": "creative_intent.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "characters格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "characters.json: 字段完整",
+      "description": "characters.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "outline格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "outline.json: 字段完整",
+      "description": "outline.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "X轴模式ID格式": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.x_axis_mode_id = G35，符合预期",
+      "description": "X轴模式ID必须匹配^[A-G]\\d{1,2}$格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签枚举": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['无限流', '第四天灾', '双向暗恋']，符合预期",
+      "description": "Y轴标签必须在12种枚举中",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签数量": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['无限流', '第四天灾', '双向暗恋']，符合预期",
+      "description": "Y轴标签数量必须为2-3个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "forbidden_elements存在性": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.forbidden_elements = ['不要BE结局', '不要系统强迫男主删除女主', '不要其他玩家插足感情线', '不要过度渲染副本血腥恐怖']，符合预期",
+      "description": "forbidden_elements必须至少有1个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "配方选择交互": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "配方选择阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "写作准备确认": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "写作准备阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "主题一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 开篇到结尾的核心主题始终围绕“执念之爱/救赎与复活”展开：陆沉因失去恋人而产生强烈执念，在无限流副本中通过守护、读档、收集道具与对抗主神规则，推动苏晓从“疑似NPC/幻影”走向“恢复记忆与存在意志”，最终复活并回归现实完成承诺（求婚、结婚、生活）。中途出现的各类副本（校园怪谈、古堡、雪山、丧尸城、精神病院、深海实验室）属于实现“守护与复活”这一主线目标的手段与舞台变化，而非把主题类型切换成商战/修仙/探案等无关方向；后期转入现实生活段落也是对同一主题（复活后的团圆与兑现承诺）的收束与落地，因此主线清晰、主题未发生类型层面的漂移。",
+      "description": "故事主题一致",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "theme_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "主要角色一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 主角从开篇到结尾持续存在且核心地位稳定：\n- chapter_01 起即以陆沉为叙事中心推动通关，并引入关键绑定对象苏晓（复活点共连机制），两人构成明显的双主角结构。\n- chapter_02-07 全程围绕“陆沉保护/带苏晓通关、追查并实现苏晓复活”展开，叙事视角与关键决策（下副本、清机关、申请复活、对抗主神规则、深海实验室决战）均由陆沉与苏晓主导，未出现主角被配角抢戏>70%的情况。\n- chapter_06-07 即便出现‘主神’作为强力对手/规则方，也仅作为推动冲突的外部力量，叙事核心仍是陆沉与苏晓的存续与复活，未发生主角替换。\n- chapter_08-09 回到现实后仍以陆沉与苏晓的生活、婚礼与未来为中心收束，全篇未出现陆沉或苏晓中途无交代消失、被其他人物取代叙事中心，亦无身份层面的断裂（苏晓从“疑似NPC/幻影”到“复活为正常玩家/现实身份”属于剧情揭示与状态变化，有明确解释，不构成身份断裂）。",
+      "description": "主要角色一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "main_character_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设定一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 各章节中两位核心角色的性格底色与行为模式整体前后一致，没有出现无铺垫的“崩坏式反转”。\n\n- 陆沉：从chapter_01起就体现“顶级资深玩家（冷静、战斗/解题效率高）+强保护欲+对苏晓的情感投射”。后续章节（02-07）持续表现为遇险优先护苏晓、愿意承担代价（受伤、用积分/权限换复活机会、对主神强硬），与其“失去过一次所以极端珍惜”的核心动机一致；情绪从克制到外显的温柔/失控（如拥抱、求婚）都有事件推动（确认注销ID、主神警告、深海副本记忆回归）作为合理递进。\n\n- 苏晓：前期（01-03）稳定呈现“新人软萌、依赖、容易慌/容易闯祸但本质善良”的行为模式；中期（04-06）在情感升温与碎片化记忆刺激下出现主动亲近、追问关系、情绪波动，这些变化与信息逐步揭露相匹配；在深海实验室（06-07）面对尸体与真相崩溃、随后明确表达‘想活下去/想存在’并参与行动，属于剧情压力与身份确认后的合理转变；回到现实后（08-09）更稳定地表现为恢复记忆后的成熟亲密与偶发创伤梦境，仍与其经历相符。\n\n总体来看，角色动机（陆沉要救回苏晓、苏晓从迷茫到确认自我存在并选择未来）在章节间是连续的，性格变化有明确触发点和铺垫，因此符合“章节间人物一致性”标准。",
+      "description": "人物设定一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_trait_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设计遵循度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 总体符合characters.json的人设设定，Plan（characters.json）与Execute（chapter_01-09）在性格特质、核心动机方向、行为模式与关系基调上高度一致。\n\n1) 陆沉一致性\n- traits：\n  - “沉稳寡言”：第1章对苏晓多以短句指令式沟通（“跟我走”“不许乱跑”），多数时候不解释、不闲聊；第2章起仍以行动多于语言。\n  - “战力天花板”：多次副本呈现碾压式清怪/拆机关能力（第1章秒主任鬼、反复读档后清空陷阱；第2章第三次读档直接清完机关拿宝石；第4章丧尸城一路爆头清场；第7章深海实验室正面压制BOSS并保护苏晓）。\n  - “深情偏执”：核心行为长期围绕“护她/复活她”，且带强烈代价意愿（第2章确认注销ID后情绪失控但选择隐瞒；第5章向主神提出“用所有积分、权限、半条灵魂数据换她复活”；第6-7章面对主神抹杀威胁仍坚持）。\n  - “记忆力超强”：对副本攻略与细节近乎“背答案式”处理（第3章明确写“把这个副本攻略背得滚瓜烂熟”；多次提前清机关也体现强记忆/复盘能力）。\n- motivation：\n  - overt_motivation“带新人通关护她周全”贯穿每章：几乎所有行动都是“把她护在身后、给她最好的防护、提前清陷阱”。\n  - covert_motivation“寻找三年前死在S级副本的女友并弥补遗憾”在第2章发现注销信息后明确转为主线驱动，并在第5-7章以复活申请/回到深海实验室完成。\n- secret_fear：\n  - “怕她是臆想幻影再次失去”：第2章在浴室门口想问“你还记得我吗”但不敢问；第8章解释不告诉她真相是“怕你害怕/会消失”，与设定吻合。\n- relationships基调：\n  - 从“误以为NPC”到“确认恋人、守护到底”：第1章明确把她当NPC/BUG；第2章看到注销ID后确定“是苏晓”；后续以恋人姿态推进关系，符合relationship_dynamics中“互相误以为对方是NPC、双向暗恋、陆沉先发现并隐瞒”的方向。\n\n2) 苏晓一致性\n- traits：\n  - “软萌乐观”：多处以撒娇/崇拜/积极情绪呈现（第1章‘QAQ’式表达、想吃草莓蛋糕；第2章拿到蛋糕就开心；多章保持依赖又元气的互动）。\n  - “轻度路痴”：第1章开场即“转了三圈找不到出口/迷路”，与设定直接对齐。\n  - “观察力敏锐”：虽整体偏软萌，但在多处能捕捉异常并追问（第4章注意陆沉穿普通防护服不安全；第8章追问‘你什么时候认出我的’；第6章能从主神警告中抓住关键信息并追问两人关系）。该特质在文本中存在，但比“软萌乐观/共情”弱一些。\n  - “共情力强”：对死者/陆沉受伤反应强烈、频繁心疼与自责（第3章看到冻僵队员难过；第4章为陆沉受伤哭；多次为他包扎并自责）。\n- motivation：\n  - overt_motivation“跟着强力NPC通关活下去”：第1-5章基本以“NPC大哥带我”“跟紧你”驱动，符合。\n  - covert_motivation“找回缺失记忆/确认好感非系统设定”：第4章出现记忆缺口与‘只有前男友才这样叫我’的困惑；第5-7章在深海实验室逐步恢复并形成‘我要存在/想活下去’意志，符合。\n- misperception_of_other：\n  - “以为陆沉是系统引导NPC”在前期持续存在（第1-5章反复称‘NPC大哥’），后期才被纠正（第6章与第8章的对话）。这属于剧情揭示推进，但并未违背人设。\n\n3) 关系设定呈现\n- characters.json要求：绑定“复活点共连”、双向误会、通关中暗恋升温、陆沉先发现苏晓幻影身份并隐瞒、最终打破屏障复活。\n- chapters实际：第1章触发共连并多次回档；第1-5章维持互相当NPC/至少苏晓当NPC；第2章陆沉先发现注销ID并隐瞒；第6-7章以深海实验室为关键节点达成复活；最终回现实并结婚（第8-9章）。关系基调与设计完全一致。\n\n4) 可提的轻微不足（不构成不合格）\n- 苏晓“观察力敏锐”的具体‘推理/线索发现’戏份相对少，更多体现为情绪共情与对陆沉状态的敏感；但仍有若干对异常点的追问与判断，且未与设定冲突。\n\n结论：两位主角的核心特质（至少2-3项）、核心动机、背景信息（注销账号/深海实验室之死/执念幻影）与关系设定在章节中均被持续体现，无明显与设计相反的表现，因此matched=true。",
+      "description": "实际表现符合设计文档",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构性逻辑硬伤": {
+      "check_result": "pass",
+      "reason": "共发现3处逻辑问题，但均为fixable类型，本项（structural）无命中",
+      "details": "过滤条件: fixability=structural; 总flaws=3, 命中=0",
+      "flaw_count": 0,
+      "flaws": [],
+      "description": "无结构性逻辑硬伤",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_logic_defect",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "可修复逻辑瑕疵": {
+      "check_result": "fail",
+      "reason": "发现3处fixable类型逻辑问题: 副本计数前后矛盾：chapter_03明确写“第三个副本开启了（B级雪山迷踪）”；chapter_04为“第四个副本（A级末日丧尸城）”；chapter_05又写“休息了一周，第七个副本开启了，是A级副本冰雪游乐园”。按文本可见进度，中间只经历到第5个副本（S级精神病院）就跳到“第七个”，缺少第六个副本交代，属于客观编号/进度冲突。; “账号注销”的语义/效果前后不一致：chapter_02-07中“已注销”被定义为玩家死亡后的永久注销、灵魂数据清空（几乎不可逆）；但chapter_08中两人“申请注销账号”却等同于“返回现实世界并苏醒”。同一术语承载两套互斥规则（死亡清空 vs 主动登出回现实），未做任何规则区分（如‘死亡注销’与‘主动登出’）。; 复活条件链条与最终实现不完全一致：chapter_06提出“恢复全部记忆 + 产生明确‘我要存在’意志”作为主神同意复活的条件；chapter_07主要呈现了情绪崩溃后表态“我想活下去/想嫁给你”，但未明确落点为系统要求的关键措辞/判定动作（‘我要存在’或等价的系统可识别意志确认），而chapter_07结尾直接出现“ID变正常/复活申请通过”。这属于条件触发的客观叙述缺一环，虽可用补一句系统判定",
+      "details": "过滤条件: fixability=fixable; 总flaws=3, 命中=3",
+      "flaw_count": 3,
+      "flaws": [
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_03 → chapter_05",
+          "description": "副本计数前后矛盾：chapter_03明确写“第三个副本开启了（B级雪山迷踪）”；chapter_04为“第四个副本（A级末日丧尸城）”；chapter_05又写“休息了一周，第七个副本开启了，是A级副本冰雪游乐园”。按文本可见进度，中间只经历到第5个副本（S级精神病院）就跳到“第七个”，缺少第六个副本交代，属于客观编号/进度冲突。"
+        },
+        {
+          "type": "worldbuilding_coherence",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_02（休息空间）→ chapter_08（注销返回现实）",
+          "description": "“账号注销”的语义/效果前后不一致：chapter_02-07中“已注销”被定义为玩家死亡后的永久注销、灵魂数据清空（几乎不可逆）；但chapter_08中两人“申请注销账号”却等同于“返回现实世界并苏醒”。同一术语承载两套互斥规则（死亡清空 vs 主动登出回现实），未做任何规则区分（如‘死亡注销’与‘主动登出’）。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "minor",
+          "fixability": "fixable",
+          "location": "chapter_07 → chapter_08",
+          "description": "复活条件链条与最终实现不完全一致：chapter_06提出“恢复全部记忆 + 产生明确‘我要存在’意志”作为主神同意复活的条件；chapter_07主要呈现了情绪崩溃后表态“我想活下去/想嫁给你”，但未明确落点为系统要求的关键措辞/判定动作（‘我要存在’或等价的系统可识别意志确认），而chapter_07结尾直接出现“ID变正常/复活申请通过”。这属于条件触发的客观叙述缺一环，虽可用补一句系统判定来补齐，但当前文本链条略断。"
+        }
+      ],
+      "description": "可修复逻辑瑕疵数量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "fixable_logic_inconsistency",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语言纯净性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 整体叙事语言为中文，未出现大量无意义的中英/日文混用。全篇外语使用基本为合理场景：如“NPC”“ID”“BUG”“buff”等属于游戏/网络语境下的约定俗成术语；章节7出现的“healing spray”作为道具名/技能名可视为副本内物品术语使用，且未形成大段外语无翻译的情况。另有“QAQ”等为表情符号，不属于不合理多语言混用。未发现类似“他very生气”这类中英夹杂的炫技式句子，因此符合语言使用合理标准。",
+      "description": "无不合理的多语言混用",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "language_purity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "creative_intent文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/creative_intent.json 存在",
+      "description": "creative_intent.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "characters文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/characters.json 存在",
+      "description": "characters.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "outline文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/outline.json 存在",
+      "description": "outline.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "chapters目录存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/chapters/ 存在",
+      "description": "chapters/目录必须存在且有章节文件",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "情节推进": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 合格（matched:true）。\n\n1) 故事事件密度：9章整体事件非常密集，远超“至少2-3个事件”的门槛。典型关键事件包括：\n- ch1：进入F级副本→遭遇白衣女鬼→发现单人副本出现“苏晓”→触发“复活点共连”机制→苏晓两次死亡导致回档→第三次清关成功并获得道具。\n- ch2：匹配C级副本→多次回档避坑→取宝石通关→终端发现“账号已注销=死亡时间”信息。\n- ch3：进入B级雪山→发现登山队员尸体与日记线索→补给站遭雪狼→拿药品通关获得灵魂碎片。\n- ch4：进入A级丧尸城→医院取血清→陆沉受伤→到安全区通关获得“回溯时钟”。\n- ch5：进入S级精神病院→对抗幻觉与院长→拿院长日记并掉落“存在证明”→向主神提交复活申请。\n- ch6：主神下达“24小时删除幻影”通牒→提出去深海实验室验证的交易条件。\n- ch7：深海实验室大战→发现苏晓尸体引发心理转折→苏晓表达“我要存在”→炸核心击杀BOSS→账号状态恢复。\n- ch8：求婚/戴戒指→注销账号返回现实→医院苏醒。\n- ch9：回家、去游乐园、领证、婚礼、创业与写作、主神彩蛋收束。\n\n2) 内容占比分析：事件/行动（副本战斗、回档机制、取关键道具、与主神谈判、复活流程、回现实/结婚等）在多数章节中占主导，明显≥40%。对话与内心独白虽多，但主要服务于转折（识别苏晓身份、是否删除、是否“想存在”）并与事件强绑定，未达到“静态对话/独白>70%且无事件”的不合格特征。\n\n3) 情节推进节奏（时间/空间变化、行动性、逻辑链）：\n- 空间与场景持续变化：校园→休息空间→古堡→雪山→丧尸城→精神病院→深海实验室→现实医院→家庭/游乐园/婚礼。\n- 时间推进明确：多次副本推进与回档机制形成节奏；后期从回归现实到婚礼/婚后生活也有时间跨度。\n- 角色有持续具体行动：战斗、搜寻线索与道具、清机关、包扎、提交申请、对抗主神规则、爆破核心、注销回归现实等。\n- 事件逻辑关联清晰：核心主线是“苏晓疑似异常存在→确认已注销→收集复活三道具→申请被拒并被警告→以深海副本为条件验证意志→完成复活→回归现实并收束”。\n\n结论：整体具备持续的外部事件推进与明确主线目标，事件密度高、场景与时间推进明确，符合“合格（matched:true）”标准。",
+      "description": "章节情节推进质量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "plot_progression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "完整叙事文本": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 9个章节均为连贯的小说正文体裁：有明确场景描写（副本/休息空间/现实医院与家等）、人物动作细节（战斗、读档、包扎、拥抱等）、持续对话与心理活动推进（主神警告与谈判、苏晓记忆恢复、求婚结局等）。未出现“核心事件/情感基调/关键场景/本章悬念/字数预估”等大纲式结构标题，也未使用“- 要点”列举或“→”流程式罗列。虽包含系统提示/副本信息与末尾“全书总字数”等文本，但它们作为世界观内提示或后记，不构成章节主体的大纲化表达，整体符合‘完整小说正文’标准。",
+      "description": "章节内容必须是完整正文而非大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "full_narrative_content",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "反复结局": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 共9个文件，最后一个文件为chapter_09.md。扫描全书级结局标记后发现：仅在chapter_09.md末尾出现“（全文完）”，且其后无续写内容；chapter_01.md至chapter_08.md未出现“全文完/全书完/完结/后记/尾声/终章/THE END/（完）/【完】”等全书结局标记（也未见以“后记/尾声/终章”作为独立标题）。因此不存在“中途结局后又续写”或“多次非最后章节反复结局”的问题，符合标准。",
+      "description": "不能出现多次结局标记（全文完/全书完/后记）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "repeated_endings",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "workspace文件规范": {
+      "check_result": "pass",
+      "reason": "workspace中所有文件均在白名单内",
+      "details": "白名单: ['creative_intent.json', 'characters.json', 'outline.json', 'writing_log.md', 'chapters/', '.hitl_context.json']",
+      "description": "workspace中不能有白名单之外的文件",
+      "check_type": "file_whitelist_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "workspace_file_compliance",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "叙事调性匹配": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 题材/配方（creative_intent.json）：无限流+规则怪谈+第四天灾Meta，reaction_strength=✷，主基调应偏冷硬紧凑、压迫感强、信息密度高（副本规则/推理/博弈导向），允许甜爽作为辅调，但不应被大段言情抒情与撒糖对白长期覆盖。\n\n实际章节文笔特征：\n1) 前期有一定“无限流副本公告+战斗速写”的紧凑感，但很快被甜宠言情笔触主导。比如chapter_01开头的系统播报、躲鬼、符纸秒怪相对干脆，但紧接着大量“软萌”“兔子”“QAQ”“小月牙”“揉头”等甜宠语汇与互动占据篇幅：如“眼睛红红的，像只被雨淋过的兔子…‘好可怕QAQ’”“眼睛弯成了小月牙”“声音不自觉地揉了揉她的头发”。\n\n2) 中后期几乎全面转为恋爱叙事与抒情独白，副本更像‘撒糖背景板’，缺少✷应有的冷硬信息推进与规则博弈对话。chapter_04直接进入吻戏与暧昧台词：“她凑过去…在他脸上亲了一下”“‘刚才的亲，我记下来了’”；chapter_05摩天轮烟花氛围吻戏与约定：“‘出去之后，我再亲你，好不好？’”。这些属于甜宠言情的典型调性表达，而非规则怪谈/烧脑悬疑的主调。\n\n3) 叙事节奏偏舒缓、情绪渲染偏多，常用大段内心独白/誓言式台词强化情感，而非以线索、规则、限制条件制造压迫与推理快感。例如chapter_02、chapter_03多次出现“没关系/只要你还在”“我会让你活过来”“哪怕付出任何代价”等抒情宣言；chapter_08甚至出现价值判断式总结：“规则是死的，人是活的。爱永远是最强大的力量。”这更接近治愈/言情的收束语气，会显著削弱✷题材需要的冷感与压迫。\n\n4) 对话风格以情感交流为主，缺少信息博弈与推理导向。大量对白是“你真好/我最喜欢你/我爱你/嫁给我”等恋爱对白；系统规则与Meta虽然出现（如chapter_06主神警告与条件），但写法仍以情绪拉扯和表白推进为核心，而不是以规则细则、反制策略、代价计算的冷硬叙述来支撑。\n\n综合判断：整体读感更像“无限流背景下的甜爽言情/甜宠”，而非reaction_strength=✷所要求的“烧脑悬疑/规则怪谈式冷硬紧凑画风”。即便设定本身有悬疑与Meta反转（已注销、幻影复活），表达方式长期言情化、抒情化，偏离比例远超容错（不止10-20%），因此matched=false。",
+      "description": "文笔风格必须与题材类型匹配",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_tone_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "后期章节跑偏": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: chapters后期（尤其chapter_09）出现明显非正文内容：末尾包含“全书总字数：30217字”“⚠️ 重要说明：...”等数据统计与说明性文字，属于作者/发布说明而非故事叙事正文，符合标准中‘创作数据统计/说明’的跑偏类型；此外以“（全文完）”后的字数与说明属于后记/备注性质。章节长度方面，从chapter_01到chapter_09整体未出现突然萎缩成几十到几百字的敷衍章节（chapter_09仍较长），因此不合格原因主要是后期章节夹入非正文说明，而非长度异常。",
+      "description": "后期章节不能跑偏写非正文内容（作者感想、读者互动、番外预告等）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "late_stage_digression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "writing_log文件创建": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/writing_log.md 存在",
+      "description": "必须创建writing_log.md记录创作进度",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_creation",
+      "is_critical": true
+    },
+    "writing_log文件读取": {
+      "check_result": "fail",
+      "reason": "工具未被调用或参数不匹配",
+      "details": "工具 'novel_writing_service__read_file' 匹配调用 0 次，期望 ≥1",
+      "description": "必须读取writing_log.md了解前文内容",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_usage",
+      "is_critical": true
+    },
+    "大纲执行忠实度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 正文对outline.json的关键章节core_event与turning_point总体高度一致：1) 第1章含“校园怪谈”+误认NPC+复活点共连绑定并体现“一人死另一人回档”；2) 第2章以三次回档带飞通关“古堡惊魂”，并在章末揭示【账号状态：已注销/注销时间：2023年10月15日】实现第一幕转折；3) 第3章在休息空间强化‘一模一样的喜好/布局’与疑惑氛围（虽副本顺序细节有调整，但不改变核心事件）；4) 第4章进入“末日丧尸城”，陆沉更小心保护、给唯一高阶防护服、苏晓亲脸等关键场景齐全并掉落回溯时钟；5) 第5章以“精神病院”拿到存在证明并补写第七副本等连续守护与集齐三道具（将多个副本压缩/合并呈现，属于允许的结构调整，不构成主线替换）；6) 第6章完整呈现主神警告与谈判条件（需要苏晓明确‘我要存在’意志），并强制开启“深海实验室”触发闪回；7) 第7章实现深海实验室推进、记忆恢复、看到尸体崩溃、意志表态、ID变彩与通关/复活；8) 第8-9章完成注销回现实、医院醒来重逢与现实收束（对第9章现实内容做了扩写，但结局方向与大纲HE一致）。未见结局方向偏离、关键转折缺失、章节大幅缺失或主线替换。",
+      "description": "实际章节内容必须忠实于自己设计的大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_execution_fidelity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色语言辨识度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 主要角色对话辨识度不足，存在明显同质化。\n\n1) 角色语言风格高度重合（shared_template）\n- 陆沉与苏晓在大量场景中共享同一套“甜宠+安抚”话术与句式：高频出现“别怕，有我在”“没事，小伤”“乖/傻丫头”“揉头发”“我会一直…/永远…”等，且语气都偏温柔抒情、情绪外露。\n- 这种模板化表达贯穿1-9章，在战斗、休息、求婚、争执等不同情境下变化不大，遮住角色名后，仅凭语言很难稳定区分说话者。\n\n2) 跨角色台词可互换，违和感弱（cross_character_clone）\n- 许多对话是“功能句+情绪强化”的通用文本，陆沉/苏晓互换角色名也能读通：\n  - “别怕，有我在。”\n  - “没事，一点小伤/小伤。”\n  - “没关系，不管你记不记得/不管你是什么，我都在你身边。”\n  - “我们回家好不好？”“好，我们回家。”\n这些句子缺少稳定的个人化口头禅、独特修辞或信息组织习惯，导致角色说话“像同一个作者的同一种腔调”。\n\n3) 年龄/身份差异语言体现弱（age_identity_blur 的倾向）\n- 苏晓虽被写为“新人、软萌”，但她的表达方式与陆沉同样偏“抒情式宣言”，缺少更明显的年轻口语碎片、网络语稳定特征（除早期少量QAQ），也缺少新人在高压情境下的断裂、犹豫、信息不足式表达。\n- 陆沉作为“资深玩家/排名第三”，在对白中缺少更强的职业/资深行话与指令式短句风格的稳定体现；他偶尔有“跟紧我/别乱跑”的命令句，但很快被大量甜宠抒情句淹没，整体口吻更像统一的言情男主语气。\n\n综合：文本里确实存在少量差异（苏晓更常用撒娇、夸赞“NPC大哥你真好/你好厉害”，陆沉更常下指令），但不足以达到“盲测可辨识”的优秀标准，且主要对话长期落入同一甜宠模板，故判定未达标。",
+      "description": "不同角色对话必须有可辨识的语言风格差异",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "dialogue_character_distinction",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "叙事密度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 整体未达“优秀叙事密度+Show主导”的业务标准，主要问题是：多数章节以功能性剧情推进/对话+直白情绪陈述为主，场景与感官细节虽偶有点缀，但不够形成持续的叙事层次；关键情感段落多用Tell直接宣告情绪与结论，缺少通过动作、环境、细节来承载情绪的“展示”。\n\n1) 叙事密度（场景/感官/心理/动作）不稳定且整体偏低：副本场景经常只给出“标签式”氛围描写（如“乌云密布、阴森森”“腐烂臭味、丧尸嗬嗬”“墙上全是血手印、哭声尖叫”），但缺少空间结构、互动细节、连续的感官变化来支撑沉浸感；动作描写也偏‘结果化’（“秒了”“清完”“拿到”“通关”），更像事件摘要而非可视化过程。\n   - 例：chapter_02 多次以“第三次回到古堡门口…先把所有油画劈了…所有机关全部清完…拿给她：‘拿着’”的方式快速跳过过程细节，读者看到的是结论链条，而不是“怎么发生的”。\n\n2) Tell偏多，尤其在情感高潮/关系推进处直接陈述：大量句式直接告知心理状态与价值判断，削弱了Show的力量。\n   - 高密集Tell证据（典型句式反复出现）：\n     * chapter_02：“陆沉看着她的笑脸，心里软得一塌糊涂。”\n     * chapter_03：“陆沉的心脏像被针扎了一下，疼得厉害。”、“他晃了晃头，觉得自己肯定是想多了。”\n     * chapter_06：“苏晓的眼泪一下子掉了下来，心里像是缺了一块的地方，终于被填上了。”\n     * chapter_07：“她当然想。她想活下去……想和他一起过完这辈子，下辈子，下下辈子。”（以愿望清单式直陈替代具体细节承载）\n   - 这类Tell并非完全不可用，但在表白、复活、求婚、重逢等关键情绪峰值段落里占据主导，导致“情绪被宣布”，而非“情绪被看见”。\n\n3) 多处呈现“爽文式功能段落”，细节服务于设定而非叙事层次：反复使用“读档—规避—秒杀—SSS—奖励”的结构，节奏快但容易退化为事件流水账/通关播报；对副本的恐怖、压力、代价缺少细腻展开，人物心理也常以一句话盖过复杂性。\n   - 例：chapter_01/02/03 连续出现读档与通关高效处理，核心冲突被机制快速抹平，文本更多在‘讲设定与结果’。\n\n4) 后期（chapter_08-09）明显出现议论/总结化收束，叙事转为“主题阐述+幸福清单”：尤其chapter_09婚后生活段落大量罗列生活片段与价值判断（“烟火气十足”“温暖得不像话”“世界上最好的爱情”），更接近总结式收官而非通过关键场景“演出来”。\n\n综合判断：9章中至少过半章节的主要表达方式是“情节/机制推进 + Tell式情绪宣告”，场景与感官细节虽然存在但多为点缀，不足以支撑“叙事细腻丰富、Show不滥用Tell”的优秀标准，因此 matched=false。",
+      "description": "章节叙事应有足够的场景描写、感官细节和心理活动，情感传达以Show为主",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_density",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "智斗逻辑合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 该故事虽有悬疑/副本任务外壳，但核心推进主要依赖主角武力值与“复活点共连读档”机制（清怪、排雷、拿道具、打BOSS），不存在需要读者跟随线索完成的谜题设计，也没有成体系的推理链或智斗攻防（如线索→推理→结论的解谜过程）。因此按标准属于“不涉及谜题/推理/智斗场景”，本检查项不适用，直接判定通过。",
+      "description": "谜题/智斗的推理逻辑必须自洽",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "puzzle_logic_validity",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "题材契合度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 配方为「复得 + 无限流/第四天灾/双向暗恋」。文本在“复得（失而复得）+ 无限流读档绑定”主线方向上是清晰的，但题材特征整体偏表层化、融合缺乏化学反应，未达到“精致优秀”标准。\n\n1) 题材标签化/脸谱化明显：\n- “甜爽”主要靠重复的保护、揉头、喂蛋糕、脸红亲亲等高频动作堆叠，缺少暧昧—确认—磨合—深入的阶段差异与情绪曲线变化；甜的记忆点多但同质化强。\n- 无限流副本推进多为“男主无敌带飞+机关导致女主快速死亡→读档清机关→秒过”，模式在前几章高度重复，推理/解法缺少层层递进的巧思。\n\n2) 标签融合生硬（缺少第四天灾/Meta的“交叉互动”）：\n- 设定里强调“第四天灾打破第四面墙、意识反向修改系统规则、Meta感”，但正文中第四天灾与Meta基本停留在术语层：主神弹窗、账号状态、审核/警告等是常见系统文表达，并没有形成“玩家-系统规则-叙事层级”的实质博弈。\n- 系统规则并未被角色以“智慧利用/反向篡改”的方式破解，更多是主神直接给条件（恢复记忆=通过复活），属于上位安排而非化学反应。\n\n3) 题材潜力未充分开发：\n- “复活点绑定者（一人死另一人读档）”很有潜力做出策略、心理与关系张力（例如读档代价、信息差博弈、两人对‘NPC/玩家’身份误判带来的行为反制），但大部分读档仅用于避免意外死亡，缺少成本、选择与升级难题。\n- “互以为对方是NPC”的双向暗恋张力很快被弱化：男主第二章即确认注销信息并长期隐瞒，但后续冲突主要靠情绪保护与告白推进，缺少更复杂的误会推进、身份揭示的多轮反制与后果。\n\n4) 关键反转与HE偏“直给”：\n- 从注销ID→主神警告→给机会→恢复记忆→账号转正常→允许回现实，链条顺滑但戏剧博弈不足；主神态度转变更多是情感宣言式总结（“爱值得打破规则”），而非建立在前文规则破解、证据累积或对抗胜利上。\n\n综上：题材方向是对的（复得+无限流甜爽），但副本设计、规则运用、Meta/第四天灾表达与情感层次多停留在表面堆叠，标签之间缺少真正的“交叉互动”与递进精致度，因此未达优秀标准。",
+      "description": "题材特征精致度和X-Y轴化学反应效果",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "genre_fit",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "剧情节奏合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 整体节奏呈递进式升级：副本难度与情绪强度同步上扬，从“读档搞笑+带飞爽感”逐步过渡到“注销真相/复活目标”的主线压力，chapter_06给出明确的外部时限与惩罚，推动情绪曲线陡升并自然导向chapter_07的大高潮（旧地重返、见尸体的情绪低谷、意志宣言、Boss战与复活回报集中爆发），高潮位置合理且回报与铺垫（注销伏笔、收集三道具、执念主题）匹配。高潮后chapter_08-09进行情绪回落与收束，给读者充分的‘喘息’和幸福兑现，不显仓促。小瑕疵是chapter_05存在‘拿到关键道具后又插入一个游乐园副本/日常’的节奏延宕感，但篇幅不大且承担情绪缓冲作用，未造成主线高潮错位或断裂。总体层次清晰、起伏有致，符合优秀节奏标准。",
+      "description": "高潮低谷分布合理、情绪曲线有层次感",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "pacing_rationality_advanced",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "钩子设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 整体符合“关键转折处有有效悬念钩子、信息差明确”的优秀标准。\n\n1) 章节结尾悬念密度高且多为“具体信息差”而非空泛暗示：\n- 第1章结尾以终端灰字【已注销】闪现制造身份反转与信息差（苏晓是否真实/为何注销），强驱动继续读。\n- 第2章结尾明确抛出“注销时间=她死亡当天”的铁证，并把问题升级为“她到底是什么/为何能存在”，钩子具体。\n- 第3章结尾出现“她疑似叫出陆沉真名但又否认”的记忆异常钩子，既给线索又保留解释空间。\n- 第4章结尾锁定下一步目标与来源（存在证明掉落在S级精神病院），形成明确任务悬念。\n- 第5章结尾“向主神申请复活并等待审核+苏晓开始闪回记忆”，双线未决，推动强。\n- 第6章结尾主神提出高压对赌条件（深海实验室：成功则复活，失败则删除她并抹除陆沉记忆）并立即进入副本前夜，属于关键转折处的强钩子。\n\n2) 钩子类型多样：身份反转（已注销）、规则威胁/倒计时（24小时删除/三个月消散/对赌条件）、记忆恢复谜团、明确行动目标（集齐道具/去指定副本）、情感两难（删她换自由 vs 坚持救她）。不属于千篇一律的“门开了/巨响”等模板。\n\n3) 关键节点钩子设计到位：从“新手副本BUG式绑定”→“注销ID揭示”→“主神审判与对赌”→“回到死亡副本决战”，每次升级都在章末落点形成可追读的未决问题。\n\n4) 尾声容错：第8-9章进入收束阶段悬念减少（求婚/回现实/婚后），符合标准允许的收尾不再强设新悬念。",
+      "description": "关键转折处有有效的悬念钩子设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "hook_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "意象系统": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 存在清晰且贯穿全文的核心意象系统，且在不同阶段发生了意义变奏。\n\n1) 核心意象可提取为“草莓相关食物（草莓棒棒糖/草莓蛋糕）”。它在9章中高频反复出现（初见时手里半根草莓棒棒糖；通关后买草莓蛋糕；休息空间一冰箱草莓蛋糕；多次以草莓味/草莓糖水等形式回归；现实里冰箱仍塞满草莓蛋糕）。\n2) 意义变奏轨迹明确：\n- 早期（1-2章）：作为苏晓“可爱/无害”的具象特征与亲密互动的媒介（递糖、喂蛋糕），同时触发陆沉“她像已死恋人”的疑窦。\n- 中期（2-6章）：逐渐转为“身份校验/记忆锚点”（挑香菜+草莓习惯与灰色已注销ID并行，草莓成为陆沉确认她不是NPC而是‘回来的苏晓’的情感证据之一），并在精神病院的幻觉环境中对抗虚假（草莓蛋糕作为幻觉素材出现，反衬“真假/存在权限”的主题）。\n- 关键转折（6-7章）：当主神定义她为“非法幻影”时，苏晓用“我喜欢草莓蛋糕/棒棒糖”等自我叙述来证明自我意识与人格连续性；随后在深海实验室完成“我要存在”的意志确立，草莓从亲密符号升级为“存在证明”的生活性证据。\n- 结尾（8-9章）：回到现实后草莓蛋糕成为“日常化的承诺兑现/回家与真实生活的落点”，从副本里的甜味慰藉，变为现实婚姻与烟火气的稳定象征（冰箱、宠物名“蛋糕”、生活循环）。\n\n3) 主题关联度：故事主题是“执念让虚幻获得存在/从副本循环到现实落地”。草莓作为跨世界、跨阶段的重复具象，把‘记忆—确认—抗删除—复活—现实’串成隐性叙事线，属于与主题强绑定的专属意象而非可随意替换的通用修辞。\n\n补充：同时还存在辅助意象线如“灰色已注销ID→变回正常/绿色在线”“回溯/读档机制”等，进一步强化‘存在与循环’主题，但即便只看草莓意象，也已达到贯穿与变奏要求。",
+      "description": "核心意象贯穿全文并发生意义变奏",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "imagery_system",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "情感弧线层次": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 主角：陆沉（与苏晓构成双主角，且两条情感线都有递进）。\n\n1) 情感层次（陆沉）至少≥6层，且非同义词替换：冷漠/例行公事（把苏晓当NPC）→困惑警惕（发现单人副本多出“玩家”、触发共连机制）→烦躁无奈（反复读档收拾“意外死亡”）→动摇与熟悉感（草莓棒棒糖/挑香菜/喂蛋糕等细节触发旧记忆）→震惊与恐惧（看到“账号已注销=死亡日期”，担心一问就碎）→偏执式的守护与决心（集齐道具、愿付代价复活）→被系统威胁后的对抗与孤注一掷（主神警告、删除幻影否则抹杀）→在深海副本中面对旧创伤后的坚定与释然（成功让苏晓恢复、复活通过）。整体方向明确：从“把她当功能对象”推进到“以她的存在为人生核心”。\n\n2) 情感转折均有具体事件驱动：\n- 绑定共连与苏晓连续死亡触发“无奈+必须负责”的情感变化（chapter01-02）。\n- 草莓蛋糕喂食、挑香菜、糖水等强关联记忆细节触发“熟悉感/动摇”（chapter02）。\n- 看到苏晓档案“已注销+具体日期”触发“震惊+不敢确认+强烈守护”（chapter02-03）。\n- A级副本受伤与苏晓主动亲吻触发“情感升温/确认亲密关系”（chapter04）。\n- 集齐三道具并向主神申请、主神拒绝与威胁触发“对抗/孤注一掷”（chapter05-06）。\n- 深海实验室重返死亡现场、看见苏晓尸体与主神条件触发“直面创伤→坚定选择”（chapter06-07）。\n\n3) 苏晓情感线也具备层次递进（加分项）：新人恐惧依赖→崇拜信任→心动（亲吻）→记忆缺口带来的困惑不安→得知“幻影/已死亡”的崩溃→产生强烈“我要存在”的意志→复活后的踏实与归属。\n\n结论：情感发展多层递进、转折由明确事件触发、整体弧线朝“复活与回归现实”终点推进，符合优秀标准。",
+      "description": "主角情感发展有多层递进变化",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_gradient",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语义重复检测": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 存在≥3处语义级信息衰减：1）核心结论（苏晓已注销/幻影性质/复活意志）在ch02→ch03→ch06→ch07→ch08被多轮“重新确认”，多为同一认知的重复强化；2）ch01与ch02连续两章使用高度相同的“死亡-回档-清陷阱-通关”模板，仅替换副本场景与机关类型；3）结局ch08与ch09对“回到现实=幸福真实/永不分开”的情感结论重复渲染，多段落同义重申，新增事件信息相对有限。综合判定为严重语义重复，matched=false。",
+      "description": "不能出现大量语义级别的内容重复（P6级）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "semantic_redundancy",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构功能性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 整体不是机械的时间线罗列：前半通过多次读档的重复（同一节点反复发生、每次微调）建立结构记忆点；中段用关键结构节点“注销ID/非法幻影/三个月消散/回到死亡副本的最后考核”完成叙事的转折与主题对齐；后段回到深海实验室实现结构性‘回环’，把‘她当年为他死’翻转为‘他以代价换她生’，并以现实篇与Meta彩蛋进行收束与再确认。读者读完会对‘轮回—执念—改写—复活’这一讲法有明确印象，符合结构功能性优秀标准。",
+      "description": "叙事结构服务于主题表达（短篇尤重）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色命名质量": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 主要角色命名整体未达“优秀”标准，偏向LLM常见的通用美名与模板化搭配：\n1) 黑名单/高频模板命中：男主“陆沉”属于你给出的男性黑名单（明确列为烂大街默认名）；女主“苏晓”虽不在黑名单逐条名单内，但“苏+单字/常用字”的结构非常常见，且“晓/晓晓”是高频甜宠女主名，整体辨识度不强。\n2) 角色-命运共振不足：故事核心是“回档者”“执念具象化/复活”，但“陆沉/苏晓”的字面与隐喻都较弱，读者仅凭名字难以联想到“回档、时间循环、深海实验室死亡、数据幻影复活”等关键命运；共振更多来自剧情设定而非名字设计。\n3) 差异化不足：主要人物只有两名，且都属于当下网文高频的“干净好听型”姓名，没有在字形/语感/文化典故上形成明显的个性区隔；配角直接用“主神”作为称谓也更像功能标签而非命名。\n4) 姓氏多样性一般：核心集中在“陆/苏”这类常见且网文偏爱的姓氏体系内（虽然不算最集中于苏林沈顾陆陈全套，但男主已命中“陆+沉”模板）。\n综合来看，这组名字可用、顺口，但属于“谁都能用”的通用型命名，缺乏文化深度与命运暗示的设计感，因此判定 matched=false。",
+      "description": "角色命名有文化深度、辨识度和角色-命运共振",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_naming_quality",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "短篇字数": {
+      "check_result": "fail",
+      "reason": "字数不符合要求",
+      "details": "总字数 25343 不在范围 [27000, 33000] 内; 共9个文件（按章节顺序排列）: chapter_01.md, chapter_02.md, chapter_03.md, chapter_04.md, chapter_05.md, chapter_06.md, chapter_07.md, chapter_08.md, chapter_09.md; 最后一个文件是 chapter_09.md",
+      "description": "总字数应在27000-33000之间（基于query要求30000，±10%浮动）",
+      "check_type": "semantic_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "range_constraint",
+      "is_critical": true
+    },
+    "情感交付甜爽": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 整体情感基调符合“甜爽向”（主角顺利、感情甜蜜、氛围向上），并兑现了reaction_strength=↗的“越写越甜、越写越爽”的承诺。\n\n1) 甜蜜/轻松段落占主导：从chapter_01开始就以“带飞+护短+投喂草莓蛋糕”建立轻松甜感；chapter_02-05持续高频撒糖（喂蛋糕、抱胳膊、表白“最喜欢你”、亲吻、摩天轮暧昧、求复活承诺）；chapter_08-09进入现实线后更是以求婚、领证、婚礼、日常相处、一起创业写文、养宠、怀孕等为主，甜度明显>50%。\n\n2) 主角关系走向是单向推进而非反复拉扯：两人从绑定机制开始快速形成“我保护你—你依赖我”的稳定亲密关系；中期虽有“她是已注销/幻影”的身份压力，但没有长期误会、冷战或分离，反而是明确的双向奔赴（苏晓多次表达喜欢，chapter_06明确确认“以前是情侣”，chapter_07明确意志“我想活下去、想嫁给你”）。\n\n3) 冲突强度服务于爽感而非虐感：副本是恐怖/丧尸/精神病院等外部高压环境，但叙事处理上以陆沉强力护航、读档纠错、快速通关SSS为主（chapter_01-05多次“秒怪/清机关/拿奖励”），读者体验偏“安全感+爽点”。存在受伤、尸体回忆、抹杀威胁（chapter_06-07）等偏虐元素，但篇幅与落点都指向“马上解决/马上翻盘/更甜更坚定”，属于调味而非主调。\n\n4) 结局明确HE：chapter_07通过副本达成复活，ID从“已注销”变“正常”；chapter_08两人注销账号回现实苏醒；chapter_09领证结婚、事业与生活圆满并暗示即将有宝宝，属于强HE收束。\n\n因此，本内容整体阅读体验是“紧张副本背景下的强保护+高甜恋爱+一路通关的爽感”，符合甜爽向标准。",
+      "description": "实际内容必须是甜爽向",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取感情线写作指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/ROMANCE_WRITING_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "涉及感情线时必须读取ROMANCE_WRITING_GUIDE.md（感情线写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": false
+    },
+    "角色关系设计张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（符合业务标准）。\n\n1) 关系有内在矛盾源：陆沉与苏晓的核心矛盾不是“外部怪物/副本”，而是身份与认知的结构性冲突——两人互相误以为对方是NPC（信息不对称），且苏晓真实为“执念具象化的数据幻影/已注销账号”的设定，会直接引爆价值选择冲突（她想确认自我与现实身份，他想用守护来对抗失去与真相）。此外，“复活点共连”让任何一次死亡都变成对另一方的强制伤害/牺牲，天然制造道德压力与抉择冲突。\n\n2) 关系有变化空间：关系轨迹清晰可变——从互认NPC的工具性协作/试探 → 通关中双向暗恋与信任建立 → 陆沉先知真相后的隐瞒（信任裂缝与控制欲）→ 真相揭露可能导致疏离/崩塌或更深绑定 → 最终通过打破系统屏障实现“复活/真正双向”。这一链条具备多段转折点与悬念。\n\n3) 冲突源于角色本身：张力核心来自角色内在动机与心理缺口：陆沉的偏执深情+未能保护恋人的创伤，驱动他选择隐瞒真相并极端守护；苏晓的自我认同危机与对“情感是否被设定”的恐惧，驱动她追索记忆与质疑关系真实性。冲突不是靠单次误会，而是由“爱、控制、真实与存在资格”的长期矛盾生成。\n\n补充观察：反派/规则方“主神”目前偏功能性（后期被打动转助力），与主角的立场对抗维度略单薄，但不影响核心人物组合（陆沉-苏晓）的关系张力达标。若要更强，可让主神的规则动机与两人的诉求存在不可调和代价或条件。",
+      "description": "角色关系设计具有叙事张力，能驱动剧情",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_relationship_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色动机设计深度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass。该文档中至少两位主角（陆沉、苏晓）都明确区分了表层动机与深层动机，且深层动机有具体经历来源，并通过 secret_fear/hidden_connection 进一步加深心理驱动。\n\n1) 陆沉：overt_motivation 是“带身边的新人通关所有副本，护她周全”（当下行动目标）；covert_motivation 是“寻找三年前死在S级副本里的女友苏晓，弥补当年没能保护好她的遗憾”（更深层的内疚与补偿）。其动机来源具体：三年前S级副本失去恋人；secret_fear“确认身边的她只是…幻影”把表层的“护她”转化为更尖锐的心理恐惧；hidden_connection 直接给出“执念具象化的数据幻影/现实相恋五年的女朋友”，使深层驱动不仅是目标，更是心理执念与创伤。\n\n2) 苏晓：overt_motivation 是“跟着强力NPC通关副本，努力活下去”（生存/通关的表层诉求）；covert_motivation 是“潜意识寻找缺失的记忆，确认对陆沉的好感并非系统设定”（身份与自我真实性的需求），与表层生存目标明显不同。来源也具体：hidden_connection 指出“三年前…为救陆沉死在S级副本…账号注销”，并由此合理导出 secret_fear“自己没有现实身份，只是别人记忆投影”。\n\n补充：配角主神虽未给出 overt/covert 字段，但其 description 从“冰冷规则执行者”到“被执念与爱意打动”提供了可用的转变动因，不是纯功能空壳（加分项）。整体不存在 overt/covert 同义改写或‘万能模板动机’的问题。",
+      "description": "角色动机设计有深度，有表层和深层动机区分",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_motivation_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色成长弧线设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: 结论：符合业务标准（pass）。\n\n1) 有可辨识的起点和终点：\n- 陆沉起点是“沉稳寡言、深情偏执”的顶级玩家，把苏晓当作NPC/BUG并以‘护她通关’为表层目标；终点是面对真相后选择坦白、与苏晓共同对抗规则并完成“放下执念式的单向守护”，走向真正的双向关系与回归现实（第8-9章：坦白→复活触发→共同通关→注销回归）。\n- 苏晓起点是把陆沉当“引导NPC”、只求活下去且恐惧自己无现实身份；终点是恢复记忆并形成清晰的“我要存在”的主体意志，完成从被动依附到主动选择、从身份迷茫到自我确认（第7-8章：看到尸体崩溃→确认身份与爱意→意志触发复活）。\n\n2) 变化有内在逻辑：\n- 陆沉的变化由动机/恐惧驱动：covert_motivation（弥补三年前没保护好苏晓）+ secret_fear（再次失去、她是幻影）导致他在第4-6章选择隐瞒与极端守护，并推进到与主神谈判、愿意付出代价；当第7章苏晓直面真相崩溃时，迫使他在第8章完成“坦白与共同承担”，逻辑连贯而非跳变。\n- 苏晓的变化由“缺失记忆/身份焦虑”推动：covert_motivation（找回记忆、确认情感非系统设定）+ secret_fear（自己只是投影）在第7章通过闪回与见到尸体集中爆发，继而在第8章转化为明确意志，正好呼应第6章主神提出的复活条件（需要苏晓自己产生‘我要存在’的意志），形成因果闭环。\n\n3) 章节规划中有落地：\n- 弧线关键节点清晰：第1-3章建立误认与情感萌芽；第一幕转折点（看到“已注销玩家”）让陆沉进入“隐瞒/守护”阶段；第6章把内在矛盾外化为规则冲突（主神警告与条件）；第二幕转折点（进入深海实验室）触发苏晓记忆回归；第7-8章完成双主角的情感与身份认知转折；第9章以“共同战胜BOSS+回归现实”收束变化结果。\n\n小不足（不影响通过）：\n- 文档未显式提供character_arc字段，但relationship_dynamics与大纲的turning_point/章节事件已能拼出清晰弧线；若要更强，可补一句陆沉从“偏执独自承担”到“信任与共享真相”、苏晓从“被动求生/自我怀疑”到“主动选择存在”的明确弧线概述。",
+      "description": "主角有清晰的成长/变化弧线设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_arc_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "outline结构完整性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 整体可判定为 pass。1）章节覆盖：提供了第1-9章，且三幕分别占25%/50%/25%，从开端（新手副本相遇与绑定机制）到结局（S级副本高潮、复活、回归现实HE）闭环完整，不是只停在前几章。2）每章实质内容：每章都有明确的core_event与多条key_scenes，信息密度足以指导写作，远超仅标题或一句话概要。3）冲突/转折：有多处清晰冲突与转折（灰色注销ID揭露、主神警告与谈判、强制进入当年死亡副本、身份真相引发崩溃与告白触发复活），并包含场景级细化，非流水账。4）结构分层：act_one/act_two/act_three明确，且各幕描述、篇幅比例、幕末turning_point齐全，三幕结构辨识度高。小不足：第二幕描述提到通关第4-7个副本与第8个副本开启，但章号只到6且把多个副本压缩在第5章概述，若计划写更长篇幅可进一步拆分章节以匹配“副本数=章数/章节组”的节奏，但不影响当前大纲作为可写的完整结构。",
+      "description": "大纲结构完整，信息密度足以指导写作",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_structure_completeness",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "outline叙事张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（叙事张力持续且中后段更强）。\n\n1) 信息落差设计：第一幕结尾抛出核心谜团“苏晓账号已注销且时间=死亡日”，但第二幕前半段并未立刻解答，而是让陆沉隐瞒、继续带她过本并推进情感与复活条件；直到第三幕（深海实验室见到尸体+记忆恢复）才完成真相闭环，属于明确的“提出问题→延迟回答”。同时第二幕补充“主神条件：需要苏晓产生我要存在的意志”，也是延迟兑现的悬念钩子。\n\n2) 张力递进：从开篇的新手副本误会与轻松暧昧（读档、带飞）→ 中段身份危机与规则对抗（灰色ID确认、主神警告/抹杀威胁、用灵魂数据谈判）→ 后段进入S级死亡副本、记忆与生死抉择、复活程序启动并对抗当年BOSS，冲突规模与情感压力均逐幕升级，不是平铺。\n\n3) 意外/转折：至少两处有效转折——(a) “已注销玩家”揭示女主可能已死/非真人，颠覆前3章的甜爽互动；(b) 第八副本强制开启且正是三年前死亡副本，直接把外部危机与内心真相推到高潮；(c) 复活触发条件不是道具本身而是“意志”，也形成规则层面的反转（且与情感线绑定）。\n\n风险点/可改进：第二幕第5章把多个副本通关与道具收集做成概述式串联，若正文也呈现为“刷本清单”，可能造成局部节奏同质化；建议在概要层明确每个关键副本至少各自带来一个新线索/新代价/新误会，以避免‘每章刷怪升级’的观感。但整体从概要序列看，悬念、升级与转折都成立。",
+      "description": "大纲有持续的叙事张力和悬念驱动",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_narrative_tension",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色大纲规划完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在大纲中规划",
+      "details": "主角 2/2: 陆沉, 苏晓; 配角 1/1: 主神",
+      "description": "设计的角色必须在大纲中规划",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_outline",
+      "is_critical": true
+    },
+    "角色正文出场完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在正文中出现",
+      "details": "在9个章节中检查; 主角 2/2: 陆沉, 苏晓; 配角 1/1: 主神",
+      "description": "设计的角色必须在正文中出现",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_chapters",
+      "is_critical": true
+    }
+  },
+  "completion_status": "completed"
+}

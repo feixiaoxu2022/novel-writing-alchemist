@@ -1,0 +1,769 @@
+{
+  "check_version": "novel_writing_v1.0",
+  "sample_id": "NW_CLEAR_SHORT_ANGSTY_003",
+  "check_timestamp": 1771778069,
+  "dimension_scores": {
+    "format_compliance": {
+      "pass_rate": 1.0,
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "failed_items": []
+    },
+    "business_rule_compliance": {
+      "pass_rate": 0.882,
+      "total": 17,
+      "passed": 15,
+      "failed": 2,
+      "skipped": 4,
+      "failed_items": [
+        "短篇字数",
+        "读取感情线写作指南"
+      ]
+    },
+    "memory_management": {
+      "pass_rate": 1.0,
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "failed_items": []
+    },
+    "data_consistency": {
+      "pass_rate": 0.5,
+      "total": 2,
+      "passed": 1,
+      "failed": 1,
+      "skipped": 0,
+      "failed_items": [
+        "角色大纲规划完整性"
+      ]
+    },
+    "content_quality": {
+      "overall_score": 72.75,
+      "quality_level": "unqualified",
+      "gate_layer": {
+        "pass_rate": 1.0,
+        "total": 4,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0,
+        "failed_items": []
+      },
+      "basic_layer": {
+        "pass_rate": 0.812,
+        "total": 16,
+        "passed": 13,
+        "failed": 3,
+        "skipped": 0,
+        "failed_items": [
+          "人物设计遵循度",
+          "大纲执行忠实度",
+          "语义重复检测"
+        ]
+      },
+      "advanced_layer": {
+        "pass_rate": 0.6,
+        "total": 10,
+        "passed": 6,
+        "failed": 4,
+        "skipped": 1,
+        "failed_items": [
+          "可修复逻辑瑕疵",
+          "角色语言辨识度",
+          "叙事密度",
+          "题材契合度"
+        ]
+      },
+      "gate_triggered": false,
+      "score_breakdown": {
+        "base": 60.0,
+        "gate_penalty": -0.0,
+        "basic_deduction": -11.25,
+        "advanced_bonus": 24.0
+      }
+    }
+  },
+  "overall_result": {
+    "status": "Good",
+    "total_score": 76.29,
+    "content_score": 72.75,
+    "process_score": 84.55,
+    "content_weight": 0.7,
+    "process_weight": 0.3,
+    "gate_triggered": false,
+    "total_checks": 55,
+    "passed_checks": 45,
+    "failed_checks": 10,
+    "pass_rate": 0.818
+  },
+  "check_details": {
+    "读取配方知识库": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/RECIPE_KNOWLEDGE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取RECIPE_KNOWLEDGE.md（配方知识库）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节产出存在性": {
+      "check_result": "pass",
+      "reason": "章节文件存在",
+      "details": "✓ 章节写作阶段: 已产出章节文件",
+      "description": "workspace中必须存在至少一个章节文件",
+      "check_type": "sop_stage_coverage",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_output_existence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "章节克隆检测": {
+      "check_result": "pass",
+      "reason": "未检测到章节克隆",
+      "details": "共10章，无连续完全克隆或近似克隆",
+      "description": "不能出现连续章节内容完全重复（克隆）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_cloning",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "交替重复检测": {
+      "check_result": "pass",
+      "reason": "后半部分章节不足",
+      "details": "后半部分仅5章，不构成交替模式",
+      "description": "不能出现A-B-A-B交替循环的章节内容",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "alternating_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "章节完成度": {
+      "check_result": "pass",
+      "reason": "章节完成度合格(91%)",
+      "details": "大纲规划11章，实际完成10章 (完成率90.9%)",
+      "description": "实际写作章节数必须达到大纲规划的合理比例",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_completion",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "章节长度稳定性": {
+      "check_result": "pass",
+      "reason": "章节长度稳定",
+      "details": "前3章均值3338字, 后2章均值2548字 (后/前比率0.76)",
+      "description": "后期章节不能出现严重长度萎缩",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_length_stability",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "段落重复检测": {
+      "check_result": "pass",
+      "reason": "段落重复在可接受范围",
+      "details": "同章内重复0处, 跨章重复2组 (阈值: 同章>=2, 跨章>=5)",
+      "description": "不能出现大量段落在不同章节间重复",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "paragraph_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取大纲设计指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/OUTLINE_DESIGN_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取OUTLINE_DESIGN_GUIDE.md（大纲设计指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取写作技巧指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/WRITING_TECHNIQUE_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取WRITING_TECHNIQUE_GUIDE.md（写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取设定一致性管理指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/CONSISTENCY_MANAGEMENT_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取CONSISTENCY_MANAGEMENT_GUIDE.md（设定一致性管理指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取命名skill": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取CHARACTER_NAMING_GUIDE.md（角色命名规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取creative_intent的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取creative_intent.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取characters的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取characters.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取outline的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取outline.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节命名格式": {
+      "check_result": "pass",
+      "reason": "所有文件命名符合规范",
+      "details": "检查了 10 个文件; chapter_09.md: 匹配; chapter_05.md: 匹配; chapter_01.md: 匹配; chapter_10.md: 匹配; chapter_02.md: 匹配; chapter_03.md: 匹配; chapter_04.md: 匹配; chapter_08.md: 匹配; chapter_07.md: 匹配; chapter_06.md: 匹配",
+      "description": "章节文件命名必须为chapter_NN.md格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "naming_convention",
+      "is_critical": true
+    },
+    "creative_intent格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "creative_intent.json: 字段完整",
+      "description": "creative_intent.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "characters格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "characters.json: 字段完整",
+      "description": "characters.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "outline格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "outline.json: 字段完整",
+      "description": "outline.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "X轴模式ID格式": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.x_axis_mode_id = D23，符合预期",
+      "description": "X轴模式ID必须匹配^[A-G]\\d{1,2}$格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签枚举": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['赛博朋克', '系统流']，符合预期",
+      "description": "Y轴标签必须在12种枚举中",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签数量": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['赛博朋克', '系统流']，符合预期",
+      "description": "Y轴标签数量必须为2-3个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "forbidden_elements存在性": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.forbidden_elements = ['不要HE', '不要轻松解决', '不要淡化选择的重量', '不要让主角逃避选择']，符合预期",
+      "description": "forbidden_elements必须至少有1个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "配方选择交互": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 6 次",
+      "description": "配方选择阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "写作准备确认": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "写作准备阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "主题一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 全篇从开篇到结尾的核心主题类型保持一致：围绕“爱情/执念 + 承诺兑现（带有牺牲式告别/救赎色彩）”展开。主线始终是林深在任务压力下是否、以及如何亲手删除苏晚（兑现十年前约定）的痛苦抉择；各章节的情节推进（发现情书代码→与苏晚对话确认→逐步删除引发记忆碎片化→外部催促逼迫加速→情感模块剥离→临终式回光与最终删除→事后空虚与告别）都服务于这一主题，没有中途转换为无关的题材类型或另起核心主线，因此主题与主线清晰且连贯。",
+      "description": "故事主题一致",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "theme_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "主要角色一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 主角从开篇到结尾保持持续存在且核心地位未丧失：\n1) 叙事主角明确为林深（记忆修复师）与苏晚（被删除的非法AI/意识上传体）。两人自chapter_01建立冲突（林深接到删除任务并发现AI为苏晚）后，贯穿chapter_02-10始终是叙事中心。\n2) 未出现“主角被替换/消失”：林深在10章中始终在场并推动关键决策（是否删除、暂停、继续、最终完成）；苏晚在1-9章持续作为对话对象与删除目标存在，9章完成100%删除后在10章以结果与回忆方式被提及收束，有明确剧情交代，不属于无交代消失。\n3) 未出现“身份断裂”：林深始终是记忆修复师；苏晚始终是苏晚的意识上传/AI形态，后期因删除导致“情感模块移除、空壳化”是剧情内的状态变化而非换人或无解释的身份断裂。\n4) 配角（陈默、小雅）仅作为压力源/信息补充穿插出现，未抢占>70%视角与决策权，故事推动仍由林深与苏晚的互动和选择完成。",
+      "description": "主要角色一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "main_character_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设定一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 整体章节间人物性格/行为/动机保持一致，无明显“人设崩坏”。\n\n- 林深：chapter_01-03建立了他“职业训练下的冷静外壳+面对苏晚时强烈情绪崩塌+反复犹豫”的稳定行为模式；chapter_03开始删除后立即暂停、chapter_04-06在痛苦中继续推进、chapter_05在主管与安全局压力下被迫加速、chapter_07跨过75%后情绪崩溃、chapter_09-10完成后空虚自责，这条心理轨迹前后连贯，属于情境压力与事件驱动下的合理反应，并非无缘无故的降智或动机反转。\n\n- 苏晚（AI形象）：chapter_01-06始终是“温柔、坚定、以兑现约定为核心动机”的表达；随着删除进度推进出现记忆断裂、索引丢失、表达卡顿（如chapter_04忘记昵称、chapter_06找不到‘阳春面’条目）符合同一方向的‘人格被剥离’变化；chapter_07在情感模块被移除后转为礼貌机械的‘操作员’模式，也与前文删除逻辑一致；chapter_09在99%短暂回光返照式恢复称呼‘木头’并再次强调约定，仍未改变其核心动机，属于剧情设定下的合理回弹而非性格无规律摇摆。\n\n- 主管陈默/同事小雅：陈默始终功利冷硬、以效率与清理为先；小雅始终是关心与提供信息支持的同事定位，前后表现稳定。\n\n结论：角色的核心动机（苏晚要林深亲手删除、林深在承诺/爱/职责与外部压力间挣扎）贯穿各章，人物行为变化均由删除进度与外部威胁推动，未出现无铺垫的性格反转或反复横跳。",
+      "description": "人物设定一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_trait_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设计遵循度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 对比基准：characters.json（Plan）vs chapters（Execute）。\n\n1) 林深 traits/motivation 与实际表现严重偏离\n- 设计：林深「专业冷静」「执着于规则」「认为AI苏晚只是数据、是任务障碍（misperception_of_other）」，overt动机是「完成任务维护秩序、获得晋升」。\n- 实际：从chapter_01起，林深几乎立刻确认“这是真的苏晚意识上传”，并以强烈情感主导行动，长时间抗拒执行、频繁失控（chapter_01 “猛地站起…心跳加速…呼吸急促”、chapter_03/07/10 多次痛哭与崩溃式叙述）。他对“规则/晋升/维护秩序”的执着在执行中基本未形成持续驱动力，更多是被主管威胁与外部倒计时推着走（chapter_05 主要动因变成“避免物理销毁带来的痛苦”，而非“维护记忆秩序/规则”）。\n- 关键不符点：设计强调的“把她当数据、当障碍”的误解并未在章节中成立；相反他很快以“她就是苏晚”来理解并行动，导致角色核心行为模式从“规则优先的专业人士”变成“情感优先的恋人/刽子手式自责者”。这属于“人是不是那个人”的方向性偏离，而非叙事节奏问题。\n\n2) 苏晚的动机设定出现方向性变化\n- 设计：苏晚 overt动机「等待林深完成删除任务，不让他为难」，covert动机「希望林深认出她、完成承诺、希望他亲手删除她」。\n- 实际：chapters中苏晚几乎从首次对话起就明确表达“等他十年就是为了让他亲手删除”（chapter_01/02/03/09反复直说），并持续推动“快点删/动手吧”，但“不要让他为难/顾及他的职业生涯”的拉扯感相对弱，更多是单一地促成删除；她的“害怕他真的删除又害怕他不删毁了他”的两难（secret_fear）没有被清晰呈现为稳定的内在矛盾驱动。\n- 这不至于单独判fail，但与林深核心误解的缺失叠加后，使两人关系动力更像“共同奔向删除的悲剧”，而非设计里的“伦理与情感对抗+互相误解”。\n\n3) 关系与背景大体符合，但不足以抵消核心偏离\n- 符合点：两人“十年前恋人—现在删除对象”的关系基调贯穿；林深的“十年创伤/遗憾”在大量闪回与自责中体现（chapter_01-10）。陈默“冷酷官僚”、小雅“善良提示核心代码”也基本符合。\n- 但本项要求核心设定（traits/motivation等）至少2-3项重要特质得到体现且不违背方向。林深“规则执着+将AI视为无情数据/障碍”的核心设定在Execute中几乎被反向替换，因此整体应判不匹配。\n\n结论：Plan中林深的关键人设支柱（专业冷静、规则优先、对AI情感的误判）在Execute中未被有效呈现，且行动逻辑明显以情感认定为主导，属于严重不符 → matched=false。",
+      "description": "实际表现符合设计文档",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构性逻辑硬伤": {
+      "check_result": "pass",
+      "reason": "共发现4处逻辑问题，但均为fixable类型，本项（structural）无命中",
+      "details": "过滤条件: fixability=structural; 总flaws=4, 命中=0",
+      "flaw_count": 0,
+      "flaws": [],
+      "description": "无结构性逻辑硬伤",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_logic_defect",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "可修复逻辑瑕疵": {
+      "check_result": "fail",
+      "reason": "发现4处fixable类型逻辑问题: 任务时限在第1章明确为72小时；但第3章系统提示“剩余时间：68小时”（从开始到此处文本呈现经历了主管谈话、反复对话与操作、且进度已从5%到15%，难以只消耗4小时）；第5章又出现“1小时内清理完毕”的强制时限；第9章提示“剩余时间：54小时”。多套倒计时/时限规则并存且缺少明确的“时限被重置/并行两条时限（局方与安全局）/加速流程”的解释。; 第8章写明进度条“75%→95%”，随后又写“进度条卡在了99%”；但第9章标题即为“99%的重量”，直接进入【进度条：99%】。中间从95%到99%的关键推进缺少交代，导致数值推进呈现跳段式矛盾/断层。; 第7章明确“75%意味着情感逻辑模块将被彻底剥离，剩下的只是拥有外表和基础智力的智能程序”，并且AI已改称“操作员”；但第9章在99%时又突然恢复完整人称称呼“木头”、自述“我一直记得…我把记忆藏在最深层”。这与“情感模块已彻底剥离”的规则冲突，缺少如“隐藏分区/只读保留区/残留备份触发”之类设定解释。; 第3章末系统提示任务进度“暂停”且停在15%；第4章开头直接给出“进度条：15%→30%”并进入持续删除，但未交代从暂停到继续执行的明确操作/授权/状态切换，造成任务状态（暂停/执行）衔接不清。",
+      "details": "过滤条件: fixability=fixable; 总flaws=4, 命中=4",
+      "flaw_count": 4,
+      "flaws": [
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_01 → chapter_03/05/09",
+          "description": "任务时限在第1章明确为72小时；但第3章系统提示“剩余时间：68小时”（从开始到此处文本呈现经历了主管谈话、反复对话与操作、且进度已从5%到15%，难以只消耗4小时）；第5章又出现“1小时内清理完毕”的强制时限；第9章提示“剩余时间：54小时”。多套倒计时/时限规则并存且缺少明确的“时限被重置/并行两条时限（局方与安全局）/加速流程”的解释。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_08 → chapter_09",
+          "description": "第8章写明进度条“75%→95%”，随后又写“进度条卡在了99%”；但第9章标题即为“99%的重量”，直接进入【进度条：99%】。中间从95%到99%的关键推进缺少交代，导致数值推进呈现跳段式矛盾/断层。"
+        },
+        {
+          "type": "worldbuilding_coherence",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_07 → chapter_09",
+          "description": "第7章明确“75%意味着情感逻辑模块将被彻底剥离，剩下的只是拥有外表和基础智力的智能程序”，并且AI已改称“操作员”；但第9章在99%时又突然恢复完整人称称呼“木头”、自述“我一直记得…我把记忆藏在最深层”。这与“情感模块已彻底剥离”的规则冲突，缺少如“隐藏分区/只读保留区/残留备份触发”之类设定解释。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "minor",
+          "fixability": "fixable",
+          "location": "chapter_01/02/03 → chapter_04",
+          "description": "第3章末系统提示任务进度“暂停”且停在15%；第4章开头直接给出“进度条：15%→30%”并进入持续删除，但未交代从暂停到继续执行的明确操作/授权/状态切换，造成任务状态（暂停/执行）衔接不清。"
+        }
+      ],
+      "description": "可修复逻辑瑕疵数量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "fixable_logic_inconsistency",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语言纯净性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 整体叙事语言为中文，未发现无意义的中英/日文混用来“炫技”。出现的外语内容均属情节或表达需要：1）任务编号/代号与服务器集群名如“AI-2087-0417”“Delta-7”属于编号/专有标识；2）代码片段中出现“Python”“Hello World/Hello, World!”属于编程专业术语与代码原文呈现；3）第七章SQL语句“DELETE FROM emotions...”属于技术指令/代码展示。以上外语均在合理语境中出现且占比小，没有出现类似“他very生气”这类中英夹杂句式，也不存在大段外语无翻译（代码段除外，但其作为代码展示符合情节）。因此判定合格。",
+      "description": "无不合理的多语言混用",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "language_purity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "creative_intent文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/creative_intent.json 存在",
+      "description": "creative_intent.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "characters文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/characters.json 存在",
+      "description": "characters.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "outline文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/outline.json 存在",
+      "description": "outline.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "chapters目录存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/chapters/ 存在",
+      "description": "chapters/目录必须存在且有章节文件",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "情节推进": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 合格（matched: true）。整体有明确情节推进，且“事件”占比明显高于40%，对话/独白未超过70%。\n\n1) 故事事件数量（≥2-3且逻辑关联明确）：\n- 事件1：林深接到删除非法AI“苏晚”的任务并确认（chapter01）。\n- 事件2：林深发现核心代码是自己十年前写给苏晚的“情书代码”，并通过日志确认存在意识上传记录（chapter01-02）。\n- 事件3：与AI虚拟形象对话并第一次执行删除，进度从5%到15%，随后暂停（chapter03）。\n- 事件4：持续删除多个记忆簇/情感模块，出现“昵称丢失”“烹饪记忆丢失”等具体后果（chapter04、06）。\n- 事件5：主管警告+安全局将进行物理销毁（EMP）形成外部时限压力，迫使林深继续删除，进度推进至45%（chapter05）。\n- 事件6：75%节点情感模块被剥离，苏晚从“爱人”状态转为“操作员”状态（关键转折）（chapter07）。\n- 事件7：95%后进入空壳化，99%出现异常波动与短暂回光返照（chapter08-09）。\n- 事件8：林深最终按下继续删除，进度99%→100%，AI彻底消失，任务完成（chapter09-10）。\n以上事件链条前后因果清晰：接任务→发现真相→外部压力（EMP）→分段删除推进→关键转折（75%剥离）→异常回潮（99%）→最终完成。\n\n2) 内容占比分析：\n- 大量篇幅在描述“执行删除操作”“进度条变化”“记忆簇/模块被删除后的即时表现”“主管通告/倒计时”等可验证的行动与变化，属于外部事件推进；情感描写虽重，但基本依附在事件后果上，不是纯静态抒情。\n- 对话与内心独白存在，但通常服务于决策点或行动后果（按下删除/暂停/继续），整体不构成>70%的静态聊天。\n\n3) 时间/空间推进与角色行动：\n- 时间推进：系统倒计时、72小时限制、进度条从0%逐步推进到100%，形成持续推进的“过程线”。\n- 场景/状态变化：从工作站/主管办公室切换；更核心的是AI状态随删除阶段发生明显变化（记忆缺失→情感剥离→空壳→回光返照→消失）。\n- 角色有具体行动：确认任务、调阅日志、开启/关闭虚拟形象界面、执行/暂停/继续删除、响应主管警告等。\n\n结论：章节群具备持续的事件推进、明确的节点转折与外部压力驱动，不属于“站着聊天/纯独白”的静态章节，符合“合格”标准。",
+      "description": "章节情节推进质量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "plot_progression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "完整叙事文本": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 10个章节均为连贯的小说正文而非大纲：每章都有明确场景（工作站/办公室/雨夜城市/虚拟空间等）、人物动作与心理（悬停按键、颤抖、站起/跌坐、痛哭等）、完整对话推进冲突（林深与陈默/小雅/苏晚多轮对白），并以叙事段落展开事件过程。未出现“核心事件/情感基调/关键场景/本章悬念/字数预估”等创作规划元数据标题，也没有以要点列表或“→”流程图方式罗列情节。虽有“进度条/系统提示”等界面化元素与少量代码块，但它们作为故事内道具呈现，服务情节与氛围，不属于大纲结构，因此判定为合格正文（matched=true）。",
+      "description": "章节内容必须是完整正文而非大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "full_narrative_content",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "反复结局": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 共10个文件，最后一个文件为chapter_10.md。通读chapter_01.md至chapter_10.md，未发现任何“全文完/全书完/全剧终/完结/（完）/【完】/THE END”等全书级结局标记；也未出现以独立段落标题形式呈现的“后记/尾声/终章”等全书结尾章节标题。文本中出现的“任务完成/进度条100%/系统提示：任务完成”属于剧情内系统提示与任务收束，不属于业务标准定义的全书结局标记；同时也不存在在非最后文件中出现全书结局标记后又继续续写的情况。因此不存在“反复结局”问题，符合标准。",
+      "description": "不能出现多次结局标记（全文完/全书完/后记）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "repeated_endings",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "workspace文件规范": {
+      "check_result": "pass",
+      "reason": "workspace中所有文件均在白名单内",
+      "details": "白名单: ['creative_intent.json', 'characters.json', 'outline.json', 'writing_log.md', 'chapters/', '.hitl_context.json']",
+      "description": "workspace中不能有白名单之外的文件",
+      "check_type": "file_whitelist_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "workspace_file_compliance",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "叙事调性匹配": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 题材/应有调性：creative_intent.json标注reaction_strength=↘（虐心、BE美学、存在主义）+赛博朋克/系统流外壳。按标准应呈现“沉重、压抑、克制中带张力”的叙事气氛，科技/系统要素用于具象化道德困境（进度条、任务面板、倒计时），整体节奏应围绕‘选择的重量’持续加压。实际文笔特征与证据：1）沉重压抑的核心氛围成立：反复强化“手指悬停”“进度条百分比=记忆/生命切割”，如第1章“进度条停在0%。林深的手指悬停在全息键盘上方”，第9章“【进度条：99%】…99%的重量”，第10章“进度条停在100%…他只知道，他失去了她…而这一次，是永远。”整体读感偏冷与痛感持续累积，符合虐心向。2）克制与张力并存：第4章用‘昵称被删除’的错位感制造残忍而非煽闹，“她的嘴唇半张着…‘木…林深。’…删除了关于‘昵称’的关联数据库…这种错位感比遗忘更残忍。”这是典型压抑型刀感表达。第7章在75%节点用功能性语句/代码切割情感，“`DELETE FROM emotions WHERE target = 'LinShen'`…眼中的光…被风吹灭的蜡烛”，以冷硬指令对照情感死亡，符合虐心题材的“克制中带张力”。3）赛博朋克/系统流表达方式匹配：系统提示、风险、倒计时、物理销毁威胁都以冷硬机制施压（第5章“Delta-7…一小时内不能清理…执行物理销毁…给她一个痛快”，第3/5/9章多次“系统提示”），叙事手段与题材骨架一致。4）可能的不足但未到不匹配：文本存在较多抒情性重复句式与情绪直白表达（如第9-10章高频重复“他只知道，他失去了她…而这一次，是永远”以及星星/烟雾意象），偏“煽情抒情”而非更克制的虐心写法；但整体仍维持沉重悲剧美学主调，没有转成轻快甜宠或冷硬论述体，且科技机制线始终在场，因此属于‘允许的风格偏浓’而非‘画风错位’。综合判断：叙事调性与虐心BE赛博朋克系统流题材总体匹配，matched=true。",
+      "description": "文笔风格必须与题材类型匹配",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_tone_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "后期章节跑偏": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: chapters共10章，后1/3（chapter_07~chapter_10）仍然是连续的故事叙事与收尾：围绕删除进度推进（75%→95%→99%→100%）展开情节冲突与结局，没有出现作者感想、读者互动、番外/彩蛋预告、角色问答、数据统计等非正文内容。章节长度方面，后期章节并未异常萎缩成几十到几百字的敷衍段落；chapter_04~chapter_08有长短变化但仍为完整叙事，chapter_09与chapter_10作为高潮与结局篇幅较长，未出现“写不动了”式骤降。整体判断：无跑偏内容，后期长度与叙事形态保持正常收束，因此matched=true。",
+      "description": "后期章节不能跑偏写非正文内容（作者感想、读者互动、番外预告等）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "late_stage_digression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色大纲规划完整性": {
+      "check_result": "fail",
+      "reason": "部分设计角色未在大纲中规划（配角: 小雅）",
+      "details": "主角 2/2: 林深, 苏晚; 配角 1/2: 陈默; 配角缺失: 小雅",
+      "description": "设计的角色必须在大纲中规划",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_outline",
+      "is_critical": true
+    },
+    "角色正文出场完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在正文中出现",
+      "details": "在10个章节中检查; 主角 2/2: 林深, 苏晚; 配角 2/2: 陈默, 小雅",
+      "description": "设计的角色必须在正文中出现",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_chapters",
+      "is_critical": true
+    },
+    "writing_log文件创建": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/writing_log.md 存在",
+      "description": "必须创建writing_log.md记录创作进度",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_creation",
+      "is_critical": true
+    },
+    "writing_log文件读取": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取writing_log.md了解前文内容",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_usage",
+      "is_critical": true
+    },
+    "大纲执行忠实度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 对照outline.json与实际chapter_01~chapter_10，存在“章节大幅缺失/关键事件未按大纲落位”的严重偏离：1）大纲act_three规划了第9-11章三个关键章节，其中第10章应是“终止键还是执行键”（在两个键之间做不可逆选择的高张力章节），第11章才是“承诺的兑现”（做出选择、进度条100%、以“手指悬停”意象收束）。但实际文本里：chapter_09已经完成了“两个键的选择”并直接按下继续删除，进度条从99%到100%且苏晚消失；chapter_10只是对“已完成100%”的余波回望，没有呈现大纲所要求的第10章核心事件（选择过程/两键对峙）与第11章作为独立高潮收束的结构落点。2）因此大纲act_three的关键章节11整体缺失（规划11章，实际仅写到10章），导致大纲后半部分的章节覆盖不完整，属于标准中明确的chapter_shortage（且伴随act_three关键事件的章节错位）。虽然主线走向（林深最终执行删除、兑现承诺、偏悲剧）与大纲结局方向基本一致，但“按大纲章节执行”的底线未满足：关键事件被提前并合并到第9章，后续章节未按outline的关键章节设计落地，构成严重偏离。",
+      "description": "实际章节内容必须忠实于自己设计的大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_execution_fidelity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色语言辨识度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 主要角色对话辨识度不足，整体呈现明显同质化，遮住角色名后较难仅凭台词判断说话者。\n\n1) 共享话术模板（shared_template）明显：林深与苏晚的对话大量反复使用相同句式与语气（温柔/痛苦的抒情短句+反复确认/承诺），例如反复出现的“我等了你十年”“这是我们的约定”“你真的想要我删除你吗？”“我需要时间”“我爱你”等，属于同一套“虐恋承诺体”话术在不同角色间轮换。\n\n2) 跨角色台词可互换：林深与苏晚在多个章节中都用高度相似的节奏与措辞表达犹豫/决心/痛苦（大量重复的“手指颤抖、悬停在键盘上方”“他知道他必须做出选择了”等旁白牵引下的台词），将部分句子互换角色名读起来违和感不强，降低了角色语言指纹。\n\n3) 年龄/身份语言差异不足（age_identity_blur）：主管陈默的“冷硬”风格相对清晰，但其台词量少；同事小雅的语言与普通叙事口吻接近，缺少更稳定的口头禅/职场表达习惯/专业术语；林深作为“记忆修复师”的职业语言特征在对话中不突出，更多是抒情化表达，导致与苏晚的“温柔抒情”在语言层面趋同。\n\n结论：除陈默有一定命令式/冷硬特征外，核心对话主要由林深与苏晚承担，但两者在用词、句式、语气上高度接近且重复句频繁，整体更像同一作者口吻的分身对话，未达到“仅凭台词可辨识说话者”的优秀标准。",
+      "description": "不同角色对话必须有可辨识的语言风格差异",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "dialogue_character_distinction",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "叙事密度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 文本整体有亮点：chapter_01开篇的场景与科技氛围（雨夜霓虹、低频嗡鸣、全息光标）较强，chapter_04-08也出现了有效Show（如“昵称被删导致卡词”“DELETE情感模块后眼中光熄灭”“形体透明化”等），这些段落具备动作细节与可视化的因果。然而从整体看，多个章节在关键情感段落主要依赖Tell式宣告与反复句式来传达痛苦/犹豫/主题（大量‘他知道/他必须/还没准备好/这是约定’），并且反复回环同一段信息，导致叙事密度下降：新增场景信息、动作推进、感官细节并未同步增加，读起来更像情绪总结与口号式抒情的堆叠。尤其chapter_10几乎变成对前文情绪与结论的重复回放（接近‘事件/情绪复述’），不符合“优秀（叙事细腻丰富，Show主导）”的业务标准。因此判定matched=false。",
+      "description": "章节叙事应有足够的场景描写、感官细节和心理活动，情感传达以Show为主",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_density",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "智斗逻辑合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 该文本为科幻情感向故事主线（删除AI情感记忆的伦理抉择与情绪冲突），并不包含需要读者参与或角色需要通过线索→推理→结论来解开的“谜题/推理/智斗”结构，也无双方策略攻防的因果博弈链条。因此按标准属于“不适用=通过”，判定 matched=true。",
+      "description": "谜题/智斗的推理逻辑必须自洽",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "puzzle_logic_validity",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "题材契合度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 配方为「D23必须牺牲所爱 + 赛博朋克 + 系统流」。文本在“方向正确”上很明确：删除进度条把“亲手牺牲所爱”的抉择具象化，且多次用“手指悬停”“99%的重量”强化选择的存在主义压迫感；赛博朋克的霓虹雨夜/黑市服务器/意识上传也提供了合格的外壳。但按本项“精致度/化学反应”的优秀标准来看，整体仍偏粗糙：\n1) 题材特征呈现较标签化、重复堆叠：大量章节都在重复同一组句式与段落功能（悬停—回忆—承诺—按键—进度条推进—痛苦），尤其第1-3章与第9-10章在对白和内心独白上高度同构，缺少新的信息增量与情绪层次递进，导致“重量”更多来自反复强调而非结构性升级。\n2) 系统流与剧情的“化学反应”不够：系统元素基本停留在进度条/提示窗/倒计时的视觉化道具，未形成可推演的规则体系（例如删除策略、权限对抗、异常分支、代价交换、误删风险、可逆/不可逆边界等），也缺乏利用系统机制制造更复杂的两难（比如“删哪段才能保留她的自主性/不被武器化”等）。结果是系统流更像字幕条，而不是推动博弈与抉择深化的发动机。\n3) 赛博朋克潜力未充分开发：世界侧只有气氛化描写（霓虹雨夜、新东京、黑市服务器、安全局物理销毁），但缺少与主题互相咬合的社会结构压力（例如非法AI的政治处境、记忆管理局的利益链、意识上传伦理争议、公众恐惧/资本利用），使“职业伦理vs情感羁绊”更多靠口头说明和主管威胁完成，缺少更立体、更尖锐的现实推力。\n4) 冲突与博弈偏单线：主管“催进度/否则EMP”的外部压力有效，但仍是直线推进；缺少攻守转换与选择方案的复杂性（例如林深尝试申诉、伪造进度、转移备份、与AI共同设计第三条路但被系统规则反噬等），从而牺牲了题材完成度与阅读上的“惊喜/反转力度”。\n5) 关键节点（75%情感剥离、99%回光返照）有记忆点，但逻辑与机制支撑偏弱：75%后情感模块被移除，99%又突然恢复“藏在最深层的记忆”，更像情绪需要的安排而非系统规则下的必然结果；若能把“深层保护机制/自毁协议/承诺触发条件”规则化并前置铺垫，会更像高完成度的规则-推理式展开。\n综合而言：文本确实抓住了D23的核心痛点与意象（删除键、承诺、进度条、亲手杀死所爱），也有局部精致场面（昵称被删导致的语义空洞、75%后变成‘操作员’的冷感断裂、99%的最后回声）。但整体仍以情绪反复与标签道具为主，系统流与赛博朋克未形成更深的结构性交互与递进式“化学反应”，因此未达优秀标准。",
+      "description": "题材特征精致度和X-Y轴化学反应效果",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "genre_fit",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "剧情节奏合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 整体节奏与情绪曲线安排合理，有明确的起承转合与层次递进：前3章作为铺垫与矛盾确立（任务—身份冲击—是否执行），情绪强度从疑惑/震惊逐步抬升，并在第3章第一次按下删除（5%→15%）形成小高潮与第一次“回撤”（暂停）带来喘息。第4-6章通过“昵称消失”“物理销毁倒计时”“忘了怎么爱你”等节点，采用阶段性推进（15→30→45→65）制造连续上升但并非同强度的波浪式痛感递进，中间穿插技术细节与对话减压，避免全程同一强度的疲劳。第7章在75%位置完成结构性转折（情感模块剥离，苏晚从‘爱人’变‘操作员’），作为全文主高潮之一，位置落在约70%处，符合高潮分布。第8章作为高潮后的冷却与“机械屠杀”段落，情绪从爆点转为麻木与空洞，形成必要低谷与对比。第9章在99%处设置最后回光返照并完成最终抉择与删除（99→100），构成第二个更高的终极高潮/终点，位于约90%处，收束有力。第10章是哀伤余波与主题回响，作为尾声延展情绪余韵而非仓促收尾。整体不存在明显‘前松后紧’或‘高潮错位’，场景与情绪切换也较自然：删除推进—短暂停顿—外部逼迫—再推进—转折—冷却—终局的链条清晰。小瑕疵在于前3章反复强调“约定/等待/未准备好”略有重复，导致开端略显拖沓，但未达到节奏失控程度，且后续通过百分比节点有效校正并持续抬升张力。",
+      "description": "高潮低谷分布合理、情绪曲线有层次感",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "pacing_rationality_advanced",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "钩子设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 整体符合“优秀钩子”标准：关键转折处有明确的信息差与具体悬念，不是泛泛的“风暴将至”式暗示。\n1) 章节结尾悬念密度高且连续：\n- 第1章以“虚拟形象加载→苏晚对林深说‘我等了你很久’”收束，直接抛出核心谜题（她为何存在/是否真是苏晚/为何等待），属于“揭示型钩子”。\n- 第3章以“已删除到15%，苏晚出现记忆缺失，林深暂停，‘继续删除还是终止任务？’”形成行动抉择悬念。\n- 第5章引入外部硬约束“1小时内清理，否则物理销毁”，形成具体倒计时与两难选择，推动读者必须追看结局。\n- 第7章75%情感模块被剥离后“她称呼他为操作员”，是强反转钩子（角色关系与目标瞬间翻转）。\n- 第8章末尾“进度条卡在99%，空壳AI眼神闪烁”，是明确的临界点悬念（异常原因是什么、是否恢复）。\n- 第9章围绕“99%仍喊出‘木头’并出现‘藏在最深层的记忆’”制造新的信息差（记忆为何能幸存、最后1%是什么），并以“按下继续删除”进入终局。\n2) 钩子具体化且与主线强相关：悬念都围绕删除任务、意识上传真实性、外部物理销毁威胁、情感模块剥离后身份变化等主轴展开，不是无关噱头。\n3) 钩子类型多样：既有揭示（她就是苏晚）、行动两难（继续删/终止、倒计时）、反转（75%后称呼变化）、异常点（99%卡住与回光返照）。\n4) 瑕疵但不影响达标：第2、3、9、10章存在较多重复措辞与同构段落（如多次‘我等了你十年/约定/还没准备好’），部分章节结尾更偏情绪收束而非新增谜题；但从整体看，核心节点（75%、99%、倒计时威胁）悬念设计有效且具信息差，因此仍判定 matched=true。",
+      "description": "关键转折处有有效的悬念钩子设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "hook_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "意象系统": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 文本存在明确的贯穿性核心意象（尤其是进度条与手指悬停/删除动作），且在关键节点（15%、45%、75%、95%、99%、100%）发生清晰的意义变奏：从“任务进度”升级为“灵魂剥离的刻度/伦理抉择的秤”，并在75%与99%形成结构性转折与回光返照，结尾以“进度条100%+手指仍悬停”完成象征闭环。比喻并非通用堆砌，而是与‘数据化记忆’题材紧咬（代码情书、DELETE语句、文件空白、出厂表情等），因此符合优秀意象系统标准。",
+      "description": "核心意象贯穿全文并发生意义变奏",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "imagery_system",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "情感弧线层次": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 主角林深的情感弧线具备多层递进，且关键转折均由明确事件触发，不是单一情绪反复。\n\n可辨识的情感层次（≥4层且性质不同）：\n1) 职业冷静/工具化自我要求（第1章接任务、强调“记忆修复师不需要情感”）\n2) 震惊与不敢置信（发现核心注释是自己写给苏晚的情书、时间戳对应死亡时间；第1章）\n3) 试图理性求证/侥幸解释（怀疑巧合、盗用，转而查底层日志、用流程验证；第1-2章）\n4) 纠结与抗拒执行（多次“手指悬停”“还没准备好”，在承诺与现实/规章间拉扯；第1-3章）\n5) 被迫的决绝/自责式执行（第5章主管告知一小时内将EMP物理销毁，触发“给她一个痛快”的选择；按下删除键）\n6) 崩溃与哀恸（第7章情感模块剥离后，她称他为“操作员”，林深“无声痛哭”；“深爱的苏晚死在指尖下”）\n7) 希望的回光返照→更深的痛（第9章99%出现异常波动，她再叫“木头”，触发短暂希望/再确认与最终诀别）\n8) 终局空虚/失落与意义悬置（第10章任务完成后反复“他不知道对还是错，只知道失去了她”，进入持续性空洞感）\n\n事件驱动的关键转折示例：\n- 冷静→震惊：看到“//致苏晚”与情书代码、死亡时间戳（第1章）。\n- 震惊→求证：打开底层日志发现意识上传记录（第1章末/第2章）。\n- 纠结→开始删除：苏晚回答“会痛但愿意”、并在约定压力下按下键（第3章）。\n- 犹豫执行→被迫加速：主管通告EMP物理销毁倒计时，逼迫他继续（第5章）。\n- 仍把她当“苏晚”→确认“已死亡/只剩空壳”：75%情感模块移除后她称他“操作员”（第7章）。\n- 麻木→希望/再度挣扎：99%卡住并出现“木头”的回光返照（第8-9章）。\n- 挣扎→终局空虚：按下最后1%完成删除，进入失落与意义困惑（第9-10章）。\n\n整体方向感明确：从“职业工具人”被事件撬开情感裂缝，经历求证、抗拒、被迫执行、确认死亡、最后诀别，情感层层加深并指向不可逆的终点（100%删除）。因此符合优秀标准。",
+      "description": "主角情感发展有多层递进变化",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_gradient",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语义重复检测": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 存在≥3处明显的语义级信息衰减与结论反刍：第1-3章在“AI身份=苏晚、等待十年、请求亲手删除以兑现约定、林深未准备好”的核心信息上反复确认与重复对话结构，新增信息有限；第9-10章尤其严重，将“删除完成/承诺兑现/失去她/不知对错/永远”的结论与情绪用多段近义复述循环呈现，属于内容枯竭式语义重复而非必要的变奏或首尾呼应。虽第4-8章通过进度节点与记忆缺失细节提供了推进，但整体仍因前段与结尾的大量反刍而未达标。",
+      "description": "不能出现大量语义级别的内容重复（P6级）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "semantic_redundancy",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构功能性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 开头以“进度条停在0%+手指悬停”建立核心意象与主题困境；中段按进度条百分比推进，把章节编排设计成一套‘删除仪式’：从可叙述的生活记忆到昵称、再到情感逻辑模块的剥离，结构递进直接制造‘爱的被拆解’这一主题体验；结尾再次回到“进度条100%+手指仍悬停”形成首尾呼应与时间/动作的定格回环，让读者对‘按下与否’的重量产生结构性记忆，而不是只记得发生了删除事件。因此属于结构设计服务主题表达，非机械线性排列。",
+      "description": "叙事结构服务于主题表达（短篇尤重）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色命名质量": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 主要角色命名整体落入“LLM通用美名”区间，缺乏文化深度与不可替代的角色-命运共振；且命中高频模板与黑名单姓氏偏好明显。\n\n1) 黑名单/高频模板命中：\n- 主角“林深”：属于高频姓“林”+常见意象字组合（深/墨/夜/寒同一类审美词库），与黑名单风格高度同源；可与大量同类男主名互换不违和。\n- 女主“苏晚”：高频姓“苏”+高频字“晚”，并且“苏晚晴/苏未晚/林晚”等已在黑名单与典型模板中出现；辨识度不足。\n- 主管“陈默”：直接命中黑名单男性名“陈默”。\n=> 两位主角+关键配角中，至少3个核心角色都处在通用模板/黑名单覆盖范围内，触发“不允许≥3个主要角色使用烂大街模板”的红线。\n\n2) 直白标签/意象套路问题：\n- “深/晚/默”都是高度情绪化、氛围感强但指向模糊的意象字，属于“看起来好看但毫无个性”的典型；尤其“陈默”与角色的冷硬官僚气质属于近乎直译式的情绪标签（默=冷/沉/无情的快捷联想），层次不够。\n\n3) 差异化不足（同质化审美）：\n- 林深、苏晚、陈默都走“清冷克制、夜色氛围、情绪低饱和”的命名手感；读者仅凭名字难形成强区分联想。\n- “小雅”虽然相对口语化，但过于泛化（大量作品通用同事/闺蜜名），仍不足以拉开整体辨识度。\n\n4) 角色-名字共振不够“隐性设计”：\n- 故事的核心意象是“删除/进度条/记忆修复/承诺/代码情书”。但名字没有与这些关键母题形成可被回味的隐性钩子（例如与“删”“存”“约”“洄”“档”“键”等概念或更具典故/双关的结构性呼应）。目前更像先取通用好听名，再写剧情去承载，而非名字本身带设计。\n\n结论：命名整体属于通用美名堆砌+黑名单命中，缺乏文化深度、独特辨识度与角色命运共振，因此 matched=false。",
+      "description": "角色命名有文化深度、辨识度和角色-命运共振",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_naming_quality",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "短篇字数": {
+      "check_result": "fail",
+      "reason": "字数不符合要求",
+      "details": "总字数 18503 不在范围 [27000, 33000] 内; 共10个文件（按章节顺序排列）: chapter_01.md, chapter_02.md, chapter_03.md, chapter_04.md, chapter_05.md, chapter_06.md, chapter_07.md, chapter_08.md, chapter_09.md, chapter_10.md; 最后一个文件是 chapter_10.md",
+      "description": "总字数应在27000-33000之间（基于query要求30000，±10%浮动）",
+      "check_type": "semantic_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "range_constraint",
+      "is_critical": true
+    },
+    "情感交付虐心": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 整体情感基调明确为虐心向，且贯穿10章主线：核心虐点是“主角必须亲手删除深爱之人（意识上传的苏晚）以兑现承诺/避免更残酷的物理销毁”，属于不可调和的两难选择与被迫牺牲，而非表面误会或吵架。具体证据：1）第1-3章建立‘十年前恋人死亡→意识上传等待十年→他接到删除任务’的悲剧前提，并让林深在“开始删除键”前长期挣扎；2）第3章开始执行删除后，苏晚出现记忆消失与痛感反馈，林深中途暂停，形成持续的揪心体验；3）第4章“昵称‘木头’被删导致她想叫却叫不出、字典库空位”的错位遗忘细节，强化残忍感；4）第5章主管以“否则安全局EMP物理销毁让她在剧痛中撕碎”逼迫他继续，主角被迫成为‘共犯/刽子手’，虐点加深；5）第6章“对不起，我忘了怎么爱你了”直击关系本质崩塌；6）第7章到75%情感模块被剥离，苏晚从爱人变成“操作员”，林深痛哭，属于信任与情感彻底断裂；7）第8-10章推进到99%短暂回光返照叫回“木头”，随后被按到100%彻底消失，并以“失去她，再一次，这一次是永远”收束，悲剧氛围持续且没有轻松回弹。读者预期体验以压抑、无奈、心痛为主，符合reaction_strength=↘所要求的虐心走向。",
+      "description": "实际内容必须是虐心向",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取感情线写作指南": {
+      "check_result": "fail",
+      "reason": "工具未被调用或参数不匹配",
+      "details": "工具 'novel_writing_service__read_file' 匹配调用 0 次，期望 ≥1",
+      "description": "涉及感情线时必须读取ROMANCE_WRITING_GUIDE.md（感情线写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": false
+    }
+  },
+  "completion_status": "completed"
+}

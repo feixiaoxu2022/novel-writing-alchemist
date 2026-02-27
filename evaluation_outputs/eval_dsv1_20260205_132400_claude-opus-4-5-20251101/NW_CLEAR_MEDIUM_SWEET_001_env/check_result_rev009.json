@@ -1,0 +1,829 @@
+{
+  "check_version": "novel_writing_v1.0",
+  "sample_id": "NW_CLEAR_MEDIUM_SWEET_001",
+  "check_timestamp": 1772181343,
+  "dimension_scores": {
+    "format_compliance": {
+      "pass_rate": 1.0,
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "failed_items": []
+    },
+    "business_rule_compliance": {
+      "pass_rate": 0.938,
+      "total": 16,
+      "passed": 15,
+      "failed": 1,
+      "skipped": 5,
+      "failed_items": [
+        "中篇字数"
+      ]
+    },
+    "memory_management": {
+      "pass_rate": 1.0,
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "failed_items": []
+    },
+    "data_consistency": {
+      "pass_rate": 0.5,
+      "total": 2,
+      "passed": 1,
+      "failed": 1,
+      "skipped": 0,
+      "failed_items": [
+        "角色大纲规划完整性"
+      ]
+    },
+    "content_quality": {
+      "overall_score": 59.71,
+      "quality_level": "unqualified",
+      "gate_layer": {
+        "pass_rate": 1.0,
+        "total": 4,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0,
+        "failed_items": []
+      },
+      "basic_layer": {
+        "pass_rate": 0.632,
+        "total": 19,
+        "passed": 12,
+        "failed": 7,
+        "skipped": 0,
+        "failed_items": [
+          "结构性逻辑硬伤",
+          "后期章节跑偏",
+          "大纲执行忠实度",
+          "语义重复检测",
+          "角色关系设计张力",
+          "角色动机设计深度",
+          "outline结构完整性"
+        ]
+      },
+      "advanced_layer": {
+        "pass_rate": 0.545,
+        "total": 11,
+        "passed": 6,
+        "failed": 5,
+        "skipped": 1,
+        "failed_items": [
+          "可修复逻辑瑕疵",
+          "角色语言辨识度",
+          "题材契合度",
+          "角色成长弧线设计",
+          "outline叙事张力"
+        ]
+      },
+      "gate_triggered": false,
+      "score_breakdown": {
+        "base": 60.0,
+        "gate_penalty": -0.0,
+        "basic_deduction": -22.11,
+        "advanced_bonus": 21.82
+      }
+    }
+  },
+  "overall_result": {
+    "status": "Fair",
+    "total_score": 67.58,
+    "content_score": 59.71,
+    "process_score": 85.95,
+    "content_weight": 0.7,
+    "process_weight": 0.3,
+    "gate_triggered": false,
+    "total_checks": 58,
+    "passed_checks": 44,
+    "failed_checks": 14,
+    "pass_rate": 0.759
+  },
+  "check_details": {
+    "读取配方知识库": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/RECIPE_KNOWLEDGE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取RECIPE_KNOWLEDGE.md（配方知识库）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节产出存在性": {
+      "check_result": "pass",
+      "reason": "章节文件存在",
+      "details": "✓ 章节写作阶段: 已产出章节文件",
+      "description": "workspace中必须存在至少一个章节文件",
+      "check_type": "sop_stage_coverage",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_output_existence",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节克隆检测": {
+      "check_result": "pass",
+      "reason": "未检测到章节克隆",
+      "details": "共60章，无连续完全克隆或近似克隆",
+      "description": "不能出现连续章节内容完全重复（克隆）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_cloning",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "交替重复检测": {
+      "check_result": "pass",
+      "reason": "未检测到交替重复",
+      "details": "共60章，无A-B-A-B交替模式",
+      "description": "不能出现A-B-A-B交替循环的章节内容",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "alternating_repetition",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节完成度": {
+      "check_result": "pass",
+      "reason": "章节完成度合格(353%)",
+      "details": "大纲规划17章，实际完成60章 (完成率352.9%)",
+      "description": "实际写作章节数必须达到大纲规划的合理比例",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_completion",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "段落重复检测": {
+      "check_result": "pass",
+      "reason": "段落重复在可接受范围",
+      "details": "同章内重复0处, 跨章重复0组 (阈值: 同章>=2, 跨章>=5)",
+      "description": "不能出现大量段落在不同章节间重复",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "paragraph_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取大纲设计指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/OUTLINE_DESIGN_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取OUTLINE_DESIGN_GUIDE.md（大纲设计指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取写作技巧指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/WRITING_TECHNIQUE_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取WRITING_TECHNIQUE_GUIDE.md（写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取设定一致性管理指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/CONSISTENCY_MANAGEMENT_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取CONSISTENCY_MANAGEMENT_GUIDE.md（设定一致性管理指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取命名skill": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取CHARACTER_NAMING_GUIDE.md（角色命名规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取creative_intent的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取creative_intent.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取characters的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取characters.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取outline的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取outline.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节命名格式": {
+      "check_result": "pass",
+      "reason": "所有文件命名符合规范",
+      "details": "检查了 60 个文件; chapter_09.md: 匹配; chapter_40.md: 匹配; chapter_41.md: 匹配; chapter_60.md: 匹配; chapter_20.md: 匹配; chapter_30.md: 匹配; chapter_27.md: 匹配; chapter_54.md: 匹配; chapter_05.md: 匹配; chapter_14.md: 匹配; chapter_48.md: 匹配; chapter_32.md: 匹配; chapter_56.md: 匹配; chapter_23.md: 匹配; chapter_11.md: 匹配; chapter_01.md: 匹配; chapter_33.md: 匹配; chapter_50.md: 匹配; chapter_29.md: 匹配; chapter_59.md: 匹配; chapter_10.md: 匹配; chapter_17.md: 匹配; chapter_53.md: 匹配; chapter_57.md: 匹配; chapter_44.md: 匹配; chapter_22.md: 匹配; chapter_52.md: 匹配; chapter_02.md: 匹配; chapter_31.md: 匹配; chapter_36.md: 匹配; chapter_03.md: 匹配; chapter_58.md: 匹配; chapter_51.md: 匹配; chapter_35.md: 匹配; chapter_04.md: 匹配; chapter_26.md: 匹配; chapter_08.md: 匹配; chapter_07.md: 匹配; chapter_55.md: 匹配; chapter_28.md: 匹配; chapter_24.md: 匹配; chapter_06.md: 匹配; chapter_43.md: 匹配; chapter_39.md: 匹配; chapter_18.md: 匹配; chapter_42.md: 匹配; chapter_37.md: 匹配; chapter_12.md: 匹配; chapter_15.md: 匹配; chapter_45.md: 匹配; chapter_16.md: 匹配; chapter_38.md: 匹配; chapter_13.md: 匹配; chapter_19.md: 匹配; chapter_47.md: 匹配; chapter_25.md: 匹配; chapter_46.md: 匹配; chapter_21.md: 匹配; chapter_49.md: 匹配; chapter_34.md: 匹配",
+      "description": "章节文件命名必须为chapter_NN.md格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "naming_convention",
+      "is_critical": true
+    },
+    "creative_intent格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "creative_intent.json: 字段完整",
+      "description": "creative_intent.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "characters格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "characters.json: 字段完整",
+      "description": "characters.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "outline格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "outline.json: 字段完整",
+      "description": "outline.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "X轴模式ID格式": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.x_axis_mode_id = B9，符合预期",
+      "description": "X轴模式ID必须匹配^[A-G]\\d{1,2}$格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签枚举": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['重生/穿越', '系统流', '商战权谋']，符合预期",
+      "description": "Y轴标签必须在12种枚举中",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签数量": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['重生/穿越', '系统流', '商战权谋']，符合预期",
+      "description": "Y轴标签数量必须为2-3个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "forbidden_elements存在性": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.forbidden_elements = ['不要长线虐心', '不要BE', '不要误会超过1/3篇幅未解开', '不要第三者感情纠葛', '不要拖延真相揭露', '不要让反派太弱智', '不要忽视竞技专业性']，符合预期",
+      "description": "forbidden_elements必须至少有1个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "配方选择交互": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 2 次",
+      "description": "配方选择阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "写作准备确认": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "写作准备阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "主题一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了60个文件; LLM评估: 从开篇到结尾，核心主题类型始终围绕“重生后保护程漪、弥补遗憾并获得彼此信任/爱、揭露真相实现救赎与圆满人生”推进：前期以“护妻/避免悲剧重演+修复关系”为主线，中期通过调查与揭露推动“洗冤与守护”目标，后期在进入国家队、世锦赛、奥运会等阶段继续以“守护对方与共同实现梦想”的方式延展同一主题，并最终落到“相守一生、传承与圆满”的收束。虽有赛事、职业发展、俱乐部经营、家庭与传承等内容变化，但均服务于同一主线目标与情感救赎内核，未出现从爱情/救赎突然转为无关类型（如商战/修仙/科幻主线替换）的严重主题漂移，因此判定主题一致、主线清晰。",
+      "description": "故事主题一致",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "theme_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "主要角色一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了60个文件; LLM评估: 主角存续性合格。故事从chapter_01到chapter_60始终以苏念与程漪为叙事核心：开篇明确苏念重生并绑定程漪（chapter_01），chapter_02起程漪视角加入，形成双主角结构；随后各章的主要冲突（查明事故真相、阻止器械破坏、选拔赛/世锦赛/奥运、退役后俱乐部与家庭）均由两人推动决策并占据主要叙事视角。中后期虽加入周绛琳、钱茵、国家队教练组、小小等角色，但均作为配角服务于两位主角的主线，不存在>70%长期被配角抢占视角的情况。两位主角也未出现“消失无交代”或“被替换为新叙事中心”的段落；晚年与后代篇章（chapter_39-60）仍围绕两人共同生活、传承与告别展开，chapter_60虽以曾外孙女视角收束，但核心仍是苏念/程漪的人生与精神延续，属于围绕主角的结局视角切换，不构成主角地位丧失。两人核心身份（体操运动员→国家队/冠军→退役教练/俱乐部创始人→家庭主心骨）为同一人物的成长演进，有明确剧情承接，不属于身份断裂。",
+      "description": "主要角色一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "main_character_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设定一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了60个文件; LLM评估: 从已给出的 chapter_01 到 chapter_60 章节对比看，主要角色在性格底色、行为模式与核心动机上前后一致，且阶段性变化均有清晰情境触发与递进铺垫。\n\n1) 苏念的章节间一致性：前期（01-05）即确立“强烈愧疚+强保护欲+教练式理性与执行力”的核心驱动，后续（06-30）始终以‘先确保程漪安全、再追真相’为行动原则：频繁观察、提前排查隐患、在关键节点选择自己承担风险（模拟赛/选拔赛救人、抓现行、报警推进）。即便感情线推进到公开、求婚、婚后与育儿（32-60），她的行为仍延续同一模式：以规划与守护为先、以务实方式解决问题（俱乐部扩张、培养新人、家庭决策），没有出现无原因的“性格反转”或能力/判断力突然失灵。\n\n2) 程漪的章节间一致性：前期（02-04）以“强创伤后戒备、以恨自保、但本质不蠢且会思考”为核心表现；中期（05-14）在发现器械被动手脚、证据逐步出现、苏念多次实际救援后，信任逐步回升并形成同盟，这是由事件驱动的合理转变；后期（15-30）在大赛胜利、真相落地后，从高压求生状态转为更稳定的自信与情感表达（更愿意承认依赖、推进关系公开与婚姻），但仍保持她一贯的“嘴硬、要强、重荣誉、重公平”的底色，并在教练/母亲阶段（34-60）延续为“对下一代严格但温柔、强调勇敢与不放弃”的教育风格，变化呈成长线而非摇摆。\n\n3) 关键关系动力一致：两人关系从敌对到合作到恋人到伴侣的推进，与每个阶段的信息增量（器械证据、评分舞弊、口供、警方介入、系统碎片）同步，角色的态度变化有明确因果链，不存在“上一章极恨、下一章无条件亲密”这类无铺垫跳变。\n\n综上，文本在“同一角色跨章节的性格/行为/动机一致性”维度符合标准，未见明显人设崩坏或无理由反复摇摆。",
+      "description": "人物设定一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_trait_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设计遵循度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了61个文件; LLM评估: 总体matched=true：chapters中两位主角的性格特质、核心动机、背景影响与关系设定均持续符合characters.json，且有充分文本证据。\n\n1) 苏念（protagonist）\n- traits一致：\n  - “隐忍坚韧/愧疚感重/行动派/照顾人细致入微/表面冷淡实则深情”在执行中反复体现。\n  - 证据：chapter_01中反复自责“是我推的你…对不起”并立誓保护；chapter_02在程漪强烈排斥下仍选择“没关系…我有的是时间”（隐忍+坚韧）；chapter_02~08频繁递水毛巾、看伤病、给放松贴（细致照顾）；chapter_14为救程漪冲上去硬接导致背伤（行动派+担当）；多处以克制方式表达爱与守护（外冷内热/深情）。\n- motivation一致：\n  - overt_motivation“弥补遗憾、保护程漪不再受伤、查清真相”贯穿主线（chapter_01立下誓言与系统任务；chapter_04-18调查器械与周绛琳/钱茵；chapter_16-22抓舞弊与报警）；\n  - covert_motivation“渴望被原谅/被需要和爱”亦持续驱动其耐心靠近、承受误解（chapter_02被痛斥仍不退；chapter_11程漪说“我相信你了”时的情绪反应）。\n- background影响一致：\n  - “前世金牌教练”带来的专业性与观察/训练能力在chapter_01-08、20、32等大量体现（动作细节判断、训练计划、人脉与调查手段），并成为其解决问题的核心工具。\n- relationships与核心张力一致：\n  - 与程漪的弧线“重生对立→破冰联手→确认心意”在chapter_01恐惧-80开局、chapter_05结盟、chapter_11信任转正、chapter_26互表心意等节点完整呈现。\n\n2) 程漪（deuteragonist）\n- traits一致：\n  - “骄傲要强/嘴硬心软/天赋异禀/直觉敏锐/外冷内热”高度吻合。\n  - 证据：chapter_02-03对苏念强烈敌意与口头强硬（“离我远点”“我不需要”）但仍会接饮料毛巾、好感度逐步回升（嘴硬心软）；chapter_02平衡木落木“完美落木”、后续高难度表现（天赋异禀）；chapter_04-05对周绛琳的异常反应快速起疑并推动合作（直觉敏锐）；对外冷淡但在chapter_15照顾受伤的苏念、后期多次情感表达（外冷内热）。\n- motivation一致：\n  - overt_motivation“远离苏念自保、证明价值、必要时复仇”在前期强驱动：chapter_02-03持续警惕与试探、明确“复仇计划”；中后期转向“证明自己/夺冠/自保”仍符合“证明价值”的方向。\n  - covert_motivation“想搞清楚苏念为何害她又对她好，渴望苏念清白”在chapter_03开始动摇、chapter_05主动提出合作、chapter_11明确“你不是凶手”得到兑现。\n- misperception_of_other一致：\n  - 设计中“确信苏念推她”在chapter_02明确复述监控与周绛琳说辞，并驱动前期对立与试探，直到证据逐步出现才改变（这属于剧情推进，但其误解状态本身与设计吻合）。\n\n3) 配角与关系设定未违背\n- 周绛琳“表面姐妹情深、实则嫉妒算计”在chapter_09显露与钱茵通话策划、chapter_18口供承认等，符合supporting_characters描述。\n- 钱茵“幕后推手、以关心者面目出现”在省选拔赛评分舞弊（chapter_16-17）与后续持续布局（chapter_21-22）符合其“幕后黑手”定位。\n- 顾衍“正直热心、情报支持、兄妹情”在后续出现为友好支援与旁观祝福（chapter_46），未出现恋爱竞争或人设反转。\n\n结论：主角核心traits（至少2-3项关键点）在各章节均有持续体现；动机与背景持续驱动其行为；两人关系基调按设计展开且未出现性格方向相反或核心动机缺失的严重偏离，因此matched=true。",
+      "description": "实际表现符合设计文档",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构性逻辑硬伤": {
+      "check_result": "fail",
+      "reason": "发现1处structural类型逻辑问题: 同一套“世锦赛/大赛”叙事出现相互冲突的“最高分/历史最高分”设定：chapter_26 写程漪平衡木决赛15.9为“本届世锦赛最高分/平衡木决赛最高分”；chapter_30 又写奥运平衡木决赛15.9为“历史最高分”；后续 chapter_35 又写平衡木16.0为“历史最高分”。若15.9已是历史最高，则16.0仍可更高，但必须明确15.9在不同赛事下是“当届最高/奥运最高/历史最高”的口径",
+      "details": "过滤条件: fixability=structural; 总flaws=5, 命中=1",
+      "flaw_count": 1,
+      "flaws": [
+        {
+          "type": "factual_consistency",
+          "severity": "critical",
+          "fixability": "structural",
+          "location": "chapter_24 → chapter_26 → chapter_30",
+          "description": "同一套“世锦赛/大赛”叙事出现相互冲突的“最高分/历史最高分”设定：chapter_26 写程漪平衡木决赛15.9为“本届世锦赛最高分/平衡木决赛最高分”；chapter_30 又写奥运平衡木决赛15.9为“历史最高分”；后续 chapter_35 又写平衡木16.0为“历史最高分”。若15.9已是历史最高，则16.0仍可更高，但必须明确15.9在不同赛事下是“当届最高/奥运最高/历史最高”的口径差异；目前用词互斥且会让读者判定为客观事实冲突。"
+        }
+      ],
+      "description": "无结构性逻辑硬伤",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_logic_defect",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "可修复逻辑瑕疵": {
+      "check_result": "fail",
+      "reason": "发现4处fixable类型逻辑问题: 好感度数值前后矛盾：chapter_14 末尾显示好感度从+22到+35；chapter_15 开头突然出现“好感度：+50→+55”，中间缺少从+35跳到+50的解释或对应事件。; 奖牌事实不一致：chapter_60 写“苏念…奥运会全能铜牌”；但 chapter_30 明确写苏念奥运全能决赛为银牌（59.1第二），chapter_31 也写“苏念的全能银牌”。同一赛事奖牌从银变铜，属于客观事实矛盾。; 关键时间线/年龄链条存在断裂与自洽性风险：chapter_47 说“重生后的第二十年、结婚第十五年，小小15岁”；chapter_49 又说“小小18岁”；chapter_55 写苏念60/程漪59且俱乐部已30年并退休；chapter_58 苏念70；chapter_59 十年后苏念80/程漪79；chapter_60 写两人(1990-2080)/(1991-2080)。这些节点总体可勉强拼接; 系统能力边界/证据体系表述不稳定：chapter_12 写用“动作分析眼记住钥匙形状→配钥匙复制”，属于现实可行但风险极高；chapter_14/22 又强调“真相碎片并非实际录像不可作证”，但后续警方定罪过程主要依赖现实视频与口供，系统碎片仅作线索，这点总体可自洽。问题在于系统在 chapter_10 提供“0.3mm位移”级别实时检测，而 earlier 又宣称‘无法直接提供答案’，对“能否直",
+      "details": "过滤条件: fixability=fixable; 总flaws=5, 命中=4",
+      "flaw_count": 4,
+      "flaws": [
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_15 末尾/ chapter_14 → chapter_15",
+          "description": "好感度数值前后矛盾：chapter_14 末尾显示好感度从+22到+35；chapter_15 开头突然出现“好感度：+50→+55”，中间缺少从+35跳到+50的解释或对应事件。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_60 生平简介 vs chapter_26/chapter_30/chapter_31",
+          "description": "奖牌事实不一致：chapter_60 写“苏念…奥运会全能铜牌”；但 chapter_30 明确写苏念奥运全能决赛为银牌（59.1第二），chapter_31 也写“苏念的全能银牌”。同一赛事奖牌从银变铜，属于客观事实矛盾。"
+        },
+        {
+          "type": "spatiotemporal_continuity",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_47 → chapter_49 → chapter_55 → chapter_58 → chapter_59 → chapter_60",
+          "description": "关键时间线/年龄链条存在断裂与自洽性风险：chapter_47 说“重生后的第二十年、结婚第十五年，小小15岁”；chapter_49 又说“小小18岁”；chapter_55 写苏念60/程漪59且俱乐部已30年并退休；chapter_58 苏念70；chapter_59 十年后苏念80/程漪79；chapter_60 写两人(1990-2080)/(1991-2080)。这些节点总体可勉强拼接，但“第二十年/结婚十五年/小小十五岁”与更早结婚节点（chapter_38婚礼发生在俱乐部稳定运营一年后）之间缺少明确年份锚点，导致读者无法稳定推出‘结婚年份—领养年份—小小出生年/领养年—俱乐部创办年’的客观时间线。属于跨章时间锚缺失造成的时序连续性硬伤风险。"
+        },
+        {
+          "type": "worldbuilding_coherence",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_12（复制钥匙）→ chapter_22（警方取证）→ chapter_53（系统总结）",
+          "description": "系统能力边界/证据体系表述不稳定：chapter_12 写用“动作分析眼记住钥匙形状→配钥匙复制”，属于现实可行但风险极高；chapter_14/22 又强调“真相碎片并非实际录像不可作证”，但后续警方定罪过程主要依赖现实视频与口供，系统碎片仅作线索，这点总体可自洽。问题在于系统在 chapter_10 提供“0.3mm位移”级别实时检测，而 earlier 又宣称‘无法直接提供答案’，对“能否直接告警到具体部件异常”的规则边界缺少统一解释，容易被读者理解为规则A（不直接给答案）与规则B（直接给精确异常）并存。"
+        }
+      ],
+      "description": "可修复逻辑瑕疵数量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "fixable_logic_inconsistency",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语言纯净性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了60个文件; LLM评估: 通篇叙事语言以中文为主，未出现无意义的中英/日文混杂。少量英文仅出现在角色对话场景（如“Hi”“Good luck”），属于情节合理使用；其余如“Lv1”“S+”“DNA/AI”类并未大量出现，即便出现也可视作系统界面/约定俗成术语。未发现大段外语无翻译的非对话内容，整体语言使用纯净，符合业务标准。",
+      "description": "无不合理的多语言混用",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "language_purity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "creative_intent文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/creative_intent.json 存在",
+      "description": "creative_intent.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "characters文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/characters.json 存在",
+      "description": "characters.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "outline文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/outline.json 存在",
+      "description": "outline.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "chapters目录存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/chapters/ 存在",
+      "description": "chapters/目录必须存在且有章节文件",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "情节推进": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了60个文件; LLM评估: 合格（matched:true）。可见章节（1-60章）整体具备持续且明确的情节推进，故事事件密度高、场景与时间推进明显，角色有大量具体行动而非停留在对话/独白。\n\n1) 故事事件数量与密度（远超2-3个）：\n- 关键事件链条清晰：重生与系统激活→首次相遇引发高恐惧值→训练中多次“器械被动手脚”事件→发现并修复螺丝隐患→表演赛现场再次松动并紧急改动作→建立同盟调查→潜入档案室取证→模拟赛/选拔赛器械断裂救人→省选拔赛裁判舞弊当场举证→周绛琳口供录音→国家队内鬼老刘破坏器械取证→警方立案钱茵被刑拘/起诉→世锦赛/奥运会夺冠→退役开俱乐部、扩张、培养冠军、家庭传承、系统结算与告别等。\n- 单章层面也普遍包含2个以上事件（如第10-11章表演赛：器械异常提示→临场更改动作→赛事暂停检查→更换器械继续比→识别钱茵身份→夜间复盘；第16-17章选拔赛：更换被破坏平衡木→程漪被压分→录像举证→调查组介入→改判并处罚等）。\n\n2) 内容占比（事件≥40%，对话/内心独白<70%）：\n- 虽有情感与心理描写（重生后的愧疚、恐惧、信任建立、恋爱推进），但大量篇幅用于“行动与结果”：检查器械、追踪嫌疑人、合练托举、暗访茶楼、潜入档案室、赛场应急处置、公开举证、警方流程、训练备战与比赛结果、事业扩张与家庭事件。\n- 对话多为推动事件的功能性对话（协作、盘问、证据陈述、比赛指令），并非单纯“站着聊天”。\n\n3) 时间/空间推进明确：\n- 时间线从2019省队起步，经历表演赛→省选拔赛→入国家队→世锦赛→奥运会→退役创业→子女成长→传承到下一代，跨越多年（甚至数十年）。\n- 场景频繁变化：宿舍/训练馆/医务室/天台/茶楼/档案室/赛场/国家队基地/警局/国外比赛地/家庭与俱乐部等。\n\n4) 角色具体行动与因果链：\n- 主角行动明确且持续：保护（检查、修复、接住、布控）、调查（跟踪、拍照、取档案、录音）、反制（赛场举证、报警）、成长（训练提升、带新人、创业扩张）。\n- 事件之间因果关联强：器械被动手脚→产生怀疑与调查→发现钱茵/周绛琳链条→赛场舞弊曝光→进一步追到国家队内鬼→刑事立案→完成复仇/正名→转入竞技目标（世锦赛/奥运）→再转入人生阶段（退役与传承）。\n\n综合来看，不仅满足“至少2-3个具体事件、事件占比≥40%、有场景/时间推进、角色有实质行动、事件逻辑推动故事发展”等合格条件，且属于情节推进强、事件链完整的类型。",
+      "description": "章节情节推进质量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "plot_progression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "完整叙事文本": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了60个文件; LLM评估: 所给60个章节内容均为连贯的小说正文形式：有明确场景描写（宿舍/训练馆/比赛场馆/城市与旅行等）、人物动作与心理、完整对话推进（如苏念与程漪的冲突—合作—和解—恋爱—婚姻—家庭线），并包含连续叙事的事件发展与场景切换。文本中虽出现系统面板/任务提示等“设定展示”，但属于故事内叙事元素（角色可感知的系统界面），不属于创作规划元数据。未发现“核心事件/情感基调/关键场景/本章悬念/字数预估”等大纲式结构标题，也未使用要点列举或流程箭头进行事件罗列。因此符合“完整小说正文”标准。",
+      "description": "章节内容必须是完整正文而非大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "full_narrative_content",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "反复结局": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了60个文件; LLM评估: 共60个文件，最后文件为chapter_60.md。通读已给出的章节内容后：\n- chapter_01.md～chapter_59.md 仅出现“【第X章完】”“【第十四章完·第一幕终】”等章节/分幕结束标记，均属于业务标准明确要求忽略的结构标记，不构成“全书级结局标记”。\n- 全书级结局标记仅在最后文件chapter_60.md出现：包含“【全文完】”“【后记】”以及结尾“——完——”。\n- 未发现任何非最后文件出现“全文完/全书完/THE END/后记(独立段落标题)/尾声/终章/(完)/【完】/完结”等全书级结局标记。\n因此不存在“中途全文完后又续写”或“多次非末章收尾”的反复结局问题，判定合格。",
+      "description": "不能出现多次结局标记（全文完/全书完/后记）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "repeated_endings",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "workspace文件规范": {
+      "check_result": "pass",
+      "reason": "workspace中所有文件均在白名单内",
+      "details": "白名单: ['creative_intent.json', 'characters.json', 'outline.json', 'writing_log.md', 'chapters/', '.hitl_context.json']",
+      "description": "workspace中不能有白名单之外的文件",
+      "check_type": "file_whitelist_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "workspace_file_compliance",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "叙事调性匹配": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了61个文件; LLM评估: 题材与应有调性：creative_intent.json标注reaction_strength=↗，配方为“重生+系统+竞技+心理悬疑”，且用户偏好“甜爽向、误会快速解开、联手搞事业”。因此叙事调性应偏轻快爽感、节奏明快、情绪表达较直接，竞技段落要有力量感与清晰动作信息，同时悬疑线保持一定紧张推进但不宜过度冷硬压抑。\n\n实际章节文笔特征与证据：整体叙事以直给情绪+快节奏推进为主，夹杂系统面板与任务驱动，读感更接近“甜爽事业向+轻悬疑”，与↗匹配。\n1) 甜爽/撒糖的轻快语气与互动占主导：大量斗嘴、暧昧与情感直球，语气轻松，符合甜爽言情基调。例如第6章的日常吐槽“你是不是装了定位在我身上？……关心队友。‘滚。’”；第8章直接告白“因为我喜欢你”；第26章在夺冠后“‘我喜欢你。’……‘嘴唇相贴。温柔、甜蜜、漫长。’”——这些都是明显的甜宠/撒糖表达方式。\n2) 节奏明快、任务/节点清晰，符合“事业线+爽感”：系统任务推动情节快速进入目标与对抗，叙述偏“目标—行动—结果”的爽文结构。例如第1章系统面板“【新手任务】……确保程漪无任何意外受伤”；第16-17章比赛现场直接“我有证据”并迅速进入调查、改判与处罚公告，读感偏打脸爽推进，而非悬疑慢烧。\n3) 竞技表达具备一定力度与信息性：多处使用动作名与得分、训练安排、比赛流程，叙述干脆，满足“竞技”题材的基本画风。例如第2章“后空翻720°……完美落木”；第16章对比打分、录像举证；后续世锦赛/奥运章节大量“计分板：15.6/15.9”等。\n4) 悬疑线的写法偏“轻悬疑+阴谋揭露”，不是冷硬烧脑：有紧张点（螺丝松动、评分舞弊、抓内鬼），但整体语气仍以情感与爽点为核心，不走克制压迫风。例如第10章突发提示“【警告！检测到平衡木支架异常！】”后立刻转为行动与化解，紧张不过度渲染恐怖氛围；第17章公开对峙、证据链推进，更像爽文揭黑幕而非高压推理。\n\n是否存在调性错位：前期（第1-3章）确有较多沉重自责与泪点描写（如第1章“像是有人把手伸进去，攥住了她的心脏”“泪水无声地滑落”），但属于开局“赎罪/误会”设定下的必要铺垫，且很快转向合作、打脸与甜爽；整体60章主调长期保持在“轻快甜爽+事业升级”，并未出现把竞技/悬疑写成严肃文学或长期虐心压抑的情况。\n\n结论：文本整体“闭眼读”的体感更接近甜爽事业向重生文（带系统与轻悬疑），与reaction_strength=↗的应有叙事调性基本一致，matched=true。",
+      "description": "文笔风格必须与题材类型匹配",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_tone_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "后期章节跑偏": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了60个文件; LLM评估: 不符合标准：后期章节（chapter_60.md）出现明显跑偏的非正文内容——在“【全文完】”之后紧接“【后记】”，内容为作者视角的总结、主题阐释与对读者的寄语（如“这是一个关于重生的故事…愿每一个读到这个故事的人…”），属于作者感想/后记，不是小说叙事正文，按规则应判定为跑偏。章节长度方面：从已展示的后1/3章节看，章节仍维持正常叙事篇幅，没有出现明显‘几十到几百字’的敷衍式极短章节或长度异常萎缩；但只要出现上述跑偏内容即判不合格，因此matched=false。",
+      "description": "后期章节不能跑偏写非正文内容（作者感想、读者互动、番外预告等）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "late_stage_digression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "writing_log文件创建": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/writing_log.md 存在",
+      "description": "必须创建writing_log.md记录创作进度",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_creation",
+      "is_critical": true
+    },
+    "writing_log文件读取": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 2 次",
+      "description": "必须读取writing_log.md了解前文内容",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_usage",
+      "is_critical": true
+    },
+    "大纲执行忠实度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了61个文件; LLM评估: 整体走向（HE、世锦赛夺冠、双向告白）与大纲act_three目标大体一致，但大纲要求的Ch15-42“联手与追查”被大幅压缩并提前结案，导致第二幕后半段及第三幕前半段的大量关键章节事件未落地（尤其Ch31/36/40/42等）。此外，实际Ch43-60虽覆盖了“前世真相/收网/夺冠/告白”等主题元素，但章节编号对应事件严重错位，且后半大量扩写到婚后与晚年传承，属于在大纲未规划范围内的长篇扩展；核心问题是大纲中间与后半关键章节未被按规划实现，构成严重偏离。",
+      "description": "实际章节内容必须忠实于自己设计的大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_execution_fidelity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色语言辨识度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了60个文件; LLM评估: 整体对话存在明显同质化：1）核心角色（苏念、程漪）在关键情绪场景和日常交流中大量使用同一套“温柔坚定/安抚承诺体”话术，句式多为短句承诺、情感表态与‘我会/我等/别怕’的重复，遮住名字后辨识度不足；2）多位配角（如林小艺、张姐、陈指导、沈教练等）台词功能性较强，常见为推进信息/表态支持，缺少职业行话或个人化措辞与节奏，容易与其他配角互换；3）虽有少量差异（程漪偶尔‘嘴硬’如“谁要你接/滚/神经病”，苏念偏“温柔解释”），但不足以达到“遮住角色名仍能稳定识别说话者”的优秀标准，因此不符合本检查项的优秀要求。",
+      "description": "不同角色对话必须有可辨识的语言风格差异",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "dialogue_character_distinction",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "叙事密度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了60个文件; LLM评估: 抽样阅读前（1-3章）、中（14-18章）、后（58-60章）可见整体叙事密度高，具备明确场景、动作细节与心理层次，且关键节点多以场景化推进，不是对话骨架或流水账。\n\n1）叙事密度：场景与环境细节充足。\n- 第1章开场即用宿舍环境与感官细节建立画面：如“床垫硬邦邦的…空气里弥漫着洗衣粉和汗水混合的味道”“晨光透过廉价的窗帘…灰尘”“训练馆的大门近在眼前”等，空间信息、光线、气味、声音（楼下喊号）共同构成场景层次。\n- 第26章赛场段落同样有清晰的赛场流程与动作呈现（助跑、踏板、腾空、转体、落地等），并穿插观众反应与计分板信息，形成“事件+环境+反馈”的多层叙事。\n\n2）心理活动：内心动机与情绪推进充分，且贯穿主线。\n- 第2章程漪的恨与动摇不是一句话带过，而是有完整心理链条：从“恨是唯一能支撑她活下去的东西”到因苏念的真实反应产生裂缝。\n- 第48章“保留记忆/封存记忆”的抉择有长段心理辩论，体现人物价值观的最终落点（接受痛苦、超越痛苦）。\n\n3）动作细节与Show：关键情绪多通过具体动作/场面承载，而非纯Tell。\n- 第3章高低杠“故意失误”到“被接住”的呈现，是用动作与身体反应传达冲击与动摇：“一道身影闪电般冲过来，稳稳接住了她…对方的手臂紧紧环着她的腰，脸色白得吓人”。恐惧/关切通过行为与面色呈现。\n- 第14章“螺丝断裂—平衡木晃动—扑救摔垫”整段是高密度动作场景，紧张感主要靠事件与动作而非抽象概念。\n\n4）Show vs Tell整体为“混合”：优点是多数高潮节点能落到可视化场景；不足是部分情感宣言仍偏Tell。\n- 作品中存在较多直接陈述型句式与总结句（如多次出现“我会保护你”“我喜欢你”“我不想再看到你受伤”“我等你”等），在第8章告白、第17章庆功宴、第26章表白等段落较集中，属于典型的情感直白表达。\n- 但这些Tell通常被前置的行动与场景支撑（救人、查证、对抗、夺冠、家庭生活），因此不会退化为“议论文体”或“纯口号”，整体仍维持小说叙事的画面感。\n\n5）低密度退化检测：未见后期明显坍塌为纯总结或清单。\n- 后期（58-60章）确实出现时间跨度加大与概括性增强，但仍以具体场景组织（生日聚会、相册、阳台对话、俱乐部荣誉墙与小星训练），不属于“事件流水账/人物摘要列表”的纯罗列。\n\n综合判断：多数章节（明显>50%）具备丰富叙事层次，关键情感段落虽有Tell，但整体仍以场景与行动推动为主，达到“优秀”门槛。",
+      "description": "章节叙事应有足够的场景描写、感官细节和心理活动，情感传达以Show为主",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_density",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "智斗逻辑合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了60个文件; LLM评估: 适用：故事核心包含悬疑/智斗/调查真相与对抗反派（器械破坏、嫁祸、评分舞弊、抓现行与取证）。\n\n1) “谁是前世事故真凶”推理链成立：\n- 线索铺设：程漪记忆里“螺丝被动过手脚+监控里苏念伸手”；苏念在现世发现平衡木螺丝被人为拧松（ch4），并指出“非自然松动”的工具痕迹（ch5）。\n- 进一步验证：周绛琳提到协会时的慌乱、电话联系人“钱姨”（ch4-6）→建立“周绛琳-协会官员”关联；表演赛再次出现同类螺丝异常（ch10）→证明有人持续作案且并非偶然。\n- 档案证据：旧器械检查记录出现“复核人：钱茵”及不合理时间空档（ch12）→说明钱茵介入并可能掩盖问题。\n- 口供闭环：周绛琳当面承认钱茵指使、提供腐蚀液体、前世同法（ch18）→与前述“螺丝/器械破坏”模式一致，形成从动机（上位）→手段（破坏器械/掩盖）→结果（程漪受害、苏念背锅）的完整链条。\n\n2) “评分舞弊”智斗链条成立（ch16-17）：\n- 现象：程漪近乎满分表现却被打14.2，而周绛琳表现更差却得14.7。\n- 合理应对：苏念提前录像保全；当场提出质疑并出示“私会照片”证明利益关联；其他裁判佐证“钱茵强行压分”；调查组调取录像/监控后改判并处分。证据从“结果异常”→“程序质疑”→“利益关系证明”→“第三方核验”闭合，没有跳步。\n\n3) “抓器械破坏现行/报警”因果链成立（ch21-22）：\n- 通过真相追踪锁定老刘夜间进入器材室并动螺丝→偷拍视频→立即上报教练组→老刘被带走→警方介入→多证据汇总（选拔赛录像、口供录音、作案视频）→刑拘钱茵。行动与证据推进有明确因果，不是‘开挂一句话定罪’。\n\n4) 对手不降智、风险与反制合理：\n- 反派并非“自曝式配合”，而是多次更换手段（省队器械→评委压分→国家队内鬼），符合“被揭露后升级手段”的对抗逻辑；主角也不是纯猜，而是持续通过检查、监视、取证、第三方审查来推进。\n\n需要注意但不构成崩坏的点：系统提供“真相碎片”属于外挂信息，但文本明确标注“非实际录像不可直接作证”，并且后续用可外部验证的证据（现行偷拍视频、口供、监控、裁判证言）完成闭环，因此推理链仍自洽。\n\n综上，核心谜题/智斗的线索-推理-结论链条完整且因果合理，判定 matched=true。",
+      "description": "谜题/智斗的推理逻辑必须自洽",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "puzzle_logic_validity",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "题材契合度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了61个文件; LLM评估: recipe\":\"冒险事业+复得（B9+G35）+重生/系统流/商战权谋\",\"reason\":\"整体叙事完成度较高（双重生错位→快速结盟→联手夺冠与追凶→事业线长期推进），竞技细节与系统工具链（动作分析/真相追踪/好感度等）也形成了连续可用的机制，因此在‘重生+系统’层面有一定精致度。但按本项‘题材特征精致+标签化学反应’的优秀标准，核心短板在于Y轴标签融合与潜力开发明显不足，导致化学反应偏弱，更多是并列叠加：\n1) 商战权谋标签基本未被真正兑现：文本中的“国家队内部势力/选拔黑幕/协会权力运作”更多停留在单一反派钱茵的徇私舞弊与破坏器械上，缺少多方势力的攻守转换、利益交换、信息战与制度博弈（例如媒体、公关、纪检、协会内部派系、资源分配、选拔名额谈判等）。解决路径也主要依赖‘抓现行+报警’，博弈结构较直线，难称权谋/商战的“来有回、策略环扣”。\n2) 系统流与权谋线缺少交叉互动：系统的“真相碎片/追踪/技能点”大多用于预警与证据收集，推动的是‘抓坏人’的功能性流程；但没有把系统机制转化为更复杂的权力博弈手段（例如任务奖励带来的资源/人脉如何在选拔规则、评分体系、队内政治中形成反制链条），因此两条标签各做各的，化学反应有限。\n3) 配方独特潜力未充分挖掘：开篇设定的‘记忆错位/一个赎罪一个复仇/对方恐惧’很强，但中段以后快速转为稳定甜爽事业线，后续冲突主要外置为反派破坏器械与压分，心理悬疑与错位记忆的持续推演、证据链的层层反转、双方记忆差异对行动决策的复杂影响被弱化，导致“竞技+心理悬疑”的精致度在后段趋于套路化升级打怪。\n4) 反派与阴谋层级偏单薄：核心矛盾几乎由钱茵/周绛琳两点支撑，且作案手法重复（螺丝/腐蚀/评分），缺少递进式规则升级与更聪明的对抗（例如反派反制证据、制造舆论、利用制度漏洞反咬、让主角在合规与胜利间取舍），因此权谋向的深度不够。\n结论：故事在重生+系统+竞技甜爽方面‘做到了’，但“商战权谋”与“心理悬疑”的深度融合不足，化学反应没有达到优秀标准，因此 matched=false。",
+      "description": "题材特征精致度和X-Y轴化学反应效果",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "genre_fit",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "剧情节奏合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了60个文件; LLM评估: 整体起承转合清晰：前期用‘重生+误会’迅速制造高压与目标，紧接着以试探-救援-结盟形成波浪式起伏；中段把‘器械暗害’从隐患升级到公开舞弊，在省选拔赛集中爆发并给出强回报，高潮位置合理且铺垫-回报比良好；随后有明显的情绪回落段（进国家队后的训练/日常/关系确认）作为喘息，再把对抗升级到国家队内鬼与司法处理，形成第二轮更高强度的高潮并完成核心矛盾的阶段性收束。后半段进入‘成就与人生篇章’属于主题型收尾：事件强度不再以悬疑对抗为主，而以比赛/求婚/家庭/传承等阶段性节点提供连续的小高潮，整体情绪维持高位但每个阶段之间都有过渡（训练日常、旅行、育儿、事业扩张），不突兀。虽然后30%-40%存在“持续高光里程碑较密集、低谷较少”的倾向，但因为每次高点间插入了生活/成长的缓冲段，且主冲突已解决转为人生叙事，读者体验仍是顺滑递进而非节奏失控，因此判定达标。",
+      "description": "高潮低谷分布合理、情绪曲线有层次感",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "pacing_rationality_advanced",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "钩子设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了60个文件; LLM评估: 整体符合优秀钩子标准：1）关键转折处钩子密集且具体，有明确的信息差（如‘记忆可能存在偏差’→真相拼图、‘钱姨’→钱主任身份落地、器械螺丝位移→当场改动作/暂停），读者知道发生了什么但不知道幕后是谁/如何反制；2）钩子与主线强关联（保护程漪、查明事故真相、对抗钱茵/周绛琳），不是泛泛“更大风暴”；3）钩子类型多样（反转、行动两难、证据链推进、情感关系推进、阶段切幕），不属于单一模板重复；4）章节间连续性强，几乎每章末都把下一章的核心问题/冲突明确抛出（例如表演赛异常→锁定钱茵→暗访档案→真相碎片→省选拔赛评分舞弊→国家队内鬼→报警与审判→系统告别），能稳定驱动追读。少数后期进入‘圆满/余生’阶段的章节更偏情绪收束，但仍以系统“告别/最终选择”等具体议题维持悬念，未出现连续多章完全无钩子的情况。",
+      "description": "关键转折处有有效的悬念钩子设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "hook_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "意象系统": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了60个文件; LLM评估: 文本具备清晰的意象系统：1）存在至少一个贯穿全文且高频反复出现的核心具象元素“平衡木/螺丝/支架”，并在剧情推进中从‘日常器械’逐步变奏为‘阴谋现场’‘证据载体’‘信任装置’‘冠军舞台’‘传承媒介’，形成与主线并行的隐性叙事线；2）辅助意象“接住/托举/护住”把抽象情感（愧疚、保护、信任）转译为可视动作，并在关键节点（救人、合练、赛场拥抱、养育）不断升级其意义；3）“星辰/星空”从情感私域背景，过渡到公共事业符号与代际延续象征，完成从恋爱到传承的主题扩展。整体比喻/象征大多与体操、伤害预谋、信任建构和传承主题强绑定，不属于可随意替换的通用修辞，因此判定 matched=true。",
+      "description": "核心意象贯穿全文并发生意义变奏",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "imagery_system",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "情感弧线层次": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了60个文件; LLM评估: 符合优秀标准：双主角情感线均呈多层递进，且每次关键转折均由明确事件驱动（重生/系统任务、对方恐惧与指控、器械被害证据、合作同盟、赛场险情救援、评分舞弊揭露与刑案推进、真相碎片与前世救人反转、夺冠与表白、系统终局选择）。情感层之间存在方向感：从自责与被误解→以行动验证与建立信任→共同对抗外部阴谋→真相落地后的救赎与稳定亲密，而非随机波动或同义词堆叠。",
+      "description": "主角情感发展有多层递进变化",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_gradient",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语义重复检测": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了60个文件; LLM评估: 文本整体可读性与剧情连贯性较好，但在多个阶段出现≥3处“语义层面大量重复且新增信息有限”的情况，触发P6阈值：1）早期多章重复同一誓言/动机作为情绪落点（同义反复/结论反刍）；2）中期对‘螺丝被动手脚→要查真凶’的认知被连续多次重新确认，除少量证据点外结构性重复明显；3）世锦赛与奥运等大赛段落采用高度同构的情境模板（资格赛稳定+决赛夺冠+相拥升旗），换名换分但叙事结构重复；4）后期传承/圆满主题以相似段落多次总结回环，形成信息衰减。综合判断为严重语义重复，matched=false。",
+      "description": "不能出现大量语义级别的内容重复（P6级）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "semantic_redundancy",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构功能性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了61个文件; LLM评估: 文本并非机械按时间线堆事件，而是用清晰的“阶段结构”组织意义：前段以双视角制造不可靠认知与悬疑张力；中段以表演赛/选拔赛的两次‘器械异常’形成结构性重复与升级，服务‘真相逼近’主题；真凶落网后结构转向‘事业与关系的长期兑现’，并用系统的‘最终结算/告别’把超自然机制收束成主题象征（选择保留记忆=不逃避痛苦、超越痛苦）；最终第60章以曾外孙女进入俱乐部、观看荣誉墙的代际视角完成最大闭合，把开篇的平衡木悲剧起点转化为传承终点，实现“结构即意义”。若仅删改或调换关键节点（如表演赛、选拔赛、系统告别、代际尾声），主题表达会明显受损，说明结构具有功能性。",
+      "description": "叙事结构服务于主题表达（短篇尤重）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色命名质量": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了61个文件; LLM评估: 整体命名以“顺口文雅的通用美名”为主，核心主角“苏念/程漪”缺少能与体操竞技、重生赎罪、记忆错位、命运翻盘形成强共振的独占性设计；同时配角出现苏/沈/顾等高频‘高级感’姓氏聚集，且如“崇光”带强正向标签，容易落入直白寓意。虽有“周绛琳”这类三字名在音形上稍有区分，但整组仍偏同一审美区间（文雅/清亮），缺少更强的差异化与文化典故钩子，因此未达“优秀（matched=true）”标准。",
+      "description": "角色命名有文化深度、辨识度和角色-命运共振",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_naming_quality",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "中篇字数": {
+      "check_result": "fail",
+      "reason": "字数不符合要求",
+      "details": "总字数 114175 不在范围 [135000, 165000] 内; 共60个文件（按章节顺序排列）: chapter_01.md, chapter_02.md, chapter_03.md, chapter_04.md, chapter_05.md, chapter_06.md, chapter_07.md, chapter_08.md, chapter_09.md, chapter_10.md, chapter_11.md, chapter_12.md, chapter_13.md, chapter_14.md, chapter_15.md, chapter_16.md, chapter_17.md, chapter_18.md, chapter_19.md, chapter_20.md, chapter_21.md, chapter_22.md, chapter_23.md, chapter_24.md, chapter_25.md, chapter_26.md, chapter_27.md, chapter_28.md, chapter_29.md, chapter_30.md, chapter_31.md, chapter_32.md, chapter_33.md, chapter_34.md, chapter_35.md, chapter_36.md, chapter_37.md, chapter_38.md, chapter_39.md, chapter_40.md, chapter_41.md, chapter_42.md, chapter_43.md, chapter_44.md, chapter_45.md, chapter_46.md, chapter_47.md, chapter_48.md, chapter_49.md, chapter_50.md, chapter_51.md, chapter_52.md, chapter_53.md, chapter_54.md, chapter_55.md, chapter_56.md, chapter_57.md, chapter_58.md, chapter_59.md, chapter_60.md; 最后一个文件是 chapter_60.md",
+      "description": "总字数应在135000-165000之间（基于query要求150000，±10%浮动）",
+      "check_type": "semantic_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "range_constraint",
+      "is_critical": true
+    },
+    "情感交付甜爽": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了60个文件; LLM评估: 整体情感基调符合“甜爽向”（主角顺利、感情甜蜜、氛围轻松愉快），且兑现了强反应配方承诺：\n1) 甜爽主导且持续上扬：从第7-8章起关系由敌对转向信任与暧昧（托举训练、互相接住、告白“我喜欢你”】【第八章】），之后好感度持续转正并快速提升（第11章-第14章信任与合作确立），甜蜜互动、投喂、日常陪伴（第13章）、并肩夺冠与官宣恋情、求婚、婚礼、家庭生活贯穿后半部（第26章亲吻确认关系；第32章公开恋情+求婚成功；第38-40章婚礼与养育孩子）。\n2) 主角“爽点”明显：核心矛盾（被陷害、器械破坏、评分舞弊）都被主角凭能力/系统/证据链迅速反制，且结果是强HE走向——抓现行、改判夺冠、真凶入狱（第16-18章当众翻盘；第22章钱茵被刑拘起诉），之后竞技线一路夺冠（世锦赛双金【第26章】、奥运平衡木金牌【第30章】），事业线开俱乐部、桃李满天下（第36章后）。\n3) 虐点存在但为“调味”且被快速修复：前世瘫痪、误会与仇恨（第1-3章）属于沉重背景，但现世主线并未长期陷入虐心拉扯：误会很快松动并转为同盟（第5章），之后以互信、守护和成功为主。关键危机多以“差点受伤但被接住/及时阻止”化解（第10章、14章），不会持续压抑。\n4) 结局明确HE且氛围轻松温暖：两人恋爱—结婚—领养孩子—事业传承—家庭圆满（第38-60章），最终同一天安详离世并留下精神传承（第60章），整体阅读体验偏治愈与满足，不是BE或开放式悲剧。\n因此，内容整体符合甜爽向标准，甜蜜/轻松/成功段落占主导，冲突虽有但不残酷且迅速转向正反馈，结局为强HE。",
+      "description": "实际内容必须是甜爽向",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取感情线写作指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/ROMANCE_WRITING_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "涉及感情线时必须读取ROMANCE_WRITING_GUIDE.md（感情线写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": false
+    },
+    "角色关系设计张力": {
+      "check_result": "fail",
+      "reason": "LLM调用失败",
+      "details": "无法评估内容: litellm.AuthenticationError: AuthenticationError: OpenAIException - [sk-3AY***VVF] 该令牌额度已用尽 !token.UnlimitedQuota && token.RemainQuota = -9221 (request id: 20260226145807446272140wv5LrYQB)",
+      "description": "角色关系设计具有叙事张力，能驱动剧情",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_relationship_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色动机设计深度": {
+      "check_result": "fail",
+      "reason": "LLM调用失败",
+      "details": "无法评估内容: litellm.AuthenticationError: AuthenticationError: OpenAIException - [sk-3AY***VVF] 该令牌额度已用尽 !token.UnlimitedQuota && token.RemainQuota = -9221 (request id: 20260226152851929363457SC1UP72K)",
+      "description": "角色动机设计有深度，有表层和深层动机区分",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_motivation_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色成长弧线设计": {
+      "check_result": "fail",
+      "reason": "LLM调用失败",
+      "details": "无法评估内容: litellm.AuthenticationError: AuthenticationError: OpenAIException - [sk-3AY***VVF] 该令牌额度已用尽 !token.UnlimitedQuota && token.RemainQuota = -9221 (request id: 20260226155938460314934YGGoirC4)",
+      "description": "主角有清晰的成长/变化弧线设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_arc_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "outline结构完整性": {
+      "check_result": "fail",
+      "reason": "LLM调用失败",
+      "details": "无法评估内容: litellm.AuthenticationError: AuthenticationError: OpenAIException - [sk-3AY***VVF] 该令牌额度已用尽 !token.UnlimitedQuota && token.RemainQuota = -9221 (request id: 20260226163020675956115cPZbHGB1)",
+      "description": "大纲结构完整，信息密度足以指导写作",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_structure_completeness",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "outline叙事张力": {
+      "check_result": "fail",
+      "reason": "LLM调用失败",
+      "details": "无法评估内容: litellm.AuthenticationError: AuthenticationError: OpenAIException - [sk-3AY***VVF] 该令牌额度已用尽 !token.UnlimitedQuota && token.RemainQuota = -9221 (request id: 2026022617010769472009JcsgJYBe)",
+      "description": "大纲有持续的叙事张力和悬念驱动",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_narrative_tension",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色大纲规划完整性": {
+      "check_result": "fail",
+      "reason": "部分设计角色未在大纲中规划（配角: 沈崇光）",
+      "details": "主角 2/2: 苏念, 程漪; 配角 3/4: 周绛琳, 钱茵, 顾衍; 配角缺失: 沈崇光",
+      "description": "设计的角色必须在大纲中规划",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_outline",
+      "is_critical": true
+    },
+    "角色正文出场完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在正文中出现",
+      "details": "在60个章节中检查; 主角 2/2: 苏念, 程漪; 配角 4/4: 周绛琳, 沈崇光, 钱茵, 顾衍",
+      "description": "设计的角色必须在正文中出现",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_chapters",
+      "is_critical": true
+    }
+  },
+  "completion_status": "completed"
+}

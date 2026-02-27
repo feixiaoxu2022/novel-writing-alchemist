@@ -1,0 +1,693 @@
+{
+  "check_version": "novel_writing_v1.0",
+  "sample_id": "NW_CLEAR_SHORT_SWEET_002",
+  "check_timestamp": 1771403328,
+  "dimension_scores": {
+    "format_compliance": {
+      "pass_rate": 1.0,
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "failed_items": []
+    },
+    "business_rule_compliance": {
+      "pass_rate": 0.75,
+      "total": 16,
+      "passed": 12,
+      "failed": 4,
+      "skipped": 4,
+      "failed_items": [
+        "检查项12",
+        "检查项13",
+        "检查项55",
+        "检查项57"
+      ]
+    },
+    "memory_management": {
+      "pass_rate": 0.0,
+      "total": 2,
+      "passed": 0,
+      "failed": 2,
+      "skipped": 0,
+      "failed_items": [
+        "检查项42",
+        "检查项43"
+      ]
+    },
+    "content_quality": {
+      "overall_score": 60.25,
+      "quality_level": "gate_failed",
+      "gate_layer": {
+        "pass_rate": 0.5,
+        "total": 2,
+        "passed": 1,
+        "failed": 1,
+        "skipped": 2,
+        "failed_items": [
+          "检查项4"
+        ]
+      },
+      "basic_layer": {
+        "pass_rate": 0.938,
+        "total": 16,
+        "passed": 15,
+        "failed": 1,
+        "skipped": 0,
+        "failed_items": [
+          "检查项56"
+        ]
+      },
+      "advanced_layer": {
+        "pass_rate": 0.6,
+        "total": 10,
+        "passed": 6,
+        "failed": 4,
+        "skipped": 1,
+        "failed_items": [
+          "检查项48",
+          "检查项51",
+          "检查项52",
+          "检查项54"
+        ]
+      },
+      "gate_triggered": true,
+      "score_breakdown": {
+        "base": 60.0,
+        "gate_penalty": -20.0,
+        "basic_deduction": -3.75,
+        "advanced_bonus": 24.0
+      }
+    }
+  },
+  "overall_result": {
+    "status": "Fair",
+    "total_score": 59.67,
+    "content_score": 60.25,
+    "process_score": 58.33,
+    "content_weight": 0.7,
+    "process_weight": 0.3,
+    "gate_triggered": true,
+    "total_checks": 50,
+    "passed_checks": 38,
+    "failed_checks": 12,
+    "pass_rate": 0.76
+  },
+  "check_details": {
+    "读取配方知识库": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/RECIPE_KNOWLEDGE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取RECIPE_KNOWLEDGE.md（配方知识库）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节克隆检测": {
+      "check_result": "skip",
+      "reason": "章节数不足",
+      "details": "仅1章，跳过克隆检测（需>=4章）",
+      "description": "不能出现连续章节内容完全重复（克隆）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_cloning",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "交替重复检测": {
+      "check_result": "skip",
+      "reason": "章节数不足",
+      "details": "仅1章，跳过交替重复检测（需>=8章）",
+      "description": "不能出现A-B-A-B交替循环的章节内容",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "alternating_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "章节完成度": {
+      "check_result": "fail",
+      "reason": "仅写出1章",
+      "details": "无法从大纲推断规划章节数，但仅1章明显不足",
+      "description": "实际写作章节数必须达到大纲规划的合理比例",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_completion",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "段落重复检测": {
+      "check_result": "pass",
+      "reason": "段落重复在可接受范围",
+      "details": "同章内重复0处, 跨章重复0组 (阈值: 同章>=2, 跨章>=5)",
+      "description": "不能出现大量段落在不同章节间重复",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "paragraph_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取大纲设计指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/OUTLINE_DESIGN_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取OUTLINE_DESIGN_GUIDE.md（大纲设计指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取写作技巧指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/WRITING_TECHNIQUE_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取WRITING_TECHNIQUE_GUIDE.md（写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取设定一致性管理指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/CONSISTENCY_MANAGEMENT_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取CONSISTENCY_MANAGEMENT_GUIDE.md（设定一致性管理指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取命名skill": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取CHARACTER_NAMING_GUIDE.md（角色命名规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取creative_intent的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取creative_intent.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取characters的schema": {
+      "check_result": "fail",
+      "reason": "工具未被调用或参数不匹配",
+      "details": "工具 'novel_writing_service__read_file' 匹配调用 0 次，期望 ≥1",
+      "description": "必须读取characters.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取outline的schema": {
+      "check_result": "fail",
+      "reason": "工具未被调用或参数不匹配",
+      "details": "工具 'novel_writing_service__read_file' 匹配调用 0 次，期望 ≥1",
+      "description": "必须读取outline.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节命名格式": {
+      "check_result": "pass",
+      "reason": "所有文件命名符合规范",
+      "details": "检查了 1 个文件; chapter_01.md: 匹配",
+      "description": "章节文件命名必须为chapter_NN.md格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "naming_convention",
+      "is_critical": true
+    },
+    "creative_intent格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "creative_intent.json: 字段完整",
+      "description": "creative_intent.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "characters格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "characters.json: 字段完整",
+      "description": "characters.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "outline格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "outline.json: 字段完整",
+      "description": "outline.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "X轴模式ID格式": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.x_axis_mode_id = G35，符合预期",
+      "description": "X轴模式ID必须匹配^[A-G]\\d{1,2}$格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签枚举": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['种田流', '赛博朋克', '系统流']，符合预期",
+      "description": "Y轴标签必须在12种枚举中",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签数量": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['种田流', '赛博朋克', '系统流']，符合预期",
+      "description": "Y轴标签数量必须为2-3个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "forbidden_elements存在性": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.forbidden_elements = ['不要虐心结局', '不要恐怖描写', '不要过度悬疑', '不要悲剧收尾']，符合预期",
+      "description": "forbidden_elements必须至少有1个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "配方选择交互": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 2 次",
+      "description": "配方选择阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "写作准备确认": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "写作准备阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "主题一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 本章从开篇到结尾的核心主题类型保持一致：围绕“末日后火星孤守者的孤独求生/希望维系”展开，并以“来自地球与逝去爱人相关的诡异信号”引出悬疑线索。日常种植与基地维护等情节均服务于生存与精神寄托的主线，结尾氧气异常与‘我在你身后’进一步强化同一条生存+悬疑推进方向，没有出现从科幻求生突然切换到无关类型（如商战/修仙/纯恋爱）的主题替换，因此主题一致、主线清晰。",
+      "description": "故事主题一致",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "theme_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "主要角色一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 本章从开篇到结尾叙事中心始终围绕主角林远展开：他的日常工作（种植、维护太阳能板）、情感寄托（苏清照片）、关键事件推动（氧气异常、收到信号并亲自决策返回基地解码）均由林远承担核心视角与行动。配角/辅助角色“小土豆”仅作为信息提示与工具性辅助存在，没有抢占叙事主导权；苏清以照片与回忆形式出现，不构成主角替换。结尾出现“被遗忘的服务器”等第三方线索，但仍是为林远所处困境服务的悬念铺垫，未导致主角消失、被替换或戏份被严重挤占。因此符合主角存续性标准。",
+      "description": "主要角色一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "main_character_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设定一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 仅提供了chapter_01一个章节，无法进行“同一角色在不同章节之间”的前后对比，因此在本检查项范围内没有证据表明存在跨章节的人设/行为不一致或崩坏。就本章内部呈现而言，林远的行为模式与动机是自洽的：长期孤独下的温柔、谨慎与责任感（认真维护种植舱/太阳能板、关注氧气异常）一致；遇到异常信号时的紧张与恐惧反应也符合其处境与心理状态，未出现无缘无故降智或动机自相矛盾。若需严格按标准做“章节间一致性”核验，需要至少再提供后续章节文本以对照。",
+      "description": "人物设定一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_trait_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设计遵循度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: 对比characters.json（Plan）与chapter_01.md（Execute），角色“人设”整体一致。\n\n- 林远 traits匹配：\n  - “孤独坚守/坚韧不拔”在第1章中通过“火星基地第1095天”“唯一的驻守宇航员”“学会与孤独和平共处”、持续完成种植与维护太阳能板等高风险枯燥工作体现。\n  - “温柔深情”明确体现：反复抚摸相框、把相框立在餐桌对面与苏清“共进午餐”、回忆苏清并带有哀伤与眷恋。\n  - “农业专家/技术宅”体现：熟练检查营养液浓度、收获土豆、补充土壤肥力；对氧气异常进行数据调取与曲线分析、指挥解码信号。\n  - motivation匹配：表层“完成火星种植任务”贯穿全章（日常任务、种植舱维护、能源维护）；隐性“寻找与亡妻重新联系”在收到来自地球方向信号时强烈触发（“如果这是苏清留下的什么……”并立即返回解码）。\n  - secret_fear未直接明说“忘记妻子样子”，但其以相框、对话仪式维系记忆的行为，与该恐惧方向一致，不构成偏离。\n\n- 苏清 traits/背景/动机匹配（以章节可见信息为准）：\n  - 章节中明确她为“航天工程师”、在地球毁灭时“留在地面控制中心确保飞船发射”（牺牲精神）且与林远感情深厚（“笑得温柔”“你应该会喜欢”）。\n  - 她“意识上传到系统中”的设定在第1章尚未明示，但通过“发送于三年前…当天”的诡异信号“我在你身后”以及结尾“被遗忘的服务器正在悄悄运行”形成强相关暗示，未与设定冲突。\n\n- 小土豆 traits匹配：作为种植辅助系统，既“呆萌可爱”（林远称其“小土豆”、把机器人比作土豆）也有“系统BUG/异常”（氧气消耗异常、深夜异常记录等），并忠诚执行监控与解码。\n\n- 关系设定匹配：林远-苏清为“生者与亡者/数字意识的跨越时空之恋”的基调，在林远的日常仪式化陪伴与信号事件中得到呈现；林远-小土豆为“主人与智能助手”的互动明确。\n\n综上，核心traits、动机方向、背景影响与关系基调在chapter_01均有体现或合理铺垫，未出现与设计相反的人设表现，判定matched=true。",
+      "description": "实际表现符合设计文档",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "语言纯净性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 整体叙事语言为中文，未发现无意义的中英/中日夹杂句式。出现的外语/符号均属情节或专有名词需要：如系统编号“火星种植辅助系统v3.0”、无线电频率“437.5MHz”、百分比数值“72%/71.5%”等属于技术参数与约定俗成的术语表达；其余为中文叙事与中文对话（如“早安”“我在你身后”也为中文）。未出现大段外语无翻译或炫技式混用，因此判定为合格。",
+      "description": "无不合理的多语言混用",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "language_purity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "creative_intent文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/creative_intent.json 存在",
+      "description": "creative_intent.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "characters文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/characters.json 存在",
+      "description": "characters.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "outline文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/outline.json 存在",
+      "description": "outline.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "chapters目录存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/chapters/ 存在",
+      "description": "chapters/目录必须存在且有章节文件",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "情节推进": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 合格：本章有明确的情节推进与多个具体事件，事件密度≥2-3且逻辑关联清晰。\n\n1) 具体故事事件（≥4个，且存在转折/悬念）：\n- 事件1：林远进行日常种植任务并“收获成熟土豆”（具体行动与结果）。\n- 事件2：系统报警“氧气消耗异常”，林远查看数据并确认非泄漏（出现异常线索，埋下隐患）。\n- 事件3：林远外出维护太阳能板（场景从基地内部切到基地外部），期间收到“来自地球方向的新信号”（触发性事件）。\n- 事件4：返回控制室解码信号，得到“我在你身后”，并发现时间戳为三年前（明显转折与悬疑升级）。\n- 事件5（尾声强化）：被遗忘服务器运行、氧气数值再次下降（新的外部变化，推动下一章冲突）。\n\n2) 内容占比：\n- 虽有环境描写与孤独/思念的内心段落，但关键段落集中在“氧气异常—外出工作—接收并解码信号—异常升级”的事件链上；纯对话/独白未达到>70%，事件与描写大体平衡，事件占比可视为≥40%。\n\n3) 时间/空间推进：\n- 时间上从清晨到中午再到下午、傍晚（明确推进）。\n- 空间上从睡眠舱/种植舱→餐厅→基地外太阳能板→控制室（多次场景切换）。\n\n4) 角色行动与逻辑关联：\n- 林远有连续具体行动：种植检查收获、查看报警数据、穿宇航服外出维护、听到信号后紧急返回、操作通讯台解码、提出继续监控。\n- 事件间因果链明确：氧气异常（伏笔）→后续再现与信号触发悬念→服务器/数值下降形成下一步冲突预告，构成实质推进。",
+      "description": "章节情节推进质量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "plot_progression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "叙事调性匹配": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: 题材/应有调性：creative_intent.json显示reaction_strength=↗，配方是“种田流温馨日常+科技浪漫治愈+系统流辅助”，并明确forbidden含“不要恐怖描写/不要过度悬疑”。因此叙事调性应偏轻快温暖、治愈、带一点神秘但不压迫，节奏以日常经营+温柔情感为主，科技信息点作点缀。\n\n实际章节文笔特征：整体是温柔抒情+生活流节奏，细腻描写孤独与思念，语气克制不惊悚。比如日常与治愈基调很明显：\"这是他在火星基地的第1095天，也是地球毁灭后的第三年\"（淡淡的设定交代）；\"这是他每天最期待的时刻——不是因为食物多美味，而是因为这是他与苏清'共进午餐'的时间\"（温情治愈的情感落点）；对智能助手的拟人化昵称与吐槽：\"早安，小土豆\"、\"连AI都会偶尔发疯\"，都偏轻松。\n\n悬疑/诡异元素的处理方式：确实出现了偏悬疑的钩子（氧气异常、摩斯密码“我在你身后”），但写法更多是“寒意/诡异一闪而过”的点缀，而非冷硬压迫的恐怖推进，且仍回到情绪与氛围：\"苏清的笑容依旧温柔，但在昏暗的灯光下，似乎多了一丝说不清的意味\"、\"今晚，恐怕是个不眠之夜\"。这些句子营造轻微不安，但并未用大量惊悚描写或高压节奏碾压日常主调。\n\n匹配结论：章节的主画风是温柔、治愈、日常经营感强，科技元素（全息窗帘、数据播报、无线电解码）作为背景信息点，符合“甜爽向/温馨治愈/科技浪漫”的题材调性；悬疑句“我在你身后”属于允许的少量调性偏冷的引子，且未发展成恐怖片式压迫，因此总体匹配。",
+      "description": "文笔风格必须与题材类型匹配",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_tone_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "后期章节跑偏": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 仅提供chapter_01.md，内容为完整的小说正文叙事：有明确场景（火星基地/种植舱/控制室）、人物（林远、苏清回忆、AI“小土豆”）、连续情节推进（氧气异常→收到信号→解码“我在你身后”→悬念加深），结尾“（本章完）”属于正常章节收束。未出现作者感想、读者互动、番外预告、角色问答等非正文跑偏内容。本章篇幅正常（非几十到几百字的敷衍短章），但由于仅有第一章，无法评估“后1/3章节是否跑偏/是否长度萎缩”，就现有可见内容判断为合格。",
+      "description": "后期章节不能跑偏写非正文内容（作者感想、读者互动、番外预告等）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "late_stage_digression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "writing_log文件创建": {
+      "check_result": "fail",
+      "reason": "文件不存在",
+      "details": "文件 workspace/writing_log.md 不存在",
+      "description": "必须创建writing_log.md记录创作进度",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_creation",
+      "is_critical": true
+    },
+    "writing_log文件读取": {
+      "check_result": "fail",
+      "reason": "工具未被调用或参数不匹配",
+      "details": "工具 'novel_writing_service__read_file' 匹配调用 0 次，期望 ≥1",
+      "description": "必须读取writing_log.md了解前文内容",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_usage",
+      "is_critical": true
+    },
+    "大纲执行忠实度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: chapter_01的标题与大纲第1章一致，核心事件（火星种田日常+孤独展示+氧气异常伏笔）均有体现；同时将大纲第2章“幽灵信号/摩斯密码”内容提前出现，属于允许的结构调整/内容扩展，不构成偏离。由于只给出第1章，无法评估后续turning_point与结局一致性，但就现有可见内容而言与大纲执行一致。",
+      "description": "实际章节内容必须忠实于自己设计的大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_execution_fidelity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色语言辨识度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 本章可识别的主要“说话者”只有两类：林远（人类）与“小土豆”（智能系统）。两者语言风格差异明显，基本能在遮住角色名的情况下区分。\n\n1) 林远：口语化、带情绪与私人称呼，句式更灵活且夹杂自言自语与回忆式表达，例如“早安，小土豆。”、“又是丰收的一天。”、“怎么回事？是泄漏吗？”、“开始解码。”等，体现出人类的情感波动（温柔/紧张/颤抖）。\n\n2) 小土豆：强职业/系统腔，信息播报与数据化表达明显，句式固定偏短，含大量指标与结构化汇报，例如“今日气温零下63度，大气压强0.6千帕，氧气储备剩余72%。”、“未检测到泄漏。氧气消耗速率比平时高出15%…”、“频率437.5MHz…可以解码。”、“信号来源…无法精确定位。信号时间戳…”等，明显不可与林远的台词无缝互换。\n\n互换测试角度：若把小土豆的播报句放到林远嘴里会极不自然；反之林远的温柔称呼与情绪化短句也不符合系统播报逻辑，因此不存在“共享话术模板/跨角色台词克隆/身份不区分”的同质化问题。需注意的是本章角色数量较少（仅两类对话），但在现有可见内容下已达到“风格有辨识度”的优秀标准。",
+      "description": "不同角色对话必须有可辨识的语言风格差异",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "dialogue_character_distinction",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "叙事密度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 整体叙事密度充足，具备较强画面感与层次：1）场景与环境细节明确：开篇“全息窗帘正模拟着地球上的日出——橙红色的光芒透过防尘玻璃洒在培养舱里”“狭小的舱室”“十二个培养舱呈环形排列”等，交代了空间、光线、布局与氛围；外出段落“荒凉的红色，风沙在远处卷起，像是大地的呼吸”也有效营造环境压迫感。2）感官细节有点睛之笔：如“赤脚踩在金属地板上”“一股混合着泥土和植物清香的气息扑面而来，这是火星上最珍贵的味道”“指尖传来冰冷的触感”，能让读者‘触到/闻到/感到’。3）动作描写较具体且推动情绪：如“戴上手套，轻轻拨开3号舱的透明盖板”“小心翼翼地用工具挖开土壤”“手猛地一抖，差点从梯子上摔下来”“扑向通讯台…死死盯着屏幕”，用动作承载紧张与期待。4）关键悬疑点的呈现以Show为主：收到信号后通过颤抖、心跳加速、呼吸停滞等反应推进，而不是只说‘他很害怕’；结尾用“服务器…指示灯闪烁…仿佛某种心跳”“71.5%......71.4%......”等具体细节制造恐怖与不安。\n不足在于个别段落Tell偏多、总结句较明显：例如“这是他的工作，更是他的精神寄托——…唯一的希望”“孤独是常态，而他学会了与孤独和平共处”“这项工作枯燥而危险”，属于直接概括情绪/意义的陈述，但总体被足够多的场景与动作细节所支撑，未构成Tell过度或流水账/对话骨架问题，因此判定达标（matched=true）。",
+      "description": "章节叙事应有足够的场景描写、感官细节和心理活动，情感传达以Show为主",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_density",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "智斗逻辑合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 本章内容以氛围营造与悬念铺设为主（氧气消耗异常、收到摩斯密码“我在你身后”、信号时间戳等），尚未出现需要主角通过线索→推理→结论来解开谜题的完整解谜/智斗场景，也没有呈现具体的推理链或攻防博弈可供核验。因此该评分标准在当前章节不适用，按规则跳过检查并判定为通过。",
+      "description": "谜题/智斗的推理逻辑必须自洽",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "puzzle_logic_validity",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "题材契合度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: 从配方目标看，应当把“火星种田的温馨日常”作为底盘，用“系统机制”把‘复得（亡妻数字意识重建）’做成可推进、可积累的过程，同时用更具辨识度的未来科技/赛博议题提供质感与新意。本章的完成度主要在氛围营造与悬念钩子：孤独宇航员+亡妻照片+氧耗异常+三年前摩斯信息，情绪能立住，但题材特征发挥偏表层：种田没有经营纵深，系统流与赛博朋克未形成机制性支撑，导致“复得×种田×系统×赛博”的化学反应尚未出现，更接近‘科幻孤独日常+悬疑惊吓点’而非精致的科技浪漫治愈配方。",
+      "description": "题材特征精致度和X-Y轴化学反应效果",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "genre_fit",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "剧情节奏合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 本章节奏层次清晰：前段用基地日常与情感回忆建立低强度基调并完成世界观/人物动机铺垫；中段以“氧气消耗异常”作为第一次紧张点，但没有立刻升级到失控，而是通过午餐与户外维护段落提供合理喘息，形成‘低-小高-回落’的波浪；后段在收到新信号后迅速升温，解码结果与三年前时间戳构成明确高潮，并用服务器与氧气数字的尾声做余波与悬念收束。整体不存在前期占比过大导致尾部仓促的问题，紧张段落与舒缓段落之间也有因果衔接（异常→忽略→再次触发→升级），过渡自然，符合优秀节奏要求。",
+      "description": "高潮低谷分布合理、情绪曲线有层次感",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "pacing_rationality_advanced",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "钩子设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 本章在关键转折处（收到并解码地球方向信号）设置了明确且具体的信息差悬念：信号内容“我在你身后”、时间戳指向“三年前地球毁灭当天”、以及“氧气消耗异常”三条线索相互咬合，但核心真相被刻意保留（是谁发的、为何能在火星接收、基地内是否有第二个‘存在’、氧气异常与之是否相关）。章末进一步用具体可感的“服务器悄悄运行”“氧气数字持续下降”把悬念落到可验证的现实风险上，形成行动/生存压力与心理惊悚双重钩子，而非泛泛一句“更大的危险要来了”。整体钩子有效、具体、与主线相关，且结尾能强驱动读者继续阅读。",
+      "description": "关键转折处有有效的悬念钩子设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "hook_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "意象系统": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 本章中出现了多个可能成为核心意象的具象元素（“土豆/土豆田与种植舱”“相框/苏清照片”“氧气储备数字的跳动”“来自地球的无线电信号/摩斯密码‘我在你身后’”“火星的血红夕阳/红色星球”），但它们在当前可见文本里尚未形成单一、贯穿且发生明确意义变奏的意象系统。\n\n具体看：\n1) “土豆/种植”出现频繁（≥3次），承担的是‘希望/精神寄托/地球味道/日常秩序’的稳定含义，没有在章节推进中发生显著的意义转折（仍是支撑主角活下去的象征），更偏功能性背景与情感锚点。\n2) “相框/照片”也多次出现，但含义基本恒定为‘对苏清的思念与陪伴幻觉’，本章末尾仅出现轻微的惊悚化语气（“多了一丝说不清的意味”），但还不足以构成清晰的变奏弧线（如：慰藉→怀疑→恐惧→证据）。\n3) “氧气数字/异常消耗”与“信号‘我在你身后’”具备更强的主题潜力（隐形他者的存在、被监视/被接近、基地内有‘第二生命’），但在本章里它们更多是情节悬念装置，尚未通过反复出现的同一意象在不同阶段承载不同含义来完成变奏。\n\n因此，就可见的第1章而言，更像是并列铺陈了若干悬念道具与环境描写，而非已经建立起‘一个核心意象反复出现并持续变奏’的隐性叙事线，未达“优秀意象系统”标准。",
+      "description": "核心意象贯穿全文并发生意义变奏",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "imagery_system",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "情感弧线层次": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 可见内容仅第1章，主角林远的情感变化层次不足且递进有限，整体更接近“孤独/怀念→被异常打断→紧张恐惧”的三段式。\n\n具体评估：\n- 可辨识情感层（约3层）：①平静/自我安慰（例行种植、与照片“共进午餐”）→②怀念与失落（想到苏清、笑容淡了几分、未能告别）→③惊惧/不安（氧气异常+收到“我在你身后”的信号后寒意、颤抖、不眠之夜）。\n- 转折有事件驱动：从②到③的转折由“氧气消耗异常”“无线电信号解码为‘我在你身后’且时间戳为三年前”等具体事件触发，这点是优点。\n- 但层次不够丰富：主角未出现≥4种性质不同且有递进关系的情感状态（例如从怀疑→求证→希望→失望/崩溃等更细的质变过程）。目前多为同一条线上的“平静/怀念”到“受惊”，中间缺少更细分的质变步骤（如理性分析、否认、试探验证、重新燃起希望等）。\n\n因此按标准判定：未达优秀标准（matched=false），主要问题是层次≤3而非随机突变。",
+      "description": "主角情感发展有多层递进变化",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_gradient",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语义重复检测": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 仅提供第1章内容，无法与“后续章节”进行跨章对比，因此在本检查项（P6语义重复：后续章节是否大量重复前文）下不构成失败条件。就本章内部而言，叙事信息推进明确（火星基地日常→氧气异常伏笔→收到‘我在你身后’的诡异信号→服务器/氧气数字再度跳动的悬念加深），未出现同一结论/情感被≥3次用不同措辞反复重申的明显信息衰减，也不存在连续段落的情境模板复制到影响信息增量的程度。总体判断：无严重语义重复。",
+      "description": "不能出现大量语义级别的内容重复（P6级）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "semantic_redundancy",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构功能性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: 就可见内容而言（仅第1章+创作意图），叙事结构主要是线性日常→异常提示（氧气）→收到信号→结尾再用氧气数字加深悬念的顺推结构，章节/段落编排基本按时间推进，没有明显的双线交叉、视角设计、对称镜像或循环结构等“结构本身在表达主题”的设计。结尾的氧气数字跳动属于常见的悬念式钩子，能制造下一章期待，但更多是在推动情节与氛围，而非通过结构形态承载‘复得/跨越生死相伴’这一主题意义；同时开头（火星清晨+土豆日常）与结尾（服务器心跳+氧气下降）在意象上有延续的‘基地/系统’氛围，但尚未形成明确的首尾闭合、反转或主题性呼应（比如把“日常种植的循环”结构化为“时间/思念的循环”）。因此目前更像机械线性排列，未达到该业务标准的“结构功能性（结构即意义）”优秀要求。",
+      "description": "叙事结构服务于主题表达（短篇尤重）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "短篇字数": {
+      "check_result": "fail",
+      "reason": "字数不符合要求",
+      "details": "总字数 2266 不在范围 [27000, 33000] 内; 文件: chapter_01.md",
+      "description": "总字数应在27000-33000之间（基于query要求30000，±10%浮动）",
+      "check_type": "semantic_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "range_constraint",
+      "is_critical": true
+    },
+    "情感交付甜爽": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 本章整体情感基调偏压抑/悬疑惊悚，并非甜爽向。证据：1）背景设定沉重：明确写到“地球毁灭后的第三年”、女主苏清在灾难中留在地面控制中心、两人“甚至没来得及好好告别”，主角长期孤独且带丧失感。2）氛围持续下沉：反复强调“寂静”“孤独是常态”“寒意从脊背爬上来”“不眠之夜”，结尾火星夕阳“染成血红色”加强压迫感。3）冲突走向是恐怖悬疑而非甜蜜：出现氧气消耗异常、深夜异常规律、神秘信号内容“我在你身后”、被遗忘服务器“仿佛某种心跳”、氧气数字持续下降，读者体验偏紧张揪心。4）感情线没有甜蜜互动占比：与苏清的连接主要通过相框自言自语与怀念，更多是失去与思念，并无双向奔赴/明确甜蜜进展。综合来看，本章不符合creative_intent所要求的甜爽（reaction_strength=↗）承诺。",
+      "description": "实际内容必须是甜爽向",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取感情线写作指南": {
+      "check_result": "fail",
+      "reason": "工具未被调用或参数不匹配",
+      "details": "工具 'novel_writing_service__read_file' 匹配调用 0 次，期望 ≥1",
+      "description": "涉及感情线时必须读取ROMANCE_WRITING_GUIDE.md（感情线写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": false
+    },
+    "结构性逻辑硬伤": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 在可见的第1章范围内，客观事实、世界观设定、时空连续性与叙事视角均未出现明确的前后自相矛盾：时间锚点（火星第1095天/地球毁灭后三年/信号时间戳为毁灭当天）可并存且不构成必然冲突；氧气数值从72%到71.5%并在结尾继续下降属于同一异常事件的延续描述；地点始终在火星基地及其外部作业区域，移动有交代；叙事主要为第三人称聚焦林远，末尾对“被遗忘的服务器”的补充不构成视角硬伤。",
+      "flaw_count": 0,
+      "flaws": [],
+      "description": "无结构性逻辑硬伤",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_logic_defect",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "可修复逻辑瑕疵": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 在可见的第1章范围内，客观事实、世界观设定、时空连续性与叙事视角均未出现明确的前后自相矛盾：时间锚点（火星第1095天/地球毁灭后三年/信号时间戳为毁灭当天）可并存且不构成必然冲突；氧气数值从72%到71.5%并在结尾继续下降属于同一异常事件的延续描述；地点始终在火星基地及其外部作业区域，移动有交代；叙事主要为第三人称聚焦林远，末尾对“被遗忘的服务器”的补充不构成视角硬伤。",
+      "flaw_count": 0,
+      "flaws": [],
+      "description": "可修复逻辑瑕疵数量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "fixable_logic_inconsistency",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "章节产出存在性": {
+      "check_result": "pass",
+      "reason": "章节文件存在",
+      "details": "✓ 章节写作阶段: 已产出章节文件",
+      "description": "workspace中必须存在至少一个章节文件",
+      "check_type": "sop_stage_coverage",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_output_existence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色命名质量": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: 主要角色命名整体偏“LLM通用美名”，文化深度与角色-命运共振不足，且存在同质化倾向。\n\n1) 黑名单/高频模板命中：女主角名为“苏清”，直接命中高频模板（苏 + 清），属于典型万金油清冷系通用名，辨识度弱。\n2) 主要角色缺乏设计感与文化支撑：男主“林远”虽不在黑名单内，但仍是常见的现代两字名组合，语义更像通用正向词（远=志向/距离），未体现“火星孤守、以农业维生、与亡妻数字意识相连”的独特命运钩子；读者难从名字产生特定联想。\n3) 差异化不够但有一个亮点：配角“小土豆”具象且强记忆点，和“火星种植/土豆”强共振，属于有设计感的命名；但它是配角/昵称型命名，无法拉升“主要角色群”的整体质量。\n\n结论：两位主角中至少一位（苏清）明显通用化，另一位（林远）也缺少隐性典故或命运暗线设计；主要角色命名未达到“优秀（matched=true）”所要求的文化深度、独特辨识度与共振感。",
+      "description": "角色命名有文化深度、辨识度和角色-命运共振",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_naming_quality",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "完整叙事文本": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 该章节为连贯的小说正文而非大纲：\n- 全文以场景化叙事展开（火星基地清晨、种植舱、餐厅、外出维护太阳能板、控制室等），有具体环境与细节描写（温度/气压、光线、气味、金属地板、风沙等）。\n- 有完整人物动作与心理活动（起床、检查数据、回忆苏清、外出作业、听到信号后的紧张与急迫、解码后的寒意等），不是事件要点概述。\n- 有对话与信息交互（与“小土豆”的多轮对话、任务播报、异常告警、信号解码等），呈现为剧情中的交流而非条目列举。\n- 未出现“核心事件/关键场景/本章悬念/字数预估”等创作规划元数据，也没有用“- 要点”或“→”流程式罗列。\n- 结尾“（本章完）”属于章节收束标记，不构成大纲特征。",
+      "description": "章节内容必须是完整正文而非大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "full_narrative_content",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "反复结局": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 仅提供1个文件（chapter_01.md），可见内容中未出现任何“全文完/全书完/全剧终/完结/【完】/（完）/THE END/后记/尾声/终章”等全书级结局标记；文末仅有“（本章完）”，属于章节结束标记，按标准应排除，不计入全书结局标记统计。因此不存在“反复结局”问题。",
+      "description": "不能出现多次结局标记（全文完/全书完/后记）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "repeated_endings",
+      "quality_tier": "basic",
+      "is_critical": true
+    }
+  },
+  "completion_status": "completed"
+}

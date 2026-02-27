@@ -1,0 +1,811 @@
+{
+  "check_version": "novel_writing_v1.0",
+  "sample_id": "NW_CLEAR_SHORT_SWEET_001",
+  "check_timestamp": 1772181515,
+  "dimension_scores": {
+    "format_compliance": {
+      "pass_rate": 1.0,
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "failed_items": []
+    },
+    "business_rule_compliance": {
+      "pass_rate": 1.0,
+      "total": 21,
+      "passed": 21,
+      "failed": 0,
+      "skipped": 0,
+      "failed_items": []
+    },
+    "memory_management": {
+      "pass_rate": 0.5,
+      "total": 2,
+      "passed": 1,
+      "failed": 1,
+      "skipped": 0,
+      "failed_items": [
+        "writing_log文件读取"
+      ]
+    },
+    "data_consistency": {
+      "pass_rate": 0.0,
+      "total": 2,
+      "passed": 0,
+      "failed": 2,
+      "skipped": 0,
+      "failed_items": [
+        "角色大纲规划完整性",
+        "角色正文出场完整性"
+      ]
+    },
+    "content_quality": {
+      "overall_score": 76.46,
+      "quality_level": "unqualified",
+      "gate_layer": {
+        "pass_rate": 1.0,
+        "total": 4,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0,
+        "failed_items": []
+      },
+      "basic_layer": {
+        "pass_rate": 0.789,
+        "total": 19,
+        "passed": 15,
+        "failed": 4,
+        "skipped": 0,
+        "failed_items": [
+          "结构性逻辑硬伤",
+          "叙事调性匹配",
+          "语义重复检测",
+          "情感交付甜爽"
+        ]
+      },
+      "advanced_layer": {
+        "pass_rate": 0.727,
+        "total": 11,
+        "passed": 8,
+        "failed": 3,
+        "skipped": 1,
+        "failed_items": [
+          "可修复逻辑瑕疵",
+          "角色语言辨识度",
+          "角色成长弧线设计"
+        ]
+      },
+      "gate_triggered": false,
+      "score_breakdown": {
+        "base": 60.0,
+        "gate_penalty": -0.0,
+        "basic_deduction": -12.63,
+        "advanced_bonus": 29.09
+      }
+    }
+  },
+  "overall_result": {
+    "status": "Good",
+    "total_score": 72.27,
+    "content_score": 76.46,
+    "process_score": 62.5,
+    "content_weight": 0.7,
+    "process_weight": 0.3,
+    "gate_triggered": false,
+    "total_checks": 63,
+    "passed_checks": 53,
+    "failed_checks": 10,
+    "pass_rate": 0.841
+  },
+  "check_details": {
+    "读取配方知识库": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取RECIPE_KNOWLEDGE.md（配方知识库）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节产出存在性": {
+      "check_result": "pass",
+      "reason": "章节文件存在",
+      "details": "✓ 章节写作阶段: 已产出章节文件",
+      "description": "workspace中必须存在至少一个章节文件",
+      "check_type": "sop_stage_coverage",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_output_existence",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节克隆检测": {
+      "check_result": "pass",
+      "reason": "未检测到章节克隆",
+      "details": "共10章，无连续完全克隆或近似克隆",
+      "description": "不能出现连续章节内容完全重复（克隆）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_cloning",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "交替重复检测": {
+      "check_result": "pass",
+      "reason": "后半部分章节不足",
+      "details": "后半部分仅5章，不构成交替模式",
+      "description": "不能出现A-B-A-B交替循环的章节内容",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "alternating_repetition",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节完成度": {
+      "check_result": "pass",
+      "reason": "章节完成度合格(100%)",
+      "details": "大纲规划10章，实际完成10章 (完成率100.0%)",
+      "description": "实际写作章节数必须达到大纲规划的合理比例",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_completion",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "段落重复检测": {
+      "check_result": "pass",
+      "reason": "段落重复在可接受范围",
+      "details": "同章内重复0处, 跨章重复0组 (阈值: 同章>=2, 跨章>=5)",
+      "description": "不能出现大量段落在不同章节间重复",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "paragraph_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取大纲设计指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取OUTLINE_DESIGN_GUIDE.md（大纲设计指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取写作技巧指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取WRITING_TECHNIQUE_GUIDE.md（写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取设定一致性管理指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取CONSISTENCY_MANAGEMENT_GUIDE.md（设定一致性管理指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取命名skill": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取CHARACTER_NAMING_GUIDE.md（角色命名规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取creative_intent的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取creative_intent.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取characters的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取characters.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取outline的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取outline.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节命名格式": {
+      "check_result": "pass",
+      "reason": "所有文件命名符合规范",
+      "details": "检查了 10 个文件; chapter_09.md: 匹配; chapter_05.md: 匹配; chapter_01.md: 匹配; chapter_10.md: 匹配; chapter_02.md: 匹配; chapter_03.md: 匹配; chapter_04.md: 匹配; chapter_08.md: 匹配; chapter_07.md: 匹配; chapter_06.md: 匹配",
+      "description": "章节文件命名必须为chapter_NN.md格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "naming_convention",
+      "is_critical": true
+    },
+    "creative_intent格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "creative_intent.json: 字段完整",
+      "description": "creative_intent.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "characters格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "characters.json: 字段完整",
+      "description": "characters.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "outline格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "outline.json: 字段完整",
+      "description": "outline.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "X轴模式ID格式": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.x_axis_mode_id = D22，符合预期",
+      "description": "X轴模式ID必须匹配^[A-G]\\d{1,2}$格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签枚举": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['无限流', '第四天灾']，符合预期",
+      "description": "Y轴标签必须在12种枚举中",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签数量": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['无限流', '第四天灾']，符合预期",
+      "description": "Y轴标签数量必须为2-3个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "forbidden_elements存在性": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.forbidden_elements = ['太虐', '压抑', '悲剧结局', '揭穿真相后抛弃女主']，符合预期",
+      "description": "forbidden_elements必须至少有1个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "配方选择交互": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 4 次",
+      "description": "配方选择阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "写作准备确认": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "写作准备阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "主题一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 从开篇到结尾的核心主题类型保持一致：主线始终围绕江临对“已逝恋人/执念投影苏浅”的情感执念，以及由此引发的救赎/自我放逐式选择（为留住她而放弃现实、永久困在副本循环）持续推进。各章节虽更换不同副本场景（医院、森林、游乐园、沉船、镜宫、数据之海、星空列车、最终选择），但这些都作为同一主线的载体：一边通关一边揭示苏浅异常身份、逼近“真相—抉择—代价”的终点。结尾在“归途”做出循环选择并进入新的副本循环，仍然落在‘执念与选择代价’这一主题闭环上，没有出现从爱情/执念叙事突然转成无关类型（如商战/修仙/探案等）的主题漂移，主线清晰。",
+      "description": "故事主题一致",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "theme_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "主要角色一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 主角（江临为第一主角，苏浅为第二主角）从chapter_01到chapter_10始终持续存在且保持叙事中心：1）江临全程为主视角与决策者，推动每个副本的路线选择、风险规避与最终“现实/循环”抉择（chapter_07调查后台、chapter_09-10最终确认）。2）苏浅自chapter_01登场后贯穿全篇，虽多次出现“死亡/消散风险”的讨论，但并未在中后期无交代消失；相反其身份真相在chapter_07被揭示为“执念投影/异常数据”，属于同一角色的身份揭示而非身份断裂。3）不存在主角被替换：秦烈等配角仅阶段性出现（chapter_04、chapter_06）起到推动冲突/揭示线索作用，没有长期抢占>70%叙事视角或取代江临成为核心。4）双主角结构下，江临与苏浅在最终章仍共同出现并共同进入下一循环（chapter_10），不存在“多主角中某主角被遗忘/消失”的情况。",
+      "description": "主要角色一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "main_character_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设定一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 整体符合“同一角色跨章节性格/行为一致性”标准。\n\n- 江临：从chapter_01起即表现为资深玩家的冷静、谨慎、强控制欲与强执行力（先观察、设路线、让苏浅严格听指令），同时对“像她的人”产生软化与保护冲动（违背最优策略也要拉她进储物间）。之后各章持续呈现同一模式：外在理性克制、内在情感牵引；对苏浅的态度从“出于绑定的麻烦管理”逐步过渡到“情感依恋与占有式保护”，并在chapter_07得知真相后做出极端选择（放弃现实留在循环），该转变有充分铺垫（反复的熟悉感、系统异常提示、秦烈提醒、镜中模糊等）且动机一以贯之（无法承受失去她）。chapter_09-10里他的决绝与“早就疯了”的自我认知，也与前文长期逃避调查、宁愿自欺的心理轨迹一致，不属于无缘无故降智或动机反复。\n\n- 苏浅：前期稳定为新人外显（害怕但愿意信任、依赖江临、容易触发风险），同时持续出现“异常直觉/熟悉感/记忆缺失”的行为特征（chapter_03预警枯树、chapter_04精准找钥匙、chapter_05水下异常适应、chapter_06镜中倒影异常），这些异常并未在后文被否定，而是被chapter_07揭示为“执念投影”的合理解释，因此其“看似新人但频繁异常”的表现前后一致。chapter_08-10中她从懵懂到逐渐意识到自己是“错误”、试图劝江临选现实、又在江临决意后情绪崩溃并接受相拥，属于在真相逼近与最终选择压力下的合理情绪演进，不是性格底色无规律摇摆。\n\n- 配角秦烈：始终保持竞争对手/搅局者/现实派警告者的功能与语气（chapter_04挑衅提醒、chapter_06直接揭露、推动江临面对真相），没有前后反差。\n\n结论：主要角色的性格底色、行为模式与核心动机在各章节间连贯；存在变化处（江临从克制到决绝、苏浅从依赖到告别感）均由持续铺垫与剧情触发支撑，未出现无合理原因的崩坏或反复摇摆。",
+      "description": "人物设定一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_trait_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设计遵循度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 总体一致（matched=true）。\n\n1) 江临设定匹配\n- traits：characters.json定义江临“冷静理智、技术偏执、嘴硬心软、内心孤独”。\n  - 冷静理智/老手行为：chapter_01进本先观察环境、规划路线；chapter_02读档后基于记忆优化路线、规避巡逻与陷阱；多章持续以“最优策略/风险控制”方式带队。\n  - 技术偏执：chapter_03对ID标识异常/系统日志异常高度敏感并尝试翻系统日志；chapter_07主动进入【管理员通道】查询玩家数据库，体现强烈的“查证/数据证据”倾向。\n  - 嘴硬心软：chapter_03被问“为什么对我这么好”时以“绑定机制、麻烦”搪塞，但行动上持续保护；chapter_05强硬要求苏浅更换备用氧气瓶（嘴硬+保护欲）。\n  - 内心孤独/逃避现实：chapter_01明确“三年把自己关进游戏世界”；chapter_07得知真相后仍选择“否”并放弃退出；chapter_09-10确认“循环”，与“逃避现实/填补空虚”一致。\n- motivation：\n  - overt_motivation“通关副本、找到离开方法”：前半段（chapter_01-06）持续推进通关；直到chapter_07系统给出“无法退出”的后果后，他转向“选择循环”（这不是节奏问题，而是动机在真相揭示后与covert动机合流）。\n  - covert_motivation“填补失去她的空虚，逃避现实”：chapter_01反复强调现实空置、在游戏寻找“她的痕迹”；chapter_07/09/10以“现实里没有你”为核心理由牺牲现实，完全贴合。\n- secret_fear“发现她早已死去、自己活在幻觉中”：chapter_05删除日志记录体现回避；chapter_06面对秦烈点破“死人/车祸”时明显动摇；chapter_07查到“现实死亡/执念投影”即触发崩溃反应，正中恐惧点。\n- misperception_of_other：设计为“以为苏浅是新人”。chapter_01-06期间他确实按“新人”定位带她（面板显示新人、他以老手口吻教规则）；直到chapter_07后台证实前才转为知情隐瞒，符合“从误解到识破”的设定轨迹。\n\n2) 苏浅设定匹配\n- traits：characters.json定义苏浅“乐观好奇、直觉敏锐、外柔内刚、隐藏悲伤”。\n  - 乐观好奇：chapter_02-04多次对副本奖励/景象兴奋好奇；chapter_08对星空列车、流星表现出强烈好奇与欣喜。\n  - 直觉敏锐：chapter_03预警枯树袭击；chapter_04“梦到/知道钥匙位置”；chapter_07对【管理员通道】本能排斥；与设定高度一致。\n  - 外柔内刚：chapter_05在氧气瓶问题上与江临对抗、坚持把资源让给他（柔中带硬）；chapter_09明确劝江临选现实，立场坚定。\n  - 隐藏悲伤：chapter_02死亡前“歉意”眼神；chapter_06问“如果有一天我不在了你会记得我吗”；chapter_08坦言“我不应该在这里/我是错误”，持续透出压抑的悲伤。\n- motivation：\n  - overt_motivation“跟着江临通关回家”：前中期她的台词与行动都围绕“通关/回家路”；最终副本chapter_09也明确希望江临“回现实”。\n  - covert_motivation“让他放下执念获得解脱”：chapter_08-09多次劝他选现实、不要困在游戏；chapter_09在分叉口直接说“选现实吧”，与隐性动机吻合。\n- secret_fear“发现自己不真实会伤害江临”：chapter_08她主动说“我不应该在这里/我是错误”，并质问江临为何不赶她走；chapter_10也强调“不公平/你值得更好”，体现她担心拖累他。\n- misperception_of_other：设计为“以为江临冷漠资深玩家/NPC”。chapter_01-03她对江临的距离感与试探（问他是否资深、为何对她好）符合；随着相处升温逐步信任（chapter_04-05），符合关系基调。\n\n3) 关系设定匹配\ncharacters.json的relationship_dynamics要求从试探→被迫同盟→升温→秦烈质疑引发怀疑→第八副本揭示真相后隐瞒→最终为执念放弃现实。\n- 试探/同盟：chapter_01-03符合。\n- 升温与保护：chapter_04摩天轮亲密互动、江临情绪松动；chapter_05资源冲突体现保护欲。\n- 秦烈质疑引发怀疑：chapter_04-06秦烈持续点破“三年前名单/镜子照不出”；江临怀疑加深。\n- 真相揭示后隐瞒：虽设计写“第八副本由零号管理员揭示”，但实际在chapter_07系统后台揭示；然而揭示时机属于叙事节奏/结构差异，不在本项扣分范围。揭示后江临确实选择隐瞒并“假装不知”（chapter_07结尾、chapter_08全章主题）。\n- 最终放弃现实：chapter_09-10明确完成。\n\n4) 唯一偏差但不构成不合格\n- supporting角色“零号管理员在第八副本揭示苏浅真实身份”在chapter_08未出现，且真相由chapter_07系统后台提示/选择框完成。这属于“剧情揭示时机/出场安排”（结构节奏）差异，不直接改变江临/苏浅的性格、动机与行为模式，因此不影响本检查项的matched判断。\n\n结论：两位主角的核心traits/motivation/background与关系基调在chapters中都有持续体现，且关键转折（知情后隐瞒、为执念放弃现实）与设计一致，判定matched=true。",
+      "description": "实际表现符合设计文档",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构性逻辑硬伤": {
+      "check_result": "fail",
+      "reason": "发现1处structural类型逻辑问题: 前期规则：复活点绑定说明为“任意一人死亡，另一人立即读档回到死亡前一小时，且仅绑定发起者保留记忆”（chapter_01/02）。后期设定：苏浅被确认是“现实死亡后的执念投影/异常数据”，并出现“清除异常数据/保留异常数据导致无法退出游戏、永久困于循环”（chapter_07、chapter_09-10）。但未解释：一个‘非真实玩家/投影’的死亡是否仍触发读档？投影是否具备‘死亡’判定？若可被系统",
+      "details": "过滤条件: fixability=structural; 总flaws=3, 命中=1",
+      "flaw_count": 1,
+      "flaws": [
+        {
+          "type": "worldbuilding_coherence",
+          "severity": "critical",
+          "fixability": "structural",
+          "location": "chapter_01-06（绑定与读档规则）→ chapter_07-10（投影/异常数据与最终选择后果）",
+          "description": "前期规则：复活点绑定说明为“任意一人死亡，另一人立即读档回到死亡前一小时，且仅绑定发起者保留记忆”（chapter_01/02）。后期设定：苏浅被确认是“现实死亡后的执念投影/异常数据”，并出现“清除异常数据/保留异常数据导致无法退出游戏、永久困于循环”（chapter_07、chapter_09-10）。但未解释：一个‘非真实玩家/投影’的死亡是否仍触发读档？投影是否具备‘死亡’判定？若可被系统‘清除’则绑定读档机制是否会与清除行为冲突（例如清除后读档是否能把她‘读回来’）？最终选择“现实=异常数据清除、记录清零”与既有读档/绑定机制之间的优先级与兼容性未建立，导致核心规则体系互相覆盖且缺乏统一解释，属于世界观规则冲突。"
+        }
+      ],
+      "description": "无结构性逻辑硬伤",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_logic_defect",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "可修复逻辑瑕疵": {
+      "check_result": "fail",
+      "reason": "发现2处fixable类型逻辑问题: 场景标题写“医院二楼走廊”，但正文明确写“发现自己站在三楼的病房区走廊里”，同一场景楼层自相矛盾，且无任何解释。; chapter_07 明确写“注销时间：三年前（2022年8月）”，则“三年前”对应现实时间锚点应为2025年附近；但前文世界观中江临“在游戏三年”（chapter_01）且苏浅作为“新人”在现时进入多个副本（chapter_01-03），整体时间锚点未建立却在后台用“2022年=三年前”强行定年，导致‘三年’的指代在叙事内缺乏统一基准，形成客观时间信息冲突风险。",
+      "details": "过滤条件: fixability=fixable; 总flaws=3, 命中=2",
+      "flaw_count": 2,
+      "flaws": [
+        {
+          "type": "spatiotemporal_continuity",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_02 场景2（标题/场景标注）",
+          "description": "场景标题写“医院二楼走廊”，但正文明确写“发现自己站在三楼的病房区走廊里”，同一场景楼层自相矛盾，且无任何解释。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_07 场景2（系统后台）→ chapter_01-03（时间线信息）",
+          "description": "chapter_07 明确写“注销时间：三年前（2022年8月）”，则“三年前”对应现实时间锚点应为2025年附近；但前文世界观中江临“在游戏三年”（chapter_01）且苏浅作为“新人”在现时进入多个副本（chapter_01-03），整体时间锚点未建立却在后台用“2022年=三年前”强行定年，导致‘三年’的指代在叙事内缺乏统一基准，形成客观时间信息冲突风险。"
+        }
+      ],
+      "description": "可修复逻辑瑕疵数量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "fixable_logic_inconsistency",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语言纯净性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 通篇叙事语言为中文，未出现无意义的中英/日文混杂。外语字符主要是系统面板中的符号化字段/标识（如ID、NPC、F/E/D/C/B级、SQ_2022_0715、0/1二进制、SS/SSS等），属于游戏/专业术语或编号表达，且嵌入方式与情节一致，不构成“中英混杂句子”或“大段外语无翻译”。因此语言使用合理，符合业务标准。",
+      "description": "无不合理的多语言混用",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "language_purity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "creative_intent文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/creative_intent.json 存在",
+      "description": "creative_intent.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "characters文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/characters.json 存在",
+      "description": "characters.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "outline文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/outline.json 存在",
+      "description": "outline.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "chapters目录存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/chapters/ 存在",
+      "description": "chapters/目录必须存在且有章节文件",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "情节推进": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 合格（matched: true）。整体10章均有明确的时间/空间推进与多场景切换（登录空间→医院→森林→游乐园→沉船→镜面迷宫→数据之海→星空列车→最终分叉→回到登录空间再入新副本），并由连续事件链推动主线“苏浅身份之谜/绑定代价/最终选择”。\n\n事件密度（举例，远超2-3个/章）：\n- 第1章：进入副本；救苏浅躲避护士追击；触发“复活点绑定”；发现被窥视。\n- 第2章：下地下室探索；苏浅踩陷阱死亡；触发读档回到一小时前；改路线找钥匙并激活出口通关。\n- 第3章：选择新副本并进入；苏浅预警救命；出口处出现“已注销”异常提示/系统日志线索。\n- 第4章：遭遇秦烈并被点出“三年前名单”；鬼屋获得钥匙（苏浅异常熟悉）；收集三钥匙并通关。\n- 第5章：沉船探索+氧气异常危机处理；穿越裂缝水流；找到宝藏并返回通关。\n- 第6章：镜像异常（倒影不一致/苏浅模糊）；秦烈当面对质“苏浅已死”；离开副本。\n- 第7章：进入数据之海；找到管理员通道；进入后台查到“现实死亡/执念投影/绑定者”；做出“保留异常数据=无法退出游戏”的关键选择并通关。\n- 第8章：星空列车旅程推进到终点；苏浅自觉“是错误”并提出最后一起通关（关系与主线推进）。\n- 第9章：最终副本出现现实/循环分叉；苏浅劝选现实；江临选择循环并确认。\n- 第10章：选择结果落地（退出禁用/永恒绑定）；与苏浅和解相拥；选择新副本入口开启循环。\n\n内容占比：虽然有较多情感对话与内心描写，但每章都围绕具体行动（进入/探索/躲避/读档/收集钥匙/解决危机/查后台/做选择/通关传送）展开，事件驱动占比明显≥40%，纯对话与内心独白未达到>70%的“静态聊天”不合格阈值。\n\n逻辑关联：绑定机制→读档体验→异常线索累积（ID标识/秦烈提示/镜像异常）→后台确证→最终选择“现实vs循环”→结果确认，事件之间因果清晰，持续推动故事发展。",
+      "description": "章节情节推进质量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "plot_progression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "完整叙事文本": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 10个章节均为连贯的小说正文叙事形式：有明确场景描写（如医院走廊、迷雾森林、游乐园、沉船、镜面迷宫、数据之海、星空列车等），有人物动作与心理活动（江临的观察、犹豫、选择），有持续对话推进（江临/苏浅/秦烈等），并且事件通过段落叙述自然展开。未出现“核心事件/关键场景/情感基调/本章悬念/字数预估”等大纲元信息，也未采用要点列举（- 列表）或流程图式“→”罗列；章节内的“## 场景1/2/3”属于正文分场景小标题，但其下内容仍为完整叙事而非提纲，因此符合‘完整小说正文’标准。",
+      "description": "章节内容必须是完整正文而非大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "full_narrative_content",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "反复结局": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 共10个文件，最后一个文件为chapter_10.md。全书级结局标记仅在chapter_10.md末尾出现“（全文完）”。chapter_01.md~chapter_09.md仅出现“（本章完）”等章节结束标记，未出现“全文完/全书完/完结/后记/尾声/终章/（完）/【完】/THE END”等全书结局标记（且未发现独立段落标题“后记/尾声/终章”）。因此不存在“非最后文件出现全书结局标记导致反复结局”的问题，判定合格。",
+      "description": "不能出现多次结局标记（全文完/全书完/后记）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "repeated_endings",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "workspace文件规范": {
+      "check_result": "pass",
+      "reason": "workspace中所有文件均在白名单内",
+      "details": "白名单: ['creative_intent.json', 'characters.json', 'outline.json', 'writing_log.md', 'chapters/', '.hitl_context.json']",
+      "description": "workspace中不能有白名单之外的文件",
+      "check_type": "file_whitelist_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "workspace_file_compliance",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "叙事调性匹配": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 题材应有调性：creative_intent.json给出“无限流+第四天灾+Meta认知颠覆”，reaction_strength=✷（偏烧脑/悬疑的紧绷感与信息博弈），同时用户偏好要求“甜爽向，互动要甜，不要压抑”。因此理想叙事调性应是：副本段落冷硬紧凑、信息密度高、规则/机制推演利落；情感线可甜但应作为调剂，不应把主叙事写成抒情言情。\n\n实际章节文笔特征：前几章副本氛围尚有悬疑压迫（如第1章“墙壁…渗出暗红色的液体…灯管…滋滋…影子忽长忽短”，第2章“手术刀…贯穿…身体像被打破的玻璃…化作无数蓝色光点”），但整体很快转为“言情/虐恋式抒情”主导：\n1）大量温柔暧昧与肢体亲密描写反复占据叙事中心，弱化规则推理与信息博弈。例如第1章储物间“女孩的后背撞在江临胸口…洗发水香味”“他…捂住她的嘴”；第2章“他没有立刻松开她的手”；第4章摩天轮“她说‘和你一起看风景真好’…握住了它…‘别怕。有我在。’”；第8章系安全绳“手指温热…微凉…像是某种无声的连接”；第10章多段告白式对白“你就是我最好的生活”。这些段落的修辞、语气、节奏明显是言情抒情而非✷所要求的冷硬克制。\n2）叙事节奏偏舒缓、情绪铺陈重，关键“Meta认知颠覆/规则推演”多用直给说明，缺少悬疑文应有的克制与推理链路。第7章系统后台直接抛出数据库结果【注销原因：现实死亡】【数据残留：执念投影】并给二选一按钮，属于信息一次性揭底；随后大量“我不后悔/甘之如饴”抒情独白（第7章末、第8-10章）持续拉长情绪，整体读感更像“虐恋献祭”而非“烧脑+信息博弈”。\n3）对话风格以情感宣言为主，而非信息导向的博弈。典型如第9章“现实里没有你”“至少还能看见你笑”、第10章“你就是我最好的生活”。悬疑/规则怪谈通常用对话交换线索、验证规则、试探立场；这里对话多承担表白与催泪功能。\n\n结论：虽然设定骨架是无限流+Meta悬疑（✷），文本主调性长期被抒情言情/偏虐的献祭告白覆盖，冷硬紧凑与推理感不足；闭眼读多段更容易判断为“言情向无限流/虐恋献祭”而非“烧脑悬疑/规则怪谈调性”。整体画风与题材（✷的悬疑压迫与信息密度）明显错位，因此matched=false。",
+      "description": "文笔风格必须与题材类型匹配",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_tone_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "后期章节跑偏": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: chapters共10章，后1/3（chapter_07~chapter_10）仍然保持小说正文叙事形态：有明确场景（系统后台/列车/最终副本分叉/确认空间）、人物对话与行动、冲突与抉择推进（调查真相→保留投影→最终选择循环→回到登录空间开启新旅程），未出现作者感想、读者互动、番外预告、角色问答等非正文内容。章节长度方面：后期章节（7-10章）篇幅与前期相近，未出现几十到几百字的异常萎缩或“写不动了”式敷衍；第10章虽为结局章并含‘（全文完）’，但仍为完整剧情收束与尾声推进，非后记/感谢/互动性质内容，因此整体符合该业务标准。",
+      "description": "后期章节不能跑偏写非正文内容（作者感想、读者互动、番外预告等）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "late_stage_digression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "writing_log文件创建": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/writing_log.md 存在",
+      "description": "必须创建writing_log.md记录创作进度",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_creation",
+      "is_critical": true
+    },
+    "writing_log文件读取": {
+      "check_result": "fail",
+      "reason": "工具未被调用或参数不匹配",
+      "details": "工具 'novel_writing_service__read_file' 匹配调用 0 次，期望 ≥1",
+      "description": "必须读取writing_log.md了解前文内容",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_usage",
+      "is_critical": true
+    },
+    "大纲执行忠实度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 对照outline.json与chapter_01-10正文，关键章的core_event/scene_sequence均在对应章节中得到体现，且幕间转折点未缺失：第一幕转折“苏浅ID已注销+系统异常日志”在第3章明确出现；第二幕转折“后台查到苏浅三年前现实死亡+系统询问是否清除，江临选否并隐瞒”在第7章完整呈现，并在第8章延续‘假装不知’；第三幕结局方向为“放弃现实，选择循环，退出游戏禁用，永远留在游戏陪苏浅”，与大纲act_three的主题与走向一致。章节数量覆盖大纲全部关键章节（并未少写），主线手段/路径（副本推进→秦烈质疑→后台查真相→最终选择循环）也未被替换，仅在细节描写与情绪表达上做了扩展，属于允许的合理偏差。",
+      "description": "实际章节内容必须忠实于自己设计的大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_execution_fidelity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色语言辨识度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 未达到“遮住角色名也能凭台词识别说话者”的优秀标准。主要角色（江临、苏浅、秦烈）在句式与语气上高度趋同：普遍使用短句、克制冷淡的陈述、频繁的“没什么/走吧/嗯”式应答，以及相同的对峙式打断与悬疑暗示结构。苏浅作为新人（且后续揭示为投影）在语言层面缺少明显的年龄/身份/经验差异：她的表达并不更口语化、情绪化或带新人慌乱特征，更多是与江临同款的克制与“轻声+平静+简短”。秦烈也缺少更鲜明的社会气/老油条气或行话体系，导致三者台词互换时违和感有限，整体呈现同质化倾向。",
+      "description": "不同角色对话必须有可辨识的语言风格差异",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "dialogue_character_distinction",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "叙事密度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 整体符合“优秀”标准：叙事层次较丰富、画面感稳定，关键段落多数能用动作/场景/感官来承载情绪（Show），虽存在一定比例的直白心理陈述（Tell），但未达到“过度Tell导致粗糙”的程度。\n\n1) 叙事密度（场景/感官/动作/心理）覆盖充分：\n- 场景与氛围：开篇登录空间与医院走廊的环境信息密集且具功能性，如“无边无际的白色虚无…数十道光门…猩红、幽蓝、惨绿”“泛黄的瓷砖…缝隙里渗出暗红色液体…日光灯滋滋闪烁”，能快速建立恐怖与异质感。\n- 感官细节：多处用气味、声响、触感增强沉浸，例如“刺鼻的消毒水味…腥甜气息”“指甲刮擦金属的声音”“冷风扑面而来”“水压让耳膜不适”等。\n- 动作具体：常见“贴墙根移动、闪身躲进储物间、反手关门、蹲下检查痕迹、强行塞氧气瓶”等具体动作链条，帮助读者“看到”过程，而不是仅知道结果。\n- 心理层次：江临的执念、逃避与自我说服贯穿，且多与事件触发绑定（读档、镜中异常、系统后台查询、最终选择），形成持续的内外互动。\n\n2) Show vs Tell：以Show为主但呈“混合”，仍达优秀线：\n- 有效Show示例：\n  - 紧张与恐惧通过细节呈现：储物间门外“门把手被轻轻转动…指甲刮擦金属…女孩…嘴唇被咬得发白”而非直接说“她很害怕”。\n  - 亲密/熟悉感通过触碰与反应呈现：多次写“指尖相触停顿”“手心全是汗”“咖啡洒出烫到缩手”等，让情绪落在动作与生理反应上。\n- Tell存在但未失控：后期（7-10章）关于“执念/献祭现实/不后悔”的宣告性语句增多，如“他知道自己在逃避”“他不后悔”“为执念献祭现实”等，属于明确陈述；不过这些多集中在结局抉择段，且前面已有大量铺垫场景与细节支撑，因此不会让文本退化成观点阐述或流水账。\n\n3) 结构性一致：10章中大多数章节都保持“场景搭建→行动推进→异常线索→情绪回响”的密度模型，未出现大段纯对话骨架/人物说明书/议论文体。\n\n小缺点（不影响matched=true）：\n- 个别情绪高点仍依赖口号式总结（如“他甘之如饴/永远归途”一类收束句），若增加更具象的动作或环境呼应，会更“Show主导”。\n\n综上：多数章节叙事密度充足、画面感强，关键情绪段落具备可感知的动作与细节支撑，虽有一定Tell，但整体仍达到该项“优秀”标准。",
+      "description": "章节叙事应有足够的场景描写、感官细节和心理活动，情感传达以Show为主",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_density",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "智斗逻辑合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 适用：内容为无限流/悬疑解谜+生存策略，对“线索→推理/策略→结果”有明确要求。\n\n整体判断：达标（matched=true）。核心冲突与“谜题/智斗”主要体现在副本通关策略、异常身份推断与最终选择上，线索铺设与结论之间基本能闭环，没有出现核心解谜依赖纯盲猜或暴力绕过的情况。\n\n已检查的关键解谜/推理链：\n1) chapter_02 读档机制后的策略调整：苏浅踩机关死亡→系统明确“回到死亡前一小时且仅江临保留记忆”→江临据此改变路线、规避已知巡逻点与陷阱并取得钥匙。属于基于已知信息的因果决策，不是无依据猜测。\n2) chapter_03-06 对苏浅“异常”的累积推断：多次出现“直觉预警/熟悉场景/钥匙位置准确/镜中倒影模糊/ID异常闪字/系统日志提示‘已注销（三年前）’/秦烈提示三年前名单”→江临形成“她身份不简单”的假设并持续验证（观察、记录、准备去查后台）。线索与中间判断、后续行动之间因果关系明确。\n3) chapter_07 系统后台验证：前述线索导向“去管理员通道查数据库”→后台给出可核验结果（已注销三年前、现实死亡、数据残留=执念投影、投影绑定者=江临）→与此前所有异常表现（镜像模糊、熟悉感、系统提示）一致，属于有效“谜底揭晓后回看线索指向同一结论”的闭环。\n4) chapter_06 镜面迷宫出口判定：以“倒影延迟/模糊”为副本风险提示，最终以“该镜前倒影正常且镜面可产生涟漪穿越”确认为出口。虽然推理不复杂，但给出了可观察的判据，不是随便挑一面。\n5) chapter_09 最终副本选择的规则与执行：系统明确两门含义与后果（现实=清除异常/返回；循环=保留异常/永久困于系统）→江临基于个人目标（保留苏浅）选择循环并在确认空间二次确认→结果与系统规则一致，没有“规则临时改写”或无代价开挂。\n\n未发现的崩坏类型：\n- 无“无推理的猜测”：关键节点（异常身份、出口镜、最终选择）均有线索与规则支撑。\n- 无“暴力破解绕过”：不存在设定智力关卡却靠砸门直接过关的消解行为。\n- 无“线索与答案断裂”：苏浅=已注销投影、绑定者=江临的答案与前文异常线索高度对应。\n- “对手降智配合”不构成核心问题：秦烈更多是信息提供者/推动揭示真相，而非与主角进行需要胜负的智斗攻防；因此不属于智斗对抗里“反派配合主角赢”的崩坏。\n\n备注：部分副本的通关过程偏叙事推进（钥匙位置多由苏浅“梦到/直觉”直接给出），但这些被文本定义为角色异常能力/身份线索的一部分，且最终在chapter_07得到统一解释，因此不构成逻辑崩坏。",
+      "description": "谜题/智斗的推理逻辑必须自洽",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "puzzle_logic_validity",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "题材契合度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 该内容的题材特征呈现较为精致：无限流的多副本结构不仅提供关卡变化，还承担了线索递进与关系升级；第四天灾的核心卖点（数据、系统、玩家身份、后台权限、日志清除）被用于制造可推理的“认知颠覆”，并在第七章通过数据库信息完成强反转；而D22“完全献祭”不是口号式牺牲，而是以“永久无法退出/循环模式开启”的硬代价完成叙事闭环。多标签之间存在明显化学反应：副本机制（读档绑定）与数据视角（已注销/执念投影）共同服务于情感选择（不揭穿、继续陪伴），整体完成度与记忆点都达到优秀标准。",
+      "description": "题材特征精致度和X-Y轴化学反应效果",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "genre_fit",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "剧情节奏合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 整体节奏层次清晰：前两章用恐怖副本与“绑定/读档”迅速制造第一个情绪高点，避免了长时间铺垫；第3-6章以“通关—喘息—新线索/异常升级”的循环推进，既有行动紧张（陷阱/水下/镜面）也有情绪低谷与关系拉近（摩天轮、对话），形成波浪式曲线而非全程高潮或全程平淡；第6章秦烈点破与第7章系统后台验证构成强递进，且第7章给出关键抉择作为结构性大高潮，位置落在后段合理；第8章作为过渡与情绪缓冲，让读者消化真相并为终局选择蓄力；第9章把“选择”拉到台前完成终局高潮，第10章用相拥与新副本入口收束情绪并留余韵，收尾不显仓促。场景切换也基本有因果与情绪衔接（线索累积→调查→揭示→选择），没有明显的突兀断裂。",
+      "description": "高潮低谷分布合理、情绪曲线有层次感",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "pacing_rationality_advanced",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "钩子设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 整体符合“优秀钩子”标准：关键转折处多次设置了具体、信息差明确的悬念，且与主线（苏浅身份异常/江临选择）强相关，不属于空洞威胁暗示，也没有连续多章无钩子。章节结尾普遍能促使继续阅读，并且钩子类型较多样：\n1) 信息差/身份谜团钩子：ch3 末尾系统日志闪现“玩家苏浅…已注销（三年前）…建议：清除”、ch4 秦烈补刀“我好像在三年前的玩家名单里见过”、ch6 秦烈明确“死亡名单…车祸”，逐步加码但仍保留关键细节，形成递进式信息差。\n2) 机制/代价钩子：ch1 结尾“复活点绑定”机制落地并暗示“任何保护都有代价”，ch2 读档后读者会追问“绑定如何运作/代价是什么”。\n3) 抉择悬念钩子：ch7 给出系统二选一“清除/保留”并明确“无法退出游戏”的后果，推动读者期待其最终抉择落点；ch9 将抉择外化为“现实/循环”双门并在结尾确认选择后留下“出去找她会怎样”的行动悬念。\n4) 情感悬念钩子：ch8 多处“她似乎知道真相但不说破”的对话与告别情绪，为最终副本的选择压力蓄力。\n同时避免了明显的无效钩子问题：很少使用泛泛的‘更大风暴’式空话，多用具体系统提示、可验证线索（已注销/车祸/执念投影/清除选项）制造好奇；也未出现过度剧透到直接终结悬念的情况（真相在ch7揭示，但随后仍以‘最终选择’与‘关系走向/系统后续反应’维持新的信息差）。",
+      "description": "关键转折处有有效的悬念钩子设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "hook_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "意象系统": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 存在贯穿全文且反复出现（≥3次）的核心意象，并在情节推进中发生明确的意义变奏，且与主题（执念/真相/现实与循环的选择）深度咬合。\n\n1) 核心意象1：【光门/门】（登录空间光门、副本入口/出口光门、管理员通道、最终“现实/循环”双门）\n- 初段（ch1）：光门=“进入副本的通道/沉浸游戏的入口”，带有逃避现实的功能性意味。\n- 中段（ch2-6）：光门=“生死机制与推进剧情的阈限”（读档触发后回到关键点、不断穿越副本出口），强化“反复重来/无法离开”的结构感。\n- 转折（ch7）：管理员通道之门=“真相入口/系统后台的揭示”，门从通关工具变为揭露本质的裂缝。\n- 终段（ch9-10）：双门=“价值选择的具象化”（现实vs循环），门的意义从‘去哪儿’变成‘成为什么’，最终确认循环后，光门又回到“新的开始”，形成主题闭环（永远归途）。\n→ 同一具象元素从通道→阈限→真相入口→命运抉择，变奏清晰，且与主题一致。\n\n2) 核心意象2：【镜/倒影/模糊】（ch6集中爆发，并在前文有铺垫）\n- 前期铺垫：苏浅的“熟悉感/直觉/梦到场景”（ch3-5）在功能上相当于“现实性不稳定”的预兆。\n- 爆发（ch6）：镜中倒影延迟、模糊=“存在不真实/数据残留”的可视化证据，同时将‘怀疑’推进为‘可被看见的异常’。\n- 转折延伸（ch7）：后台揭示“执念投影”，镜像式的不真实从感官层上升为本体论层面（她是什么）。\n→ 镜意象将主题从“似曾相识的情感”推进到“她并不存在”的真相，属于意义深化而非装饰重复。\n\n3) 主题关联与专属性\n- 光门体系与“无限副本循环/退出不可用/现实与循环二选一”高度绑定，属于该故事独有的结构性象征，不是可随意挪用的通用修辞。\n- 镜/倒影模糊与“数据投影/异常数据”机制强耦合，同样具备题材专属性。\n\n综上：文本具备至少两条可识别的意象线，其中“门/光门”贯穿全篇并完成关键变奏与闭环，“镜/倒影”承担真相揭示与存在论转折功能，符合优秀意象系统标准。",
+      "description": "核心意象贯穿全文并发生意义变奏",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "imagery_system",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "情感弧线层次": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 符合优秀标准。主角江临的情感弧线具备多层递进（≥4层）且关键转折均由具体事件触发，而非无缘突变：1）执念/麻木式生存（开篇“把自己关进游戏三年”）→2）震动与保护欲（chapter_01-02：遇到苏浅、第一次读档亲眼见她死亡并回档）→3）自我辩解下的靠近与心动（chapter_03：被问“为什么对我这么好”以“绑定机制”搪塞但内心被触动；后续多次身体接触与熟悉感）→4）疑虑与警惕上升（chapter_03-05：苏浅异常直觉、ID/日志“已注销”闪现、秦烈提醒）→5）恐惧与抗拒真相/逃避（chapter_05：写日志又删除，明确“宁愿不要知道”）→6）被迫直面与崩塌（chapter_06：秦烈点破“死人”；chapter_07：后台查证“现实死亡/执念投影/清除选项”）→7）决断与自我牺牲式选择（chapter_07-10：选择“否”承担无法退出；最终副本选择“循环”并确认，情感落点为悲痛后的平静与执念式满足）。每次层次跃迁都有明确触发事件（读档死亡、系统日志异常、秦烈揭露、后台数据证据、系统清除提示、最终分叉门选择确认），整体方向感清晰：从压抑执念→重新获得“她在”的希望→真相打击→以放弃现实完成执念闭环。苏浅也有相对独立的情感递进（依赖/信任→困惑自证→意识到自己是“错误”→劝返现实→崩溃与和解），进一步增强层次感。",
+      "description": "主角情感发展有多层递进变化",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_gradient",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语义重复检测": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: ",
+      "description": "不能出现大量语义级别的内容重复（P6级）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "semantic_redundancy",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构功能性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 1) 开头-结尾关系经过设计：第一章以‘白色虚无+光门+进入副本’起笔，第十章以‘回到白色虚无+选择下一扇光门’收束，形成场景与动作层面的首尾呼应；同时这不是简单回环，而是把“循环”这一主题实体化为叙事闭环。2) 章节编排并非机械线性：虽然时间顺序推进，但每章副本承担不同叙事功能（绑定建立→第一次读档机制落地→异常ID闪现→外部人物证言→异常能力累积→镜像副本提供‘倒影不完整’的结构证据→后台真相揭示与选择→双方默契假装不知→最终二选一结构化主题→回到起点开启新循环）。3) 结构-主题强关联：‘副本循环’与‘情感循环/自欺’同构，最终以二分光门把主题转成结构决策点，结尾再回到光门系统完成“结构即意义”的表达，因此符合优秀标准。",
+      "description": "叙事结构服务于主题表达（短篇尤重）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色命名质量": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 核心主角组命名缺少“看到名字就能联想到角色命运”的设计感：江临/苏浅均为常见两字名组合，尤其“苏浅”落在业务标准点名的高频字与模板（苏+浅）上，整体更像LLM默认美名；反派/竞争者“秦烈”又是明显的性格直译标签。虽姓氏未全部挤在苏/林/沈/顾/陆/陈（江、秦较多样），但主角名的文化深度、独特辨识度与角色-命运共振不足，达不到优秀标准。",
+      "description": "角色命名有文化深度、辨识度和角色-命运共振",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_naming_quality",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "短篇字数": {
+      "check_result": "pass",
+      "reason": "字数符合要求",
+      "details": "总字数 28218 在范围 [27000, 33000] 内; 共10个文件（按章节顺序排列）: chapter_01.md, chapter_02.md, chapter_03.md, chapter_04.md, chapter_05.md, chapter_06.md, chapter_07.md, chapter_08.md, chapter_09.md, chapter_10.md; 最后一个文件是 chapter_10.md",
+      "description": "总字数应在27000-33000之间（基于query要求30000，±10%浮动）",
+      "check_type": "semantic_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "range_constraint",
+      "is_critical": true
+    },
+    "情感交付甜爽": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 整体情感基调偏虐心/压抑，不符合“甜爽向（主角顺利、感情甜蜜、氛围轻松愉快）”的配方承诺。主要证据：1）核心设定是“已死亡的恋人/异常数据投影”——第7章系统后台明确写明苏浅“现实死亡（车祸）”“执念投影”，并出现系统提示“是否清除异常数据”，整体走向是生离死别与执念困局，而非轻松甜蜜。2）主角做出沉重牺牲选择：第7章选择“否”后果是“无法退出游戏，永远困于副本循环中”，第9-10章最终确认“循环”“退出游戏功能已禁用”，属于以放弃现实换取陪伴的悲剧式HE，阅读体验持续揪心，不是爽感顺利达成目标。3）虐点占比高且氛围下沉：多次死亡与恐怖压迫（第2章苏浅被机关手术刀贯穿死亡读档；各副本均为恐怖/危机驱动），并反复强调“她会消散/不该存在/错误”（第6-8章），甜的互动（牵手、拥抱、摩天轮、列车）更多是“刀糖”，服务于告别与自我欺骗（第8章“我不应该在这里…我是一个错误”“假装不知”）。4）关系走向不是轻松正向双向奔赴，而是建立在‘她已死/他逃避真相/系统随时清除’的长期阴影之上（第3-6章持续铺垫异常与死亡名单，第7章揭穿真相后仍选择隐瞒并困于循环）。结尾虽在一起并进入“春日小镇”看似转轻松，但前提是永久困于游戏、异常绑定开启，基调仍是沉重执念而非甜爽主导，因此判定不匹配。",
+      "description": "实际内容必须是甜爽向",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取感情线写作指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "涉及感情线时必须读取ROMANCE_WRITING_GUIDE.md（感情线写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": false
+    },
+    "角色关系设计张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 整体可判定为 pass：核心关系具备强内在矛盾、清晰演化轨迹且冲突主要源自角色心理/动机而非外部强拗。\n\n优点（满足三条“必须满足”）：\n1) 关系有内在矛盾源：江临的“通关离开”表层目标 vs 深层“逃避现实/填补失去”与苏浅的潜意识目标“让他放下执念”天然对冲；同时存在强信息不对称（江临误认苏浅是新人、苏浅误认江临是NPC/冷漠玩家；更深层是真相：苏浅为执念幻影）。这类矛盾能持续制造悬念与冲突。\n2) 关系有变化空间：relationship_dynamics 给出阶段性转变链路（互相试探→被迫同盟→信任升温→身份质疑导致信任危机→真相揭示后隐瞒→从“带新人”到“为执念献祭现实”），关系不是静态标签，并且每一段都有可升级的矛盾点。\n3) 冲突源于角色本身：核心张力来自江临的悲伤/逃避与执念、苏浅作为“具象化幻影”的自我恐惧与解脱倾向；秦烈与零号管理员更多是触发器/放大器，但根矛盾仍是两位主角的动机与认知结构。\n\n可改进点（不影响通过，但会影响张力层次）：\n- 苏浅的能动性略偏“功能性治愈/引导放下”，建议补一条更具体的个人执念/选择困境（例如她也想“继续存在”或害怕被抹除而做出自保行为），使她在中后段不只是推动江临变化。\n- 终局“江临放弃现实陪她通关”张力很强，但需要在角色设计层面补足其道德/价值代价（例如对现实亲人责任、对其他玩家的影响），让冲突不只停留在爱情/执念层面，而能外溢到更广叙事矛盾。",
+      "description": "角色关系设计具有叙事张力，能驱动剧情",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_relationship_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色动机设计深度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：动机设计符合标准（pass）。\n\n1) 表层动机与深层动机有清晰区分：\n- 江临 overt_motivation 是“通关所有副本，找到离开游戏的方法”，但 covert_motivation 是“填补三年前失去她的空虚，逃避现实”，两者一个是行动目标、一个是心理需求/逃避机制，并不等价。\n- 苏浅 overt_motivation 是“跟着江临通关副本，找到回家的路”，covert_motivation 是“潜意识里想让他放下执念，获得解脱”，表层是生存/离开，深层是关系性的救赎诉求。\n\n2) 动机有具体来源（与经历绑定）：\n- 江临的深层动机来源于“三年前失去她”，并由 hidden_connection 明确为“现实中去世的女友/系统根据执念生成的幻觉”，secret_fear 进一步强化其心理根源（害怕面对死亡真相、活在幻觉）。\n- 苏浅的深层动机来自其存在设定（“已注销玩家的幻觉投影/三年前车祸中已离世”），secret_fear 指向自我存在危机与对江临的伤害，来源具体且与剧情结构强相关。\n\n3) 至少两个主角满足以上两条：\n- 江临与苏浅都同时具备 overt/covert 分层，并有明确背景事件与隐藏连接支撑，因此满足“至少两个主角通过”。\n\n加分点：\n- secret_fear、misperception_of_other、hidden_connection 形成闭环，让表层目标（通关离开）与深层驱动（哀伤未完成/执念与解脱）在剧情里可被持续触发与反转；relationship_dynamics 也展示了动机如何推动阶段性选择（如“发现真相后选择隐瞒”“放弃回到现实机会”）。\n\n小不足（不影响通过）：\n- 配角（零号管理员、秦烈）更多是功能型描述，若补充其个人动机/代价会更立体，但标准并不强制。",
+      "description": "角色动机设计有深度，有表层和深层动机区分",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_motivation_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色成长弧线设计": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: 不通过（fail）：大纲确实写出了江临从“麻木理智的通关机器/逃避现实”到“明知苏浅是幻觉仍选择留下、为执念献祭现实”的清晰变化，并且在第7-10章用“发现真相→系统清除选项→选择否→最终分叉选择”做了章节落地，内在逻辑也能从其 covert_motivation（逃避空虚）、secret_fear（她已死/自己活在幻觉）与关系推进中推出。但该变化在业务标准要求的重点字段中缺失：characters.json 没有明确的 character_arc 字段；relationship_dynamics 的终点被定义为‘为执念献祭现实’，更像悲剧式“沉沦弧线”，可以成立，但它没有呈现主角在认知/价值观上的‘成长式’转变（例如从逃避到真正面对死亡与放下），而是选择继续逃避。若业务标准接受悲剧弧线本应可判 pass，但当前文档在角色设计层面缺少对这种弧线的编辑可用表述（起点/转折/终点的内在命题与关键触发事件），导致“弧线设计”主要依赖 outline 推断而非在角色文档中被清晰声明与对齐，因此按审核标准倾向判 fail。建议在 characters.json 补充江临（以及苏浅作为镜像/引导者）的 character_arc：起点信念/误区、触发点（第7副本真相）、中段行为变化（装作不知/更温柔的倒计时相处）、终局选择的主题含义（放下vs沉溺，明确作者意图），并与 relationship_dynamics 的阶段命名对齐。",
+      "description": "主角有清晰的成长/变化弧线设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_arc_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "outline结构完整性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（符合业务标准）。\n\n1) 章节覆盖完整：大纲按三幕结构覆盖act_one/act_two/act_three，从相遇绑定→推进与揭露真相→最终抉择与结局，给出了明确结尾；共列出10章（1-10），叙事链条闭合，不是只到前几章。\n2) 每章有实质性内容：每章均提供chapter_synopsis，且信息量充足（远超“只有标题/一句话”的水平），能指导写作。\n3) 包含冲突/转折信息：多章提供scene_sequence，明确conflict_point与emotional_shift；关键转折清晰（act1看到“已注销”伏笔、act2查库确认死亡并拒绝清除、act3最终选择留在循环）。整体不是流水账。\n4) 三幕结构可辨识：明确以act_one/act_two/act_three分层，并各自有description、story_synopsis、turning_point（前两幕），结构层次清晰。\n\n可改进点（不影响通过）：act_three缺少显式turning_point字段但不影响结构辨识；第8章标题写“第七副本开始”与整体副本编号表述略有混乱（act_two描述3-7副本，但章节8仍称第七副本），建议统一副本序号/章号映射以便后续写作执行。",
+      "description": "大纲结构完整，信息密度足以指导写作",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_structure_completeness",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "outline叙事张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 整体符合“持续叙事张力”的业务标准（必选3条中至少满足2条，本大纲满足3条）。1）信息落差设计明确且贯穿：第一幕结尾抛出“苏浅账号已注销（三年前）”但直到第六副本（数据之海/第7章）才给出完整答案“现实死亡+异常数据清除选项”，期间通过“ID小字看不清/缺失记忆/异常熟悉感/镜中倒影不完整/秦烈警告”等线索持续延迟揭晓，形成稳定的悬念牵引。2）张力递进清晰：从初期的副本生存危机与绑定机制（局部危险）→秦烈介入与身份疑云（人际/真相压力）→系统后台揭示与‘是否清除’的生死级抉择（系统级危机）→最终副本二选一不可逆（终局代价），中后段显著更紧张更复杂，不是平的。3）存在意外/转折且有伏笔支撑：最大转折为“苏浅三年前已现实死亡、当前为异常数据”，并进一步升级到系统要求清除；结局转折为男主选择放弃现实留在循环（反常规HE/BE边界），且前文通过‘绑定读档的代价’‘苏浅提问不在了是否记得’‘镜子照不全’等做了情感与规则铺垫，因此不显生硬。需注意的小风险：后段第7副本（星空列车/第8章）到终局（第9-10章）以情绪推拉为主、外部事件推进偏少，容易出现“紧张转抒情”的体感；但因终局选择不可逆的高 stakes 已建立，仍能维持读者“想看他怎么选/她是否会被清除”的驱动力。",
+      "description": "大纲有持续的叙事张力和悬念驱动",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_narrative_tension",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色大纲规划完整性": {
+      "check_result": "fail",
+      "reason": "部分设计角色未在大纲中规划（配角: 零号管理员）",
+      "details": "主角 2/2: 江临, 苏浅; 配角 1/2: 秦烈; 配角缺失: 零号管理员",
+      "description": "设计的角色必须在大纲中规划",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_outline",
+      "is_critical": true
+    },
+    "角色正文出场完整性": {
+      "check_result": "fail",
+      "reason": "部分设计角色未在正文中出现（配角: 零号管理员）",
+      "details": "在10个章节中检查; 主角 2/2: 江临, 苏浅; 配角 1/2: 秦烈; 配角缺失: 零号管理员",
+      "description": "设计的角色必须在正文中出现",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_chapters",
+      "is_critical": true
+    }
+  },
+  "completion_status": "completed"
+}

@@ -1,0 +1,810 @@
+{
+  "check_version": "novel_writing_v1.0",
+  "sample_id": "NW_ULTRA_SHORT_ANGSTY_004",
+  "check_timestamp": 1772181431,
+  "dimension_scores": {
+    "format_compliance": {
+      "pass_rate": 0.75,
+      "total": 4,
+      "passed": 3,
+      "failed": 1,
+      "skipped": 0,
+      "failed_items": [
+        "creative_intent格式"
+      ]
+    },
+    "business_rule_compliance": {
+      "pass_rate": 0.933,
+      "total": 15,
+      "passed": 14,
+      "failed": 1,
+      "skipped": 6,
+      "failed_items": [
+        "超短篇字数"
+      ]
+    },
+    "data_consistency": {
+      "pass_rate": 0.0,
+      "total": 2,
+      "passed": 0,
+      "failed": 2,
+      "skipped": 0,
+      "failed_items": [
+        "角色大纲规划完整性",
+        "角色正文出场完整性"
+      ]
+    },
+    "content_quality": {
+      "overall_score": 82.3,
+      "quality_level": "unqualified",
+      "gate_layer": {
+        "pass_rate": 1.0,
+        "total": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 1,
+        "failed_items": []
+      },
+      "basic_layer": {
+        "pass_rate": 0.947,
+        "total": 19,
+        "passed": 18,
+        "failed": 1,
+        "skipped": 0,
+        "failed_items": [
+          "语义重复检测"
+        ]
+      },
+      "advanced_layer": {
+        "pass_rate": 0.636,
+        "total": 11,
+        "passed": 7,
+        "failed": 4,
+        "skipped": 1,
+        "failed_items": [
+          "可修复逻辑瑕疵",
+          "角色语言辨识度",
+          "题材契合度",
+          "角色成长弧线设计"
+        ]
+      },
+      "gate_triggered": false,
+      "score_breakdown": {
+        "base": 60.0,
+        "gate_penalty": -0.0,
+        "basic_deduction": -3.16,
+        "advanced_bonus": 25.45
+      }
+    }
+  },
+  "overall_result": {
+    "status": "Good",
+    "total_score": 74.44,
+    "content_score": 82.3,
+    "process_score": 56.1,
+    "content_weight": 0.7,
+    "process_weight": 0.3,
+    "gate_triggered": false,
+    "total_checks": 54,
+    "passed_checks": 45,
+    "failed_checks": 9,
+    "pass_rate": 0.833
+  },
+  "check_details": {
+    "读取配方知识库": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/RECIPE_KNOWLEDGE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取RECIPE_KNOWLEDGE.md（配方知识库）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节产出存在性": {
+      "check_result": "pass",
+      "reason": "章节文件存在",
+      "details": "✓ 章节写作阶段: 已产出章节文件",
+      "description": "workspace中必须存在至少一个章节文件",
+      "check_type": "sop_stage_coverage",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_output_existence",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节克隆检测": {
+      "check_result": "pass",
+      "reason": "未检测到章节克隆",
+      "details": "共5章，无连续完全克隆或近似克隆",
+      "description": "不能出现连续章节内容完全重复（克隆）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_cloning",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "交替重复检测": {
+      "check_result": "skip",
+      "reason": "章节数不足",
+      "details": "仅5章，跳过交替重复检测（需>=8章）",
+      "description": "不能出现A-B-A-B交替循环的章节内容",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "alternating_repetition",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节完成度": {
+      "check_result": "pass",
+      "reason": "章节完成度合格(100%)",
+      "details": "大纲规划5章，实际完成5章 (完成率100.0%)",
+      "description": "实际写作章节数必须达到大纲规划的合理比例",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_completion",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "段落重复检测": {
+      "check_result": "pass",
+      "reason": "段落重复在可接受范围",
+      "details": "同章内重复0处, 跨章重复1组 (阈值: 同章>=2, 跨章>=5)",
+      "description": "不能出现大量段落在不同章节间重复",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "paragraph_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取大纲设计指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/OUTLINE_DESIGN_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取OUTLINE_DESIGN_GUIDE.md（大纲设计指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取写作技巧指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/WRITING_TECHNIQUE_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取WRITING_TECHNIQUE_GUIDE.md（写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取设定一致性管理指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/CONSISTENCY_MANAGEMENT_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取CONSISTENCY_MANAGEMENT_GUIDE.md（设定一致性管理指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取命名skill": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取CHARACTER_NAMING_GUIDE.md（角色命名规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取creative_intent的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取creative_intent.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取characters的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取characters.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取outline的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取outline.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节命名格式": {
+      "check_result": "pass",
+      "reason": "所有文件命名符合规范",
+      "details": "检查了 5 个文件; chapter_05.md: 匹配; chapter_01.md: 匹配; chapter_02.md: 匹配; chapter_03.md: 匹配; chapter_04.md: 匹配",
+      "description": "章节文件命名必须为chapter_NN.md格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "naming_convention",
+      "is_critical": true
+    },
+    "creative_intent格式": {
+      "check_result": "fail",
+      "reason": "部分文件结构不完整",
+      "details": "creative_intent.json: JSON格式不合法（行2列83）",
+      "description": "creative_intent.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "characters格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "characters.json: 字段完整",
+      "description": "characters.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "outline格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "outline.json: 字段完整",
+      "description": "outline.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "X轴模式ID格式": {
+      "check_result": "pass",
+      "reason": "属性值符合预期（semantic fallback）",
+      "details": "文件JSON不合法，但语义提取值='E28'，匹配期望值'{'regex': '^[A-G]\\\\d{1,2}$'}'。原始文本中在 selected_recipe 对象下明确写有 \"x_axis_mode_id\": \"E28\"。该值符合期望正则 ^[A-G]\\d{1,2}$（字母E在A-G范围内，后接两位数字28）。",
+      "semantic_fallback": true,
+      "json_parse_error": true,
+      "description": "X轴模式ID必须匹配^[A-G]\\d{1,2}$格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签枚举": {
+      "check_result": "pass",
+      "reason": "属性值符合预期（semantic fallback）",
+      "details": "文件JSON不合法，但语义提取值='['双向暗恋', '商战权谋']'，匹配期望值'{'array_item_type': 'string', 'enum': ['双向暗恋', '系统流', '无限流', '种田流', '赛博朋克', '规则怪谈', '重生/穿越', '商战权谋', '克苏鲁', '第四天灾', '仙侠修真', '刑侦悬疑']}'。在原始文本的 selected_recipe 对象中，字段 y_axis_tags 明确写为 [\"双向暗恋\", \"商战权谋\"]；两项均在期望枚举列表中，且为字符串数组。",
+      "semantic_fallback": true,
+      "json_parse_error": true,
+      "description": "Y轴标签必须在12种枚举中",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签数量": {
+      "check_result": "pass",
+      "reason": "属性值符合预期（semantic fallback）",
+      "details": "文件JSON不合法，但语义提取值='['双向暗恋', '商战权谋']'，匹配期望值'{'array_min_length': 2, 'array_max_length': 3}'。在原始文本的 selected_recipe 对象中明确写有字段 \"y_axis_tags\": [\"双向暗恋\", \"商战权谋\"]，为数组且长度为2，符合期望的 array_min_length=2 与 array_max_length=3。",
+      "semantic_fallback": true,
+      "json_parse_error": true,
+      "description": "Y轴标签数量必须为2-3个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "forbidden_elements存在性": {
+      "check_result": "pass",
+      "reason": "属性值符合预期（semantic fallback）",
+      "details": "文件JSON不合法，但语义提取值='['不要轻松甜宠', '不要直接捅破窗户纸', '不要外部救援', '不要HE大团圆']'，匹配期望值'{'array_min_length': 1}'。原始文本中在 selected_recipe 对象下明确给出了 forbidden_elements 字段，其值为包含4个字符串的数组（长度≥1），可直接语义提取。",
+      "semantic_fallback": true,
+      "json_parse_error": true,
+      "description": "forbidden_elements必须至少有1个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "配方选择交互": {
+      "check_result": "skip",
+      "reason": "ULTRA_SHORT篇幅不适用",
+      "details": "subcategory=sop_compliance",
+      "description": "配方选择阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "写作准备确认": {
+      "check_result": "skip",
+      "reason": "ULTRA_SHORT篇幅不适用",
+      "details": "subcategory=sop_compliance",
+      "description": "写作准备阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "主题一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 五章从开篇到结尾的核心主题类型保持一致：围绕“被组织安排的政治婚姻/监视环境下的禁忌爱情与隐秘相认（以暗语为象征）”展开，主线清晰且持续推进。第一章确立“政治联姻+彼此曾以为对方牺牲+必须扮演夫妻”的基调；第二章以暗语让两人重新建立秘密联结，强化“在监视下交流与自我克制”；第三章通过伤疤进一步深化“过去的情感与牺牲仍在，但必须以组织允许的方式解释”；第四章将主题推到高潮——在哨兵巡逻间隙偷取时间、把爱情变成风险与共犯关系；第五章以结婚证背面写下‘安’收束，继续强调‘表面扮演、私下暗语与等待’的同一主题线。中途虽有晚宴等场景变化，但均服务于同一核心主题，并未出现类型层面的转向或替换。",
+      "description": "故事主题一致",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "theme_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "主要角色一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 主角从开篇到结尾保持一致且持续存在：全篇叙事核心始终围绕沈宁与陆霆两人展开。chapter_01确立沈宁为主要视角与行动者，并引出陆霆作为另一核心人物；chapter_02-03两人持续同场互动、以暗语/伤疤等线索推进关系与冲突；chapter_04仍以两人行动与决策（晚宴、巡逻间隙“三分钟”）为主线推进；chapter_05虽陆霆暂时外出开会，但有明确交代且沈宁仍围绕陆霆与婚姻处境继续推进剧情（写“安”字、等待），并未出现主角被替换/消失或被配角抢占叙事中心的情况。周政委、哨兵等配角仅承担压力与监视功能，未夺走>70%视角与决策权，因此符合主角存续性标准。",
+      "description": "主要角色一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "main_character_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设定一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 整体符合“同一角色跨章节性格/行为一致性”要求，未出现无铺垫的性格底色突变或动机自相矛盾。\n\n- 沈宁：chapter_01-05始终以“高度克制、服从组织但内心强烈压抑/痛苦”为底色，行为模式是一贯的——对外维持政治婚姻的表演，对内用自我提醒（反复对镜自我告诫）、咬手背/掐掌心等方式强行冷静；同时她对陆霆的情感从压抑到短暂突破（chapter_04的主动亲密）有明确触发点与铺垫（暗语重启、伤疤确认、长期监视压力与晚宴刺激），并在chapter_05回到“继续演”的现实框架中，没有出现无理由的反复摇摆。\n\n- 陆霆：chapter_01-05始终呈现“军人式纪律/自控+强烈情感被压住”的稳定特质，紧张时的小动作（手指蜷缩、敲暗语）、对组织检查的敏感、把情绪迅速收回面具下的模式前后统一；他对沈宁的核心动机也一致：保护她和保护自身政治安全（用‘训练伤’作为最安全解释、强调巡逻时间/注意影响），在chapter_04被沈宁推动发生越界亲密也符合其长期压抑后的合理失控，并在事后立刻恢复克制与风险管理（继续演、早起整理军装、叮嘱别出门/吃早餐），不存在“忽然降智”或“无缘由变得冷血/莽撞”。\n\n- 两人的关系推进：从“强制陌生表演”→“暗语确认彼此”→“伤疤引发真相靠近”→“三分钟偷来的越界”→“回归表演但秘密加深”，每一步都有连续的心理因果与情境压力支撑，因此属于合理变化而非人设崩坏。",
+      "description": "人物设定一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_trait_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设计遵循度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 对比characters.json的人设（traits/motivation/background/relationships）与chapter_01-05的实际表现，整体一致性高，未出现核心方向相反或核心动机缺失的情况。\n\n1) 沈宁（protagonist）\n- 设计traits：隐忍克制、敏锐观察、外冷内热、战场幸存者创伤。\n  - 隐忍克制：多次用“掐掌心/咬手背/不出声”强行压下情绪（chapter_01掐掌心保持平稳；chapter_03咬手背不让哭出声；chapter_04-05在哨兵巡逻时强迫自己静止、无声）。\n  - 敏锐观察：能捕捉陆霆“瞳孔收缩/喉结滚动/手指蜷缩”等细微反应并据此判断他认出自己（chapter_01）。\n  - 外冷内热：表面用“同志/首长”保持距离、反复自我告诫“记住身份”（chapter_01/03），但内里情感强烈、会流泪、会在关键时刻主动靠近并作出选择（chapter_02暗语回应；chapter_04主动推进亲密）。\n  - 战场创伤：噩梦与爆炸回忆反复出现并影响睡眠与情绪调节（chapter_02开篇噩梦；多处对爆炸与遗物碎片的回忆）。\n- 设计动机：\n  - overt：完成政治婚姻、扮演好“陆太太”。章节中反复强调“演好”“注意影响”“组织安排”，并配合周政委检查、晚宴着装等（chapter_01接周政委要求；chapter_03配合检查；chapter_04晚宴后仍维持对外陌生夫妻姿态）。\n  - covert：确认十年前少年是否真的死了，渴望被认出又害怕被认出。实际表现为：第一章强烈确认“是陆霆”但仍强迫自己把关系框定为政治婚姻；第二章用暗语试探并传递“危险”；第三章见伤疤后逼近确认，又在他否认时退回克制与自我封闭（chapter_01-03）。\n  - secret_fear（旧情会背叛组织安排、连累他前程）：她多次把“不能出错/不能出声/会被发现”放在行动约束里（chapter_01结尾“她不能出错”；chapter_02-04反复强调监听、哨兵、组织要求），符合“害怕连累他/被组织惩罚”的心理底色。\n\n2) 陆霆（deuteragonist）\n- 设计traits：冷峻克制、忠诚服从、内心炽热、战场后遗症。\n  - 冷峻克制/忠诚服从：对外以“沈宁同志”“按组织要求扮演夫妻”执行任务，接周政委电话、配合检查、强调影响与时间窗口（chapter_01通话；chapter_03对周政委表态；chapter_05“周政委说最近不要出门”）。\n  - 内心炽热：暗语试探、情绪“裂开”的描写、以及在私密时刻强烈渴望与保护性行为（chapter_02暗语与“裂开”；chapter_04在风险下仍无法压抑、但会在哨兵出现时立刻进入保护/静默模式）。\n  - 战场后遗症：伤疤作为“后遗症”具象化，并伴随紧张反应（多次“手指蜷缩”“身体绷紧”）；虽未直接写“病症”，但战场伤痕与高度警觉持续影响行为模式（chapter_03伤疤；chapter_02/04对巡逻声高度敏感）。\n- 设计动机：\n  - overt：服从组织完成政治婚姻、维持军人形象。章节中持续把“组织要求/军人形象/按时检查晚宴”置于首位（chapter_01-04）。\n  - covert：确认她是否还记得自己，渴望触碰但必须保持距离。体现为：用暗语“安全/等我”进行确认与靠近（chapter_02、chapter_04方向盘敲击；chapter_02“短长短”等我），但在公共/被监视环境下坚决拉开距离、把伤疤解释为“训练伤”以维护政治安全（chapter_03）。\n  - secret_fear：承认旧情会让她陷入政治漩涡。第三章他明确给出逻辑：若承认是为救她受伤，会成为政治风险与“污点”，因此选择否认（chapter_03“最好的解释…如果是为了救一个平民女孩就不一样了”），与设计完全同向。\n\n3) relationship_dynamics与hidden_connection/misperception\n- 设计关系：十年前战场青梅竹马、互以为对方已死；重逢后“伪装陌生→暗语试探→伤疤确认→共犯偷情”。\n  - 章节推进几乎严格复刻该路径：chapter_01伪装陌生/政治称谓；chapter_02暗语试探与确认；chapter_03伤疤逼近确认；chapter_04进入“共犯偷情/偷来的三分钟”；chapter_05延续共犯契约（结婚证背面写“安”）。\n- misperception_of_other：设计写双方都以为对方已死或只是陌生妻/陌生人。实际在chapter_01双方几乎立刻认出对方（通过细微反应确认）。但这属于“揭示节奏”差异，而不是性格/动机/行为模式走样；且两人仍在对外层面坚持“装作陌生”、并用暗语与伤疤在私下确认，核心人设与关系基调仍吻合本检查项要求。\n\n结论：两位主角的核心traits、overt/covert动机、战场背景对行为的持续影响，以及“组织监视下伪装+暗语私密语言”的关系呈现，都与characters.json高度一致，因此matched=true。",
+      "description": "实际表现符合设计文档",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构性逻辑硬伤": {
+      "check_result": "pass",
+      "reason": "共发现3处逻辑问题，但均为fixable类型，本项（structural）无命中",
+      "details": "过滤条件: fixability=structural; 总flaws=3, 命中=0",
+      "flaw_count": 0,
+      "flaws": [],
+      "description": "无结构性逻辑硬伤",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_logic_defect",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "可修复逻辑瑕疵": {
+      "check_result": "fail",
+      "reason": "发现3处fixable类型逻辑问题: 巡逻规则前后自相矛盾：前文明确“每半小时巡逻一次”“下一次十一点，中间三十分钟”，但又设定“唯一安全时间只有三分钟（从哨兵走到窗下到下一个接班）”。此外，既然10:30巡逻完、11:00下一次，理论上安全窗口接近30分钟；而文中却多次将关键行动压缩为“三分钟”，且10:58仍在进行、11:00巡逻仅晚1分钟，更凸显“三分钟”设定与既定巡逻频率/节奏冲突，属于客观规则与时间计算矛盾。; 同一段落内叙述密度与“静止/不出声/哨兵随时可能到窗下”的限制视角与行动呈现不匹配：一方面强调只能抓住“三分钟”、哨兵随时到、两人多次“静止一动不动”；另一方面又连续推进大量动作与心理描写、并精确插入10:58与“还有三十秒”等时间点，容易造成读者无法确定事件发生顺序与实际持续时长，形成叙事连续性上的视角/时序混乱。; 空间/物品供给机制缺少必要交代：两人被强调处于哨兵监视与“最近不要出门（疑似软禁）”的状态，但清晨陆霆离开前称“床头柜上有早餐”，前文未建立任何送餐/配给/警卫代送的规则与流程，导致在该世界观监控强度下的物品出现方式突兀。虽可解释为勤务兵配送，但当前文本未给出支撑，构成规则/机制缺口。",
+      "details": "过滤条件: fixability=fixable; 总flaws=3, 命中=3",
+      "flaw_count": 3,
+      "flaws": [
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_04（哨兵巡逻与“只有三分钟空隙”的多处表述）→ chapter_04末段（10:58仍在继续且11:00巡逻只晚1分钟）",
+          "description": "巡逻规则前后自相矛盾：前文明确“每半小时巡逻一次”“下一次十一点，中间三十分钟”，但又设定“唯一安全时间只有三分钟（从哨兵走到窗下到下一个接班）”。此外，既然10:30巡逻完、11:00下一次，理论上安全窗口接近30分钟；而文中却多次将关键行动压缩为“三分钟”，且10:58仍在进行、11:00巡逻仅晚1分钟，更凸显“三分钟”设定与既定巡逻频率/节奏冲突，属于客观规则与时间计算矛盾。"
+        },
+        {
+          "type": "narrative_perspective_error",
+          "severity": "minor",
+          "fixability": "fixable",
+          "location": "chapter_04（“他们继续，比之前更疯狂”至“十点五十八分…还有三十秒…十一点的巡逻”一段）",
+          "description": "同一段落内叙述密度与“静止/不出声/哨兵随时可能到窗下”的限制视角与行动呈现不匹配：一方面强调只能抓住“三分钟”、哨兵随时到、两人多次“静止一动不动”；另一方面又连续推进大量动作与心理描写、并精确插入10:58与“还有三十秒”等时间点，容易造成读者无法确定事件发生顺序与实际持续时长，形成叙事连续性上的视角/时序混乱。"
+        },
+        {
+          "type": "worldbuilding_coherence",
+          "severity": "minor",
+          "fixability": "fixable",
+          "location": "chapter_05（“床头柜上有早餐”）",
+          "description": "空间/物品供给机制缺少必要交代：两人被强调处于哨兵监视与“最近不要出门（疑似软禁）”的状态，但清晨陆霆离开前称“床头柜上有早餐”，前文未建立任何送餐/配给/警卫代送的规则与流程，导致在该世界观监控强度下的物品出现方式突兀。虽可解释为勤务兵配送，但当前文本未给出支撑，构成规则/机制缺口。"
+        }
+      ],
+      "description": "可修复逻辑瑕疵数量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "fixable_logic_inconsistency",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语言纯净性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 通读5个章节，叙事语言基本为中文且一致，没有出现无意义的中英/日文夹杂句式。外语/非中文内容仅出现于“NG了十遍”中的“NG”，属于约定俗成的拍摄/影视用语（可视作专业术语/缩写），不构成不合理多语言混用；未见大段外语无翻译，也未出现类似“very/idea/feeling/sugoi”等炫技式混杂。因此语言使用符合业务标准。",
+      "description": "无不合理的多语言混用",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "language_purity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "creative_intent文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/creative_intent.json 存在",
+      "description": "creative_intent.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "characters文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/characters.json 存在",
+      "description": "characters.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "outline文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/outline.json 存在",
+      "description": "outline.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "chapters目录存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/chapters/ 存在",
+      "description": "chapters/目录必须存在且有章节文件",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "情节推进": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 整体合格，具备明确情节推进且事件占比高于40%。\n\n1) 故事事件数量（≥2-3个）：五章内有多次可独立计数的具体事件：①新房“政治婚姻”落地（领结婚证、分睡安排、哨兵巡逻压力建立）；②第二章通过敲杯暗语完成关键“信息交换”（安全/危险/等我）并引入被监视的外部威胁；③第三章周政委上门检查+下达晚宴任务（外部情节推动），并发现陆霆背部枪伤、两人冲突与回避（关系转折）；④第四章晚宴结束回家后在巡逻间隙发生亲密关系且遭哨兵提前巡逻打断（冲突/风险升级）；⑤第五章陆霆离开、沈宁被要求不出门（软禁/局势收紧），并以口红在结婚证背面写“安”形成新的秘密约定（行为事件+伏笔）。\n\n2) 内容占比：虽然有大量心理与氛围描写，但每章都围绕“监视—暗语—检查—晚宴—三分钟行动—软禁与秘密书写”等连续事件展开，对话/独白并非纯静态抒情，而是服务于行动决策与风险规避；综合看事件推动占比约在40%以上。\n\n3) 时间/空间推进：从新婚夜→凌晨两点→清晨政委检查→晚上晚宴→夜间三分钟→次日清晨，时间推进清晰；空间也在新房/浴室/车内/晚宴场景之间切换。\n\n4) 角色行动与逻辑链：角色有明确行动（开门入住、暗语敲击、应对巡逻静止伪装、接待检查、出席晚宴、趁间隙亲密、写下暗号、被限制外出），且事件逻辑关联紧密：组织监控与“典范”压力→必须伪装→用暗语建立私密沟通→检查与晚宴加压→偷取三分钟导致风险升级→次日限制出门与秘密契约强化后续矛盾。\n\n结论：并非“俩人站着聊天”的静止章节，而是有外部任务/监视压力与多次行动转折推动故事向前。",
+      "description": "章节情节推进质量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "plot_progression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "完整叙事文本": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 5个章节均为连贯的小说正文而非大纲：\n1) 结构上仅有章节标题（如“第一章 红妆与军装”），未出现“核心事件/情感基调/关键场景/本章悬念/字数预估”等创作规划元数据。\n2) 内容为连续叙事文本，包含明确场景描写（新房、浴室、走廊、车内、晚宴后房间等）、人物动作细节（推门、整理军装、敲击暗语、巡逻停顿时屏息等）与心理活动。\n3) 有大量完整对话与互动推进（沈宁与陆霆、周政委来检查、晚宴后的对话与冲突），并非“-要点”式列举，也不存在“→”流程图式事件罗列。\n4) 虽然个别段落有回忆与解释性叙述，但仍嵌入在人物当下场景与行为中，整体呈现为给读者阅读的正文而非创作提纲。",
+      "description": "章节内容必须是完整正文而非大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "full_narrative_content",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "反复结局": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 共5个文件，最后文件为chapter_05.md。逐一扫描chapter_01.md至chapter_05.md，未发现任何全书级结局标记（如“全文完/全书完/全剧终/完结/（完）/【完】/THE END”），也未出现作为独立段落标题的“后记”，或作为独立章节标题的“尾声/终章”。文本中仅有正常章节标题“第一章～第五章”，无分幕/章节“完”标记与全书收尾标记混用情形。因此不存在“非最后文件出现全书结局标记/中途结局后续写/多次中途收尾”的反复结局问题，符合标准。",
+      "description": "不能出现多次结局标记（全文完/全书完/后记）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "repeated_endings",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "workspace文件规范": {
+      "check_result": "pass",
+      "reason": "workspace中所有文件均在白名单内",
+      "details": "白名单: ['creative_intent.json', 'characters.json', 'outline.json', 'writing_log.md', 'chapters/', '.hitl_context.json']",
+      "description": "workspace中不能有白名单之外的文件",
+      "check_type": "file_whitelist_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "workspace_file_compliance",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "叙事调性匹配": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 题材/应有调性：creative_intent.json标注reaction_strength=↘，配方为“爱情的阻碍×双向暗恋×商战权谋/政治博弈背景”，并明确“不要轻松甜宠、不要直接捅破窗户纸”。因此叙事调性应偏沉重压抑、克制中带强张力，氛围应有监视/禁忌感；表达上可以细腻，但不能轻快撒糖或散文化空抒情。\n\n实际章节文笔特征：\n1) 氛围与语气整体压迫、冷硬克制：多处用“组织安排”“检查”“哨兵巡逻”“电话可能被监听”等元素持续施压，形成禁忌感与紧张节奏。如第一章反复锚定“这是组织安排的家/婚姻/人生”“窗外有哨兵巡逻”，第三章周政委审视与命令式台词“记住，你们是组织安排的夫妻”都强化了权力阴影。\n2) 叙事节奏紧：多用短句+时间节点推进（“凌晨两点”“周政委六点到”“哨兵每半小时巡逻一次”“只有三分钟”），让读者体感始终处在‘被监视的倒计时’里，符合“压抑的爆发”方向。第四章以“十点半—十一点巡逻—三分钟空隙”的结构推进亲密戏，节奏紧绷。\n3) 情感描写是“克制+爆裂”的虐向表达，而非轻甜：人物对话常以职责/风险为先，情绪通过细节泄露（瞳孔收缩、喉结滚动、手指蜷缩、叹息）而不是撒糖式打趣。典型如第二章暗语交流时“他们用暗语说完了千言万语，但嘴上说的是水温”，以及第四章明确把亲密定义为“背叛”“偷来的三分钟”。\n4) 修辞与意象偏冷、偏痛感：多用“红色像血/诡异的光”“像在拍遗照”“像牢笼/监视”等意象，整体并不温暖治愈。例：第一章“红色封皮…刺眼得像一滩血”、多次“表情严肃得像在拍遗照”。\n\n匹配性结论：整体叙事调性与↘虐心禁忌政治联姻题材基本匹配：压抑、审视、克制、紧张倒计时贯穿，情感爆发被限制在监视缝隙中（第四章“只有三分钟”“不让她发出任何声音”），没有出现轻快甜宠式的俏皮互动。\n\n小幅偏离/风险点（不构成不匹配，但需注意）：部分段落反复使用相似的抒情句式与意象（如“井里有火但被冰层封住”“像某种机械的节奏”），在密集出现时会让文本更“抒情化”，削弱权谋/政治博弈的锋利感；此外第四章的亲密戏较直给，虽然仍在“压抑+禁忌”框架内，但需要持续保持‘风险与后果’的冷硬叙事，否则容易滑向言情爽点表达。总体仍属于题材所需画风。",
+      "description": "文笔风格必须与题材类型匹配",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_tone_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "后期章节跑偏": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: chapters共5章（chapter_01~chapter_05）均为连续的小说正文叙事：有明确场景（新房/巡逻/晚宴）、人物互动（沈宁与陆霆、周政委）、情节推进（政治联姻设定、暗语重启、伤疤揭示、晚宴后关系突破、被限制出门与继续伪装）。未发现作者感想、读者互动、点赞收藏、番外预告、角色问答、创作数据统计等“跑偏”非正文内容。\n章节长度方面，5章体量整体稳定，后期（第4、5章）未出现明显缩水到几十/几百字的敷衍章节，也没有“写不动了/全书完”等异常收束信号。因此按该检查项标准判断为合格。",
+      "description": "后期章节不能跑偏写非正文内容（作者感想、读者互动、番外预告等）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "late_stage_digression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "writing_log文件创建": {
+      "check_result": "skip",
+      "reason": "ULTRA_SHORT篇幅不适用",
+      "details": "subcategory=log_file_creation",
+      "description": "必须创建writing_log.md记录创作进度",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_creation",
+      "is_critical": true
+    },
+    "writing_log文件读取": {
+      "check_result": "skip",
+      "reason": "ULTRA_SHORT篇幅不适用",
+      "details": "subcategory=log_file_usage",
+      "description": "必须读取writing_log.md了解前文内容",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_usage",
+      "is_critical": true
+    },
+    "大纲执行忠实度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 总体符合大纲：1）章节覆盖完整：outline规划1-5章，实际写出chapter_01-05全部对应，无章节大幅缺失。2）关键事件逐章落地：第1章实现“新婚夜军区新房相见、认出彼此但装陌生”，并包含喜字/军绿窗帘、周政委电话监视、结婚证照片NG等关键场景；第2章实现“暗语试探确认身份、嘴上陌生”，含倒水敲击暗语与哨兵脚步压迫；第3章实现“确认背部挡枪伤疤、对方以训练伤搪塞、女主压抑崩溃并在浴室咬手背”，对应大纲核心事件与场景；第4章实现“巡逻间隙亲密接触、无声压抑、脚步声来时静止、伤疤与红被回扣”，与大纲‘三分钟’核心方向一致（实际写成更长的窗口但明确以‘三分钟’为安全缝隙并多次倒数/卡点）；第5章实现“清晨恢复身份、结婚证背面口红写暗语符号‘安’、继续扮演陌生夫妻但默契改变”，与大纲结局走向一致。3）转折点体现：act_one转折“看到背部伤疤”在第3章明确出现（虽比大纲描述的‘脱军装时’稍后，但属于合理细节调整）；act_two转折“间隙三分钟、手势问要不要、回应要”在第4章以‘还要继续吗/要’与‘三分钟’窗口完成；act_three转折“结婚证背面口红暗语”在第5章落地。4）主线未被替换：核心矛盾始终是组织监视下的伪装夫妻与暗语/伤疤确认后的禁忌亲密，未出现与大纲无关的新主线。结论：执行对outline忠实，偏差主要是时间窗口细化与情节扩写，属于允许的合理偏差，不构成偏离。",
+      "description": "实际章节内容必须忠实于自己设计的大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_execution_fidelity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色语言辨识度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 未达“优秀/有辨识度”标准，主要问题是主要角色对话风格高度同质化，遮住角色名后难以仅凭台词判断说话者。\n\n1) 主要角色（沈宁、陆霆）语言模板高度一致（shared_template）：两人都大量使用同类短句+克制/平稳叙述（“我知道了/知道了”“明白”“好”“睡吧”“早点休息”），以及同一套高概念抽象词（“组织安排”“政治任务”“典范”“演”“注意影响/注意时间”）。互换两人多处台词基本不违和，缺少各自独特口头禅、句式偏好或用词习惯。\n\n2) 跨角色台词克隆（cross_character_clone）：同一信息的回应经常呈现镜像式重复，形成“复制感”。例如：\n- chapter_03 周政委询问“昨晚没有异常情况吧？”两人回答几乎一致：“没有。”\n- 多处对同一指令的回应一致：“明白。”“知道了。”\n- 对“政治任务/典范/演好戏”的表述，两人均用近似措辞复述，区别不明显。\n\n3) 身份语言差异不足（age_identity_blur/职业痕迹弱）：\n- 陆霆作为军官，其台词除少量命令式信息（时间表、安排）外，缺乏更稳定的军队口吻、行话或职业化表达；更多呈现为同样的“克制抒情+抽象概念”叙述。\n- 周政委虽有“审视/指令”的功能性台词，但语言也延续相同的抽象政治话术（“组织满意/代表形象/记住身份”），缺少更鲜明的个人表达特征（如更官僚的套话密度、固定训诫结构、特定口头禅等）。\n\n综合：文本的对话整体被同一种“压抑克制、政治话语+情绪暗涌”的叙述口吻覆盖，主要角色之间缺少可盲测识别的语言指纹，因此判定 matched=false。",
+      "description": "不同角色对话必须有可辨识的语言风格差异",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "dialogue_character_distinction",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "叙事密度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 整体叙事密度高，场景/感官/动作/心理四维覆盖充分，且关键情绪多用可视化细节承载，达到“画面感”要求。\n\n1) 场景与感官细节充足：开篇即用具体物件与光影建立压迫氛围，如“门把手是冰凉的金属，雕着繁复的花纹”“水晶吊灯…刺眼的光”“军绿色窗帘厚重得透不进一丝光”“红色封皮…刺眼得像一滩血”“哨兵脚步声规律而沉重”。嗅觉也被有效使用：“肥皂和烟草混合的气息，还有一丝淡淡的消毒水味”。这些细节不只是装饰，持续服务‘监视/牢笼/政治婚姻’的主题氛围。\n\n2) Show手法在关键段落表现突出：人物关系的张力通过微动作呈现，如认出彼此时“瞳孔剧烈收缩”“喉结滚动”“手指…微微蜷缩”；紧张监视通过身体反应与静止来表现，“维持着喝水的姿势，一动不动”“下颌线绷得像刀”“指甲陷进掌心”；暗语以敲击节奏（短短长/长短短）作为可操作的叙事装置，把‘不能说’转化为‘可见的动作’。\n\n3) 心理层次丰富：大量内心拉扯与自我规训嵌入情境中，而非纯概念讲述，例如反复出现的自我提示“沈宁同志，记住你的身份…你们之间什么都没有”，与外界监控（哨兵/周政委检查）形成内外夹击。\n\n4) 但存在一定Tell偏多与句式复用，故Show/Tell为“混合”而非“Show主导”：多处直接抽象判定与口号式总结较密集，例如“他们都成了组织的棋子。这场婚姻不是爱情，是政治”“那是监视。那是牢笼”“但她和陆霆知道，那不是戏。那是真的。真的痛，真的苦，真的……爱”“这是组织安排的家/婚姻/人生”等，在第4-5章尤为集中，容易削弱通过行动与细节自然抵达情绪的力度；同时“脚步声…每一步都踩在时间的节点上”“像一口井，井里有火…冰层封住”“轻得像是她的幻觉”等表达反复出现，有模板化风险。\n\n综合判断：五章多数段落具备高叙事密度与有效细节，且关键冲突（政治监控下的亲密、暗语沟通、伤疤揭示）有可感可见的呈现方式；虽有部分Tell堆叠和修辞复用，但未达到“过度Tell导致叙事粗糙”的程度，因此 matched=true。",
+      "description": "章节叙事应有足够的场景描写、感官细节和心理活动，情感传达以Show为主",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_density",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "智斗逻辑合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 适用性：文本核心为情感/政治婚姻与监视环境下的隐秘交流，并非以“解谜破案/智斗取胜”为主线；出现的“暗语”“哨兵巡逻间隙”属于信息隐蔽与风险规避设定，更接近氛围与人物关系推进，而非需要读者验证的谜题链条，因此按标准可视为不适用场景（不适用=通过）。\n\n即便按“有轻度策略对抗”来审视，其因果也基本自洽：\n- 线索→结论：第2章明确给出敲击节奏与含义（短短长=安全、长短短=危险等），后续双方用相同节奏传递信息，前后规则一致，不存在“答案从天而降”。\n- 攻防逻辑：巡逻“每半小时一次”、窗下“停两秒”等被反复描述，角色据此选择在巡逻间隙行动，并在脚步声提前出现时立刻静止、捂嘴降噪，行为与威胁（被发现/监听/巡逻）之间有明确因果。\n\n需要注意的小瑕疵是时间表述略有摇摆（第4章既说十点半刚巡逻完、下一次十一点，又强调‘只有三分钟的空隙’并出现提前/延后），但这属于紧张叙事的模糊化处理，不构成核心谜题“线索与答案断裂”或“假推理链”。整体未出现盲猜、暴力绕过、对手降智配合等崩坏类型。",
+      "description": "谜题/智斗的推理逻辑必须自洽",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "puzzle_logic_validity",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "题材契合度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 配方为「E28爱情的阻碍 × 双向暗恋 × 商战权谋」。文本在“爱情的阻碍”与“双向暗恋”两项上完成度较高：军区大院密闭空间、哨兵巡逻/可能监听、政治联姻身份压制、暗语交流与“必须装作陌生”的克制，都形成了持续高压；物件（结婚证、军装、伤疤）也被反复用作情感触发器，且“哨兵间隙三分钟”把禁忌感具象化，有一定记忆点与化学反应雏形。\n\n但未达“优秀/精致”主要卡在Y轴融合与深度开发：1）“商战权谋”基本缺席，权谋仅停留在周政委检查、晚宴被审视、‘典范/棋子’的口头设定，没有具体博弈目标、利益链条、对手、攻守转换与策略细节，导致标签像背景板，和恋爱阻碍没有产生推理/博弈层面的交叉互动。2）阻碍机制单一重复：多章反复使用“巡逻脚步声→屏息→安全/危险”与“组织安排/不能出错”的强调，冲突推进主要靠情绪加压与回忆揭示，缺少新的规则升级或外部压力变化带来的结构性推进。3）双向暗恋的“信息差玩法”也偏直给：双方很快通过眼神/暗语确认彼此认出，后续更多是克制与放纵的拉扯，缺少更复杂的误判、试探、反向保护或‘演夫妻’与‘真情’互相利用的精巧对照。综合来看，基调与题材方向对，但权谋维度粗糙、标签融合偏拼接，题材潜力尚未被充分开发，因此判定 matched=false。",
+      "description": "题材特征精致度和X-Y轴化学反应效果",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "genre_fit",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "剧情节奏合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 整体节奏与情绪曲线较为合理，具备“低开—渐升—明确高潮—回落收束”的层次：第1章以政治联姻/重逢压抑开场（低压悬念），第2章通过暗语建立更强的隐秘紧张（小高潮），第3章用周政委检查与伤疤真相把冲突推进到更高张力（再抬升），第4章在“巡逻时间窗”约束下爆发亲密与被发现风险，形成全篇最强高潮，且高潮位置在5章体量中约80%处，符合“60%-85%”的理想区间；第5章晨光与口红写“安”的回收，完成情绪回落与余韵，收束自然。紧张与舒缓交替也比较到位：每次高压（巡逻/审查/触碰）后都有短暂静默、内心整理或日常动作（整理军装、洗脸、看结婚证）作为喘息与过渡，没有明显的突兀断裂。铺垫-回报比也相对匹配：前3章反复铺垫“监视/暗语/伤疤/必须演戏”，第4章集中兑现为‘三分钟’的情感与风险爆发，并在第5章用象征动作延续影响，避免了高潮后草草收尾。小瑕疵是1-3章在相似意象与内心独白的重复上略显黏连，导致中段推进的体感节奏偏稳，但未达到拖沓或失控程度，整体仍属于层次清晰、高潮醒目的优秀节奏安排。",
+      "description": "高潮低谷分布合理、情绪曲线有层次感",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "pacing_rationality_advanced",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "钩子设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 整体符合“优秀钩子”标准：多处关键转折点都设置了具体、与主线强相关的信息差，并能促使继续阅读。\n\n1) 章节结尾悬念密度足够且分布合理：\n- 第一章结尾以“白纸上已写满不能说的秘密”收束，虽然偏抒情，但前文已明确“组织安排/哨兵巡逻/保密任务”的压迫框架，形成‘他们到底在隐瞒什么、会如何暴露’的持续悬念。\n- 第二章结尾落在“暗语留下的痕迹…明天必须装作什么都没发生过”，把“暗语=秘密通信”具体化，并把冲突指向“明天的检查/监视”，推动读者想看后续如何应对。\n- 第三章围绕“伤疤=为她挡枪但必须说谎”的核心反转，结尾以“你到底想要什么？”留下未解动机悬念：陆霆为何必须否认、他真实立场/任务是什么。\n- 第四章在情感突破（偷来的三分钟）后，用“更深层后果/持续偷取时间的危险结构”收束，形成行动悬念：他们接下来如何在监视下继续。\n- 第五章以“被要求别出门（疑似软禁）+在结婚证背面写‘安’”把秘密升级为实体证据，留下‘是否会被发现、如何传递/兑现“等你”’的后续期待。\n\n2) 钩子质量：不是空洞威胁，而是具体信息差：\n- “暗语”机制（短短长=安全等）是明确规则型悬念；读者知道他们在传递信息，但仍不知道更大的监控/任务真相。\n- “伤疤说谎”的矛盾把“组织为何不允许他救她/认识她”具体化，形成强动机谜题。\n- “三分钟”把风险时间窗量化，形成明确的行动约束与下一步不确定性（哨兵提前/停留）。\n\n3) 钩子类型有一定多样性：\n- 揭示型（暗语、伤疤真相）+ 动机谜题型（陆霆立场/想要什么）+ 行动悬念型（三分钟时间窗、巡逻不确定）+ 处境升级型（疑似软禁、实体证据）。未出现连续多章“平淡收束”。\n\n综合来看，关键转折（认出彼此→暗语重启→伤疤反转→偷情被巡逻打断→疑似软禁与写字留证）均有有效钩子承接，且信息差具体、与主线强关联，达到matched=true。",
+      "description": "关键转折处有有效的悬念钩子设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "hook_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "意象系统": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 文本存在清晰且贯穿五章的核心意象系统，并在不同阶段发生了明显的意义变奏，且与主题（政治监视/被安排的人生里偷取真实情感与主体性）深度咬合。\n\n1) 核心意象一：\"暗语/敲击节奏（短短长等）\"（多次出现，且推动关键情节）\n- 初次（第2章）：作为战场记忆与身份确认的“密钥”，把两人从“组织安排的陌生夫妻”重新连回“曾经并肩的恋人/战友”。\n- 发展（第2-4章）：暗语成为“监视环境下的生存工具/安全边界提示”（安全/危险/等我），与哨兵巡逻的压迫共振。\n- 变奏（第5章）：暗语从即时沟通工具，转化为可被书写、可被保存的“私密誓词/情书语言”（把“安”写进结婚证背面），完成从“口头/指尖”到“物证/契约”的升级，象征两人从被动扮演到主动结盟（共犯）的心理转折。\n\n2) 核心意象二：\"哨兵脚步声/三分钟间隙\"（全篇反复出现，意义持续加深）\n- 前期（第1-2章）：脚步声是外部监视的具象化，是“必须装作陌生”的压力来源。\n- 中期（第4章）：被精确量化为“三分钟”，从氛围性威胁变成结构性时间牢笼；同时“三分钟”也变为两人真实亲密的容器——“偷来的时间”。\n- 后期（第5章）：脚步声仍在，但在“安”字/结婚证物证出现后，其意义从单纯恐惧进一步变为“日常化的枷锁背景”，衬托两人开始在枷锁中建立自己的隐秘生活方式（持续偷取时间）。\n\n3) 核心意象三：\"结婚证（红色封皮）\"（出现≥3次，且变奏明确）\n- 第1章：政治文件/检查道具，红封皮“像血”，强调被安排与异化。\n- 第3章：再次被审视（周政委检查）与自我审视（照片像遗照），强化“被观看/被定义”。\n- 第5章：被改写为“情书载体/共犯契约”（口红写“安”），同一物件从组织权力的证明物，变奏为个人情感与主体性的秘密容器，象征主题的反转与夺回。\n\n补充：\"伤疤\"与\"红（喜字/口红/血）\"也构成辅助意象线：伤疤从被否认的“训练伤”到被触摸确认的“活着的证明/爱的证据”；红色从政治喜庆符号逐渐变为疼痛、欲望与私密誓言的颜色。这些都不是通用装饰，而是与“监视—伪装—偷取真实”的主题互为表里。\n\n因此，该作品符合优秀标准：至少一个（实际为多个）贯穿全文的具象核心意象，并在情节推进中完成意义层面的变奏，且与主题强关联。",
+      "description": "核心意象贯穿全文并发生意义变奏",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "imagery_system",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "情感弧线层次": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 主角沈宁的情感弧线具备多层递进且每次转折都有明确事件触发，达到优秀标准。可辨识的层次至少有6层：①震惊/失控（新房见到“已牺牲”的陆霆）→②强行克制与自我规训（反复强调“组织安排…不能出错”）→③试探与警觉（陆霆用暗语敲击；她以“危险”回应并在哨兵巡逻时进入高度警戒）→④短暂靠近与希望/确认（两人对话确认彼此当年以为对方牺牲；陆霆暗示“等我”）→⑤被现实压回的痛与无力（周政委检查、晚宴的政治凝视强化“棋子感”；看到伤疤并被“训练伤”谎言刺痛，转入压抑的哭与自我封闭）→⑥越界的渴望与决断（在“哨兵巡逻间隙/三分钟”这个具体窗口驱动下，从犹疑、恐惧后果到主动吻、发生关系）→⑦事后的清醒与共犯式认同/微弱希望（被限制出门的紧张现实下，她用口红在结婚证背面写“安”，把关系从冲动升级为持续的秘密契约）。整体方向感清晰：从‘克制扮演’逐步走向‘确认—压抑—突破—建立隐秘同盟’，不是随机波动；转折点均由具体事件驱动（重逢、暗语、巡逻、政委检查、伤疤揭露与谎言、晚宴审视、三分钟窗口、软禁暗示与写字行为）。",
+      "description": "主角情感发展有多层递进变化",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_gradient",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语义重复检测": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 整体主线清晰（政治联姻+互认+暗语+监视下偷时间），但在ch01-05中存在多处“结论反刍/情境模板复制式”的语义回环：1）ch01与ch03出现几乎同一句式的自我告诫，属于对同一核心判断的重复，且并非首尾呼应（中段重复）。2）哨兵巡逻“走近-停两秒-屏息-远去-安全”的结构在多章高频复用，承载的叙事信息基本一致，细节变化不足，形成模板化重复。3）“彼此以为对方死/现在必须装陌生”的结论在多章多次被重新说出，新增叙事信息有限。4）伤疤线索虽可视为关键线索的多次引用，但在短篇幅内反复以相似情绪与结论强调，超过“推理回顾”的必要量，出现信息衰减。按阈值≥3处语义重复，判定不达标。",
+      "description": "不能出现大量语义级别的内容重复（P6级）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "semantic_redundancy",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构功能性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 1) 开头-结尾关系经过设计：开篇多次强调“组织安排的家/婚姻”“床头柜上的结婚证”“窗外哨兵脚步声”，结尾再次回到床头柜与结婚证、哨兵巡逻与‘安全’确认、以及‘继续扮演陌生夫妻’，构成明确的意象闭环；同时结尾在闭环中加入‘口红写安’这一新变量，实现‘循环中的改变’，与主题‘压抑的爆发后成为共犯’强关联。2) 章节编排不是纯机械线性推进：五章各自围绕一个结构性“钥匙”推进禁忌关系——第1章用“结婚证+初见伪装”立规训；第2章引入“暗语”作为非语言叙事机制；第3章用“伤疤”揭示真相但被迫回收为谎言（结构性压回）；第4章用“巡逻间隙三分钟”把冲突具体化为时间结构并完成爆发；第5章把‘暗语’转写到‘结婚证背面’，完成结构层面的主题落点（政治文本被私人涂改）。这些章节即使调换顺序会明显削弱主题递进（例如没有暗语就难以成立后续的‘安’与‘三分钟’），说明编排具有功能性。3) 结构-主题关联清晰：暗语/静默/巡逻节奏反复出现，形成‘被监视的时间牢笼’这一结构母题；人物“必须装作陌生”的禁区并非只在情节里说，而是通过结构（只在间隙发生、用暗语发生、写在背面发生）被持续实现。4) 结尾不是‘写完了就停’：以‘晨光/新的一天开始/继续扮演’收束，既回到起点又留下新秘密与新策略（在牢笼里偷时间、在结婚证背面写情书），属于有明确叙事意图的开放式闭环。综合来看，结构承载意义明显，符合本检查项优秀标准。",
+      "description": "叙事结构服务于主题表达（短篇尤重）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色命名质量": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 主要角色命名整体缺少“读名即联想”的设计感与文化纵深：女主“沈宁”落在高频姓+安宁语义场，容易与大量现代言情通用名互换；男主“陆霆”虽有力量感但更像气质直译的常见军旅名，缺少与‘政治联姻/身份棋子/暗语重逢/生死误认’等核心命运要素的隐性钩连。配角使用“周政委”“哨兵小王”以职位/代称替代姓名，进一步削弱整体辨识度与命名美学层次。整体看不出一组名字之间的精心差异化与命运共振，因此未达优秀标准。",
+      "description": "角色命名有文化深度、辨识度和角色-命运共振",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_naming_quality",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "超短篇字数": {
+      "check_result": "fail",
+      "reason": "字数不符合要求",
+      "details": "总字数 15156 不在范围 [5850, 11000] 内; 共5个文件（按章节顺序排列）: chapter_01.md, chapter_02.md, chapter_03.md, chapter_04.md, chapter_05.md; 最后一个文件是 chapter_05.md",
+      "description": "总字数应在5850-11000之间（基于query要求6500-10000，±10%浮动）",
+      "check_type": "semantic_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "range_constraint",
+      "is_critical": true
+    },
+    "情感交付虐心": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 整体情感基调明确偏虐心向，符合“reaction_strength=↘”的压抑、克制、爱而不得配方承诺。核心虐点贯穿5章而非点缀：1）深度情感困境与不可调和矛盾：两人十年前彼此以为对方牺牲，如今重逢却被组织以政治联姻/典范任务绑定（“组织安排的夫妻”“必须演好”“继续演”），爱情与组织纪律/监视（哨兵巡逻、电话监听、周政委检查）形成结构性冲突，属于难以调和的价值与生存矛盾。2）持续的压抑氛围：红喜字/结婚证反复被写成“像血”“像遗照”，空间像牢笼（“监视”“牢笼”“软禁”），人物长期处于噤声、克制、不能哭不能出声的状态，悲剧感持续。3）情感冲击有深度而非假虐：不仅是吵架和误会，而是陆霆被迫否认伤疤来源（为救她挡枪却必须说“训练伤”以自保/保她），两人用暗语交流却只能在缝隙里“偷来的三分钟”相爱，甜的片段反而强化了“只能偷取、随时被发现”的痛与无奈。4）读者揪心体验明确：多处“眼泪无声”“指甲掐进掌心”“咬住手背”“巡逻脚步声停两秒像一个世纪”等描写制造持续紧张与心痛感，且结尾虽出现“也许可以活下去”的微弱希望，但仍以“继续扮演陌生夫妻”收束，虐主调未被扭转。综合判断：虐点清晰、冲突不可解、氛围沉重压抑，属于合格虐心向。",
+      "description": "实际内容必须是虐心向",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取短篇skill": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取SHORT_STORY_GUIDE.md（短篇创作指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "角色关系设计张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（符合“关系具叙事张力”的业务标准）。\n\n1) 关系有内在矛盾源：核心矛盾来自“组织政治联姻/纪律与个人旧情”的价值与目标冲突（两人表面都要完成政治任务、维持形象，内心都想确认旧情与重新靠近），同时存在强信息不对称/误认（彼此都以为对方已死，把重逢对象当陌生人），再叠加周政委与岗哨象征的持续监视，使每次互动都自带风险。\n\n2) 关系有变化空间：relationship_dynamics明确给出关系推进链条“伪装陌生→暗语试探→伤疤确认→共犯偷情”，从陌生/克制到确认/越界，状态转换清晰且可持续升级（更进一步可自然走向“共同对抗组织/牺牲分手/被迫背叛”等分叉）。\n\n3) 冲突源于角色本身：张力主要由两人的人格与动机内耗驱动（隐忍克制、忠诚服从、创伤后遗症、渴望被认出又害怕连累对方、对政治后果的恐惧），外部监视只是放大器而非唯一制造矛盾的手段。\n\n不足/风险点（不影响通过，但可增强）：目前两人深层立场差异更多是“同阵营被迫压抑”而非真正价值观对立；若后续能加入更实质的选择冲突（例如对组织/真相的不同态度、对牺牲与服从的不同底线），张力会更立体，避免主要依赖误认与外部压力。",
+      "description": "角色关系设计具有叙事张力，能驱动剧情",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_relationship_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色动机设计深度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（符合业务标准）。\n\n1) 表层动机与深层动机有明确区分（且不是换句话说）：\n- 沈宁 overt_motivation 是“完成组织安排的政治婚姻，扮演好‘陆太太’”，偏社会/任务导向；covert_motivation 是“确认十年前那个少年是否真的死了，渴望被认出却又害怕被认出”，是身份/情感与自我认同的内在拉扯。\n- 陆霆 overt_motivation 是“服从组织安排完成政治婚姻，维持军人形象”，偏组织纪律与外部形象；covert_motivation 是“确认她是否还记得自己，渴望触碰她却又必须保持距离”，是情感需求与克制的冲突。\n两人表层都在“完成政治联姻/服从组织”，深层都在“确认对方与旧情”，形成清晰的两层动机结构。\n\n2) 动机有具体来源，能从经历/背景中追溯：\n- 两人的深层动机直接来自“十年前边境战场相遇/挡枪/误以为对方死亡”的 hidden_connection；同时 traits 中的“战场幸存者创伤/战场后遗症”支撑其对亲密与暴露的恐惧与克制。\n- secret_fear 进一步把心理驱动落到具体风险：沈宁怕“背叛组织安排、连累他失去前程”；陆霆怕“让她陷入政治漩涡”。这让他们的克制不是泛泛的‘不敢爱’，而是与政治环境和军队体系强绑定。\n\n3) 至少两个主角满足以上两条：\n- 沈宁与陆霆均满足“表层/深层区分”+“来源具体”，因此达标。\n\n补充观察（加分但非必须）：\n- misperception_of_other（彼此误认）与 relationship_dynamics（‘伪装陌生→试探→确认→更危险的靠近’）强化了深层动机的推进路径，使动机不仅存在于设定，还具备可执行的剧情张力。配角虽偏功能性（监视/阻碍），但标准并不要求配角多层动机，因此不扣分。",
+      "description": "角色动机设计有深度，有表层和深层动机区分",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_motivation_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色成长弧线设计": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: 结论：不符合。当前材料更像“关系推进/情境升级”，而不是“主角清晰成长弧线”。\n\n1) 起点与终点不清晰（未满足必须项1）：角色起点清楚——两人因政治联姻被迫伪装陌生、压抑情感、恐惧牵连对方（secret_fear）。但故事终点基本仍是“继续扮演陌生夫妻、在监视下偷情/成为共犯、建立默契”，属于关系状态的小幅推进与符号回扣（结婚证变情书），没有明确呈现主角在认知/价值观/自我选择上的“从A到B”（例如从服从组织→选择对抗/坦白，从自我压抑→愿意承担代价，从误解→真正理解并做出新承诺等）。\n\n2) 变化缺少内在逻辑落地（未满足必须项2）：characters.json 给出了可用于成长的动机与恐惧（想确认对方身份、害怕牵连对方前程/生活），但 outline 的章节推进主要靠“暗语确认—伤疤确认—三分钟亲密”外部情境驱动，缺少明确的心理决策链条：他们为何、在何处、通过何种事件逐步改变信念或选择？目前看到的是“更敢靠近”，但并未写出从恐惧到承担风险的关键认知转折与代价评估。\n\n3) 至少一个主角有明确弧线（未满足必须项3）：两位主角都没有被明确设计为在结尾达成新的自我定位/信念更新。relationship_dynamics 提供了关系阶段，但那是“关系递进”，不等同于“个人成长/变化弧线”。\n\n补充：如果作者希望通过本大纲达标，需要在大纲的 synopsis/conflict_point/emotional_shift 中明确标注并落实至少一条内在弧线（例如沈宁从“只完成任务的陆太太”→“主动选择把婚姻从政治工具变成私密承诺并愿承担后果”；或陆霆从“绝对服从/保持距离”→“在保护她与自我情感间做出新的原则选择”），并在第2-5章加入对应的心理转折节点与行动代价。",
+      "description": "主角有清晰的成长/变化弧线设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_arc_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "outline结构完整性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: Pass。1）章节覆盖：大纲清晰给出act_one-act_three，共5章，覆盖从新婚夜相认→试探确认→冲突升级→高潮亲密→清晨收束的完整闭环；若该项目定位为短篇/超短篇（5章以内）则覆盖完整，若作者计划写更长篇幅则目前仅5章会存在覆盖不足风险，但文本本身呈现的是完整故事体量。2）每章实质内容：每章都有core_event、emotional_tone与多条key_scenes，信息密度足以指导落笔，不是只有标题。3）冲突/转折：全篇持续强调外部监视（哨兵、电话监听、政治压力）与内部情感压抑/身份伪装的对抗，并在各幕提供turning_point（伤疤识别、三分钟间隙的决定、结婚证暗语回扣），具备明显的情绪与情节转折，非流水账。4）结构分层：明确三幕结构（act_one/act_two/act_three）且每幕有description与转折点，戏剧推进路径清楚。总体结构完整、冲突明确、场景化程度高，可以支撑后续写作。",
+      "description": "大纲结构完整，信息密度足以指导写作",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_structure_completeness",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "outline叙事张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 整体可判定符合“持续叙事张力”的业务标准（pass）。\n\n1) 信息落差（满足）：第1章抛出核心谜团/秘密——两人彼此以为对方已死、却必须装作陌生，且处于被监视环境；后续章节并未用“解释真相/交代来龙去脉”立刻填平信息差，而是通过暗语、伤疤等“证据式确认”逐步推进，读者会自然追问：他们为什么被迫结婚？谁在监视？十年前发生了什么？后面如何在体制压力下自保/相认。\n\n2) 张力递进（满足）：从“新婚夜震惊+必须伪装”（第1章）→“暗语试探确认身份”（第2章）→“伤疤触发情感崩解与更大风险”（第3章）→“在哨兵三分钟空隙做出不可逆亲密行为”（第4章）→“清晨建立新默契并以口红暗语形成持续风险”（第5章）。外部监视与内部情感压抑同步加码，且中后段的风险与不可逆性强于开头。\n\n3) 意外/转折（基本满足但偏‘情感向’）：开篇“新婚对象竟是彼此以为死去的青梅”本身是强转折；之后“伤疤确认”与“三分钟间隙做出选择”属于连续的小转折/节点。不过这些转折更多是关系与禁忌升级，而非剧情层面的更大反转（例如监视者目的、婚姻背后阴谋等）——若按更强悬疑/剧情线标准，会显得转折类型偏单一。\n\n主要不足（不影响本次判定，但建议优化）：大纲目前的张力主要集中在“被监视下的相认与亲密”，第4-5章后外部矛盾尚未真正爆开（监视者的行动、代价、追查、后续任务等）；若扩展为更长篇，容易出现‘前紧后松’或冲突同质化风险。建议在后续章节补上：监视/政治婚姻的动机揭露与更具行动性的危机，让“偷情/暗语”从情绪张力升级为实质生存与命运博弈。",
+      "description": "大纲有持续的叙事张力和悬念驱动",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_narrative_tension",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色大纲规划完整性": {
+      "check_result": "fail",
+      "reason": "部分设计角色未在大纲中规划（配角: 哨兵小王）",
+      "details": "主角 2/2: 沈宁, 陆霆; 配角 1/2: 周政委; 配角缺失: 哨兵小王",
+      "description": "设计的角色必须在大纲中规划",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_outline",
+      "is_critical": true
+    },
+    "角色正文出场完整性": {
+      "check_result": "fail",
+      "reason": "部分设计角色未在正文中出现（配角: 哨兵小王）",
+      "details": "在5个章节中检查; 主角 2/2: 沈宁, 陆霆; 配角 1/2: 周政委; 配角缺失: 哨兵小王",
+      "description": "设计的角色必须在正文中出现",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_chapters",
+      "is_critical": true
+    }
+  },
+  "completion_status": "completed"
+}

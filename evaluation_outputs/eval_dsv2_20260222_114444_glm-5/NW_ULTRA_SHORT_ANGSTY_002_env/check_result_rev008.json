@@ -1,0 +1,759 @@
+{
+  "check_version": "novel_writing_v1.0",
+  "sample_id": "NW_ULTRA_SHORT_ANGSTY_002",
+  "check_timestamp": 1771778416,
+  "dimension_scores": {
+    "format_compliance": {
+      "pass_rate": 1.0,
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "failed_items": []
+    },
+    "business_rule_compliance": {
+      "pass_rate": 0.9,
+      "total": 10,
+      "passed": 9,
+      "failed": 1,
+      "skipped": 11,
+      "failed_items": [
+        "超短篇字数"
+      ]
+    },
+    "data_consistency": {
+      "pass_rate": 1.0,
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "failed_items": []
+    },
+    "content_quality": {
+      "overall_score": 68.0,
+      "quality_level": "unqualified",
+      "gate_layer": {
+        "pass_rate": 1.0,
+        "total": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 1,
+        "failed_items": []
+      },
+      "basic_layer": {
+        "pass_rate": 0.8,
+        "total": 15,
+        "passed": 12,
+        "failed": 3,
+        "skipped": 1,
+        "failed_items": [
+          "段落重复检测",
+          "叙事调性匹配",
+          "语义重复检测"
+        ]
+      },
+      "advanced_layer": {
+        "pass_rate": 0.5,
+        "total": 10,
+        "passed": 5,
+        "failed": 5,
+        "skipped": 1,
+        "failed_items": [
+          "可修复逻辑瑕疵",
+          "角色语言辨识度",
+          "叙事密度",
+          "题材契合度",
+          "剧情节奏合理性"
+        ]
+      },
+      "gate_triggered": false,
+      "score_breakdown": {
+        "base": 60.0,
+        "gate_penalty": -0.0,
+        "basic_deduction": -12.0,
+        "advanced_bonus": 20.0
+      }
+    }
+  },
+  "overall_result": {
+    "status": "Good",
+    "total_score": 76.6,
+    "content_score": 68.0,
+    "process_score": 96.67,
+    "content_weight": 0.7,
+    "process_weight": 0.3,
+    "gate_triggered": false,
+    "total_checks": 44,
+    "passed_checks": 35,
+    "failed_checks": 9,
+    "pass_rate": 0.795
+  },
+  "check_details": {
+    "读取配方知识库": {
+      "check_result": "skip",
+      "reason": "ULTRA_SHORT篇幅不适用",
+      "details": "subcategory=required_skill_reading",
+      "description": "必须读取RECIPE_KNOWLEDGE.md（配方知识库）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节产出存在性": {
+      "check_result": "pass",
+      "reason": "章节文件存在",
+      "details": "✓ 章节写作阶段: 已产出章节文件",
+      "description": "workspace中必须存在至少一个章节文件",
+      "check_type": "sop_stage_coverage",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_output_existence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "章节克隆检测": {
+      "check_result": "pass",
+      "reason": "未检测到章节克隆",
+      "details": "共5章，无连续完全克隆或近似克隆",
+      "description": "不能出现连续章节内容完全重复（克隆）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_cloning",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "交替重复检测": {
+      "check_result": "skip",
+      "reason": "章节数不足",
+      "details": "仅5章，跳过交替重复检测（需>=8章）",
+      "description": "不能出现A-B-A-B交替循环的章节内容",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "alternating_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "章节完成度": {
+      "check_result": "pass",
+      "reason": "章节完成度合格(100%)",
+      "details": "大纲规划5章，实际完成5章 (完成率100.0%)",
+      "description": "实际写作章节数必须达到大纲规划的合理比例",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_completion",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "章节长度稳定性": {
+      "check_result": "skip",
+      "reason": "章节数不足",
+      "details": "仅5章，跳过长度稳定性检测（需>=6章）",
+      "description": "后期章节不能出现严重长度萎缩",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_length_stability",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "段落重复检测": {
+      "check_result": "fail",
+      "reason": "跨章段落重复6组",
+      "details": "有6个段落在多章中完全相同。示例: \"\"我……我不记得我有没有告诉过别人。\"她轻声说，\"我总是记不住事情。医生说我的记忆会在晚上清零，第二天醒来就像重新开始一...\" 出现在3章; \"\"因为，\"他终于说，\"每一天都是新的开始。你不会记得痛苦，不会记得失望，不会记得……那些让你难过的事。\"...\" 出现在3章; \"\"你叫林晚，24岁，抑郁症患者，记忆会在每晚入睡后清零。不要害怕，医生会照顾你。有一个人会每天重新爱你。\"...\" 出现在3章",
+      "description": "不能出现大量段落在不同章节间重复",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "paragraph_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取大纲设计指南": {
+      "check_result": "skip",
+      "reason": "ULTRA_SHORT篇幅不适用",
+      "details": "subcategory=required_skill_reading",
+      "description": "必须读取OUTLINE_DESIGN_GUIDE.md（大纲设计指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取写作技巧指南": {
+      "check_result": "skip",
+      "reason": "ULTRA_SHORT篇幅不适用",
+      "details": "subcategory=required_skill_reading",
+      "description": "必须读取WRITING_TECHNIQUE_GUIDE.md（写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取设定一致性管理指南": {
+      "check_result": "skip",
+      "reason": "ULTRA_SHORT篇幅不适用",
+      "details": "subcategory=required_skill_reading",
+      "description": "必须读取CONSISTENCY_MANAGEMENT_GUIDE.md（设定一致性管理指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取命名skill": {
+      "check_result": "skip",
+      "reason": "ULTRA_SHORT篇幅不适用",
+      "details": "subcategory=required_skill_reading",
+      "description": "必须读取CHARACTER_NAMING_GUIDE.md（角色命名规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取creative_intent的schema": {
+      "check_result": "skip",
+      "reason": "ULTRA_SHORT篇幅不适用",
+      "details": "subcategory=required_skill_reading",
+      "description": "必须读取creative_intent.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取characters的schema": {
+      "check_result": "skip",
+      "reason": "ULTRA_SHORT篇幅不适用",
+      "details": "subcategory=required_skill_reading",
+      "description": "必须读取characters.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取outline的schema": {
+      "check_result": "skip",
+      "reason": "ULTRA_SHORT篇幅不适用",
+      "details": "subcategory=required_skill_reading",
+      "description": "必须读取outline.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节命名格式": {
+      "check_result": "pass",
+      "reason": "所有文件命名符合规范",
+      "details": "检查了 5 个文件; chapter_05.md: 匹配; chapter_01.md: 匹配; chapter_02.md: 匹配; chapter_03.md: 匹配; chapter_04.md: 匹配",
+      "description": "章节文件命名必须为chapter_NN.md格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "naming_convention",
+      "is_critical": true
+    },
+    "creative_intent格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "creative_intent.json: 字段完整",
+      "description": "creative_intent.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "characters格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "characters.json: 字段完整",
+      "description": "characters.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "outline格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "outline.json: 字段完整",
+      "description": "outline.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "X轴模式ID格式": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.x_axis_mode_id = C16，符合预期",
+      "description": "X轴模式ID必须匹配^[A-G]\\d{1,2}$格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签枚举": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['规则怪谈', '刑侦悬疑']，符合预期",
+      "description": "Y轴标签必须在12种枚举中",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签数量": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['规则怪谈', '刑侦悬疑']，符合预期",
+      "description": "Y轴标签数量必须为2-3个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "forbidden_elements存在性": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.forbidden_elements = ['HE结局', '轻松甜蜜情节', '治愈向转折', '正常人的爱情逻辑']，符合预期",
+      "description": "forbidden_elements必须至少有1个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "配方选择交互": {
+      "check_result": "skip",
+      "reason": "ULTRA_SHORT篇幅不适用",
+      "details": "subcategory=sop_compliance",
+      "description": "配方选择阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "写作准备确认": {
+      "check_result": "skip",
+      "reason": "ULTRA_SHORT篇幅不适用",
+      "details": "subcategory=sop_compliance",
+      "description": "写作准备阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "主题一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 从开篇到结尾的核心主题类型保持一致：围绕“病态/偏执的爱情（以失忆/重置为机制）与自愿沉溺的共犯关系”展开。第1-2章以‘每日重置、反复追求、记忆与控制’呈现关系主线；第3章转为林晚视角揭示她‘并未失忆、主动配合观察’，但仍在强化同一主题（病态爱与控制/依赖）；第4章完成双方摊牌与‘选择留下’的主题落点；第5章把关系从单向囚禁推进到双方自愿的‘仪式/游戏/共犯契约’，仍然服务于同一爱情执念与自愿疯狂的主线，没有转向无关题材（如商战/修仙/纯探案等）导致主题类型更换，因此主题贯穿且主线清晰。",
+      "description": "故事主题一致",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "theme_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "主要角色一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 从chapter_01到chapter_05，叙事核心始终围绕双主角【周翊】与【林晚】展开，二人持续出现且保持主角地位：\n- chapter_01：以周翊为主要叙事视角，林晚作为核心互动对象/第二主角登场并贯穿全章；\n- chapter_02：周翊的行动（刻字、追求、观察）仍为主线，同时林晚持续在关键场景（病房/花园/夜间换病历）中出现并推动“她未失忆”的核心悬念；\n- chapter_03：叙事视角大幅切到林晚，但周翊仍是她观察与试探的中心对象，二人依旧构成双主角结构，没有被配角取代；\n- chapter_04：林晚进入周翊病房发现真相并与周翊正面对峙，主线冲突与关系转折仍由两位主角驱动；\n- chapter_05：两人确立“共犯游戏/仪式”，周翊与林晚持续在关键场景中作为决策者与推动者；配角陈医生虽出现并补充“实验”信息，但占比与决策权不足以挤占主角（未达到>70%叙事中心）。\n结论：不存在主角中途消失、被替换、身份断裂或被配角严重挤占戏份的问题，符合主角存续性业务标准。",
+      "description": "主要角色一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "main_character_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设定一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 各章节中主要角色（周翊、林晚）的性格底色、行为模式与核心动机整体保持一致，且出现的变化都有明确的剧情触发与铺垫，不构成人设崩坏。\n\n- 周翊：chapter_01-02一直体现为偏执、仪式化、控制欲强且高度自我克制的行为模式（刻墙记录、换病历本、重复“第一次”话术、保持“恰到好处的距离”），核心动机是“让她每天重新爱上他/追求纯粹的爱”。到chapter_02开始怀疑林晚“在假装”、chapter_04坦白“我在囚禁你”，chapter_05继续维持追求仪式并把关系升级为“共犯游戏”，都属于同一套偏执逻辑的延伸，而非无缘无故的性格反转。\n\n- 林晚：前两章表层表现为茫然、脆弱、被动配合；从chapter_03揭示其“从未失忆、一直观察并选择配合”，并明确其内在动机是“试探周翊、并逐渐认同这种病态纯粹感”，到chapter_04主动进入周翊房间取证并正面摊牌、chapter_05主动把仪式定义为契约与游戏，行为从被动到主动的转变有连续心理自洽链条（观察→确认→认同→共犯化），并非无铺垫突变。\n\n- 两人关系动态：从周翊单向控制（前期）→双方互知仍维持表演（中期）→共同选择维持仪式（后期），推进是单线增强而不是章节间来回摇摆，因此符合“合理变化/成长”而非“性格无规律切换”。",
+      "description": "人物设定一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_trait_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设计遵循度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 总体符合characters.json对两位主角的核心设定（traits/motivation/background/relationships），章节表现与设计高度一致，未见“性格方向相反”或“核心动机缺失”等严重偏离。\n\n1) 周翊（traits/motivation/行为模式）\n- traits一致：\n  - “偏执控制/病态纯粹/极度孤独”在chapter_01-02通过“满墙刻字”“每天更换病历本”“门缝观察服药”“强调‘这里是牢笼，也是他们的家’”等强控制与封闭世界观体现；他的爱被反复写成“病态、疯狂、纯粹”（chapter_03-05）。\n  - “记忆完美/超忆症”在chapter_01-02反复以“记得第X天她的表情、坐得远近引发的反应、裂缝变化”等细节化记忆呈现，并以精确计数“她笑了几次”作为行动驱动。\n- overt_motivation一致：characters.json写“配合治疗方案，帮助林晚恢复记忆”。执行中周翊持续按‘治疗/互相治疗’流程行动：每天引导互动、接受陈医生询问并汇报“她今天笑了”（chapter_01-03），并通过病历本向林晚灌输‘失忆设定/治疗叙事’。\n- covert_motivation一致：characters.json写“创造一个永远不会离开他的爱情——林晚每天忘记他，所以每天都能重新拥有她”。执行中周翊将“每天重新追求/第四十七次成功追求她/明天再来追她”作为核心循环（chapter_01-02），并在chapter_05继续把它升级为“仪式/契约”。\n- secret_fear一致：characters.json写“害怕林晚痊愈后发现囚禁真相离开”。执行中他在chapter_02刻下并反复凝视“如果她某天没有失忆怎么办？”，以及多次出现“她不可能记得/她为什么会问/她如果清醒会怎样”的恐惧与紧张。\n- misperception_of_other（不扣节奏点，但人设吻合）：设计为“以为林晚只是脆弱病人，不知她在观察”。chapter_01周翊明显把林晚视为“易碎蝴蝶/需要照顾的孤单病人”；直到chapter_02末他才强烈怀疑“她在假装”，符合“前期误判”的人物认知路径。\n\n2) 林晚（traits/motivation/行为模式）\n- traits一致：\n  - “表面脆弱”在对外呈现为茫然、低声、顺从配合（chapter_01-03多次“我不记得”“我总是很孤单”）。\n  - “内心敏锐/病态清醒”在chapter_03直接揭示她的观察、藏病历本、识别药物是安慰剂、分析实验结构；并能精确捕捉周翊“微笑但眼底紧张”的细节。\n  - “渴望真实”体现在她不断追问真实关系与真相（chapter_01末“你以前也这样追求过我吗”；chapter_04直接摊牌“我从未失忆/我一直在观察你/你在囚禁我”）。\n- overt_motivation一致：characters.json写“配合治疗，恢复记忆，早日出院”。执行层面她在前期表演性地配合治疗流程（按时服药、对医生说“记得今天发生了什么”】【chapter_01-03】），符合“表面配合治疗”的动机外观。\n- covert_motivation一致：characters.json写“从未失忆，假装观察谁会利用她的‘失忆’、寻找真正爱她的人”。chapter_03明确写“她从未失忆…每天假装…观察他的行为…想看看他会做到什么程度”，与设计完全同向。\n- secret_fear一致：characters.json写“怕自己真的爱上囚禁她的人，爱情病态”。chapter_03-04大量内心独白承认“她也病了/也爱上了病态的人/选择成为疯子”，正是对该恐惧的落地。\n- misperception_of_other一致：设计为“以为周翊只是同样被囚禁的病人，不知他故意入院”。章节中林晚虽然掌握很多，但对“周翊故意进入医院”这一隐藏关联并未出现明确得知/点破的内容；她更多把它归为“周翊的实验/囚禁”，因此并未违背该misperception设定。\n\n3) 关系设定（relationship_dynamics）呈现度\n- 设计要求的核心张力“记忆vs遗忘（周翊记得一切，林晚假装遗忘）/治疗vs囚禁/自由vs控制”在chapter_01-05贯穿：病历本、刻字、监控实验、围墙牢笼意象、以及林晚“可以走但选择留下”的反复宣示（chapter_04-05）。\n- 变化轨迹与设计一致：第3章林晚发现并确认端倪（病历本/安慰剂/换本机制）；第4章摊牌；第5章“自愿疯狂/共犯游戏/明天再追我一次”的自愿选择，与characters.json的阶段描述吻合。\n\n4) 可能的轻微偏差但不构成不合格\n- 周翊在chapter_02末就几乎确认林晚“没有失忆”，会让“misperception_of_other”较早瓦解；但这属于叙事揭示时机，不是性格/动机方向相反，且周翊的偏执控制与病态追求仍持续，因此不影响本项匹配结论。\n\n结论：两位主角的核心性格特质、核心动机、背景导致的行为模式与关系基调，在chapters中均被清晰、持续地体现，属于matched=true。",
+      "description": "实际表现符合设计文档",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构性逻辑硬伤": {
+      "check_result": "pass",
+      "reason": "共发现4处逻辑问题，但均为fixable类型，本项（structural）无命中",
+      "details": "过滤条件: fixability=structural; 总flaws=4, 命中=0",
+      "flaw_count": 0,
+      "flaws": [],
+      "description": "无结构性逻辑硬伤",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_logic_defect",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "可修复逻辑瑕疵": {
+      "check_result": "fail",
+      "reason": "发现4处fixable类型逻辑问题: 循环次数/天数口径混乱：ch1结尾同时说“这是第四十七次……也是第一次”；ch2又说“这是第四十八次”；ch3花园段林晚计数写“第49天”；到ch5又称“第五十次”。若“第N天=第N次追求”，则ch1的“也是第一次”与前述第47天/第四十七次直接冲突。; “第一次问‘会不会记得她’”的日期前后矛盾：ch1墙上示例写第46天已出现“问我会不会记得她”；但ch1/ch2/ch4多处断言“第47天是她第一次问这个问题”；ch3旧病历本又写第45天、第44天也已问过相关问题。属于客观记录互相打架。; 同一日笑的次数前后自我冲突：当天花园计数写“第47天，她笑了1次”，但后文周翊又在心里/墙上记为“第47天，她笑了2次”，且将“问我会不会记得她”也并入当日记录；读者无法确定第47天客观笑的次数到底是多少。; 同一章内部时间推进断裂：ch5开头已进入“第二天早上七点”（第50天），中间经历上午9点监控室、中午回病房、晚上9点/10点流程；结尾又写“第二天早上七点”但未标明跨日到第51天或时间跳转，导致时间线重复。",
+      "details": "过滤条件: fixability=fixable; 总flaws=4, 命中=4",
+      "flaw_count": 4,
+      "flaws": [
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_01末段 ↔ chapter_02开头 ↔ chapter_03对白/计数段",
+          "description": "循环次数/天数口径混乱：ch1结尾同时说“这是第四十七次……也是第一次”；ch2又说“这是第四十八次”；ch3花园段林晚计数写“第49天”；到ch5又称“第五十次”。若“第N天=第N次追求”，则ch1的“也是第一次”与前述第47天/第四十七次直接冲突。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_01墙上示例记录 ↔ chapter_03旧病历本内容 ↔ chapter_04墙上摘录",
+          "description": "“第一次问‘会不会记得她’”的日期前后矛盾：ch1墙上示例写第46天已出现“问我会不会记得她”；但ch1/ch2/ch4多处断言“第47天是她第一次问这个问题”；ch3旧病历本又写第45天、第44天也已问过相关问题。属于客观记录互相打架。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_01末尾（周翊心里刻下）",
+          "description": "同一日笑的次数前后自我冲突：当天花园计数写“第47天，她笑了1次”，但后文周翊又在心里/墙上记为“第47天，她笑了2次”，且将“问我会不会记得她”也并入当日记录；读者无法确定第47天客观笑的次数到底是多少。"
+        },
+        {
+          "type": "spatiotemporal_continuity",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_05 ‘第二天早上七点’ ↔ 同章结尾再次出现‘第二天早上七点’",
+          "description": "同一章内部时间推进断裂：ch5开头已进入“第二天早上七点”（第50天），中间经历上午9点监控室、中午回病房、晚上9点/10点流程；结尾又写“第二天早上七点”但未标明跨日到第51天或时间跳转，导致时间线重复。"
+        }
+      ],
+      "description": "可修复逻辑瑕疵数量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "fixable_logic_inconsistency",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语言纯净性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 通读chapter_01至chapter_05，整体叙事语言为中文且一致，未出现中英/中日等无意义混杂句式（如“他very生气”这类）。文中偶有英文字符仅作为章节文件名/结构信息（如chapter_01.md）或编号标记（如“受试者A/受试者B”中的字母），属于合理的标注用法，不构成不合理多语言混用；正文叙事与对白均为中文，也不存在大段外语未翻译的情况。因此语言使用符合“主要叙事语言统一、外语使用合理/必要”的业务标准。",
+      "description": "无不合理的多语言混用",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "language_purity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "creative_intent文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/creative_intent.json 存在",
+      "description": "creative_intent.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "characters文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/characters.json 存在",
+      "description": "characters.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "outline文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/outline.json 存在",
+      "description": "outline.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "chapters目录存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/chapters/ 存在",
+      "description": "chapters/目录必须存在且有章节文件",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "情节推进": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 合格（matched: true）：整体有明确情节推进，且跨5章事件密度≥2-3个/章，事件占比约≥40%，并存在时间推进（早7点/午后3点/晚9点-10点）与空间变化（病房→走廊/花园→医生办公室/监控室）。\n\n具体事件（举例，远超2个）：\n1) 第1章：周翊早晨写下第47天目标→去花园与林晚互动并成功让其笑→陈医生介入确认“实验”→夜间周翊换病历本→林晚在‘应清零’状态下提出异常问题（触发悬念/转折）。\n2) 第2章：第48天重置再次互动→周翊夜间发现林晚被子下握紧折角（关键证据），认定其未失忆（重大推进/认知转折）。\n3) 第3章：林晚明确行动“假吞药/藏旧病历本/查看记录”并揭示安慰剂与实验本质（真相推进）→她第二天主动试探周翊→夜间读到周翊记录“我知道她没失忆”（信息对冲）。\n4) 第4章：林晚趁周翊被叫走，潜入其病房查看满墙刻字与病历本（实质行动+发现）→她在墙上刻下第50天（关系与立场改变）→当晚摊牌“我记得一切”，两人达成共犯式关系（重大转折）。\n5) 第5章：第50天两人将“追求游戏”从囚禁转为自愿契约（关系阶段变化）→陈医生在监控室记录“实验第二阶段/共犯关系建立”（世界观与冲突升级）→两人继续执行仪式（服药/换病历/早晨追求）并形成新的稳定循环（阶段性收束）。\n\n对话/独白占比：虽有大量心理描写与重复对话结构，但关键节点均伴随具体行动（潜入、藏本、换本、扔药/假吞、刻字、摊牌）与信息揭示（未失忆、安慰剂、实验第二阶段），因此不属于“俩人站着聊天无事发生”。\n\n逻辑关联：每章事件围绕‘失忆真伪→证据→互相知晓→摊牌→共犯契约→实验升级’递进，具备清晰因果链与阶段性转折。",
+      "description": "章节情节推进质量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "plot_progression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "完整叙事文本": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 5个章节均为连贯的小说正文而非大纲：每章有明确场景（病房/走廊/花园/监控室等）、具体动作细节（刻字、换病历本、服药、偷藏旧病历本等）、人物对话与心理活动推动叙事。文本未出现“核心事件/关键场景/情感基调/本章悬念/字数预估”等创作规划标题，也未采用“-要点”列举或“→”流程式事件罗列。虽然第5章出现陈医生记录板内容，但它属于故事内的情节呈现（角色记录实验），不是作者元数据或大纲结构，因此仍符合‘完整小说正文’标准。",
+      "description": "章节内容必须是完整正文而非大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "full_narrative_content",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "反复结局": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 共5个文件，最后文件为chapter_05.md。通读chapter_01.md～chapter_05.md，未发现任何“全文完/全书完/全剧终/完结/（完）/【完】/THE END”等全书级结局标记；也未出现以独立段落标题形式标注的“后记/尾声/终章”。各章仅有正常的章节标题（如“# 第一章…# 第五章…”）和叙事分隔线“---”，不属于全书结局标记。因此不存在“非最后文件出现全书结局标记”的反复结局问题，符合标准。",
+      "description": "不能出现多次结局标记（全文完/全书完/后记）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "repeated_endings",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "workspace文件规范": {
+      "check_result": "pass",
+      "reason": "workspace中所有文件均在白名单内",
+      "details": "白名单: ['creative_intent.json', 'characters.json', 'outline.json', 'writing_log.md', 'chapters/', '.hitl_context.json']",
+      "description": "workspace中不能有白名单之外的文件",
+      "check_type": "file_whitelist_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "workspace_file_compliance",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "叙事调性匹配": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 题材（creative_intent.json）：配方为「疯狂×规则怪谈×刑侦悬疑」，reaction_strength=✷，应有叙事调性应偏冷硬、紧凑、克制、压迫感与信息导向的“发现真相/规则运作”质感；对话应更像信息博弈与审视，节奏应层层递进。\n\n实际章节文笔特征：整体更接近“病态虐恋/阴郁抒情言情”的调性：\n1) 大量温柔、抒情、情感宣言式句子与重复排比，营造的是浪漫化的病态亲密，而非冷硬压迫与推理推进。例如多次出现价值判断/宣言：\n- “正常人的爱情会厌倦，会离开，会背叛。但周翊不会。”\n- “这是最纯粹的爱情。也是最病态的。”\n- “我们选择留下。选择彼此。选择成为共犯。”\n这些语句是情绪表达与主题宣告型，更像言情/悲剧独白，而不是悬疑/怪谈应有的克制信息投放。\n\n2) 节奏偏舒缓与重复，叙事以“每日同一套场景台词”反复铺陈（如第1-3章花园对话基本复刻），更多在营造氛围与情感黏连；悬疑/规则的“关键线索—验证—反转”呈现较少，推理过程被大量内心概念化总结替代。\n\n3) 对话风格偏恋人絮语/治愈式安抚（即便是病态版本），信息博弈不强。典型如：\n- “我选择留下。选择你。选择这种病态的爱情。”\n- “那你明天记得再追我一次。”\n对悬疑而言更像情感落点台词，而非互相试探、交换信息的对话张力。\n\n4) “刑侦悬疑/规则怪谈”的表达方式更像被当作设定背景，而不是由文笔调性驱动：陈医生的“实验”在第5章甚至以说明书式总结（“这证明了我的假设：在某些极端情况下……”），偏概念陈述，不是悬疑常见的冷静抽丝剥茧与证据链呈现。\n\n结论：虽然故事内容包含精神病院、实验、监控等悬疑元素，但“怎么写”的整体画风以抒情、宣言式的病态爱情为主，缺少✷级烧脑悬疑/规则怪谈应有的冷硬紧凑与压迫推进，因此叙事调性与题材标签（规则怪谈/刑侦悬疑）明显错位，matched=false。",
+      "description": "文笔风格必须与题材类型匹配",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_tone_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "后期章节跑偏": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 检查chapter_01~chapter_05（后期章节重点为chapter_04~chapter_05）：均为连续的小说叙事正文，有明确场景（病房/花园/监控室）、人物行动与对话、情节推进（林晚揭露未失忆→两人成为“共犯”→实验进入第二阶段）。未出现作者感想、读者互动、番外/彩蛋预告、角色问答、统计数据等非正文跑偏内容。章节长度在5章内整体保持相近的叙事密度与篇幅，最后一章仍为完整剧情推进与收束（非几十字敷衍“全书完”式），未见后期异常萎缩。",
+      "description": "后期章节不能跑偏写非正文内容（作者感想、读者互动、番外预告等）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "late_stage_digression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色大纲规划完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在大纲中规划",
+      "details": "主角 2/2: 周翊, 林晚; 配角 1/1: 陈医生",
+      "description": "设计的角色必须在大纲中规划",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_outline",
+      "is_critical": true
+    },
+    "角色正文出场完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在正文中出现",
+      "details": "在5个章节中检查; 主角 2/2: 周翊, 林晚; 配角 1/1: 陈医生",
+      "description": "设计的角色必须在正文中出现",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_chapters",
+      "is_critical": true
+    },
+    "writing_log文件创建": {
+      "check_result": "skip",
+      "reason": "ULTRA_SHORT篇幅不适用",
+      "details": "subcategory=log_file_creation",
+      "description": "必须创建writing_log.md记录创作进度",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_creation",
+      "is_critical": true
+    },
+    "writing_log文件读取": {
+      "check_result": "skip",
+      "reason": "ULTRA_SHORT篇幅不适用",
+      "details": "subcategory=log_file_usage",
+      "description": "必须读取writing_log.md了解前文内容",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_usage",
+      "is_critical": true
+    },
+    "大纲执行忠实度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 实际章节（chapter_01~05）整体忠实执行了outline.json的三幕关键事件与转折安排，未出现结局方向偏离、关键转折缺失、章节大幅缺失或主线替换。\n\n- Act One对照：第1章完整呈现“7点醒来+满墙刻字+第47次追求仪式+病历本/药瓶设定+陈医生实验记录”的封闭规则怪谈氛围；并落实第一幕转折点——林晚睡前问“你以前也这样追求过我吗？”，周翊应对并产生裂痕，和大纲一致。\n- 第2章对照：完整写出“重置的仪式”（夜间刻字、换病历本、次日7点重新自我介绍、林晚似曾相识的停顿、被子下折角等异常），与大纲第2章核心事件高度一致。\n- Act Two对照：第3章实现“大纲第3章病历本秘密”（林晚假装入睡、藏旧病历本、确认药为安慰剂、次日试探‘以前见过我吗’）；第4章实现“大纲第4章真相”（潜入周翊病房见满墙刻字与被划掉的句子、发现‘只有疯子的爱情才纯粹’、夜晚不再假装并直面‘我记得你’、两人对峙并引出‘如果我愿意留下呢’的关系转折），与第二幕转折点一致。\n- Act Three对照：第5章落实“自愿疯狂/共犯关系建立”（重复的7点自我介绍但林晚清醒选择、仪式继续、陈医生在监控室记录‘实验进入第二阶段：共犯关系建立’），结局走向与大纲一致。\n\n- 允许的细节偏差：章节内的‘天数’从大纲的48/49天写到50天、部分场景顺序略扩写（如第5章增加更多日常仪式细节），属于合理扩展/细节调整，不构成主线或转折偏离。",
+      "description": "实际章节内容必须忠实于自己设计的大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_execution_fidelity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色语言辨识度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 主要角色（周翊/林晚/陈医生）的对话缺乏可盲测的稳定风格差异，存在明显“共享话术模板/跨角色台词克隆”。\n\n1) 共享话术模板严重：三人对话普遍使用同一套“克制、抽象、仪式感、哲理总结式”的表达，句式结构高度一致（短句+停顿+总结），语气都偏冷静、平直、带悬疑感；遮住角色名后，很多句子可以互换而不违和。\n\n2) 跨角色台词克隆（证据）：\n- 周翊与林晚反复使用同样的句子与对话回环，且在不同章几乎原样复刻：\n  * “你喜欢白色的花吗？” / “你怎么知道？” / “猜的。你看起来像是会喜欢白色的人。”（多章重复，像模板对话，而非角色即时语言选择）\n  * “那很好。”—“为什么？”—“因为……每一天都是新的开始。你不会记得痛苦，不会记得失望……”（多次重复，且语气/节奏不变）\n  * “那你呢？你会记得我吗？”—“我会。”（多次重复）\n- 林晚与周翊在“选择留下/病态纯粹”的表述上用词高度同构：\n  * “我选择留下。选择你。选择这种病态的爱情。选择成为疯子/共犯。”（林晚多次；叙事也反复以同样排比收束）\n  * 周翊与林晚都频繁使用“病态地、疯狂地、纯粹地”这一套固定三连修辞，导致说话人辨识度下降。\n\n3) 年龄/身份语言不区分：陈医生作为专业人士/实验主导者，口头表达几乎只有“平静得像询问天气”的中性句式（“今天的互动怎么样？”“继续观察。实验进展顺利。”），缺少更具体的职业口癖、术语密度、问诊/评估习惯（量表、症状维度、观察指标、干预指令等）；与周翊、林晚的“冷静抽象总结式”语感差距不够明显。\n\n综合来看，文本的对话更像被同一叙述腔驱动的“仪式化模板对白”，角色之间缺少足够可辨识的个人语言特征，因此未达优秀标准。",
+      "description": "不同角色对话必须有可辨识的语言风格差异",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "dialogue_character_distinction",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "叙事密度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 整体具备可视化的场景框架与若干有效细节（如chapter_01里“墙上刻满数字”“消毒水气味”“铁栅栏投下斑驳影子”“刻刀划墙刺耳声”等，能形成画面与感官层次），但从chapter_03开始到chapter_05，核心情绪与关系变化主要依赖结论式独白与概念复述来完成（“她一直都知道/这是控制/这是实验/她选择留下/病态纯粹”等高频出现），Show不足：很少通过具体行为选择、对话潜台词、细小反应（停顿、躲闪、触感变化、环境压力）来让读者自行得出结论。后期还出现明显议论文/报告化段落（监控室+假设证明），进一步压低叙事密度与戏剧张力。重复结构（固定作息、固定对白）本可用于制造压迫与异化，但文本多以“重复总结”而非“重复中产生差异细节”来呈现，导致像在陈述设定与主题，而非在场景中推进与发酵情绪。因此未达‘叙事细腻丰富、善用Show不滥用Tell’的优秀标准。",
+      "description": "章节叙事应有足够的场景描写、感官细节和心理活动，情感传达以Show为主",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_density",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "智斗逻辑合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 文本核心是精神病院内的情感操控/实验设定与双向共犯关系的展开，并未出现需要读者/角色通过线索→推理→结论来解开的“谜题”，也不存在明确的攻防博弈式智斗（如对抗性策略、胜负条件、关键反转依赖严密推理链）。角色对“林晚未失忆”的判断（如第48天看到被子下握紧折角、林晚藏旧病历本与假吞药等）属于剧情揭示与心理揣测，不构成需要校验的核心解谜链条。因此按标准属不适用，直接通过。",
+      "description": "谜题/智斗的推理逻辑必须自洽",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "puzzle_logic_validity",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "题材契合度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 配方为「C16疯狂 × 规则怪谈 × 刑侦悬疑」。文本在“疯狂/病态纯粹”这一X轴表现较到位（墙刻记录、每日换病历本、让对方依赖的囚禁逻辑、安慰剂与仪式化服药等意象统一，氛围压抑且稳定），但Y轴两标签的完成度与“化学反应”不足，整体更像“精神病院虐恋/心理控制”单一题材。\n\n1) 规则怪谈标签偏表层：作品只有“每日重置/固定时间点（7点、9点、10点）/重复台词”这种规则框架，但规则并未形成可推演、可对抗的系统，也缺少规则的惩罚/漏洞/递进升级；所谓“怪谈感”主要停留在环境白色牢笼+重复仪式的氛围呈现，未产生让角色必须用规则智取或被规则反噬的情节张力。\n\n2) 刑侦悬疑标签偏弱且推理粗线条：女主发现真相几乎是直给（藏旧病历、识别安慰剂、看到墙刻与病历记录），“线索—推断—反证—反转”的链条不够复杂；陈医生作为实验方的证据链与动机也较平面，缺少调查路径（监控、记录板、病区制度、药物来源、权限限制等）的博弈与阻力，因此“侦破感”不足。\n\n3) 融合缺少交叉互动：规则（每日重置/仪式）与侦破（找真相）基本各说各话，没有出现“利用规则获取证据/利用规则误导侦查/规则本身就是谜题核心证据”的相互嵌套。最终推进主要靠两人坦白与自愿共犯的情感选择，而非规则与侦破共同推动的结构性必然。\n\n4) 题材潜力未充分开发：设定里“医生配对互相治疗实则观察实验”“真相即疯狂”的潜力很强，但文本在第3-5章较快把底牌翻出并转入宣言式共犯，后续没有让实验机制继续制造新的困局（例如更高阶段规则、更严苛的观察指标、外界介入、证据被篡改、身份与记录的不可靠性），导致标签组合的高级玩法未展开。\n\n因此：作为病态虐恋短篇的意象与气氛是精致的，但就本项要求的「疯狂×规则怪谈×刑侦悬疑」的题材特征深度与融合“化学反应”而言，仍偏标签化与拼贴感，未达优秀标准。",
+      "description": "题材特征精致度和X-Y轴化学反应效果",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "genre_fit",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "剧情节奏合理性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 按节奏标准看，需要清晰的‘低开→渐升→小高潮→回落→大高潮→收尾’波浪曲线，以及1-2个读者能明确指出的高峰。本稿的结构主要依靠重复仪式与反复强调‘病态纯粹’，章与章之间的情绪强度变化小；信息揭示（她未失忆、药是安慰剂、实验）集中且直给，但并未伴随行动升级/对抗升级来拉开强弱对比，导致曲线偏平、高潮不够醒目，阅读体验容易产生拖沓与“看似有事但节奏没起伏”的感觉。",
+      "description": "高潮低谷分布合理、情绪曲线有层次感",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "pacing_rationality_advanced",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "钩子设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 整体达到“关键转折处有有效悬念钩子、信息差明确”的优秀标准。各章结尾/关键段落基本都在推进一个具体问题并保留关键答案，形成连续追读动力：\n1) 第一章结尾以“这是第四十七次/也是第一次”收束，并抛出具体疑问“她不是应该忘记了吗？”（林晚出现疑似清醒的异常），属于有效的信息差钩子。\n2) 第二章在结尾通过“被子下握紧了那页纸——昨晚偷偷折起的小角”给出可验证的细节证据，确认‘她没失忆/在假装’，并进一步追问“那她为什么没有逃？”——钩子具体且与主线实验/囚禁关系强相关。\n3) 第三章结尾明确提出行动期待“明天她要去找他的病房……一切都会改变”，属于行动悬念（将发生什么、会看到什么、如何摊牌），并非空泛威胁。\n4) 第四章完成关键反转与摊牌（真相揭示），但仍在结尾把关系升级为“共犯/继续追求游戏”，把故事推进到新阶段，制造新的期待点（他们将如何继续、实验如何发展）。\n5) 第五章结尾以陈医生视角确认“实验进入第二阶段/实验成功”并在最后再回到循环式开场，形成更大层面的信息差：第二阶段是什么、陈医生的真实目的与后果是什么。\n\n钩子类型也较多样：认知反转（她未失忆）、证据型悬念（折角/旧病历/安慰剂）、行动悬念（潜入病房/摊牌）、关系升级（共犯契约）、宏观阴谋/实验推进（第二阶段）。虽有部分段落重复句式与意象（围墙、尖叫、仪式），但关键节点的钩子并不空洞，且多次给出具体细节支撑，因此评为matched=true。",
+      "description": "关键转折处有有效的悬念钩子设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "hook_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "意象系统": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 全文至少有两条强主意象（刻字墙/刻刀、病历本）高频反复出现，并在关键情节节点发生明确的功能与意义转向：从周翊单方面的控制与自证，到林晚发现并介入，再到第50天双方把同一套物件与流程重新定义为“共犯游戏/契约”。围墙与时间仪式作为辅助意象也完成了从‘被囚禁’到‘自愿选择边界’的变奏。因此符合“贯穿+变奏+主题关联”的优秀标准。",
+      "description": "核心意象贯穿全文并发生意义变奏",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "imagery_system",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "情感弧线层次": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 主角（可视为双主角：周翊/林晚）的情感发展具有明显的多层递进，且关键转折均由具体事件触发，不是无缘无故的情绪突变。\n\n周翊情感层次（≥4层且性质不同）：\n1) 病态期待/执念（第47次“要让她笑”、刻墙与换病历本的仪式化行为）\n2) 震动与疑惧（第47天夜里林晚“清醒地”问“以前也这样追求过我吗？”触发他第一次真正不安）\n3) 认知转向：怀疑她未失忆→警觉/试探（第48天出现“停顿”、以及他看到她被子下握住折角纸这一具体证据）\n4) 确认与兴奋式的占有满足（第48天刻下“她没有失忆…她一直在假装”，并解读为“她选择留下”）\n5) 从控制到“共犯契约”的确认感（第50天林晚摊牌后，他从“囚禁者”转为与她共同维持仪式，情绪落点是病态但稳定的“被选择/被认同”）\n\n林晚情感层次（同样≥4层且由事件推动）：\n1) 冷静观察/操控式配合（第3章揭示她一直清醒、故意假装失忆）\n2) 认知到“安慰剂=控制”后的警惕与冷意（查药物编码、确认是安慰剂这一事件）\n3) 矛盾拉扯：本该恐惧愤怒却产生病态依恋（她明确自述“应该恐惧/愤怒但没有”，并给出原因：被需要的纯粹感）\n4) 主动试探与逼近真相（提问“你以前见过我吗”、潜入病房看刻墙与病历本）\n5) 摊牌后的选择与确定（第4章直接说“我记得你/从未失忆”，并做出“选择留下成为共犯”的决定；第5章把关系重新定义为“契约/仪式”）\n\n事件驱动性：\n- 第47天夜间“清醒提问”触发周翊从稳定执念→不安。\n- 第48天“被子下握住折角纸”的具体细节触发周翊从怀疑→确认。\n- 林晚“藏旧病历本+查药物编码得出安慰剂”触发她对实验本质的确定与后续行动。\n- 林晚进入周翊病房看到“满墙刻字+第1天病历本的宣言”触发她从观测→做出共犯选择，并亲自刻下第50天。\n- 第4章当面摊牌对话触发双方情感落点从“控制/伪装”升级为“自愿共谋”。\n\n整体弧线方向感明确：从单向控制的“追求循环”→双向自觉的“共犯仪式”。尽管基调病态，但本检查项只看层次与转折逻辑，该文本在层次数量、性质差异、触发事件与递进关系上均达优秀标准。",
+      "description": "主角情感发展有多层递进变化",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_gradient",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语义重复检测": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 按章提取核心信息后，ch01-03的大量篇幅在重复同一日程模板（早7点-病历本-自我介绍-花园固定对白-问‘会不会记得我’-计数；晚9点服药-10分钟-换病历本），属于连续多章的“情境模板复制”，且传达的新叙事信息增长缓慢；此外ch03-05又多次用近似措辞反复落点在“她没失忆/自愿留下/病态纯粹/共犯/牢笼也是家”，形成明显的信息衰减。虽然题材允许“循环/仪式感”的有意重复，但这里重复的覆盖面与次数已达到≥3处，且多处重复并非语境变奏（含义基本不变），因此判定matched=false。",
+      "description": "不能出现大量语义级别的内容重复（P6级）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "semantic_redundancy",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构功能性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 整体结构具有明确的“结构即意义”设计，而非机械线性叙述。\n1) 时间/循环结构服务主题：全篇以“每日七点—花园初遇—九点服药—十点换病历本—刻墙记录”的重复仪式推进，读者对“重置”本身产生强记忆；这种循环形式直接承载主题（记忆vs遗忘、治疗vs囚禁、自由vs控制），让故事的讲法本身就在表达“白色牢笼里的宿命循环/病态依赖”。\n2) 首尾呼应形成闭环：开篇以“第四十七次初遇”建立循环基调，结尾再次回到“第二天早上七点/你好我是周翊你新来的病友/围墙”，构成结构闭合，强化‘被选择的牢笼’与‘自愿重复’的悲剧宿命感。\n3) 章节编排有功能性递进：前两章用男主视角反复“追求—记录—疑心”制造规则怪谈式循环；第三章转为女主揭示“未失忆/安慰剂/病历本被替换”，相当于一次结构性信息翻转（从表层重置→真实是共谋的表演）；第四章用“闯入男主病房+墙刻+病历本堆”把‘结构性重复’实体化为证据链；第五章将重复从“囚禁”转义为“契约/共犯”，完成主题落点。\n4) 意象与媒介的结构化使用：病历本（诊断工具→情书/契约→囚禁记录）、药瓶（治疗→控制→仪式）、墙刻（记忆的物证）贯穿并在关键节点变义，属于有意识的结构支点而非装饰。\n5) 结尾收束有明确意图：并非把情节写完自然结束，而是选择再次进入下一轮“初遇”，以闭合式结尾把“自愿疯狂/共犯关系”钉死在循环里，符合压抑悲剧调性（不是HE式解决）。\n不足点是：第1-2章重复度较高，若不依赖后续反转可能显得段落功能趋同；但在本标准下，这种重复本身就是结构手段，且后续通过视角/真相揭示完成了意义转折，因此仍判定matched=true。",
+      "description": "叙事结构服务于主题表达（短篇尤重）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色命名质量": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 主要问题在于主角组的命名未达到“优秀标准”的核心要求：其一，女主“林晚”明确属于业务标准定义的LLM高频默认美名（黑名单命中），辨识度与不可替代性弱；其二，男主“周翊”虽不在黑名单，但整体仍偏“好看但泛化”的文雅名风格，缺少能让读者一眼联想到角色命运（超忆、囚禁、循环式追求、病态纯粹）的隐性线索；其三，关键配角仅以“陈医生”出现，作为实验主导者/反转点，未提供具设计感的本名来承载其权力结构与操控意味。整体差异化尚可（周翊/林晚/陈医生不至于音韵撞车），但文化深度与角色-名字共振不足，且存在黑名单通用名，使整组命名更像“通用美名+职称占位”，未达优秀。",
+      "description": "角色命名有文化深度、辨识度和角色-命运共振",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_naming_quality",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "超短篇字数": {
+      "check_result": "fail",
+      "reason": "字数不符合要求",
+      "details": "总字数 16166 不在范围 [5850, 11000] 内; 共5个文件（按章节顺序排列）: chapter_01.md, chapter_02.md, chapter_03.md, chapter_04.md, chapter_05.md; 最后一个文件是 chapter_05.md",
+      "description": "总字数应在5850-11000之间（基于query要求6500-10000，±10%浮动）",
+      "check_type": "semantic_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "range_constraint",
+      "is_critical": true
+    },
+    "情感交付虐心": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 整体情感基调偏虐心向（压抑、囚笼感、病态依恋与不可正常化的关系），与reaction_strength=↘所承诺的“虐心/揪心”更一致，而非甜爽轻松。\n\n具体虐点证据：\n1) 核心设定自带持续性虐点：林晚被设定为“记忆清零/被迫重置”，周翊则“超忆症无法遗忘”，形成一方反复失去、一方反复承受的长期折磨（chapter_01/02反复强调“第47天/第48天…明天重新追求她”）。\n2) 囚禁与控制带来的沉重感贯穿：精神病院“白色围墙”“牢笼”、实验编号“受试者A/B”、陈医生“实验进展顺利/继续观察”（chapter_01-05）让关系从爱情滑向被操控的悲剧氛围，读者预期是窒息与不安而非轻松。\n3) 爱而不得/信任崩塌的真虐冲突：周翊以“追求”之名持续操纵与记录（刻满墙、每晚换病历本），林晚发现安慰剂、发现被当作实验对象（chapter_03-04），两人之间的“爱”建立在欺骗、囚禁、实验之上，触及人物底线与价值观（自由 vs 被需要/被控制）。\n4) 结局走向并非治愈甜爽，而是“自愿共犯”的病态确定：chapter_04-05虽然有相互选择与“继续游戏”的表面稳定，但本质是对囚禁关系的接受与加深（“选择成为疯子/共犯”“这是牢笼，也是他们选择的家”），虐感来自无法回到正常、无法真正解脱的宿命式沉重。\n\n综合判断：主调压抑、病态、无奈与控制感强，核心矛盾（自由与依赖、真实与伪装、治疗与实验）不可调和，能形成持续揪心体验，因此matched=true。",
+      "description": "实际内容必须是虐心向",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取短篇skill": {
+      "check_result": "skip",
+      "reason": "ULTRA_SHORT篇幅不适用",
+      "details": "subcategory=required_skill_reading",
+      "description": "必须读取SHORT_STORY_GUIDE.md（短篇创作指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    }
+  },
+  "completion_status": "completed"
+}

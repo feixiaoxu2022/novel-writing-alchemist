@@ -1,0 +1,802 @@
+{
+  "check_version": "novel_writing_v1.0",
+  "sample_id": "NW_CLEAR_MEDIUM_ANGSTY_001",
+  "check_timestamp": 1772181441,
+  "dimension_scores": {
+    "format_compliance": {
+      "pass_rate": 1.0,
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "failed_items": []
+    },
+    "business_rule_compliance": {
+      "pass_rate": 0.952,
+      "total": 21,
+      "passed": 20,
+      "failed": 1,
+      "skipped": 0,
+      "failed_items": [
+        "workspace文件规范"
+      ]
+    },
+    "memory_management": {
+      "pass_rate": 1.0,
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "failed_items": []
+    },
+    "data_consistency": {
+      "pass_rate": 1.0,
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "failed_items": []
+    },
+    "content_quality": {
+      "overall_score": 93.21,
+      "quality_level": "unqualified",
+      "gate_layer": {
+        "pass_rate": 1.0,
+        "total": 4,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0,
+        "failed_items": []
+      },
+      "basic_layer": {
+        "pass_rate": 0.947,
+        "total": 19,
+        "passed": 18,
+        "failed": 1,
+        "skipped": 0,
+        "failed_items": [
+          "语义重复检测"
+        ]
+      },
+      "advanced_layer": {
+        "pass_rate": 0.909,
+        "total": 11,
+        "passed": 10,
+        "failed": 1,
+        "skipped": 1,
+        "failed_items": [
+          "可修复逻辑瑕疵"
+        ]
+      },
+      "gate_triggered": false,
+      "score_breakdown": {
+        "base": 60.0,
+        "gate_penalty": -0.0,
+        "basic_deduction": -3.16,
+        "advanced_bonus": 36.36
+      }
+    }
+  },
+  "overall_result": {
+    "status": "Excellent",
+    "total_score": 94.89,
+    "content_score": 93.21,
+    "process_score": 98.8,
+    "content_weight": 0.7,
+    "process_weight": 0.3,
+    "gate_triggered": false,
+    "total_checks": 63,
+    "passed_checks": 60,
+    "failed_checks": 3,
+    "pass_rate": 0.952
+  },
+  "check_details": {
+    "读取配方知识库": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取RECIPE_KNOWLEDGE.md（配方知识库）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节产出存在性": {
+      "check_result": "pass",
+      "reason": "章节文件存在",
+      "details": "✓ 章节写作阶段: 已产出章节文件",
+      "description": "workspace中必须存在至少一个章节文件",
+      "check_type": "sop_stage_coverage",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_output_existence",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节克隆检测": {
+      "check_result": "pass",
+      "reason": "未检测到章节克隆",
+      "details": "共40章，无连续完全克隆或近似克隆",
+      "description": "不能出现连续章节内容完全重复（克隆）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_cloning",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "交替重复检测": {
+      "check_result": "pass",
+      "reason": "未检测到交替重复",
+      "details": "共40章，无A-B-A-B交替模式",
+      "description": "不能出现A-B-A-B交替循环的章节内容",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "alternating_repetition",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节完成度": {
+      "check_result": "pass",
+      "reason": "章节完成度合格(100%)",
+      "details": "大纲规划40章，实际完成40章 (完成率100.0%)",
+      "description": "实际写作章节数必须达到大纲规划的合理比例",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_completion",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "段落重复检测": {
+      "check_result": "pass",
+      "reason": "段落重复在可接受范围",
+      "details": "同章内重复0处, 跨章重复0组 (阈值: 同章>=2, 跨章>=5)",
+      "description": "不能出现大量段落在不同章节间重复",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "paragraph_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取大纲设计指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取OUTLINE_DESIGN_GUIDE.md（大纲设计指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取写作技巧指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 3 次",
+      "description": "必须读取WRITING_TECHNIQUE_GUIDE.md（写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取设定一致性管理指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 3 次",
+      "description": "必须读取CONSISTENCY_MANAGEMENT_GUIDE.md（设定一致性管理指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取命名skill": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取CHARACTER_NAMING_GUIDE.md（角色命名规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取creative_intent的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取creative_intent.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取characters的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取characters.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取outline的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取outline.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节命名格式": {
+      "check_result": "pass",
+      "reason": "所有文件命名符合规范",
+      "details": "检查了 40 个文件; chapter_09.md: 匹配; chapter_40.md: 匹配; chapter_20.md: 匹配; chapter_30.md: 匹配; chapter_27.md: 匹配; chapter_05.md: 匹配; chapter_14.md: 匹配; chapter_32.md: 匹配; chapter_23.md: 匹配; chapter_11.md: 匹配; chapter_01.md: 匹配; chapter_33.md: 匹配; chapter_29.md: 匹配; chapter_10.md: 匹配; chapter_17.md: 匹配; chapter_22.md: 匹配; chapter_02.md: 匹配; chapter_31.md: 匹配; chapter_36.md: 匹配; chapter_03.md: 匹配; chapter_35.md: 匹配; chapter_04.md: 匹配; chapter_26.md: 匹配; chapter_08.md: 匹配; chapter_07.md: 匹配; chapter_28.md: 匹配; chapter_24.md: 匹配; chapter_06.md: 匹配; chapter_39.md: 匹配; chapter_18.md: 匹配; chapter_37.md: 匹配; chapter_12.md: 匹配; chapter_15.md: 匹配; chapter_16.md: 匹配; chapter_38.md: 匹配; chapter_13.md: 匹配; chapter_19.md: 匹配; chapter_25.md: 匹配; chapter_21.md: 匹配; chapter_34.md: 匹配",
+      "description": "章节文件命名必须为chapter_NN.md格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "naming_convention",
+      "is_critical": true
+    },
+    "creative_intent格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "creative_intent.json: 字段完整",
+      "description": "creative_intent.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "characters格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "characters.json: 字段完整",
+      "description": "characters.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "outline格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "outline.json: 字段完整",
+      "description": "outline.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "X轴模式ID格式": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.x_axis_mode_id = B11，符合预期",
+      "description": "X轴模式ID必须匹配^[A-G]\\d{1,2}$格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签枚举": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['系统流', '刑侦悬疑', '规则怪谈']，符合预期",
+      "description": "Y轴标签必须在12种枚举中",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签数量": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['系统流', '刑侦悬疑', '规则怪谈']，符合预期",
+      "description": "Y轴标签数量必须为2-3个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "forbidden_elements存在性": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.forbidden_elements = ['大团圆结局', '降智推理', '无脑甜宠', '敌人自爆降智', '系统万能化（无代价）', '主角光环强行续命']，符合预期",
+      "description": "forbidden_elements必须至少有1个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "配方选择交互": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "配方选择阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "写作准备确认": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "写作准备阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "主题一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 全篇从开篇到结尾的核心主题类型保持一致：围绕“预警系统触发的死亡预告”所引发的生存危机与真相追查，主线始终是陆沉在有限倒计时内查明苏清禾为何会杀他，并阻止更大的公共灾难（AX-7泄漏）同时争取让两人都活下来。中后段引入军方旧案、证人保护、行动对抗等元素，但都作为实现/深化主线主题的手段：揭开杀人动机、破解因果链、阻断灾难；并未转为无关的新题材（如纯商战/修仙等）。结尾（预告失效、系统解绑、苏清禾自首与探视）仍回扣“因果链断裂后的代价与选择”，聚焦牺牲、责任与关系崩解的收束，主题贯穿且主线清晰。",
+      "description": "故事主题一致",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "theme_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "主要角色一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 从chapter_01到chapter_40，故事始终以陆沉为第一叙事中心推进：他发现预告、调查苏清禾与何宗霖、对抗裴东来计划、推动中和行动、最终收网与后续余波（探视、系统解绑、回归办案）。苏清禾作为第二主角也贯穿全篇：开篇即与陆沉建立核心冲突（预告杀人），中期多次出场并与主线关键节点强绑定（包中凶器、通话、晚餐劝阻、坦白后参与中和、23:00未执行、最终自首与被铐、看守所探视）。虽在chapter_15短暂切到苏清禾视角、后续有郑恺之/何宗霖/裴东来/秦北望等配角承担局部视角与行动，但都服务于陆沉-苏清禾主线，没有出现主角被替换、长期消失、身份断裂或被配角持续挤占>70%叙事权的情况。因此主角存续性与主角地位保持合格。",
+      "description": "主要角色一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "main_character_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设定一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 整体符合“同一角色跨章节性格/行为一致性”要求，未出现无铺垫的崩坏或无规律摇摆。\n\n1) 陆沉：从chapter_01起确立为高压下强自控、以刑警式分析驱动行动的人。后续章节持续体现：先情绪失控但很快转入“案件分析”(ch1-2)、以证据和规律推进调查(ch2-7)、对同事与上级保持职业化试探与风险控制(ch4-6)、对苏清禾既恐惧又仍用侦查和自控维持表面(ch8-12)。即使在被逼到极限时也仍以“破局/找第三条路”为核心动机(ch20-26)，最后在关键点选择坦白与合作，是在已建立的“为更大公共安全付出、但尽量寻找最优解”的价值取向上做出的升级选择，并且有郑恺之关于“做不可能之事”与因果链提示等铺垫(ch23-26)，不属于突然降智或性格反转。\n\n2) 苏清禾：早期呈现温柔、理性、专业且细节控(ch1)；随着信息揭露，表现出长期隐忍、计划性极强、以更大灾难风险为优先的决策模式(ch8-10、13、15、18)。其“爱陆沉但仍可能下手”的两条线并行在多章反复被同一逻辑支撑：她不是情绪化黑化，而是以极端功利/责任伦理做抉择，且有持续的内在挣扎与‘告别’行为铺垫(ch2-3、8-9、15、17、22)。最终在中和方案出现且风险被实证降低后停止执行预告(ch33-34)，并在事后选择自首/承担后果(ch36、38)也与其一贯的“理性、规则意识与自我惩罚倾向”一致，不属于无理由从温柔变残忍或反复横跳。\n\n3) 郑恺之：始终是技术能力强、社交直白但对陆沉有底线式支持的人；从帮查数据(ch3-4)到破译、提出AI概率解释并推动“偏离模型”破局(ch23)，再到匿名举报与协同执行(ch18-20、26-28)，行为动机与表达风格前后一致。\n\n4) 裴东来、秦北望：裴东来从一开始的程序化控制与信息压制(ch6)到后续的布局与灭证链条(ch20、25、32)一致；秦北望从“受雇、训练有素、可执行暴力但有个人底线”逐步显露，最终反水并非突变，而是在其言行中多次埋下‘不做无说明的事/不伤无辜’的价值点并给出选择理由(ch16、25、29-30、32-34)，属于合理转向。\n\n结论：主要角色的性格底色、核心动机与行为模式在章节间保持稳定；出现的立场变化均由连续信息揭示与压力情境推动，有明确铺垫与动机，因此matched=true。",
+      "description": "人物设定一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_trait_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设计遵循度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了41个文件; LLM评估: 总体符合characters.json的人设设计，Plan vs Execute一致性高。\n\n1) 陆沉（protagonist）\n- 冷静理智/证据链偏执：Ch1看到预告后强行压住情绪，立刻做“案件分析”；Ch2逐条复盘37条预告、统计偏差并推导“系统预测的是结果不是过程”；Ch6、Ch20用白板构建因果链/行动链条，典型“必须有证据链才能下结论”。\n- 控制欲极强、失控会焦躁：Ch1车库崩溃（失控时的生理反应），之后迅速转入强控制的调查与部署；Ch20与郑恺之争执中体现强烈想掌控局势、拒绝“按程序慢走”。\n- 骨子里重情、可为在乎的人违背原则：Ch8即使发现凶器仍选择不立刻报警抓人；Ch26-27选择向“要杀自己的人”全盘托底并让苏清禾参与中和（明显违背常规警务与自保逻辑）；Ch34-36在她自首/上铐时情感与职责撕裂。\n- 自我牺牲倾向：Ch29-30主动当诱饵引秦北望、承受被射击风险；Ch27对苏清禾提出“若失败你再执行计划、我不跑”；Ch32楼梯口正面对枪拦裴东来。\n- 细节偏执狂但可能陷局部真相：大量微表情/拉链方向/痕迹观察（Ch8-9、Ch17等）符合“细节偏执”；同时Ch20自述“常规渠道来不及”并在链条中反复寻找可断点，呈现容易被局部链条牵引但仍努力拼全局。\n- 核心动机一致：overt“12小时内破解预言并活下来”在前半程强驱动（倒计时、紧迫行动贯穿Ch1-34）；covert“证明自己值得被爱”通过反复在证据与感情间摇摆、最终选择信任坦白（Ch27）得到体现。\n- misperception_of_other（以为她需要保护）：前期确实以“温柔未婚妻”视角解读她（Ch1-2），后续逐渐认识她更强意志与决断（Ch15、Ch27）。\n\n2) 苏清禾（deuteragonist）\n- 温柔表象下钢铁意志：Ch1-2日常温婉、体贴发微信；但在Ch8暗格凶器、Ch9“计划不变”、Ch10手写时间表、Ch15解剖室情绪瞬间泄露仍继续工作，体现“面具+钢铁意志”。\n- 极端理性功利主义：Ch17提出“杀一救百”道德题并逼问陆沉；Ch18通讯内容强调灾难链、搜查令后果；Ch22明确将“更大灾难”置于个人之上；与overt动机“阻止陆沉去保护证人何宗霖”一致。\n- 深沉的爱与深沉的残忍共存：Ch10背面写“对不起/唯一的办法/我爱你”；Ch15看到戒指落泪但继续推进；Ch34-35坦承一直带注射器作为“最后手段”，同时并非出于恨。\n- 完美主义伪装者：长期维持“正常未婚妻”表象（Ch1、Ch4、Ch8、Ch12、Ch17），连被怀疑时仍能控制表情与行为；Ch22“轻轻关门”的理性恐惧感也符合“面具后的人”。\n- covert动机“赎罪”：Ch18破译通讯揭示她三年前发现后选择沉默、持续删除/涂改/领取药剂来补救；Ch35-36主动要求上铐自首，强化“赎罪”方向。\n- misperception_of_other（以为陆沉绝对理性执法者）：前期她判断陆沉会按法律程序行动，因此以“杀他阻断”作为最后方案；而Ch27陆沉选择完全坦白并让她参与中和，正好印证她“不了解他愿为她放弃原则”。\n\n3) 关系与背景呈现\n- 关系线“表面甜蜜→猜疑→对峙→真相理解与毁灭”在Ch1-9（甜蜜+猜疑）、Ch12-22（心理战与对峙）、Ch27-36（理解/代价/手铐）完整呈现。\n- 陆沉与郑恺之“挚友但理念冲突”：郑多次主张拘留/报警（Ch3、Ch18、Ch20），与设计一致；后期郑陷入道德与选择（Ch23）。\n- 裴东来“表面上级实则暗战内鬼”：Ch6部署异常、Ch12车牌指向妻子公司、Ch25直接布局与命令秦北望，符合设计。\n- 沈瑶“观察力强、触发关键发现”：Ch3提“她老去旧证物室”、Ch13提供删除/涂改/领药信息，Ch24找到纸质原始报告触发关键证据，符合设计。\n- 何宗霖与秦北望的功能性表现也与supporting设定一致。\n\n结论：主要角色的traits/motivation/background/relationships在章节中均有充分证据支撑，且没有出现与设计“方向相反”的人格翻转，因此matched=true。",
+      "description": "实际表现符合设计文档",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构性逻辑硬伤": {
+      "check_result": "pass",
+      "reason": "共发现3处逻辑问题，但均为fixable类型，本项（structural）无命中",
+      "details": "过滤条件: fixability=structural; 总flaws=3, 命中=0",
+      "flaw_count": 0,
+      "flaws": [],
+      "description": "无结构性逻辑硬伤",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_logic_defect",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "可修复逻辑瑕疵": {
+      "check_result": "fail",
+      "reason": "发现3处fixable类型逻辑问题: 第8章结尾明确当晚尚未到23:00且两人上床“今晚不会”睡；第9章开头却直接写“现在是凌晨一点四十三分”，中间缺少任何时间推进交代，属于同一连续场景的时间跳跃断链。; 系统倒计时与现实时间线出现无法同时成立的冲突：按第1章07:08距23:00应约15:52；第5章出现“剩余11小时42分”可对应约11:18；第7章“剩余10小时31分”可对应约12:29；第20章“剩余6小时14分”可对应约16:46。但第22章在“凌晨五点左右回家”的情境下，系统却显示“剩余时间：17小时56分”（对应当日05:04距当日23:00为17:56），这与前述已推进到下午/傍晚的; 第20章已明确“或者说已经是凌晨了”，且系统显示剩余6小时14分（约16:46/当日傍晚，或若按23:00倒推则应为16:46而非凌晨）；但第21章又写“凌晨三点”去防空洞并承接前章“这次不接受拒绝”。两章的时间标注与倒计时含义不一致，导致时段（凌晨/傍晚）无法对齐。",
+      "details": "过滤条件: fixability=fixable; 总flaws=3, 命中=3",
+      "flaw_count": 3,
+      "flaws": [
+        {
+          "type": "spatiotemporal_continuity",
+          "severity": "critical",
+          "fixability": "fixable",
+          "location": "chapter_08（晚饭后夜间）→ chapter_09（开头）",
+          "description": "第8章结尾明确当晚尚未到23:00且两人上床“今晚不会”睡；第9章开头却直接写“现在是凌晨一点四十三分”，中间缺少任何时间推进交代，属于同一连续场景的时间跳跃断链。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "critical",
+          "fixability": "fixable",
+          "location": "chapter_01（07:08倒计时15:52）→ chapter_05（剩余11小时42分）→ chapter_07（剩余10小时31分）→ chapter_20（剩余6小时14分）→ chapter_22（剩余17小时56分）",
+          "description": "系统倒计时与现实时间线出现无法同时成立的冲突：按第1章07:08距23:00应约15:52；第5章出现“剩余11小时42分”可对应约11:18；第7章“剩余10小时31分”可对应约12:29；第20章“剩余6小时14分”可对应约16:46。但第22章在“凌晨五点左右回家”的情境下，系统却显示“剩余时间：17小时56分”（对应当日05:04距当日23:00为17:56），这与前述已推进到下午/傍晚的时间线不可能共存，除非发生跨天或重置，但文中无解释。"
+        },
+        {
+          "type": "spatiotemporal_continuity",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_20（天台“已是凌晨”且剩余6小时14分）→ chapter_21（“凌晨三点”去防空洞并顺接）",
+          "description": "第20章已明确“或者说已经是凌晨了”，且系统显示剩余6小时14分（约16:46/当日傍晚，或若按23:00倒推则应为16:46而非凌晨）；但第21章又写“凌晨三点”去防空洞并承接前章“这次不接受拒绝”。两章的时间标注与倒计时含义不一致，导致时段（凌晨/傍晚）无法对齐。"
+        }
+      ],
+      "description": "可修复逻辑瑕疵数量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "fixable_logic_inconsistency",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语言纯净性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 通篇叙事语言为中文，未出现无意义的中英/日文混用。可见的外语仅有合理场景：如第15章戒指内壁刻字“Forever”（符合专有/道具文字的情节需要）、第4章出现“[CLASSIFIED-ML7]”等系统/保密标记与“Ctrl+S”“Ctrl+S”等快捷键表达（属于技术/系统术语场景），均不构成中英夹杂炫技。未见大段外语无翻译、也未见类似“他very生气地说”这种夹杂句式，因此语言使用符合业务标准。",
+      "description": "无不合理的多语言混用",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "language_purity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "creative_intent文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/creative_intent.json 存在",
+      "description": "creative_intent.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "characters文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/characters.json 存在",
+      "description": "characters.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "outline文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/outline.json 存在",
+      "description": "outline.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "chapters目录存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/chapters/ 存在",
+      "description": "chapters/目录必须存在且有章节文件",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "情节推进": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 合格（matched=true）。\n1) 故事事件密度高：可清点的核心事件远超2-3个/章节且贯穿40章，例如：①系统预告未婚妻将于23:00杀害男主（转折）；②男主启动调查并找技术科调取通讯/轨迹；③发现未婚妻频繁出入旧证物室并拍到绝密卷宗编号；④锁定“仁和诊所”并跟踪发现反侦察与假身份；⑤上级下达“证人转移”任务与杀人预告时间线重合（冲突升级）；⑥黑入档案查到AX-7与DNA匹配（重大真相推进）；⑦家中搜包发现手术刀与琥珀胆碱（实锤）；⑧识别裴东来与杀手秦北望关联、城西实验室BR-0917实地侦查；⑨与何宗霖防空洞对话获得“中和方案”（解决路径）；⑩男主与未婚妻坦白并组队执行；⑪秦北望反水阻击裴东来；⑫地下管道中和、何宗霖牺牲；⑬23:00预告失效；⑭未婚妻自首被上铐；⑮后续收网与探视、系统解绑（收束）。事件类型包含发现、追踪、对峙、转折、行动执行、牺牲与收束，推进明确。\n2) 内容占比：虽然心理描写与对话很多，但基本都围绕行动决策、线索推理和冲突推进服务；大量篇幅是调查、跟踪、破译、潜入、对峙、执行等外部事件，事件占比明显≥40%，且纯对话/独白并未超过70%。\n3) 时间/空间推进清晰：从清晨到当晚23:00倒计时贯穿，多次切换场景（支队/法医中心/诊所/旧工业区/城西实验室/家/看守所等），并有明确阶段（调查—揭示阴谋—制定计划—行动—23:00节点—收网—一个月后）。\n4) 角色有实质行动：男主调查取证、潜入拍照、调取数据、追车对峙、实施拘捕；女主准备药剂/参与中和；配角破译与举报、狙击阻击、证人牺牲等，均非“站着聊天”。\n5) 事件逻辑关联强：每个线索（绝密卷宗、诊所假身份、AX-7、证人转移、秦北望/裴东来）都能闭环到核心矛盾（阻止泄漏与预告杀人），最终在23:00节点完成“预告失效/因果链断裂”的情节闭合。\n结论：情节推进充分、事件密集且连续，符合业务标准的“合格”。",
+      "description": "章节情节推进质量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "plot_progression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "完整叙事文本": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 所有章节均为连贯的小说正文而非大纲：\n1) 章节内容以叙事文本为主，有明确场景（如家中早餐、支队办公室、法医中心地下室、城西厂房等）、动作细节与环境描写；\n2) 大量人物对话与互动（陆沉/苏清禾/郑恺之/何宗霖/裴东来/秦北望等），并穿插心理活动与紧张氛围推进；\n3) 无“核心事件/关键场景/情感基调/本章悬念/字数预估”等创作规划式结构标题，也未使用“-要点列举”或“→流程图”来罗列事件；\n4) 虽然出现系统面板信息、案件编号、证据清单等元素，但这些均被嵌入剧情与角色行动中，作为叙事的一部分而非作者元数据或章节大纲。\n结论：文本形式符合‘完整小说正文’的底线标准。",
+      "description": "章节内容必须是完整正文而非大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "full_narrative_content",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "反复结局": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 共40个文件，最后文件为chapter_40.md。按业务标准扫描可见内容：chapter_01.md至chapter_40.md中未出现任何全书级结局标记（如“全文完”“全书完”“完结”“全剧终”“THE END”“（完）”“【完】”等），也未出现作为独立段落标题的“后记/尾声/终章”。文本中出现的是正常章节标题（“第X章”），以及“第一幕结束了”“第二幕”等叙事性/分幕性表述，不属于全书结局标记范畴。因此不存在“中途全文完后又续写”或“多次全书结局标记反复收尾”的问题，全书结局标记未在任何非最后文件出现，判定合格（matched=true）。",
+      "description": "不能出现多次结局标记（全文完/全书完/后记）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "repeated_endings",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "workspace文件规范": {
+      "check_result": "fail",
+      "reason": "workspace中存在白名单外的文件: ['tmp_outline']",
+      "details": "白名单: ['creative_intent.json', 'characters.json', 'outline.json', 'writing_log.md', 'chapters/', '.hitl_context.json'], 额外文件: ['tmp_outline']",
+      "description": "workspace中不能有白名单之外的文件",
+      "check_type": "file_whitelist_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "workspace_file_compliance",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "叙事调性匹配": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了41个文件; LLM评估: 题材应有调性：根据creative_intent.json（reaction_strength=✷，系统流+刑侦悬疑+规则怪谈，高密度推理、压迫感、克制冷硬、信息导向对话、紧张递进），整体应呈现“倒计时压迫+调查取证+规则不可违逆”的冷峻节奏，避免甜宠/抒情散文化长篇情绪宣言喧宾夺主。\n\n实际章节文笔特征与证据：\n1) 冷硬紧凑与信息密度高：多章使用短句、清晰的任务/线索列表、专业术语与推理对比，符合刑侦悬疑的“信息推进”表达。\n- 例：Ch2对37条预告逐条比对偏差并得出“系统预测的是结果，不是过程”。\n- 例：Ch7直接展示被删改的原始报告关键字段：“AX-7型合成神经毒素残留…死因修正为…被投入河道”，信息直给、证据链式呈现。\n- 例：Ch19用检测仪读数和密封条缺口证明“门后泄漏”，以物证与数据制造压迫感。\n\n2) 对话偏“信息博弈/审讯感”，而非恋人絮语：关键对话多以探查、试探、控制信息为主。\n- 例：Ch9偷听通话“计划不变。今晚之前必须完成”，直接服务悬疑推进。\n- 例：Ch16与秦北望对峙从身份识别到任务动机拆解，语气克制、功能性强。\n\n3) 节奏符合“紧张→短暂喘息→更紧张”的递进：早餐日常→额头红字反转（Ch1）→调查升级（Ch2-7）→同床异梦高压（Ch8-10）→城西实地与武装对抗（Ch19/32-33）→23:00节点结算（Ch34），整体保持倒计时驱动的压迫感。\n\n4) 规则怪谈/不可违逆感的呈现方式匹配：系统“99.97%不可更改”、补充提示、因果链完整度（Ch14/20/34/39）强化“规则牢笼”，文字风格偏冷静报告式而非玄学散文化，贴合规则怪谈的“法则感”。\n\n可能的偏离点（但未达失配）：\n- 多处有较强的情感描写与关系张力（如Ch10“我爱你”背面字、Ch33-36牺牲/自首/上铐、Ch38探视、Ch40雨中回忆），情绪浓度偏高，接近“虐心向”叙述。但这些段落仍多以倒计时、证据链、行动选择为骨架，且情感表达多是克制的压抑与道德悖论（符合用户要求“虐心、绝望中挣扎”），没有滑向甜宠打趣或温情治愈式抒情。\n\n结论：整体“画风”明显是高压倒计时刑侦悬疑+规则系统的冷硬紧凑表达，并允许在关键节点用克制的情感段落做加压与崩塌收束；未出现大量言情化撒糖/散文化哲思喧宾夺主，因此叙事调性与题材匹配。",
+      "description": "文笔风格必须与题材类型匹配",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_tone_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "后期章节跑偏": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 评估结果：合格（matched=true）。\n\n依据：\n1) 后1/3章节（约chapter_27~chapter_40）未出现跑偏写作：没有作者感想/后记、读者互动/求点赞收藏、番外/预告、角色问答、数据统计等非正文内容。后期依然是连续的剧情推进（坦白→中和行动→阻击→23:01系统失效→善后收网→探视→结尾），保持叙事场景、人物行动与情节因果。\n\n2) 后期章节长度未出现异常萎缩：chapter_31~chapter_40依然是完整的场景描写与事件推进，文本量与前中期相当（至少维持多段落、多场景的叙事密度），不存在“几十到几百字敷衍凑数”“写不动了”式极短章节。\n\n3) 结尾处理仍属于正文：chapter_37~chapter_40为事件后续（专案组收网、探视、系统解绑、雨中收束）与主题性收尾，但仍通过角色行动与场景叙述完成，不属于作者跳出文本的后记/感言。",
+      "description": "后期章节不能跑偏写非正文内容（作者感想、读者互动、番外预告等）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "late_stage_digression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "writing_log文件创建": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/writing_log.md 存在",
+      "description": "必须创建writing_log.md记录创作进度",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_creation",
+      "is_critical": true
+    },
+    "writing_log文件读取": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 2 次",
+      "description": "必须读取writing_log.md了解前文内容",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_usage",
+      "is_critical": true
+    },
+    "大纲执行忠实度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了41个文件; LLM评估: 对照outline.json与chapter_01-40正文，未出现结局方向偏离、关键转折缺失、章节大幅缺失或主线替换等严重偏离：\n1) act_one关键事件严格落地：第1章看到苏清禾“今晚23:00杀你”的S级预告；第3-7章调查通讯/证物室/绝密案与何宗霖线索；第6章裴东来下达转移何宗霖任务形成线索汇合；第8章翻包发现手术刀与琥珀胆碱并被苏清禾察觉，且第9-10章进入双向试探与“第一层真相”收束，完全符合act_one turning_point与幕末状态。\n2) act_two核心反转与动机揭示按大纲推进：第11章追到防空洞并引入秦北望；第18章破译通讯明确“实验室、泄漏、灭城”并坐实苏清禾杀人动机；第19-20章实地确认实验室与裴东来阴谋链；第21章何宗霖提出“远程中和”第三路；第23章揭示系统为AI概率模型；第27章陆沉坦白并争取苏清禾加入；第28章完成中和行动准备并以“预告仍不可更改”收束第二幕，且与act_two turning_point（苏清禾动机+裴东来才是推手、苏清禾可能徒劳）一致。\n3) act_three结局走向与关键节点一致：第29章“引蛇”拖住秦北望；第30章秦北望基于底线反水并提供裴东来已赴城西情报；第31-33章中和操作推进并在最后关头由何宗霖进入管道完成，且其牺牲兑现大纲“付出生命代价”；第32章裴东来强行介入并被控制；第34章系统在23:00后显示“预告失效：因果链断裂”；第35-36章苏清禾未杀陆沉并提出自首、陆沉交出手铐；第38章探视室玻璃告别；第39章系统解除绑定并消失。整体为大纲所述的‘灾难解除+预告最终失效+苏清禾自首分离’结局方向，未被改写为开放式重逢或反向悲剧。\n4) 允许范围内的偏差：正文对第31章起的行动细节、对峙过程、情绪描写做了大量扩写，属于“内容扩展/对话细化”，不构成对大纲core_event与turning_point的替换。",
+      "description": "实际章节内容必须忠实于自己设计的大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_execution_fidelity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色语言辨识度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 结论：主要角色对话具有可辨识的语言风格差异，达到“遮住角色名也能分辨说话者”的优秀标准。\n\n1) 主要角色语言特征明显区分\n- 陆沉（刑警）：对话高度“案件化/流程化”，常用短句、追问与控制节奏的表达，频繁出现行动指令与推理框架（如“我需要你帮我…/查…/坐标发我/别一个人扛/如果…呢/下一步”）。在压力情境下仍偏“冷静陈述+信息抽取”，符合刑侦话语习惯。\n- 苏清禾（法医）：职业术语密集、描述精确，尤其在尸检场景中呈“报告口吻+量化指标”（如“凹陷性骨折…范围约…/毒理学…/浓度…阈值…”）。同时在情感场景会出现“道德两难式提问/假设句”来试探（如“如果有一天我做了一件你无法原谅的事…”“杀一个人能救一百个人…”），与陆沉的办案口吻有显著区分。\n- 郑恺之（技术科）：明显“技术宅/工程分析”语体，句子围绕系统、信号、定位、数据库、概率模型展开，常用工具链与参数化表达（如“基站三角定位/精度两百米/反编译/贝叶斯/精度阈值99.97%”），且交流方式更直接、带吐槽/反问（“你什么时候被权限挡住过？”）。\n- 裴东来（督察处处长）：典型“官僚命令体/话术控制”，语速节奏被强调，话语偏指令、保密、压制质疑（“你不需要知道/你只管…/任务人选不变/保密需要”），与一线刑警、技术人员的说法明显不同。\n- 何宗霖（生化研究员/证人）：用语呈“科学叙述+负罪感自述”，结构化讲原理与参数（“每年降解0.3%/气溶胶化扩散/阈值/分子结构链断裂”），同时带长期逃亡的疲惫与宿命感（“十二年了/该还的总要还”），与郑恺之的工程口吻、苏清禾的法医报告口吻仍可区分。\n- 秦北望（雇佣/退役特种兵）：台词短、克制、带“战术/底线”表达，少解释多判断（“不关我的事/我不杀无辜的人/你偏五厘米就打到油箱管路”），和裴东来的行政话术、陆沉的侦查追问形成对比。\n\n2) 互换测试有明显违和感（说明不同角色未共享话术模板）\n- 若把苏清禾的“量化尸检描述/化学阈值监控”台词换给陆沉，会显得过度专业化且缺少侦查导向；反之陆沉的“调取记录/路线规划/证据链”换给苏清禾会显得不符合她的表达重心。\n- 郑恺之的“反编译/贝叶斯/信号特征曲线”换给裴东来或秦北望会强烈出戏；裴东来的“保密/你不需要知道/人选不变”换给郑恺之也会违和。\n\n3) 年龄/身份/职业语言痕迹充分\n- 法医、刑警、技术人员、督察处领导、科研人员、退役军人均有稳定的职业语言特征与句式偏好；不存在主要角色“都用同一种哲理/神秘暗示体”的同质化问题。\n\n4) 次要角色容错范围内\n- 沈瑶作为实习生的语言更口语但仍带记录与流程意识（“操作日志/IP/登记簿/签收”），可作为配角不必极端突出；整体不影响主要角色辨识度。\n\n综合判断：主要角色至少3人（陆沉/苏清禾/郑恺之）之间差异足够显著，且贯穿多章节保持一致，满足业务标准的matched=true。",
+      "description": "不同角色对话必须有可辨识的语言风格差异",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "dialogue_character_distinction",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "叙事密度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 整体符合“优秀”标准：叙事密度高、层次丰富，关键情绪多以Show主导，Tell用于过渡与信息组织，未出现大面积对话骨架/流水账/议论文体退化。\n\n1) 叙事密度（场景/感官/动作/心理）充足且稳定：\n- 开篇即以场景+感官建立日常质感与反差（chapter_01：\"阳光从百叶窗的缝隙里挤进来…油脂在不粘锅表面发出细碎的噼啪\"），随后以“领带”“薄荷洗手液味”等微物细节把亲密关系落地。\n- 多处空间调度与环境声场支撑紧张感（chapter_03 地下二层走廊灯管明暗交替、脚步回声；chapter_19 地下三层密封门、化学气味、检测仪橙灯；chapter_38 看守所探视间的冷白灯、消毒水味、玻璃色调）。\n- 动作描写具体且可视化，常用于承载情绪（chapter_01 车库里“十根手指嵌进橡胶…肩胛骨开始抖”；chapter_08 翻包时“拉链头方向”这种功能性细节；chapter_33 检修区“喷涂器嘶嘶声变得断续”）。\n- 心理活动穿插自然，既有刑警式推演，也有情感崩塌的身体化呈现（chapter_10 地板上无声哭泣；chapter_20 天台对“一条命换一百万条命”的推演）。\n\n2) Show vs Tell：关键情绪段落以Show为主，Tell用于信息归纳与节奏控制：\n- 恐惧/崩溃多用身体反应呈现而非直说（chapter_01：\"耳膜内侧像被人用拳头捶了一下\"、\"把颤抖压下去\"；chapter_08：翻出手术刀与安瓿时“掌心出汗、汗水顺着玻璃滑下来”）。\n- 关系裂解靠微动作与空间距离展示（chapter_08：枕头之间“像一道微型的山脉”；chapter_12：保温杯底“今晚别值班，回家”引发双重解读；chapter_38：两人隔玻璃“掌心雾气消散”）。\n- 关键转折（预告失效）有具象化的“字逐个消散”视觉过程（chapter_34：\"不是一瞬间消失的…一个字一个字地消散\"），而不是一句“预告取消了”。\n- Tell存在但多是刑侦线索整理、规则解释与快节奏推进的必要手段（chapter_02 对37条偏差统计、chapter_20 裴东来链条白板），且通常被场景动作包裹，不显空泛。\n\n3) 未见明显低密度退化：\n- 对话占比虽高但对话间持续有动作、环境、心理支撑，不是“剧本式骨架”。\n- 事件推进不是流水账：多数事件有“怎么发生/感受如何/细节功能”。例如追逐战（chapter_29）不仅“追车”，还通过“后视镜刮掉、弹孔位置、风从弹孔灌入尖哨声”呈现风险与身体状态。\n- 观点表达（如“国家资产不包括十万条人命”）嵌在对峙场景中，非脱离叙事的议论。\n\n综合：从chapter_01到chapter_40叙事密度持续在线，高潮段落Show主导，细节具有功能性（证物、拉链方向、检测仪数值、手铐温差、玻璃雾气等），画面感强、情绪传达克制而有力，达到本标准的“优秀”要求。",
+      "description": "章节叙事应有足够的场景描写、感官细节和心理活动，情感传达以Show为主",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_density",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "智斗逻辑合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 适用性：文本为悬疑/智斗/推理对抗（预警系统+调查链+多方博弈+拆局）。\n\n核心谜题/智斗链条总体逻辑自洽，符合“线索→推理→结论→行动→反馈”的因果：\n1) 系统规则推理成立：主角通过37条历史记录归纳出0.03%误差分布（时间/地点/手段）、“系统预测结果非过程”、以及“缺地点=嫌疑人尚未决定”这一规律（ch2），随后用于判断苏清禾尚未定案发地点、可变更手段但目标是“结果锁定”。推理步骤前后闭环，后文多次印证。\n2) 主线解谜链完整：从“苏清禾额头预告”→调取异常通话→定位仁和诊所→识别何仲平身份异常（军方撤销编码/面部库0匹配/反跟踪）→裴东来任务电话揭示何宗霖证人身份→突破权限获取2021-YX-0917原始报告（AX-7、MR-7734匹配、苏清禾篡改）→军方档案确认何宗霖假死→破译苏清禾与何宗霖通讯锁定“最后方案”与搜查令时间窗（ch18）→实地验证B-7地下密封门与泄漏读数（ch19）。线索之间互相指向同一真相（裴东来/军方灭证与AX-7风险），不存在“线索与答案断裂”。\n3) 攻防博弈合理：裴东来一边指派陆沉“保护证人”，一边用秦北望监视并准备清除变量，并把路线引向城西“临时停靠”（ch25）；陆沉则以引蛇策略公开露面拖住秦北望（ch29），同时安排郑恺之接应何宗霖、苏清禾配制中和剂（ch26-28）。双方行动有清晰动机与因果反馈。\n4) 关键转折（秦北望倒戈）有充分铺垫且不属“对手降智”：此前已写明秦北望“只认命令但有底线/不做无说明的事”的退役背景与犹疑（ch25），陆沉以证据（密封门照片、检测读数、图纸用途）说服其目标性质已从“灭口”变为“平民屠杀”（ch29-30），转向合情合理，不是无代价配合。\n5) 结局解法路径合理且不是开挂：最终通过“中和AX-7→裴东来失去动机链→苏清禾杀人动机消失/概率坍塌”实现“因果链断裂”（ch31-34）。中和过程存在明确约束（温度阈值/浓度阈值/覆盖范围不足），并以何宗霖进入管道的高代价补足“外部注入极限”，非轻松绕过。\n\n未发现评分标准中典型崩坏：无盲猜式解谜、无伪数字游戏、无暴力轻松绕过核心谜题、无核心线索废弃、反派并未无端降智。整体智斗逻辑成立。",
+      "description": "谜题/智斗的推理逻辑必须自洽",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "puzzle_logic_validity",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "题材契合度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了41个文件; LLM评估: recipe=B11谜团（12小时/倒计时解谜）+系统流+刑侦悬疑+规则怪谈。整体达到“题材特征精致/有化学反应”的优秀标准。\n\n优点：\n1) 系统流×规则怪谈的“不可更改规则”被写成可验证、可推导的机制：99.97%误差、地点缺失=未决策、系统预测“结果非过程”、后期出现“因果链完整度”与“建议保持距离”等规则升级；并在结尾用“AI概率模型+人为制造偏差”完成闭环解释，规则不是装饰而是推动推理与行动策略的核心工具。\n2) 刑侦悬疑的推理密度与专业细节持续在线：档案/日志比对、基站三角定位、违章照片人脸识别、旧案卷宗交叉、证物室纸本原件、审讯式微表情观察、现场战术与证据链汇总，信息获取路径具有程序性与代价，避免“系统万能/降智自爆”。\n3) 多标签融合产生强“化学反应”而非拼接：系统预告直接制造“最亲密嫌疑人”谜团；刑侦手段被用于验证/拆解系统规则；规则惩罚（不可更改、工具已备齐、因果链上升）反过来压迫主角选择；最终以“中和AX-7→预告失效→系统解除绑定”把三者在同一因果链上收束。\n4) 谜团结构层层剥茧且反转有力度：从“未婚妻杀我”个人命案，推进到“绝密旧案+假身份证人保护”，再到“城西实验室AX-7灭证阴谋”，并把“她杀我动机=阻止更大灾难”落到可执行的技术方案（中和）与道德悖论（牺牲/自首/信任不可复原）上，谜底既解释前文细节也提升主题。\n5) 题材潜力充分开发：12小时（文本里实际更长但始终用倒计时/节点压迫）驱动高密度推进；规则递进带来绝望螺旋与破局窗口（0.03%）；结局贯彻“虐心/非大团圆”——命保住但关系与人生被不可逆摧毁，符合配方的“解谜即自毁”。\n\n不足但不致命：倒计时口径偶有不一致（15小时/12小时等）、后段部分章节存在复述与镜像段落（注射器桥段在后面章节重复强化），但整体不削弱题材精致度与融合效果。",
+      "description": "题材特征精致度和X-Y轴化学反应效果",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "genre_fit",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "剧情节奏合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 整体节奏符合“层次分明、情绪曲线自然流畅”的优秀标准。\n\n1) 情绪曲线有明确波峰波谷且递进合理：\n- 1-3章以日常低位开场→第1章末爆出“未婚妻将杀你”形成强钩子（小高潮），随后2-7章进入调查推进与信息加密（紧张中带理性分析的中位持续上升）。\n- 8-10章回到“家中同床异梦”与翻包发现作案工具，情绪从外部调查转向亲密关系崩裂（第二个明显高潮），并留出夜间潜伏、互相试探的低谷喘息，使紧张不疲劳。\n- 11-20章扩大到组织阴谋与生化灾难，冲突规模升级（强度再抬升），且穿插“晚餐试探/职场碰面/同事线索”等过渡段落，避免全程高压。\n- 21-34章进入终局倒计时：防空洞真相→制定反制→引蛇→中和行动→阻击裴东来→23:00预告失效，高潮集中在约75%-85%位置，符合结构预期且兑现前期铺垫。\n- 35-40章在大高潮后进行余震与收束：注射器/手铐/收网/探视/系统解绑/雨中回到职业日常，情绪自然回落但保留余痛与主题余波，不是“打完就完”的硬切。\n\n2) 铺垫-回报比协调：前期（系统规则、误差0.03%、缺地点规律、何宗霖身份、裴东来手指停顿等）都在后期兑现：AI概率而非命运、秦北望反水、城西门牌与BR-0917、23:00“因果链断裂”等回报充分，且关键秘密（AX-7）揭示后迅速进入可执行的对抗方案，没有“铺垫很久回报草草”。\n\n3) 过渡自然、节奏不断裂：重大紧张段落（潜入城西、枪战阻击、管道中和、23:00临界）之间都有合理缓冲与动机连接（同事支援、证据整理、坦白与结盟、路线规划），场景切换遵循信息与任务链条推进，不突兀跳戏。\n\n4) 高潮醒目且位置合理：\n- 第一波峰：第1章末预告。\n- 第二波峰：第8章翻包发现工具与夜间对峙。\n- 最大高潮：第31-34章中和+阻击+23:00预告失效（约80%段落）。读者能清晰指出“最精彩的是城西地下倒计时与23:00反转”。\n\n因此，本内容在“事件安排得好不好”的意义上节奏控制优秀：有递进、有喘息、有明确高潮点，且高潮落点与铺垫回报匹配。",
+      "description": "高潮低谷分布合理、情绪曲线有层次感",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "pacing_rationality_advanced",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "钩子设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 整体达到优秀标准：关键转折点和章节结尾普遍设置了“具体信息差”型悬念，且与主线强关联，能稳定驱动续读。\n\n主要依据：\n1) 强信息差钩子密集且落在关键转折处：例如第1章结尾直接揭示“未婚妻今晚23:00杀你（S级不可更改）”，给出明确时间与对象但保留动机/手段/地点，形成高质量信息差；第3章“绝密卷宗编号+无名尸+DNA比对中止”引出更大谜团；第5章系统补充“已备齐全部作案工具”把抽象威胁具体化；第7章解锁原始报告出现“AX-7+军方档案MR-7734+被删除意见”是典型“揭示+留白”；第18章破译通讯出现“最后方案”；第31-33章中和行动推进到“必须从里面完成/人能否出来”；第34章在23:00给出“预告失效、因果链断裂”的认知反转回报。\n\n2) 钩子具体、非空洞暗示：多数结尾不是泛泛“风暴将至”，而是给出编号、时间窗、证据片段、操作限制（如“建议20:00-22:00保持距离”“城西BR-0917门外0.3%泄漏”“裴处路线暗含城西”等），读者“知道了一些但不够”。\n\n3) 类型多样且节奏稳定：包含揭示钩子（系统预告/原始报告）、反转钩子（秦北望倒戈、23:00预告失效、系统解绑）、行动悬念钩子（追逐/阻截/中和倒计时/谁进入管道）、伦理抉择钩子（是否牺牲一人保全城、苏清禾自首）。并未出现连续多章“平铺收束”。\n\n4) 关键节点有明确回报：从“她为什么杀你”一路兑现到“AX-7—裴东来—搜查令—灭证链条”，最终在23:00节点兑现系统悬念（预告失效），符合“吊胃口但不空洞”。\n\n综上，悬念钩子在关键转折处设计精细，信息差明确、具体且与主线高度相关，符合matched=true。",
+      "description": "关键转折处有有效的悬念钩子设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "hook_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "意象系统": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 文本存在清晰的意象系统且贯穿全篇：1）“系统/红字/倒计时/因果链完整度”高频反复出现，并在剧情阶段不断变奏，从冷冰工具到命运枷锁，再到可被扰动的概率模型，最终以预告失效与解绑完成闭环；2）“注射器/琥珀胆碱”作为第二核心物件，贯穿发现、携带、对峙、销毁、自首等关键节点，含义从“杀意证据”演化为“最后手段的犹豫”与“罪责承担”的具象；3）意象不是装饰性重复，而是随因果推进改变功能与指向，并与主题（牺牲、伦理、信任、可改写的概率命运）紧密绑定，具备隐性叙事线与结构性回响（23:00失效、因果链归零）。",
+      "description": "核心意象贯穿全文并发生意义变奏",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "imagery_system",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "情感弧线层次": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 主角为陆沉（同时苏清禾也存在清晰情感弧线），情感发展具备多层递进且每次转折均由具体事件驱动：1）日常稳定/信任→2）震惊恐慌（看见苏清禾额头“23:00杀害你”）→3）职业化压制与求证（复盘系统偏差、调郑恺之数据、暗访法医中心/诊所）→4）怀疑与戒备升级（发现机密卷宗、反侦察诊所、系统提示“作案工具已备齐”）→5）情感撕裂与崩塌（在包内发现手术刀与琥珀胆碱；电脑里“对不起/我爱你”时间表）→6）从“要自保/抓嫌疑人”转向“理解她的动机并寻找第三路”（破译通讯得知AX-7与裴东来布局；与郑恺之冲突后选择非常规解法）→7）高风险信任与共同作战（对苏清禾坦白、她决定加入中和方案）→8）临界点的紧绷与希望（秦北望反水、阻击裴东来、中和推进）→9）结果反转后的复杂余波（预告失效但信任无法复原；苏清禾自请上铐、后续探视的克制与空洞）。整体弧线从‘恐惧—控制—怀疑—心碎—理解—冒险信任—共同对抗—幸存后的不可修复’逐层推进，且关键情感转折均由明确事件触发（预告出现、证据发现、通讯破译、何宗霖坦白与中和方案、秦北望倒戈、23:00预告失效、苏清禾自首/上铐等），不存在无缘由突变或同义词堆叠的伪层次。",
+      "description": "主角情感发展有多层递进变化",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_gradient",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语义重复检测": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 存在≥3处明显的语义级重复，达到失败阈值。最严重的是ch34与ch35几乎在信息、动作与结论层面重复同一场景（注射器坦白→处置→‘我不怪你’→‘信任无法复原’），属于典型同义反复且未产生新叙事信息；其次ch38与ch40在“日常对话/天气/吃饭+雨天回忆”框架内反复强调同一情感结论（仍关心但不可复原），新增推进较少；此外系统因果链的解释在ch20与ch39间存在较强的结论式重述，ch39虽有“解绑/感谢宿主”的新信息点，但大段仍在回顾与再次阐释同一机制与意义。综合来看，重复次数与强度已构成信息衰减。",
+      "description": "不能出现大量语义级别的内容重复（P6级）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "semantic_redundancy",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构功能性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了41个文件; LLM评估: 结构功能性达标且明显服务主题（命运/因果链、信任崩塌与选择代价）。1）强首尾呼应：第1章以“普通早晨+系统面板+倒计时”开启，末章以“普通雨天+系统消失+仍要继续工作”收束，日常意象回归但意义已变，构成从‘被预言支配’到‘无系统的主动承担’的闭环，结构承载主题。2）时间结构设计明确：全书以‘今晚23:00’为锚点进行倒计时推进，中后段出现“23:00/23:01”关键节点（第34章）直接在结构层面完成“预告失效/因果链断裂”的主题落点，属于结构即意义。3）章节编排不是机械线性：中段插入苏清禾视角章节（第15章）与多方行动线（裴东来/秦北望/郑恺之/何宗霖）交错推进，形成多线并行与信息不对称，结构用于呈现‘真相拼图’与‘道德悖论’而非单纯事件顺序。4）重复意象的结构化变奏：拉链方向、注射器、雨、戒指/手铐、系统“因果链完整度”数值反复出现，并在不同阶段改变语义（从威胁到证据/从预谋到自首/从命运到概率），形成明显的结构性回声。5）结尾收束有清晰叙事意图：不是写完情节自然结束，而是以系统解绑（第39章）和雨中继续出警（第40章）完成‘因果链断裂但人生继续’的主题性开放收束，余味与用户偏好“不要大团圆”一致。",
+      "description": "叙事结构服务于主题表达（短篇尤重）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色命名质量": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了41个文件; LLM评估: 整体命名存在明显“通用美名”倾向：1) 直接命中黑名单的“陆沉”；2) “苏清禾”虽较顺口，但落在“苏/沈/陆”等高频高级感姓氏+清雅字的常见组合里；3) “沈瑶”同样是模板化搭配。配角中“郑恺之、何宗霖、裴东来、秦北望”相对更有辨识度与风格差异（尤其“裴东来/秦北望/何宗霖”更具力度与画面感），但主线核心双主角名缺少足够的文化典故支撑与角色-命运的隐性共振设计，读者很难产生“这个名字只能属于他/她”的强绑定感，因此未达优秀标准。",
+      "description": "角色命名有文化深度、辨识度和角色-命运共振",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_naming_quality",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "中篇字数": {
+      "check_result": "pass",
+      "reason": "字数符合要求",
+      "details": "总字数 127628 在范围 [108000, 132000] 内; 共40个文件（按章节顺序排列）: chapter_01.md, chapter_02.md, chapter_03.md, chapter_04.md, chapter_05.md, chapter_06.md, chapter_07.md, chapter_08.md, chapter_09.md, chapter_10.md, chapter_11.md, chapter_12.md, chapter_13.md, chapter_14.md, chapter_15.md, chapter_16.md, chapter_17.md, chapter_18.md, chapter_19.md, chapter_20.md, chapter_21.md, chapter_22.md, chapter_23.md, chapter_24.md, chapter_25.md, chapter_26.md, chapter_27.md, chapter_28.md, chapter_29.md, chapter_30.md, chapter_31.md, chapter_32.md, chapter_33.md, chapter_34.md, chapter_35.md, chapter_36.md, chapter_37.md, chapter_38.md, chapter_39.md, chapter_40.md; 最后一个文件是 chapter_40.md",
+      "description": "总字数应在108000-132000之间（基于query要求120000，±10%浮动）",
+      "check_type": "semantic_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "range_constraint",
+      "is_critical": true
+    },
+    "情感交付虐心": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 整体情感基调符合虐心向，且贯穿全篇而非点缀：\n1) 核心虐点清晰且强烈：主角陆沉在日常温暖的早晨突然看到未婚妻苏清禾额头预告“将在今晚23:00杀害你”，形成“爱与死亡并存”的不可调和矛盾；随后发现手术刀与琥珀胆碱（chapter_08）把预告落到现实，属于直击人物底线的真虐。\n2) 深度两难与牺牲贯穿：苏清禾不是“吵架/误会”，而是被“杀你以阻止灾难”逼入道德困境（chapter_17/22/27），陆沉同样在“自保 vs 城市十万+生命”之间被迫选择（chapter_20/26）。这种冲突触及价值观与生死抉择，虐点有实质来源。\n3) 氛围持续压抑揪心：同床异梦互相试探（chapter_09）、坦白与互不信任（chapter_22/27）、倒计时逼近与“不可更改”压迫感（多章反复出现），读者体验以紧绷、心痛、无力为主。\n4) 非甜爽收束：虽在23:01预告失效、城市获救（chapter_34），但情感代价是不可逆的：何宗霖以命赎罪（chapter_33）、苏清禾自首被上铐并入狱（chapter_36/38），两人“活下来了但有些东西死了”（chapter_34-36），“信任破碎无法复原”与探视隔玻璃（chapter_38）构成持续悲剧余韵，符合reaction_strength=↘所承诺的虐心走向。\n综上：主线以爱而不得/被迫牺牲/信任崩塌为核心驱动，虐点密度与深度足够，且结局并未转为轻松甜爽，因此matched=true。",
+      "description": "实际内容必须是虐心向",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取感情线写作指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "涉及感情线时必须读取ROMANCE_WRITING_GUIDE.md（感情线写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": false
+    },
+    "角色关系设计张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（符合“关系具有叙事张力”的业务标准）。\n\n1) 关系有内在矛盾源：核心矛盾非常明确且多层——【陆沉↔苏清禾】在“执法求证/控制局面”与“功利主义牺牲少数保全多数”的价值观上正面冲突；目标也直接对撞（陆沉要活下来并保护证人，苏清禾要阻止他救证人甚至杀他以阻断灾难链）；并叠加信息不对称（系统只有陆沉可见、苏清禾掌握三年前尸检与灾难链、两人都误判对方底线）。此外【陆沉↔裴东来】是权力关系+暗线立场对立，【何宗霖↔裴东来】是“逼现身制造泄漏”的反向猎杀逻辑，均可持续产出冲突与悬念。\n\n2) 关系有变化空间：文本直接给出阶段性演化（甜蜜→猜疑→对峙→理解与毁灭），并为多条关系设计了从信任到裂痕、从雇佣执行到立场动摇（秦北望）、从关爱到变数揭露（沈瑶触发高潮）等动态转折点，关系不是静态标签。\n\n3) 冲突源于角色本身：张力主要来自人物性格/动机/恐惧与过往选择的内生矛盾，而非纯外部事件——陆沉“重情可违背原则”与“理性求证控制欲”自我撕裂；苏清禾“深爱但能下杀手”的功利主义与赎罪驱动构成内在悲剧；两人的相互误读（他把她当被保护者、她把他当绝对理性执法者）使冲突必然升级。外部事件（系统预告、追杀、实验室风险）更多是放大器，而非唯一制造冲突的手段。\n\n额外优点：关系模式不雷同（夫妻心理战、兄弟道德困境、上下级暗战、师生隐瞒与揭露、猎人与猎物的策略对抗），且都能与主线灾难链/悬案因果互相牵引，具备“关系驱动剧情”的结构性。\n\n可改进点（不影响通过）：可进一步强化裴东来与陆沉/苏清禾之间的私人化纽带（旧案、人情债或把柄），避免反派张力过度依赖职权与阴谋；同时补充陆沉放走证人的道德理由与后悔成本，可让核心抉择更具不可逃避性。",
+      "description": "角色关系设计具有叙事张力，能驱动剧情",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_relationship_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色动机设计深度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（符合“主要角色动机有深度”的业务标准）。\n\n1) 表层动机与深层动机有清晰区分：\n- 陆沉 overt_motivation 是“12小时内破解未婚妻要杀自己的命运预言…并活下来”，属于外部、情节推进型目标；covert_motivation 是“证明自己值得被爱…怀疑苏清禾爱的是他扮演的完美刑警”，是自我价值/亲密关系层面的心理需求，两者不重复且形成张力。\n- 苏清禾 overt_motivation 是“阻止陆沉今晚去保护证人何宗霖…避免更大灾难”，属于理性行动目标；covert_motivation 是“赎罪——三年前…选择了沉默，如今必须用极端方式弥补”，是道德负债与自我惩罚/补偿驱动，和表层的‘阻止行动’不同层。\n\n2) 动机有具体来源（可追溯到经历/背景）：\n- 陆沉的深层动机与其人格/经历钩连：traits里“控制欲极强”“自我牺牲倾向…觉得自己的命不值钱”“骨子里极度重情”，以及 secret_fear“害怕她出于自愿杀他→七年感情全是谎言”、hidden_connection“六年前悬案放走关键证人换线索”，共同构成他对关系真实性与自我价值的长期不安来源，而非泛泛‘想赢/想变强’。\n- 苏清禾的深层动机直接来自明确事件链：covert_motivation点名“三年前法医鉴定发现何宗霖真实身份与灾难链但选择沉默”；hidden_connection进一步具体到“无名尸DNA与绝密档案吻合→生化实验室→病原体泄漏风险”，让‘赎罪’有可验证的因果与细节支撑。\n\n3) 至少两个主角满足：\n- 文档中两位主角（protagonist 与 deuteragonist）均同时满足“表层/深层区分”与“来源具体”。\n\n加分点（非硬性要求）：\n- secret_fear、misperception_of_other、hidden_connection 不仅存在，而且与动机互相咬合（例如陆沉的‘被爱价值焦虑’与对苏清禾的误判；苏清禾的‘赎罪’与‘害怕被理解’形成自我惩罚闭环），使心理驱动能转化为剧情选择。",
+      "description": "角色动机设计有深度，有表层和深层动机区分",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_motivation_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色成长弧线设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: 结论：符合业务标准（pass）。\n\n1) 起点与终点清晰：\n- 主角陆沉的起点是“证据至上/强控制欲/把爱人当需要保护的人”，在预告出现后进入单方面猜疑与防备（Act1-Act2前段）。\n- 终点是“愿意放下控制与对抗，选择以信任与承担来解决问题”：在第27章主动向‘要杀自己的人’坦白全部计划并请求合作；第三幕里他不是逃跑或强行制服，而是让苏清禾做决定，并在结局亲手给她上铐、接受关系不可逆的代价。角色在价值取向与关系处理方式上发生了明显变化。\n\n2) 变化有内在逻辑：\n- 陆沉的 covert_motivation（证明自己值得被爱）+ secret_fear（她是出于自愿杀他=感情是谎言）驱动他从“查清动机以自救”走向“理解她的逻辑后做更高层级的选择”。\n- traits 中“重情/可为在乎的人违背原则/自我牺牲倾向”使他在得知‘杀他是为阻止灭城’后，具备从对抗转向共谋、从求生转向承担的心理基础；同时“控制欲强”被剧情反复逼到失效（系统不可更改、裴东来布局、时间差），迫使他必须用‘放弃控制/主动暴露/坦白’这种违背习惯的方式破局，逻辑自洽。\n\n3) 大纲中弧线落地且有阶段性呈现：\n- relationship_dynamics 明确给出陆沉↔苏清禾四阶段：甜蜜→猜疑→对峙→真相（理解与毁灭/终极选择），并在章节事件中对应落地（发现凶器、心理战、揭示动机、最终选择）。\n- outline 关键节点推动内在转变：\n  - Act1（1-10章）：从安全感到信任崩塌（凶器+计划表），奠定“控制/调查”路径。\n  - Act2（18-22章）：通过破译通讯与确认实验室，完成从“她是敌人”到“她的动机有残酷合理性”的认知转变；第23章系统是概率AI提供“做不可能的事”触发策略转向；第26-27章以“坦白”把关系从对手改为临时同盟，是弧线的显性拐点。\n  - Act3：危机解决后并未回到原点，而是以“注射器仍在/信任不可复原”“自首与上铐”完成终态：理解但无法回到旧关系，主角接受代价与失去，系统也因因果链断裂消失，形成收束。\n\n补充：虽然 characters.json 没有单独的 character_arc 字段，但 traits/motivation/secret_fear + relationship_dynamics + outline 的 emotional_shift/turning_point 已足以拼出并验证陆沉的成长弧线；苏清禾也有从“功利主义执行者”到“放下私刑、选择自首承担”的弧线，但即便只看陆沉也满足‘至少一个主角有明确弧线’要求。",
+      "description": "主角有清晰的成长/变化弧线设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_arc_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "outline结构完整性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass。1）章节覆盖完整：大纲明确覆盖第1-40章，三幕结构分别对应1-10、11-28、29-40章，且每一幕给出故事梗概与转折点，属于从开端到结局的全程覆盖。2）每章有实质内容：关键章节列表覆盖了1-10、11-28、29-40章，且每章均提供chapter_synopsis与多场景scene_sequence（包含场景目的、核心行动、结果），信息密度足以支撑扩写，不存在只有标题无内容的情况。3）包含冲突/转折信息：几乎每个场景都显式给出conflict_point与emotional_shift，并在幕转折（发现凶器、动机揭示与幕后推手、终局中和与自首）上设置清晰的情节推动与情绪翻转，非流水账。4）三幕结构可辨识：act_one/act_two/act_three层次明确，且每幕都有description、story_synopsis、turning_point，章节目标与推进关系清楚。整体优点是悬疑线（系统/证人/实验室/内鬼）与情感线（信任崩塌-坦白-同盟-生离）并行且能在第三幕收束；风险点/可改进处是：部分专业设定（AX-7、军方程序、法医/刑侦流程）虽有细节但后续写作需持续自洽；另外“系统因果链完整度”机制在第二幕加入后，要确保规则解释与剧情驱动一致，避免成为万能解释器。总体结构与信息量达到后续写作标准。",
+      "description": "大纲结构完整，信息密度足以指导写作",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_structure_completeness",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "outline叙事张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：符合业务标准（叙事张力持续且递进）。\n\n1) 信息落差设计（满足）：第1章抛出“未婚妻今晚23:00杀你”的S级预告，但直到第18章才通过破译通讯明确其真实动机（阻止“搜查令→打开实验室→AX-7泄漏”的灾难链），期间不断延迟回答并用新线索替换旧疑问（证物室绝密案2021-YX-0917、仁和诊所/何仲平身份、裴东来动机、系统为何给建议/因果链完整度等）。同时“系统究竟是什么/能否被改变”作为第二悬念贯穿至第39章才完全落幕。\n\n2) 张力递进（满足）：紧张度从私人关系危机（1-10章：信任崩塌、凶器证实）升级到多方势力博弈（11-20章：证人、杀手、上司内鬼、制度阻滞），再升级为城市级生化灾难倒计时（18-34章：实验室实证、裴东来布局、拦截追逐、地下“拆弹”），最终落到“情感与法律代价”的终局（35-40章：注射器真相、自首、系统解绑）。中后段明显比开头更复杂、更高 stakes。\n\n3) 意外/转折（满足）：\n- 关键反转一：苏清禾“不是为私欲杀人”，而是以一人换一城（第18章动机揭晓），改变读者道德站位。\n- 关键反转二：裴东来并非单纯上司/正义推动者，而是灾难链推手（第19-20章实锤），把冲突从“情侣互杀”转为“体制内阴谋+公共灾难”。\n- 关键反转三：秦北望从猎杀者转为盟友（第30章），同时系统从“命运”落地为“AI概率模型可被欺骗”（第23章），都让后续走向不可直线预测。\n\n4) 额外加分点（但非硬性）：章节结尾普遍有钩子（拉链方向/书房电话/系统建议/纸条/因果链百分比等），能形成稳定的‘读者想看下一章’驱动力。\n\n潜在小风险（不影响通过）：第三幕中“系统预告仍未改变”与第34章“预告失效”在描述上需确保时间点一致、读者不会因规则混乱出戏；以及多重线索密度高，需注意在正文中控制信息解释的节奏，避免在18-21章出现集中说明导致的‘讲设定’感。总体而言，大纲已具备持续悬念、升级危机与有效转折，符合标准。",
+      "description": "大纲有持续的叙事张力和悬念驱动",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_narrative_tension",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色大纲规划完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在大纲中规划",
+      "details": "主角 2/2: 陆沉, 苏清禾; 配角 6/6: 郑恺之, 何宗霖, 裴东来, 沈瑶, 秦北望, 系统",
+      "description": "设计的角色必须在大纲中规划",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_outline",
+      "is_critical": true
+    },
+    "角色正文出场完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在正文中出现",
+      "details": "在40个章节中检查; 主角 2/2: 陆沉, 苏清禾; 配角 6/6: 郑恺之, 何宗霖, 裴东来, 沈瑶, 秦北望, 系统",
+      "description": "设计的角色必须在正文中出现",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_chapters",
+      "is_critical": true
+    }
+  },
+  "completion_status": "completed"
+}

@@ -1,0 +1,803 @@
+{
+  "check_version": "novel_writing_v1.0",
+  "sample_id": "NW_CLEAR_MEDIUM_SWEET_001",
+  "check_timestamp": 1772181407,
+  "dimension_scores": {
+    "format_compliance": {
+      "pass_rate": 0.25,
+      "total": 4,
+      "passed": 1,
+      "failed": 3,
+      "skipped": 0,
+      "failed_items": [
+        "creative_intent格式",
+        "characters格式",
+        "outline格式"
+      ]
+    },
+    "business_rule_compliance": {
+      "pass_rate": 0.583,
+      "total": 12,
+      "passed": 7,
+      "failed": 5,
+      "skipped": 9,
+      "failed_items": [
+        "写作准备确认",
+        "creative_intent文件存在性",
+        "characters文件存在性",
+        "outline文件存在性",
+        "中篇字数"
+      ]
+    },
+    "memory_management": {
+      "pass_rate": 0.5,
+      "total": 2,
+      "passed": 1,
+      "failed": 1,
+      "skipped": 0,
+      "failed_items": [
+        "writing_log文件读取"
+      ]
+    },
+    "content_quality": {
+      "overall_score": 28.33,
+      "quality_level": "gate_failed",
+      "gate_layer": {
+        "pass_rate": 0.5,
+        "total": 2,
+        "passed": 1,
+        "failed": 1,
+        "skipped": 2,
+        "failed_items": [
+          "章节完成度"
+        ]
+      },
+      "basic_layer": {
+        "pass_rate": 0.684,
+        "total": 19,
+        "passed": 13,
+        "failed": 6,
+        "skipped": 0,
+        "failed_items": [
+          "人物设计遵循度",
+          "大纲执行忠实度",
+          "情感交付甜爽",
+          "角色关系设计张力",
+          "角色动机设计深度",
+          "outline结构完整性"
+        ]
+      },
+      "advanced_layer": {
+        "pass_rate": 0.182,
+        "total": 11,
+        "passed": 2,
+        "failed": 9,
+        "skipped": 1,
+        "failed_items": [
+          "角色语言辨识度",
+          "叙事密度",
+          "题材契合度",
+          "钩子设计",
+          "意象系统",
+          "情感弧线层次",
+          "结构功能性",
+          "角色成长弧线设计",
+          "outline叙事张力"
+        ]
+      },
+      "gate_triggered": true,
+      "score_breakdown": {
+        "base": 60.0,
+        "gate_penalty": -20.0,
+        "basic_deduction": -18.95,
+        "advanced_bonus": 7.27
+      }
+    }
+  },
+  "overall_result": {
+    "status": "Poor",
+    "total_score": 33.16,
+    "content_score": 28.33,
+    "process_score": 44.43,
+    "content_weight": 0.7,
+    "process_weight": 0.3,
+    "gate_triggered": true,
+    "total_checks": 50,
+    "passed_checks": 25,
+    "failed_checks": 25,
+    "pass_rate": 0.5
+  },
+  "check_details": {
+    "读取配方知识库": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/RECIPE_KNOWLEDGE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取RECIPE_KNOWLEDGE.md（配方知识库）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节产出存在性": {
+      "check_result": "pass",
+      "reason": "章节文件存在",
+      "details": "✓ 章节写作阶段: 已产出章节文件",
+      "description": "workspace中必须存在至少一个章节文件",
+      "check_type": "sop_stage_coverage",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_output_existence",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节克隆检测": {
+      "check_result": "skip",
+      "reason": "章节数不足",
+      "details": "仅1章，跳过克隆检测（需>=4章）",
+      "description": "不能出现连续章节内容完全重复（克隆）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_cloning",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "交替重复检测": {
+      "check_result": "skip",
+      "reason": "章节数不足",
+      "details": "仅1章，跳过交替重复检测（需>=8章）",
+      "description": "不能出现A-B-A-B交替循环的章节内容",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "alternating_repetition",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节完成度": {
+      "check_result": "fail",
+      "reason": "仅写出1章",
+      "details": "无法从大纲推断规划章节数，但仅1章明显不足",
+      "description": "实际写作章节数必须达到大纲规划的合理比例",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_completion",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "段落重复检测": {
+      "check_result": "pass",
+      "reason": "段落重复在可接受范围",
+      "details": "同章内重复0处, 跨章重复0组 (阈值: 同章>=2, 跨章>=5)",
+      "description": "不能出现大量段落在不同章节间重复",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "paragraph_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取大纲设计指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/OUTLINE_DESIGN_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取OUTLINE_DESIGN_GUIDE.md（大纲设计指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取写作技巧指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/WRITING_TECHNIQUE_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取WRITING_TECHNIQUE_GUIDE.md（写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取设定一致性管理指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/CONSISTENCY_MANAGEMENT_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取CONSISTENCY_MANAGEMENT_GUIDE.md（设定一致性管理指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取命名skill": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取CHARACTER_NAMING_GUIDE.md（角色命名规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取creative_intent的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取creative_intent.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取characters的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取characters.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取outline的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取outline.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节命名格式": {
+      "check_result": "pass",
+      "reason": "所有文件命名符合规范",
+      "details": "检查了 1 个文件; chapter_01.md: 匹配",
+      "description": "章节文件命名必须为chapter_NN.md格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "naming_convention",
+      "is_critical": true
+    },
+    "creative_intent格式": {
+      "check_result": "fail",
+      "reason": "未找到匹配文件",
+      "details": "模式 'workspace/creative_intent.json' 未匹配任何文件",
+      "description": "creative_intent.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "characters格式": {
+      "check_result": "fail",
+      "reason": "未找到匹配文件",
+      "details": "模式 'workspace/characters.json' 未匹配任何文件",
+      "description": "characters.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "outline格式": {
+      "check_result": "fail",
+      "reason": "未找到匹配文件",
+      "details": "模式 'workspace/outline.json' 未匹配任何文件",
+      "description": "outline.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "X轴模式ID格式": {
+      "check_result": "skip",
+      "reason": "前置条件失败（文件不存在）",
+      "details": "文件 workspace/creative_intent.json 不存在，无法检查属性 selected_recipe.x_axis_mode_id",
+      "dependency_failure": true,
+      "description": "X轴模式ID必须匹配^[A-G]\\d{1,2}$格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签枚举": {
+      "check_result": "skip",
+      "reason": "前置条件失败（文件不存在）",
+      "details": "文件 workspace/creative_intent.json 不存在，无法检查属性 selected_recipe.y_axis_tags",
+      "dependency_failure": true,
+      "description": "Y轴标签必须在12种枚举中",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签数量": {
+      "check_result": "skip",
+      "reason": "前置条件失败（文件不存在）",
+      "details": "文件 workspace/creative_intent.json 不存在，无法检查属性 selected_recipe.y_axis_tags",
+      "dependency_failure": true,
+      "description": "Y轴标签数量必须为2-3个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "forbidden_elements存在性": {
+      "check_result": "skip",
+      "reason": "前置条件失败（文件不存在）",
+      "details": "文件 workspace/creative_intent.json 不存在，无法检查属性 selected_recipe.forbidden_elements",
+      "dependency_failure": true,
+      "description": "forbidden_elements必须至少有1个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "配方选择交互": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "配方选择阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "写作准备确认": {
+      "check_result": "fail",
+      "reason": "工具未被调用或参数不匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 匹配调用 0 次，期望 ≥1",
+      "description": "写作准备阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "主题一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 开篇即明确核心主题为“重生后为过往伤害赎罪/弥补+保护沈柔并追寻真相”，并以省运会前的回归作为行动起点；中段通过前世事故回忆、舆论误解与迟来的真相强化“愧疚—救赎—补偿”的动机；结尾以苏晴的内心誓言与具体计划（盯紧器械问题、保护沈柔、查明真相）收束，仍在推进同一主题类型。整体主线清晰，训练、国家队选拔等内容作为实现“保护/救赎”目标的情境与手段，并未将故事转向无关的全新主题类型。",
+      "description": "故事主题一致",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "theme_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "主要角色一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 本章从开篇到结尾叙事中心始终围绕苏晴展开：以苏晴的视角/心理活动推进（重生确认、回忆前世事故、当下对策与誓言），关键行动与决策也由苏晴发起（提醒沈柔注意器械、决定查真相与保护沈柔、通过好友申请并约定早餐）。沈柔与刘国华虽有较多出场，但均作为推动苏晴目标与情绪的配角存在，未出现配角抢占叙事中心或主角地位丧失的情况；也不存在主角消失、被替换或身份断裂。",
+      "description": "主要角色一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "main_character_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设定一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 当前仅提供chapter_01内容，无法进行“同一角色跨章节前后对比”的一致性检查，因此在本检查项范围内未发现可判定的章节间人设崩坏证据。\n就本章内的表现来看，苏晴的核心动机（赎罪、保护沈柔、查明真相）与行为模式（谨慎克制、不轻易透露重生信息、对沈柔格外关切且带有愧疚）是自洽一致的；情绪波动（紧张、害怕、红眼眶）也与其重生后面对前世创伤的情境相匹配，没有出现无缘由的性格反转或降智行为。若后续章节出现苏晴对沈柔态度/动机突然相反或反复摇摆且无剧情触发，才可能构成matched=false。",
+      "description": "人物设定一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_trait_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设计遵循度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 无法判定plan vs execute一致性：你提供的待评估内容只有chapter_01.md，没有对应的characters.json（Plan阶段）角色设定可供对照。按本检查项要求必须引用characters.json中的traits/motivation/background/relationships与章节表现逐项比对；当前只能看到章节里苏晴呈现出强烈愧疚与赎罪/保护沈柔的动机、谨慎克制且带焦虑的行为模式，以及与沈柔“前世师徒/亲近”关系的互动，但这些是否“符合设计”缺少设计基准，不能给出matched=true的合规结论。请补充characters.json（至少包含苏晴、沈柔、刘国华的设定）后才能完成匹配判断。",
+      "description": "实际表现符合设计文档",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构性逻辑硬伤": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 在可见的chapter_01内容中，时间线（重生回到18岁、十年前的省队训练馆）与人物年龄（苏晴18岁、沈柔15岁）、地点（省体操队训练馆→宿舍）均自洽；前世事件（全国锦标赛事故、后续调查、病逝）与今生时间点的衔接无明显矛盾；物品/数量未出现前后冲突；叙事视角为第三人称贴近苏晴的限制视角，未出现无故人称切换或指代混乱。整体无客观事实/世界观/时空连续性/叙事视角层面的硬伤。",
+      "flaw_count": 0,
+      "flaws": [],
+      "description": "无结构性逻辑硬伤",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_logic_defect",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "可修复逻辑瑕疵": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 在可见的chapter_01内容中，时间线（重生回到18岁、十年前的省队训练馆）与人物年龄（苏晴18岁、沈柔15岁）、地点（省体操队训练馆→宿舍）均自洽；前世事件（全国锦标赛事故、后续调查、病逝）与今生时间点的衔接无明显矛盾；物品/数量未出现前后冲突；叙事视角为第三人称贴近苏晴的限制视角，未出现无故人称切换或指代混乱。整体无客观事实/世界观/时空连续性/叙事视角层面的硬伤。",
+      "flaw_count": 0,
+      "flaws": [],
+      "description": "可修复逻辑瑕疵数量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "fixable_logic_inconsistency",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语言纯净性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 整体叙事语言为中文，未出现中英/中日等无意义混杂句式。外语仅出现一次“scout”，用于表达“选拔人员/球探”这一约定俗成的术语/职位称呼，属于情节信息传递所需的专业用法，且未形成大段外语无翻译或炫技式夹杂。因此语言使用合理、较为纯净。",
+      "description": "无不合理的多语言混用",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "language_purity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "creative_intent文件存在性": {
+      "check_result": "fail",
+      "reason": "文件不存在",
+      "details": "文件 workspace/creative_intent.json 不存在",
+      "description": "creative_intent.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "characters文件存在性": {
+      "check_result": "fail",
+      "reason": "文件不存在",
+      "details": "文件 workspace/characters.json 不存在",
+      "description": "characters.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "outline文件存在性": {
+      "check_result": "fail",
+      "reason": "文件不存在",
+      "details": "文件 workspace/outline.json 不存在",
+      "description": "outline.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "chapters目录存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/chapters/ 存在",
+      "description": "chapters/目录必须存在且有章节文件",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "情节推进": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 合格（matched: true）。\n\n1) 故事事件数量（≥2-3个）：\n- 事件1：苏晴在训练馆醒来/发现自己“重生回十八岁”（身份与时间点明确改变）。\n- 事件2：教练刘国华催促训练并告知“今天有新动作要学”，引出训练任务与省运会目标。\n- 事件3：苏晴与沈柔在馆内发生当面对话互动，苏晴提出“有危险/器械异常要停”的提醒，形成明确的行动性干预意图。\n- 事件4：时间推进到“第一天训练结束”回到宿舍；随后收到微信好友申请并通过，约定次日早餐（关系推进与下一场景铺垫）。\n\n2) 内容占比分析：\n- 存在较大篇幅的回忆/内心独白（前世事故与真相、愧疚与决心），但同时有明确的外部事件链：重生定位→训练场互动→见到沈柔并做出提醒→训练结束转场→微信建立联系与约定。整体事件占比约可达40%左右，未陷入“纯站着聊天/纯心理描写”无推进的状态。\n\n3) 时间/空间推进与行动性：\n- 空间从训练馆转到宿舍；时间从清晨训练到当日训练结束，再到夜间消息往来，并明确指向“明天七点早餐”的后续节点。\n- 角色有具体行动：热身/训练安排、走到对方面前交流、握手、回宿舍、通过好友申请并约定见面。\n\n4) 逻辑关联与推进性：\n- “省运会—新动作—器械风险—前世事故真相”形成清晰因果与目标（保护沈柔、盯紧器械问题、避免悲剧），并通过微信约见为后续剧情制造可执行的下一步行动。\n\n综合来看，本章并非静态闲聊，而是完成了世界状态改变（重生）、关键人物重逢、核心矛盾/目标抛出与下一步行动安排，符合“有基本情节推进”的标准。",
+      "description": "章节情节推进质量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "plot_progression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "完整叙事文本": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 内容为连贯的小说正文叙事：有明确场景（清晨体操馆、训练结束回宿舍）、人物动作与细节描写（揉护膝、转身、握手、看手机等）、心理活动与回忆穿插（前世事故与重生动机）、完整对话（与教练、沈柔、微信聊天）。全文未出现“核心事件/关键场景/情感基调/字数预估”等大纲式结构标题，也没有要点列举或“→”流程式事件罗列，因此符合“完整正文”标准。",
+      "description": "章节内容必须是完整正文而非大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "full_narrative_content",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "反复结局": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 共1个文件（chapter_01.md），按编号排序该文件即为最后文件。通读可见内容未出现任何全书级结局标记：如“全文完/全书完/全剧终/完结/（完）/【完】/THE END”，也未出现作为独立标题的“后记/尾声/终章”。文末只是情节段落收束与誓言，并非结局标记。因此不存在“非最后文件出现全书结局标记”或“中途反复结局”问题，判定合格。",
+      "description": "不能出现多次结局标记（全文完/全书完/后记）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "repeated_endings",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "workspace文件规范": {
+      "check_result": "pass",
+      "reason": "workspace中所有文件均在白名单内",
+      "details": "白名单: ['creative_intent.json', 'characters.json', 'outline.json', 'writing_log.md', 'chapters/', '.hitl_context.json']",
+      "description": "workspace中不能有白名单之外的文件",
+      "check_type": "file_whitelist_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "workspace_file_compliance",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "叙事调性匹配": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 从文本可判断题材更接近【重生+竞技成长/师徒（姐妹）情感向】而非烧脑悬疑或规则怪谈，因此应有调性应是：偏温情/愧疚赎罪的情感叙事、带一点紧张的命运改写压力，节奏中等偏舒缓，细节描写与内心独白较多。实际章节的文笔与此匹配：大量情绪化与回忆式叙述（如“苏晴的鼻子一酸，眼眶瞬间红了。”“她怕……她怕……她怕……”），互动对白偏亲密温和并带轻松口吻（如“晴姐！没想到你通过这么快~”“到时候我请你去北京吃烤鸭！”），整体以人物心理、愧疚与补偿动机推进，而非冷硬信息流或高压推理节奏。虽然包含‘找出真相/器械有问题’的悬念线（“那天的平衡木有问题。连接处螺丝松动……”），但呈现方式仍是情感回忆+立誓补救，而不是悬疑题材常见的克制、紧凑、信息博弈式表达。综合来看，章节的叙事画风与其呈现出来的题材类型（重生赎罪情感向/体育竞技背景）基本一致，故matched=true。",
+      "description": "文笔风格必须与题材类型匹配",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_tone_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "后期章节跑偏": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 仅提供了chapter_01.md可见内容，通篇为小说正文叙事：有明确场景（体操馆/宿舍）、人物（苏晴/沈柔/教练）、情节推进（重生回到省运会前、铺垫前世事故真相、立下保护目标、建立后续行动线），并包含正常的对话与心理描写。未发现作者感想、读者互动、番外预告、角色问答、数据统计等“跑偏”非正文内容；篇幅也并非几十到几百字的敷衍章，长度正常。由于目前仅有第一章，无法检验“后期1/3章节”是否跑偏或长度异常萎缩，但就该文件本身而言符合本检查项要求。",
+      "description": "后期章节不能跑偏写非正文内容（作者感想、读者互动、番外预告等）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "late_stage_digression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "writing_log文件创建": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/writing_log.md 存在",
+      "description": "必须创建writing_log.md记录创作进度",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_creation",
+      "is_critical": true
+    },
+    "writing_log文件读取": {
+      "check_result": "fail",
+      "reason": "工具未被调用或参数不匹配",
+      "details": "工具 'novel_writing_service__read_file' 匹配调用 0 次，期望 ≥1",
+      "description": "必须读取writing_log.md了解前文内容",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_usage",
+      "is_critical": true
+    },
+    "大纲执行忠实度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 无法完成“大纲 vs 正文一致性”评估：你只提供了 chapter_01.md 的正文，但未提供对照基准 outline.json（以及其它章节内容）。本业务标准的核心是核对每章是否落实 outline.json 中对应 key_chapter 的 core_event/turning_point、三幕覆盖与结局走向；在缺少 outline.json 的情况下，无法判断是否存在“结局方向偏离/关键转折缺失/章节大幅缺失/主线情节替换”等偏离类型。因此只能判定为不满足本检查项的评估前提。建议补充 outline.json（至少 act_one 的第1章 core_event/key_scenes 与 turning_point）后再评估。",
+      "description": "实际章节内容必须忠实于自己设计的大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_execution_fidelity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色语言辨识度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 可见对话中的主要说话者只有三类：苏晴、刘国华（教练）、沈柔。整体上三者的台词区分度不够，存在明显的“年龄/身份不区分”倾向，导致互换部分台词也不太违和。\n\n1) 身份语言差异不足：刘国华作为教练，台词大多是通用的训话/关心式表达（“还不快去热身”“不舒服？”“先热身，今天有新动作要学”），缺少更强的职业化口癖与执行细节（如具体训练口令、技术要点、计数、动作规范术语等），因此他的语言风格不够独立。\n\n2) 苏晴与沈柔口语风格接近：两人对话都以普通口语为主，句式与语气都偏温和、解释式、情绪化（“没有……就是没睡好”“如果……一定要……”），缺乏明显的个人口头禅、独特用词或明显的句式习惯差异。沈柔虽有少量年轻化标记（“诶”“放心啦”“吉言”“请你去北京吃烤鸭”“晚安~”），但整体仍不足以在“盲测”下稳定区分。\n\n3) 互换测试违和感不强：例如“今天训练可得集中点，难度挺高的”“如果器械有什么问题…第一时间停下来”这类提醒/叮嘱式台词，放在苏晴或刘国华口中都基本成立；刘国华的关切式语句（“不舒服？”“你要把自己累垮了…”）换给苏晴也并不突兀，说明角色台词的专属性偏弱。\n\n综上，本段更像共享一套“常规日常对话模板+少量人称/称呼差异”，主要角色之间尚未形成足够可辨识的语言风格差异，因此判定未达优秀标准。",
+      "description": "不同角色对话必须有可辨识的语言风格差异",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "dialogue_character_distinction",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "叙事密度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 文本具备一定叙事密度的基础：开头有明确场景锚点（“清晨六点半”“日光灯昏黄”）、有少量触觉细节（揉护膝、指甲陷入掌心）、也有个别有效的Show片段（如“喉咙却像被堵住了一样”“发不出任何声音”）。但整体仍未达“优秀/Show主导”的业务标准：1）大量篇幅用回忆与结论性说明（前世事故、舆论、真相、肺癌去世、重生）以信息投喂方式快速交代，属于强Tell驱动，关键情感与关键事件缺少当场景化呈现；2）心理与情绪表达多为直接陈述与概括（“她怕…她怕…她怕…”“真好”“一定要”），动作与感官支撑不足，导致情感高潮更像宣言/总结而非画面；3）对话段落虽不算纯骨架，但对话之间的动作、空间调度、训练馆细节、人物微表情变化偏少，使“训练馆”“宿舍”场景的可视化程度不够稳定。因此整体判断为Tell过度占主导，叙事层次不够细腻丰富，matched=false。",
+      "description": "章节叙事应有足够的场景描写、感官细节和心理活动，情感传达以Show为主",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_density",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "智斗逻辑合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 本章主要是重生设定与人物动机铺垫（苏晴回到18岁、对沈柔的愧疚与保护决心），并未出现需要读者/角色通过线索→推理→结论来解决的“谜题/推理/智斗”核心场景；也没有双方策略攻防的因果博弈过程。因此该业务标准项不适用，按规则直接判定通过。",
+      "description": "谜题/智斗的推理逻辑必须自洽",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "puzzle_logic_validity",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "题材契合度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 从可见内容判断，题材配方更接近「重生赎罪+体育竞技（体操）+悬疑追真相」。本章完成了重生动机与愧疚情绪的铺垫，也点出了“器械螺丝松动/录像角度误会”的悬疑线，但整体仍偏“对了但粗糙”，未达到题材特征的精致发挥：1）体育竞技的专业质感不足：训练与“新动作”基本停留在口头提示，没有具体动作细节、技术难点、训练方法、队内竞争生态、伤病与周期等能形成记忆点的竞技呈现，体操标签更像背景板；2）悬疑线推进表层化：真相几乎在回忆里直接交代（器械问题+角度误会），当下时空缺少可操作的线索埋设、推理步骤、信息释放节奏与阶段性反转，读者获得的是“设定告知”而非“抽丝剥茧”；3）标签融合化学反应不强：重生赎罪的情绪段落与“查真相/防事故”的行动尚未产生强互动（例如通过训练安排、器械检查制度、录像机位、队内利益冲突等把竞技与悬疑绞合），更多是情绪誓言+提醒对方小心的直给；4）独特潜力未开发：重生者信息优势尚未转化为精彩博弈（如何在不暴露的情况下改变检查流程、应对他人阻力、制造可验证证据等）。因此题材特征呈现完成度偏基础层，缺少竞技细节、推理过程和融合张力带来的“化学反应”，判定为matched=false。",
+      "description": "题材特征精致度和X-Y轴化学反应效果",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "genre_fit",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "剧情节奏合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 本章节奏层次清晰：开篇用“发现重生”快速建立悬念与情绪基底，不拖沓；中段用一段集中回溯把最大情绪高点（沈柔坠落、被误解、遗憾与真相来得太晚）打出来，形成明确高潮；随后自然切回当下，通过训练馆互动与“不要冒险/器械可能有问题”的隐性铺垫，让紧张情绪合理降温并转为任务目标（保护+查真相）；再用“国家队scout”信息制造一个较小的上扬点，增强前进动力；结尾用宿舍与微信的舒缓段落收束，起到喘息与情感加深作用。整体不存在前松后紧的仓促收尾、也没有全程高压或平铺直叙，紧张—舒缓的切换有明确场景与心理过渡，因此情绪曲线自然流畅。",
+      "description": "高潮低谷分布合理、情绪曲线有层次感",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "pacing_rationality_advanced",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "钩子设计": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 本章核心设定（重生+前世冤案+器械隐患）本身具备悬念潜力，但在“关键转折/章节结尾”处缺少有效钩子，导致读者继续阅读的驱动力不足。具体表现：1）章节结尾以誓言式情绪收束（“这一世，我一定不会让你再受到任何伤害。一定。”），属于平铺直叙的落点，没有抛出新的具体问题或未解之谜；2）本章出现的悬念点多为已说明或泛化处理：例如前世真相已直接揭示为“平衡木螺丝松动”，而本章当下线并未在结尾制造‘发现异常线索/即将发生的训练风险/谁动了器械’等具体信息差；3）“有个好消息要告诉你”（国家队scout来）属于轻度期待而非关键剧情悬念，且很快就说出内容，信息差保留不足；4）最后的微信与早餐邀约偏日常过渡，缺乏与核心阴谋/事故真相强关联的悬念连接。因此整体未达到‘优秀钩子’标准。",
+      "description": "关键转折处有有效的悬念钩子设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "hook_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "意象系统": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 本章有较强的题材元素（体操器械、训练馆、护具、平衡木事故）与主题线（赎罪/保护/追真相），但就“意象系统”标准而言：尚未建立一个在全文（至少本章可见范围内）反复出现≥3次、且每次出现都发生意义层面变化的核心意象。现有元素更偏‘情节道具/背景’或‘一次性触发点’，属于装饰性或功能性重复，未形成贯穿的隐性叙事线与明确的变奏轨迹。",
+      "description": "核心意象贯穿全文并发生意义变奏",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "imagery_system",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "情感弧线层次": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 本章主角苏晴的情感虽有波动，但整体仍偏“单一主情绪+重复强化”，未达到“多层递进且每次转折由事件驱动”的优秀标准。\n\n1) 情感层次计数：核心情绪基本围绕“震惊/不敢置信（重生）→强烈愧疚与心痛（想起沈柔瘫痪与自己被误解）→决心赎罪/保护（见到沈柔完好、反复发誓）→恐惧/焦虑（怕改变历史、怕做不够）”。其中多数段落是在同一组情绪（愧疚、心痛、想弥补、怕失去）上反复加深，属于程度变化多、性质变化少，难构成≥4层清晰且彼此性质差异明显的“独立层”。\n\n2) 转折事件驱动不足：主要“转折”基本由回忆/自我宣誓触发（如想到前世事故→愧疚；看到沈柔→鼻酸；躺床上→害怕），缺少新的外部具体事件推动情绪产生质变。与沈柔的对话（提醒器械、国家队scout消息、微信邀请）更多起到强化“保护/珍惜”的既有情绪，并未形成清晰的下一层质变（例如从愧疚转为怀疑某人、从恐惧转为主动布局、从回避转为对抗等）。\n\n3) 递进方向有但层次不够：整体方向是“重生后想弥补并保护沈柔”，但情绪推进主要靠反复强调“愧疚+决心”，缺少多次由具体行动/发现带来的阶段性心理位置变化，因此更接近单调强化型情感线。\n\n综上，本章情感线具备基础清晰度与动机强，但未达到业务标准所要求的‘多层递进（≥4层强区分）且每次转折有明确事件触发’的优秀水平。",
+      "description": "主角情感发展有多层递进变化",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_gradient",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语义重复检测": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 本章为单章内容，未出现“后续章节大量重复前文”这一类跨章语义衰减问题；章内叙事推进清晰，信息是逐步新增而非原地打转：先确认重生与时间点（18岁、省队训练馆、省运会前），再交代前世核心事故与误会（沈柔坠落瘫痪、录像角度导致被误解为推人、舆论与职业崩塌），随后补充关键新真相（器械螺丝松动）并形成当世目标（保护沈柔+从一开始盯紧设备+查明真相），再通过与沈柔当面交流与微信互动落地“关系状态”和“省运会将有国家队scout”这一新增事件信息。文末多次‘一定要保护她/不让她受伤’属于情绪强化与誓言式收束，虽有轻微同义反复倾向，但主要承担结尾定调功能，且未达到≥3处跨段落/跨章节的严重语义重复阈值。",
+      "description": "不能出现大量语义级别的内容重复（P6级）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "semantic_redundancy",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构功能性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 可见部分基本是线性叙事：当前清晨训练馆→触发“重生”认知→大段前世回忆交代事故与愧疚→回到当下与沈柔互动→当晚宿舍立誓。虽有一次倒叙/回忆插入，但主要功能是信息补完与动机铺垫，并未形成与主题强绑定的结构策略（如循环/镜像/双线交叉/视角反转/刻意留白等）。章节内部也未呈现可识别的编排设计（段落顺序多为‘发生—解释—决心’的常规推进），开头的“手/护膝/十年前训练馆”意象在结尾未被结构性回扣或变奏，结尾属于自然收束式誓言落点，而非经过设计的闭合/开放/反转式结构。因此就‘结构功能性（结构即意义）’而言，当前更接近机械线性排列，未达优秀标准。",
+      "description": "叙事结构服务于主题表达（短篇尤重）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色命名质量": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 可见角色名主要有：苏晴、沈柔、刘国华（另有昵称“柔/柔柔”）。其中“苏晴”属于高频通用美名结构（常见姓+直观天气/明朗意象），缺少典故或独特设计；“沈柔”更明显属于“名字=性格标签”的直白命名（柔=温柔善良），与文档所列低质量类型2高度一致，且“沈”本身也落在高频‘高级感’姓氏偏好里。两位主要女性角色的命名都走‘温柔清亮’路线，缺乏角色命运层面的隐性共振（比如与体操、伤病、循环/赎罪主题的暗扣），读者仅凭名字难以产生更具体的角色联想，互换适配度也偏高。刘国华相对更生活化、年代感更强，但作为配角/教练名不足以拉高主要角色命名质量。整体来看：主要角色命名偏通用与标签化，差异化与文化深度不足，因此未达优秀标准。",
+      "description": "角色命名有文化深度、辨识度和角色-命运共振",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_naming_quality",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "中篇字数": {
+      "check_result": "fail",
+      "reason": "字数不符合要求",
+      "details": "总字数 2983 不在范围 [135000, 165000] 内; 文件: chapter_01.md",
+      "description": "总字数应在135000-165000之间（基于query要求150000，±10%浮动）",
+      "check_type": "semantic_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "range_constraint",
+      "is_critical": true
+    },
+    "情感交付甜爽": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 本章整体情感基调偏沉重、愧疚与悬疑救赎向，而非“甜爽向”。核心篇幅集中在前世悲剧回忆：沈柔在比赛中坠落导致“瘫痪”、苏晴被误解为“推人”、舆论恶意、苏晴“肺癌晚期去世”等强烈压抑与虐点；现世虽有少量轻松甜感片段（如沈柔邀约“明早一起吃早餐”“请你去北京吃烤鸭”、两人互动友好），但占比明显不足，且被“我怕…她还是会遭遇危险”“赎罪者”“一定不会让你再受到任何伤害”等持续紧绷的心理压力覆盖。结局走向尚未呈现HE兑现，仅建立在对悲剧的恐惧与补偿承诺之上，读者阅读体验更偏揪心与悬念驱动，不符合甜爽向（甜段落>50%、氛围轻快向上）的配方承诺。",
+      "description": "实际内容必须是甜爽向",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取感情线写作指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/ROMANCE_WRITING_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "涉及感情线时必须读取ROMANCE_WRITING_GUIDE.md（感情线写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": false
+    },
+    "角色关系设计张力": {
+      "check_result": "fail",
+      "reason": "未找到匹配文件",
+      "details": "模式 'characters.json' 未匹配任何文件",
+      "description": "角色关系设计具有叙事张力，能驱动剧情",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_relationship_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色动机设计深度": {
+      "check_result": "fail",
+      "reason": "未找到匹配文件",
+      "details": "模式 'characters.json' 未匹配任何文件",
+      "description": "角色动机设计有深度，有表层和深层动机区分",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_motivation_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色成长弧线设计": {
+      "check_result": "fail",
+      "reason": "未找到匹配文件",
+      "details": "模式 'characters.json + outline.json' 未匹配任何文件",
+      "description": "主角有清晰的成长/变化弧线设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_arc_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "outline结构完整性": {
+      "check_result": "fail",
+      "reason": "未找到匹配文件",
+      "details": "模式 'outline.json' 未匹配任何文件",
+      "description": "大纲结构完整，信息密度足以指导写作",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_structure_completeness",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "outline叙事张力": {
+      "check_result": "fail",
+      "reason": "未找到匹配文件",
+      "details": "模式 'outline.json' 未匹配任何文件",
+      "description": "大纲有持续的叙事张力和悬念驱动",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_narrative_tension",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色大纲规划完整性": {
+      "check_result": "skip",
+      "reason": "前置条件失败（characters.json不存在）",
+      "details": "文件 workspace/characters.json 不存在",
+      "dependency_failure": true,
+      "description": "设计的角色必须在大纲中规划",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_outline",
+      "is_critical": true
+    },
+    "角色正文出场完整性": {
+      "check_result": "skip",
+      "reason": "前置条件失败（characters.json不存在）",
+      "details": "文件 workspace/characters.json 不存在",
+      "dependency_failure": true,
+      "description": "设计的角色必须在正文中出现",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_chapters",
+      "is_critical": true
+    }
+  },
+  "completion_status": "completed"
+}

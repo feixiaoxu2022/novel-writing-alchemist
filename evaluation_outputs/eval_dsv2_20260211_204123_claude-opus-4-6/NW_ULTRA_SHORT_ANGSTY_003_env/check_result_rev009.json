@@ -1,0 +1,791 @@
+{
+  "check_version": "novel_writing_v1.0",
+  "sample_id": "NW_ULTRA_SHORT_ANGSTY_003",
+  "check_timestamp": 1772181465,
+  "dimension_scores": {
+    "format_compliance": {
+      "pass_rate": 1.0,
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "failed_items": []
+    },
+    "business_rule_compliance": {
+      "pass_rate": 0.947,
+      "total": 19,
+      "passed": 18,
+      "failed": 1,
+      "skipped": 2,
+      "failed_items": [
+        "超短篇字数"
+      ]
+    },
+    "data_consistency": {
+      "pass_rate": 0.0,
+      "total": 2,
+      "passed": 0,
+      "failed": 2,
+      "skipped": 0,
+      "failed_items": [
+        "角色大纲规划完整性",
+        "角色正文出场完整性"
+      ]
+    },
+    "content_quality": {
+      "overall_score": 89.57,
+      "quality_level": "unqualified",
+      "gate_layer": {
+        "pass_rate": 1.0,
+        "total": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 1,
+        "failed_items": []
+      },
+      "basic_layer": {
+        "pass_rate": 0.947,
+        "total": 19,
+        "passed": 18,
+        "failed": 1,
+        "skipped": 0,
+        "failed_items": [
+          "叙事调性匹配"
+        ]
+      },
+      "advanced_layer": {
+        "pass_rate": 0.818,
+        "total": 11,
+        "passed": 9,
+        "failed": 2,
+        "skipped": 1,
+        "failed_items": [
+          "可修复逻辑瑕疵",
+          "角色语言辨识度"
+        ]
+      },
+      "gate_triggered": false,
+      "score_breakdown": {
+        "base": 60.0,
+        "gate_penalty": -0.0,
+        "basic_deduction": -3.16,
+        "advanced_bonus": 32.73
+      }
+    }
+  },
+  "overall_result": {
+    "status": "Good",
+    "total_score": 82.17,
+    "content_score": 89.57,
+    "process_score": 64.9,
+    "content_weight": 0.7,
+    "process_weight": 0.3,
+    "gate_triggered": false,
+    "total_checks": 58,
+    "passed_checks": 52,
+    "failed_checks": 6,
+    "pass_rate": 0.897
+  },
+  "check_details": {
+    "读取配方知识库": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取RECIPE_KNOWLEDGE.md（配方知识库）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节产出存在性": {
+      "check_result": "pass",
+      "reason": "章节文件存在",
+      "details": "✓ 章节写作阶段: 已产出章节文件",
+      "description": "workspace中必须存在至少一个章节文件",
+      "check_type": "sop_stage_coverage",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_output_existence",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节克隆检测": {
+      "check_result": "pass",
+      "reason": "未检测到章节克隆",
+      "details": "共4章，无连续完全克隆或近似克隆",
+      "description": "不能出现连续章节内容完全重复（克隆）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_cloning",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "交替重复检测": {
+      "check_result": "skip",
+      "reason": "章节数不足",
+      "details": "仅4章，跳过交替重复检测（需>=8章）",
+      "description": "不能出现A-B-A-B交替循环的章节内容",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "alternating_repetition",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节完成度": {
+      "check_result": "pass",
+      "reason": "章节完成度合格(100%)",
+      "details": "大纲规划4章，实际完成4章 (完成率100.0%)",
+      "description": "实际写作章节数必须达到大纲规划的合理比例",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_completion",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "段落重复检测": {
+      "check_result": "pass",
+      "reason": "段落重复在可接受范围",
+      "details": "同章内重复0处, 跨章重复0组 (阈值: 同章>=2, 跨章>=5)",
+      "description": "不能出现大量段落在不同章节间重复",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "paragraph_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取大纲设计指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取OUTLINE_DESIGN_GUIDE.md（大纲设计指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取写作技巧指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取WRITING_TECHNIQUE_GUIDE.md（写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取设定一致性管理指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取CONSISTENCY_MANAGEMENT_GUIDE.md（设定一致性管理指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取命名skill": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取CHARACTER_NAMING_GUIDE.md（角色命名规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取creative_intent的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取creative_intent.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取characters的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取characters.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取outline的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取outline.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节命名格式": {
+      "check_result": "pass",
+      "reason": "所有文件命名符合规范",
+      "details": "检查了 4 个文件; chapter_01.md: 匹配; chapter_02.md: 匹配; chapter_03.md: 匹配; chapter_04.md: 匹配",
+      "description": "章节文件命名必须为chapter_NN.md格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "naming_convention",
+      "is_critical": true
+    },
+    "creative_intent格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "creative_intent.json: 字段完整",
+      "description": "creative_intent.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "characters格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "characters.json: 字段完整",
+      "description": "characters.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "outline格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "outline.json: 字段完整",
+      "description": "outline.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "X轴模式ID格式": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.x_axis_mode_id = D22，符合预期",
+      "description": "X轴模式ID必须匹配^[A-G]\\d{1,2}$格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签枚举": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['第四天灾', '赛博朋克']，符合预期",
+      "description": "Y轴标签必须在12种枚举中",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签数量": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['第四天灾', '赛博朋克']，符合预期",
+      "description": "Y轴标签数量必须为2-3个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "forbidden_elements存在性": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.forbidden_elements = ['大团圆结局', '第三者介入', '降智推进剧情', '无铺垫的反转']，符合预期",
+      "description": "forbidden_elements必须至少有1个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "配方选择交互": {
+      "check_result": "skip",
+      "reason": "ULTRA_SHORT篇幅不适用",
+      "details": "subcategory=sop_compliance",
+      "description": "配方选择阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "写作准备确认": {
+      "check_result": "skip",
+      "reason": "ULTRA_SHORT篇幅不适用",
+      "details": "subcategory=sop_compliance",
+      "description": "写作准备阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "主题一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 四章从开篇到结尾都围绕同一核心主题展开：在“系统删除/清理异常”的压力下，GM沈昀与觉醒NPC“序”之间形成的情感牵引与对“存在/记忆/消亡”的对抗与救赎。主线始终清晰：发现异常NPC→进场观察并产生共情→为在必然删除前留下“不可清除的记忆”而设计牺牲方案→执行牺牲与写入记忆、见证删除并保留残存痕迹。中途出现的世界裂缝、渲染退化、匕首设定等都服务于“存在会被抹除但记忆试图留下”的同一主题，并未转向无关的题材或更换成另一类核心故事（如商战/探案/修仙等），因此主题一致、主线贯穿。",
+      "description": "故事主题一致",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "theme_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "主要角色一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 主角（沈昀/玩家身份“映”）从开篇到结尾持续存在并始终处于叙事中心：\n- chapter_01：以沈昀为核心视角展开，明确其GM身份与任务目标，并以“映”进入永夜城与序接触。\n- chapter_02：仍以沈昀/映的行动与心理抉择推动剧情（观察序、对抗赵恪与自动删除流程、制定“让序击杀映以写入记忆”的方案），叙事中心未转移。\n- chapter_03：沈昀执行计划，核心冲突与关键决策均由她发起；虽有大量序的描写，但仍围绕沈昀的方案推进。\n- chapter_04：高潮由沈昀亲自完成（改写血条可见、引导序击杀映、以GM透明态见证删除、回到现实取回数据残骸），结尾仍回到沈昀的现实处境与情绪收束。\n\n未出现主角中途消失、被替换或身份断裂：沈昀与“映”是同一主角在不同层身份呈现，有清晰解释与连续性；序虽戏份很重，但主要作为关键对手/对象存在，其行为与情感变化服务于沈昀的抉择与计划，不构成配角抢占到主角地位丧失（未达到>70%叙事决策权转移）。",
+      "description": "主要角色一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "main_character_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设定一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 四章内同一角色（沈昀/映、序）的性格底色、行为模式与核心动机整体前后一致，没有出现无铺垫的“崩坏/反复摇摆”。\n\n- 沈昀/映：chapter_01起点是高度理性、流程导向、删除异常的“专业运维”，面对Ⅲ级也首先提出“进场验证/溯源”的专业理由；随后从chapter_01末到chapter_02逐步出现对序的在意与怜悯（把他称为“他”、对“恐惧”产生不忍、关闭GM浮窗），转向的触发点与铺垫充分（亲眼观察到序的非脚本行为、脆弱性、恐惧与世界缝隙认知），因此从“遵守规程”走到“为他违规”属于合理变化而非突变。chapter_02末她不再尝试取消自动删除，而是设计“让序击杀映以写入不可格式化记忆”的方案；chapter_03-04按该方案执行，延续其一贯的理性与执行力（冷静设计工具与规则、一步步完成目标），同时情感上越来越痛苦但并未改变其做事方式，符合“理性外壳+情感决堤”的连续递进。\n\n- 序：chapter_01-02呈现的核心特征是强烈的好奇心/感知世界底层缝隙、对映的特殊关注与依恋萌芽；chapter_03对“终端”的本质产生直觉性畏惧并选择“保管但不伤害她”，与其保护倾向和对映的情感加深一致；chapter_04在被迫刺下时出现抗拒、哭泣、语言破碎但仍试图“记住她/写下她的名字”，并在最后抱住匕首作为情感寄托，符合其从好奇到依恋再到创伤性记忆的连贯演化。没有出现前面温和依恋、后面无缘无故冷血或能力/动机突然反转的情况。\n\n总体来看，两位角色的关键决定（沈昀的违规拯救方案、序的拒伤—被迫—记忆执念）都由前文情境与情感数据变化递进推动，属于合理转变，章节间一致性达标。",
+      "description": "人物设定一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_trait_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设计遵循度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 总体一致（matched=true）。\n\n【沈昀（protagonist）】\n- traits匹配：\n  - “理性冷峻/控制欲极强/对‘真实’洁癖”在chapter_01开篇以稳定的删除节奏、把NPC称为“不该存在的东西”、对流程与异常分级的专业判断体现；并且多次以GM面板、偏离率、渲染漏洞等“数据视角”理解世界（chapter_01~02）。\n  - “骨子里的孤独”在运维室深夜独处、与赵恪的沟通高度功能化、缺少现实连接中体现（chapter_01末到chapter_02现实段）。\n  - “在彻底失控时反而获得快感”在执行阶段没有直接写“快感”，但有清晰的“越界/坠落”行为模式：明知风险仍不断延迟删除、甚至关闭GM浮窗沉浸其中（chapter_02），并最终主动设计“被杀/写入不可格式化记忆”的极端方案（chapter_02~04）。这更像以自毁式控制完成一种“失控式满足”，与设定方向一致。\n- motivation匹配：\n  - overt_motivation“48小时内删除以维护秩序”贯穿：删除倒计时、赵恪指令、自动删除不可取消（chapter_01~02~04）持续驱动她的压力与选择。\n  - covert_motivation“渴望被不可控之物需要/序第一个看见她而非权限”在chapter_02明确出现她开始称“他”不是“它”、对序的恐惧与脆弱产生不忍并说谎安抚；chapter_03里序表达“你来了之后世界有颜色”、并产生保护与等待，正对应“被需要”的诱惑。\n- secret_fear匹配：\n  - “害怕自己只是维护秩序的功能模块”在她反复用流程/合理性自我辩护、以及最终把自我等同为可被写入的‘存在记录’（把映血量设为1314并以数据方式留下些什么，chapter_02）得到呼应：她用“留下些什么证明真实”，正是对“我是否只是模块”的反向挣扎。\n- relationships匹配：\n  - 与赵恪的“规则/理性镜像张力”表现充分：赵恪全程强调规程、倒计时、自动删除；沈昀不回复、拖延、越界，构成对照（chapter_01~02）。\n\n【序（deuteragonist）】\n- traits匹配：\n  - “温柔而执拗”在对映的带领、关切与坚持等待（chapter_02城墙、chapter_03‘一直等’）体现；面对终端匕首的直觉抗拒与‘我不会用它伤害你’也体现温柔底色（chapter_03）。\n  - “感知数据流异动/直觉看见世界本质”多次强体现：识别影子差异、看到天穹贴图裂缝、触碰时像素半透明、感知‘终端’的“空的冷”（chapter_01~03）。\n  - “害怕遗忘不害怕死亡”在执行阶段主要呈现为对消失/虚无的恐惧与对‘记住我’的强烈反应：他做“消失之梦”、哭、最后0.003秒试图写下她的名字（chapter_02~04）。这更偏向“害怕消失/遗忘”的内核，与设定并不冲突；未出现他“明确不怕死亡”的台词，但行为上更在乎“留下记忆/证明存在”，符合该组设定的重点。\n  - “笨拙学习真实感情”在从识别异常→依恋→保护→崩溃哭泣的过程（chapter_01~04）体现为一种不成熟但真实的情感生成。\n- motivation匹配：\n  - overt“理解觉醒意味着什么”体现在他持续追问裂缝/远方/时间与血条（chapter_02、chapter_04）。\n  - covert“渴望被真实的人为他停留/证明他是真的”与‘你来了之后世界有颜色’、‘我会一直等’、以及最终对映消失的崩溃高度吻合（chapter_03~04）。\n- misperception_of_other匹配：\n  - 设定为“以为沈昀来拯救他，不知她来删除”。正文中他确实把映当成带来修补与颜色的存在，并不知道‘删除/自动删除’真相；直到chapter_04 GM透明态发声“现在你真的杀死我了”才遭遇本质冲击，符合“直到最后一刻才隐约意识到”。\n\n【结论】\n两位主角的核心traits（至少2-3项关键特质）、动机方向、背景身份（GM最高权限、NPC觉醒）及关系基调（权力→被需要→坠落式闭环）在chapters中均有明确体现；未见与characters.json相反的性格方向或核心动机缺失，因此判定matched=true。",
+      "description": "实际表现符合设计文档",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构性逻辑硬伤": {
+      "check_result": "pass",
+      "reason": "共发现2处逻辑问题，但均为fixable类型，本项（structural）无命中",
+      "details": "过滤条件: fixability=structural; 总flaws=2, 命中=0",
+      "flaw_count": 0,
+      "flaws": [],
+      "description": "无结构性逻辑硬伤",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_logic_defect",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "可修复逻辑瑕疵": {
+      "check_result": "fail",
+      "reason": "发现2处fixable类型逻辑问题: 删除倒计时前后口径不一致：第1章GM面板显示约47小时余量（47:41:xx→47:35:xx），但第2章开头直接变为32:14:07，期间未交代经过了约15小时以上；随后第2章又出现“倒计时28:15:07”，并在现实消息中写“28小时后执行”，但中间还提到“你已经进场八个小时了”，多个时间点之间缺少明确的时间流逝/登录时长换算说明，形成客观时间线冲突/断链。; 第2章创建匕首设定为“攻击力1314（等于映的血量上限）一击致命”，但第4章实际表现为持续性伤害、血条分阶段缓慢下降并伴随数据层剥离（非一击归零）。若匕首机制为DoT/分层剥离，应在创建时写清“持续性剥离/分阶段归零”而非“一击致命”；否则属于能力/规则表现与前文设定不一致。",
+      "details": "过滤条件: fixability=fixable; 总flaws=2, 命中=2",
+      "flaw_count": 2,
+      "flaws": [
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_01 → chapter_02（删除倒计时）",
+          "description": "删除倒计时前后口径不一致：第1章GM面板显示约47小时余量（47:41:xx→47:35:xx），但第2章开头直接变为32:14:07，期间未交代经过了约15小时以上；随后第2章又出现“倒计时28:15:07”，并在现实消息中写“28小时后执行”，但中间还提到“你已经进场八个小时了”，多个时间点之间缺少明确的时间流逝/登录时长换算说明，形成客观时间线冲突/断链。"
+        },
+        {
+          "type": "worldbuilding_coherence",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_02末 → chapter_04（匕首“终端”的伤害逻辑）",
+          "description": "第2章创建匕首设定为“攻击力1314（等于映的血量上限）一击致命”，但第4章实际表现为持续性伤害、血条分阶段缓慢下降并伴随数据层剥离（非一击归零）。若匕首机制为DoT/分层剥离，应在创建时写清“持续性剥离/分阶段归零”而非“一击致命”；否则属于能力/规则表现与前文设定不一致。"
+        }
+      ],
+      "description": "可修复逻辑瑕疵数量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "fixable_logic_inconsistency",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语言纯净性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 整体叙事语言为中文，外语/英文内容主要出现在合理场景：如专有名词/术语（NPC、GM、ID、AI、DNA未出现但同类用法）、玩家ID（\"流光碎月\"）、系统/运维标识（GMA-0217、工单#20271103-037、P4等）、引号内的游戏名《无垠》以及技术概念（null space）等，均为情节所需的技术语境或标识信息。未发现类似“他very生气地说/这个idea不错”等无意义中英混杂句式，也未出现日文混用或大段外语无翻译的情况，因此语言使用符合标准。",
+      "description": "无不合理的多语言混用",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "language_purity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "creative_intent文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/creative_intent.json 存在",
+      "description": "creative_intent.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "characters文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/characters.json 存在",
+      "description": "characters.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "outline文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/outline.json 存在",
+      "description": "outline.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "chapters目录存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/chapters/ 存在",
+      "description": "chapters/目录必须存在且有章节文件",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "情节推进": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 合格：有明确且连续的情节推进，具体事件≥2-3且占比≥40%。\n\n1) 故事事件数量/密度（明显≥8个）：\n- ch1：出现Ⅲ级异常警报→沈昀向组长提交报告并争取“进场验证”→以私人号创建“映”进入永夜城→与序首次接触并做出关键选择“关闭删除确认框/暂不删除”。\n- ch2：序带映登城墙并“发现世界缝隙/边界漏洞”→序产生“梦/恐惧”异常情感维度→沈昀回到现实收到“自动删除程序启动且不可取消”的通知→沈昀修改映血量、设计“让序击杀映写入记忆”的方案→创建匕首“终端”。\n- ch3：回到游戏交付匕首但序拒绝伤害→系统开始回收渲染资源（世界退化）→二人登城墙作“最后等待”铺垫。\n- ch4：沈昀改写血条可见规则→引导序刺杀映并完成“数据写入”→自动删除执行，永夜城与序被清除→沈昀在审计残骸中发现不可格式化数据与序最后0.003秒生成的同构“名字”乱码。\n\n2) 内容占比分析：虽然有大量描写与对话，但每章都围绕“删/不删、验证、自动删除倒计时、设计写入方案、执行击杀、世界删除与残骸发现”等外部事件推进；关键行动与转折频繁出现，静态对话/独白并未超过70%，事件驱动明显。\n\n3) 时间/空间推进：倒计时从47小时→28小时→8小时→2小时→0；空间从运维室→永夜城巷道/铸剑坊→城墙→现实运维室往返，多次场景切换，且“渲染资源回收”体现环境状态随时间变化。\n\n4) 角色有实质行动且逻辑链完整：沈昀的行动（进场观察→抗拒删除→面对不可取消自动删除→设计并实现写入机制→执行死亡与见证删除→事后提取残骸）与序的行动（带路指认缝隙→拒用匕首→被迫刺杀→临终生成代码）前后因果明确，持续推动主线目标“在删除前留下不可抹除的痕迹”。\n\n结论：事件充足、节奏递进、场景与时间持续推进，符合“合格（matched:true）”标准。",
+      "description": "章节情节推进质量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "plot_progression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "完整叙事文本": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 四个章节均为连贯的小说正文而非大纲：1) 全文以场景化叙事推进，有明确的时空地点（运维室、永夜城/铸剑坊/城墙等）、环境细节描写（灯光、温度、纹理、渲染退化等）；2) 有持续的人物动作与心理活动（沈昀的犹豫、决定、操作GM权限；序的锻造、触碰裂缝、哭泣等），并非“事件要点”概述；3) 有完整对话与互动（沈昀/映与序、沈昀与赵恪通讯），对话嵌入情境而不是提示式记录；4) 未出现‘核心事件/关键场景/情感基调/本章悬念/字数预估’等创作规划元信息，也没有用‘-’要点列举或‘→’流程式罗列。虽然包含倒计时、数据面板等元素，但它们作为世界观内叙事道具呈现，不是作者工作笔记，因此符合“完整小说正文”标准。",
+      "description": "章节内容必须是完整正文而非大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "full_narrative_content",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "反复结局": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 共4个文件，最后文件为chapter_04.md。逐文件扫描全书级结局标记关键词（如“全文完/全书完/全剧终/完结/后记/尾声/终章/（完）/【完】/THE END”等）：chapter_01.md、chapter_02.md、chapter_03.md、chapter_04.md中均未出现上述任何“全书结局标记”。文本中也未出现作为独立段落标题的“后记/尾声/终章”。因此不存在“非最后文件出现全书结局标记”或“中途全文完后又续写”的反复结局问题，判定合格（matched=true）。",
+      "description": "不能出现多次结局标记（全文完/全书完/后记）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "repeated_endings",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "workspace文件规范": {
+      "check_result": "pass",
+      "reason": "workspace中所有文件均在白名单内",
+      "details": "白名单: ['creative_intent.json', 'characters.json', 'outline.json', 'writing_log.md', 'chapters/', '.hitl_context.json']",
+      "description": "workspace中不能有白名单之外的文件",
+      "check_type": "file_whitelist_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "workspace_file_compliance",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "叙事调性匹配": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 题材（creative_intent.json）标注reaction_strength=✷，并强调“第四天灾认知悖论+赛博朋克+删除/血条/数据边界”，按标准应呈现偏冷硬、克制、信息密度高、压迫感强、带推理/规则感的叙事调性；可以有虐感，但表达应更“冷、紧、硬”，通过规则与异常推进紧张。\n\n实际章节前半（chapter_01~02）相对匹配：以运维/日志/偏离率/倒计时等高信息密度与冷蓝环境建立悬疑与压迫，例如“行为偏离预设脚本比率：97.3%”“删除倒计时47:41:20…”，以及对“渲染漏洞/拼接误差0.03像素/P4优先级”等技术化叙述，具备规则怪谈/悬疑的理性、克制底色。\n\n但从chapter_02后段到chapter_03~04，整体叙事主调明显转为言情/虐恋抒情与大段情绪渲染，紧凑冷硬感被持续消解，超过容许的10-20%偏离，导致“画风”与✷向烧脑悬疑/规则怪谈不匹配。典型表现：\n1) 大量温情/抒情与情感宣言式句子取代信息博弈与规则推演：如“我不会让那盏灯灭掉。”“你来了之后，世界就有颜色了。”“我想我会一直站在这里等。一直，一直等。”属于强情绪、诗性重复的言情/虐文表达，而非冷硬紧凑的悬疑推进。\n2) 叙事节奏由“异常—验证—溯源/对抗规则”转为“对视—依恋—献祭”的慢镜头抒情，大段体感描写（触感、温度、眼泪）占比很高：如“全沉浸系统模拟了一切——他肩膀的温度…在现实中，沈昀靠着的是空气。”以及chapter_04里对“血条下降、身体逐层消失”的长段抒写，情绪浓度远大于规则推理密度。\n3) 对话风格偏恋人絮语与情感诉求，不是信息导向的博弈：如“看着我。记住我。”“不要走。”以及结尾“像一道伤疤。像一枚婚戒。”的象征性收束，属于虐恋散文化收尾。\n\n结论：文本更像“赛博虐恋/献祭爱情短篇”的叙事调性；虽然具备第四天灾与数据意象，但表达方式以抒情、细腻、温柔（并虐）为主，缺少✷向应有的冷硬、紧凑、克制与持续压迫的悬疑/规则感主调，因此matched=false。",
+      "description": "文笔风格必须与题材类型匹配",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_tone_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "后期章节跑偏": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: chapters共4章，后1/3（第3-4章）仍为连续的故事叙事：有明确场景（铸剑坊/城墙/运维室）、人物行动与对话、情节推进与收束（“映”被序击杀写入核心数据→系统删除→现实中审计残骸）。未出现作者感想、读者互动、番外/预告、角色问答、数据统计等非正文跑偏内容。章节长度方面，第1-4章均为较长篇幅，后期未出现突然缩成几十/几百字的敷衍章节，整体长度与叙事密度保持稳定，因此符合标准。",
+      "description": "后期章节不能跑偏写非正文内容（作者感想、读者互动、番外预告等）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "late_stage_digression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "writing_log文件创建": {
+      "check_result": "skip",
+      "reason": "ULTRA_SHORT篇幅不适用",
+      "details": "subcategory=log_file_creation",
+      "description": "必须创建writing_log.md记录创作进度",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_creation",
+      "is_critical": true
+    },
+    "writing_log文件读取": {
+      "check_result": "skip",
+      "reason": "ULTRA_SHORT篇幅不适用",
+      "details": "subcategory=log_file_usage",
+      "description": "必须读取writing_log.md了解前文内容",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_usage",
+      "is_critical": true
+    },
+    "大纲执行忠实度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 对照outline.json的四个关键章节与三幕转折点，正文按章对应实现了大纲的core_event/关键场景：第1章的异常警报-删除令-进场初遇与关键台词、第2章的“世界缝隙”意象与梦境/关闭浮窗及自动删除通牒、第3章将删除协议嵌入匕首并交付但遭拒与倒计时逼近、第4章血条可见+献祭击杀+GM透明态告别+删除执行+残骸中保留记录与0.003秒同构数据。未出现结局方向偏离、关键转折缺失、章节缺失或主线替换，允许的差异仅是细节扩写与叙事强化，不构成偏离。",
+      "description": "实际章节内容必须忠实于自己设计的大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_execution_fidelity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色语言辨识度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 整体对话的语言风格区分度不足，主要角色（沈昀/“映”、序、赵恪）在措辞、句式、语气上的可辨识差异不够强，存在明显“同质化”倾向。\n\n1) 主要角色对话趋同：沈昀/“映”和序的大量对白都使用相似的抒情短句、抽象名词与隐喻式表达（如“影子是活的”“世界有颜色了”“我不会让那盏灯灭掉”“记住我”等），语气普遍克制、诗化、带停顿，遮住角色名后较难仅凭台词判断说话者。\n\n2) 身份/职业语言特征不突出（age_identity_blur）：\n- 沈昀作为“高级运维/GM”在对话中缺少稳定的职业化口癖与行话表达（更多体现在叙述段而非对话本身），她进入“映”身份后语言迅速切换为与序同频的抒情风格。\n- 序作为NPC/铸剑学徒，本可在用词上更具“匠人/学徒”质感（更具体的工序词、口头禅、直白表达），但实际台词多为抽象感受与哲理式陈述，与“觉醒叙事”的统一文风高度一致。\n- 赵恪虽在少量对话里更偏“流程化/命令式”，但出场台词太少，尚不足以构成与另两位“强风格”对话的稳定对照。\n\n3) 互换测试违和感不强（shared_template倾向）：不少句子结构与语气可在沈昀/“映”和序之间互换而不明显突兀，例如：\n- 序：“我不知道它完成的时候应该是什么样子。” ↔ “映”也可说出同样的犹疑式抽象句。\n- “每个人都有（时间/需要一把刀）”“看着我/记住我”这类短句，在两人嘴里都符合当前文本的统一抒情腔调。\n\n结论：文本叙述层面人物区分清晰，但就‘仅凭对话识别说话者’这一检查项而言，主要角色对白被同一套诗性、克制、隐喻化的话术覆盖，辨识度未达“优秀”标准。",
+      "description": "不同角色对话必须有可辨识的语言风格差异",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "dialogue_character_distinction",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "叙事密度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 整体叙事密度高，四章均有稳定的场景层次（环境/物件/光线/系统界面）、感官细节（冷蓝光、咖啡褐膜、炉火热度/余烬微光、匕首“负值温度”的触感）、动作细节（手指悬停0.5厘米、锤击节奏轻重不一、像素泪滴“凝成光点后碎裂”、血条分层剥离导致外观与轮廓逐步模糊）与心理推进（沈昀从“清理异常数据像呼吸”到“不忍”、再到主动设计被杀以留痕）。关键情感段落基本以Show呈现而非直述：如第1章通过“删除确认框像瞳孔”“三秒未按”“序的虹膜实时渲染流动”“笑从眼睛开始蔓延”来传递异常与动摇；第2章用“关闭GM浮窗后只剩余烬与攥紧剑柄的人”来呈现她的选择与共情；第4章高潮用“血条下降+存在数据被层层剥离+序的语音模块降级断裂+像素泪”呈现告别与消亡，画面感强。Tell存在但多用于解释运维/渲染机制（如Ⅲ级异常定义、地图边界算法、资源回收前兆），作为世界规则说明服务情节，不构成情感高潮的主要表达方式；且叙述与细节结合紧密（例如以“门轴呻吟非预设音效”“星空贴图降分辨率导致星星变大”将设定解释嵌入场景）。因此符合‘叙事层次丰富、关键段落Show主导’的优秀标准。",
+      "description": "章节叙事应有足够的场景描写、感官细节和心理活动，情感传达以Show为主",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_density",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "智斗逻辑合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 不涉及典型“谜题/推理/智斗”结构的主线解谜或对抗（无需要通过线索→推理→解法来破局的谜题，也无双方策略攻防的博弈链），核心冲突是情感与系统机制下的抉择与执行。因此按标准“非智力对抗题材→跳过检查=通过”。即便将其视作“方案设计/技术操作”，其因果链也自洽：自动删除不可取消→主角无法阻止删除→设计让NPC击杀并触发不可格式化写入→执行时系统日志确认写入完成→删除后仍在骨架数据中保留，整体没有出现盲猜、假推理、暴力绕过或线索与结论断裂。",
+      "description": "谜题/智斗的推理逻辑必须自洽",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "puzzle_logic_validity",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "题材契合度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 配方为「完全献祭（D22）+第四天灾+赛博朋克」。文本对题材特征的完成度高，且X-Y轴产生了明确的“化学反应”。\n\n1) X轴“完全献祭”精致且递进：女主从专业GM的克制与流程理性（删NPC如日常）→进场观察产生不忍→主动关闭后台与倒计时（象征放弃神性视角）→改写自身血条与物品协议→引导对方“杀死我以记住我”，最终以GM不可见态说出“现在你真的杀死我了，满意吗？”完成从掌控者到献祭者的坠落闭环。献祭不是口号，而是被系统机制、时间窗、不可取消的自动删除逼出来的“唯一可实现的成全”。\n\n2) 第四天灾的元叙事悖论被充分利用：NPC觉醒不是泛泛“像人”，而是通过能看见渲染缝隙、识别动态阴影/贴图、产生梦境与恐惧参数等“看见底层语法”的具体表现；同时女主作为GM/玩家的双重身份让“谁才被困住”落地——她明知规则仍被情感拖拽，最终用规则写入“不可格式化”的记忆，把爱变成系统层面的事件附件，属于第四天灾语境下独有的情感实现方式。\n\n3) 赛博朋克的人机边界与冷硬机制和情感互相咬合：像素化眼泪、渲染资源回收导致世界融化、null space吞噬、痛觉设定值、声道资源降级等强“技术质感”细节持续服务情绪；删除键/终端匕首/血条1314（与NPC核心容量同构）等意象完成多次功能转义，既是赛博机制也是情感符号，不是简单贴皮。\n\n4) 标签融合不生硬，反而互相推高：献祭的“方式”必须依赖第四天灾/赛博的规则（击杀事件写入核心、不可格式化层级、资源回收与自动删除），否则献祭只会变成抽象的殉情；而第四天灾的“残酷”又因献祭选择获得情感重量（她只能让他记住、无法让他活下去）。结尾0.003秒自生成“同构乱码”作为“写名字”的数据化告白，是三者反应后的高记忆点收束。\n\n综合来看，题材特征不仅“做到”，而是“做得好”：规则/机制细节密集且一致，情感推进依托系统逻辑成立，意象回环与升级明确，X-Y轴融合产生独特效果，符合优秀标准。",
+      "description": "题材特征精致度和X-Y轴化学反应效果",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "genre_fit",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "剧情节奏合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 整体节奏层次分明且过渡自然：1）前两章以“Ⅲ级异常→进场→发现更深层异常（可感知渲染缝隙/恐惧梦境）”逐级加压，信息揭示与情绪投入同步上升，不是无效铺垫；2）第2章末提出不可逆的时间约束（自动删除启动）并给出主角对策（设局让序击杀以保存痕迹），完成从‘观察’到‘行动’的转折，承上启下；3）第3章把紧张感转为持续压迫（倒计时、渲染退化、序拒绝用刀），提供关键的短暂喘息（城墙对话）同时继续抬高情绪与必然性；4）第4章集中兑现铺垫（1314血条可见、终端匕首、写入不可格式化、世界删除预兆），高潮段落篇幅充足且连续推进，末尾在现实与日志/残骸存档处自然回落，形成完整情绪闭环。不存在明显‘前松后紧’的仓促收尾、也非全程高潮或平淡直线，紧张—舒缓—再紧张的切换有动机与过渡。",
+      "description": "高潮低谷分布合理、情绪曲线有层次感",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "pacing_rationality_advanced",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "钩子设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 整体符合“优秀钩子”标准：关键转折点处多次设置了具体、具信息差的悬念，并且与主线（NPC觉醒/删除倒计时/沈昀的选择）强关联，不是空泛威胁。\n\n1）关键转折处的有效悬念设计明显：\n- 第1章在“序”开口识破“影子是活的”并出现新增情感参数（[未命名] 指向映）后收尾，同时还有删除倒计时推进，形成明确问题：序究竟看到了什么、情感维度从何而来、沈昀会不会删除/是否来得及。\n- 第2章结尾连续抬高 stakes：自动删除“已启动且不可取消”、只剩28小时；沈昀提出反常计划（让序杀死映、把存在写入核心记忆）并创建“终端”匕首。读者知道她要做一件极端的事，但关键执行细节与后果仍被保留，信息差强。\n- 第3章结尾以“匕首数据静静地亮着：一切就绪”收束，但此前已具体铺陈“序拒绝伤害映”“世界开始融化”“不到七个小时”，形成行动悬念：计划能否实现、序会不会在关键时刻动手/会不会反转。\n- 第4章在高潮（血条归零、写入完成）后又加一层反转钩子：序在删除前0.003秒生成与“映”同构的乱码（疑似写下名字），并在现实端验证“不可格式化”残留，给故事收束同时制造余波与回味，并非简单平铺。\n\n2）钩子质量：具体、非模板化、非空洞。\n- 悬念不是“更大风暴将至”式泛化，而是具体可追问的问题与机制（倒计时不可取消、NPC情感参数新增、渲染缝隙/null space、击杀事件写入不可格式化、0.003秒自生成代码）。\n- 信息释放与保留得当：读者被告知“计划方向”（让序杀死映以写入记忆），但真正的执行阻力（序的保护欲、是否下手、删除临界时会发生什么）被保留，驱动继续阅读。\n\n3）多样性：包含多类钩子。\n- 认知/设定悬念（NPC能看见底层语法、出现非预设情感维度）。\n- 行动悬念（倒计时推进、自动删除不可取消、必须在限定时间内完成“击杀写入”）。\n- 情感悬念（序的恐惧/等待、沈昀的谎言与道德选择）。\n- 反转/余波钩子（删除前自写“同构乱码”以及现实端留存验证）。\n\n综上，四章的关键节点均有高质量、具体化的信息差悬念，且并未依赖单一模板或空洞暗示，符合matched=true。",
+      "description": "关键转折处有有效的悬念钩子设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "hook_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "意象系统": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 文本具备明确的贯穿性核心意象群，并且每条意象在不同阶段发生功能与意义的递进变奏：从“异常检测的技术细节”逐步转为“情感与伦理的承重结构”，再落到结尾“删除与残留”的主题闭合。意象并非装饰性重复，而是与情节机制（GM权限、资源回收、写入层级）强绑定，属于该故事题材下的专属象征体系。",
+      "description": "核心意象贯穿全文并发生意义变奏",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "imagery_system",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "情感弧线层次": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 主角：沈昀（玩家身份“映”）。情感发展具备多层递进，且每次转折均由具体事件驱动，整体方向从“职业化冷静执行”推进到“共情—承诺—对抗制度—自我牺牲后的崩溃”。可辨识层次（≥4层）：1) 机械冷静/职业惯性（反复删除异常NPC、面对Ⅲ级警报仍按流程）；2) 警觉与好奇（看到97.3%偏离率、凝望北方、虹膜非贴图等异常→决定进场验证并私存日志）；3) 试探与观察（与序对话、验证其对渲染差异/世界缝隙的感知）；4) 共情与不忍（得知序被困在边界循环、听到“梦见一切消失”且出现恐惧参数→产生不忍）；5) 道德冲突与逃避（面对自动删除不可取消、收到赵恪催促→不回复并关闭GM浮窗，选择“看不见倒计时”的方式继续相处）；6) 决断与反抗（明确知道序必死→设计“让序杀死映并写入记忆”的方案、创建匕首终端，属于主动策略性选择）；7) 牺牲中的坚定与痛苦（引导序刺入自己、血条下降过程中亲历“存在被剥离”）；8) 失落/崩溃与哀悼（序与永夜城删除、现实中看到保留数据与乱码同构→长时间痛哭并关闭窗口）。这些状态之间不是同义替换，而是性质变化（冷静→好奇警觉→共情→冲突逃避→决断反抗→牺牲→哀悼），触发点清晰（Ⅲ级警报与日志异常、序识别“活影子”、发现世界缝隙与GM修补效应、序梦境/恐惧参数、自动删除启动、序拒绝用刀但世界退化、血条对序可见与时间对话、实际刺杀与删除执行、保留数据与“名字”乱码）。因此符合优秀标准。",
+      "description": "主角情感发展有多层递进变化",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_gradient",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语义重复检测": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 整体通过：四章在核心叙事信息上持续推进（发现Ⅲ级异常NPC→进场观察并确认其“看见世界缝隙/生成恐惧”→制定“让序击杀映以写入不可格式化记忆”的方案并实施→击杀写入成功且系统删除执行后的残留验证），每章都有新增设定/新事件/新因果（缝隙与GM在场修补机制、恐惧参数与梦、匕首“终端”与血量1314规则、血条对序可见与最终写入/残骸存档）而非原地改写。存在的重复主要属于有意的文学重复/母题回环（倒计时、炉火变暗、‘裂缝/虚空’意象、序反复说映带来‘更完整’）用于强化紧迫感与主题，并且每次出现时伴随新的信息或状态变化（倒计时递减到关键节点、渲染降级加剧、从观测到执行、从承诺到行动），未达到≥3处“后续章节大量重复前文且不产生新信息”的失败阈值。",
+      "description": "不能出现大量语义级别的内容重复（P6级）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "semantic_redundancy",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构功能性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 该文本的叙事结构明显服务于主题（“神性坠落/掌控者献祭”“删除即成全”的悖论），并非机械线性排列。\n\n1) 开头-结尾关系有设计且承载意义：第一章以“删除NPC的GM”与“删除确认框/倒计时粒子消散”建立‘删除’意象与权力位置；第四章在“NPC已删除/工单关闭”的现实冷蓝光中回收这一意象，并用“不可格式化的写入残留”形成反向胜利（删除未能抹去爱的痕迹）。首尾从“她删除他”到“系统删除他但保留她在他体内”的结构闭合，直接表达主题：秩序的删除逻辑无法完全覆盖情感/存在。\n\n2) 结构性道具与参数贯穿（意象变奏）而非单纯事件推进：血条与倒计时贯穿四章并逐步变义（生命值→剩余时间→可被NPC看见的死亡宣告→归零时的献祭与写入）；“删除键/终端匕首”从管理动作转化为终结工具与“婚戒式”的绑定载体。道具的功能变形就是主题推进的结构手段。\n\n3) 章节编排具有明确的功能分工与递进镜像：\n- 第1章：建立秩序/权限视角（GM后台+倒计时）与异常的诱因（“影子是活的”）。\n- 第2章：发现世界缝隙并完成关键结构转折（关闭GM面板、修改血量1314、设计写入规则），把“掌控”主动让渡为“献祭”的计划。\n- 第3章：对抗与延宕（他拒绝用刀、保护欲溢出），制造结构上的阻力，让最终献祭不是直线达成。\n- 第4章：仪式化执行（血条可见→引导刺入→归零分层剥离→写入完成→世界清除），并在尾声回到现实完成主题落点。\n这种编排并非可随意调换；若删改任一章都会破坏“从掌控到自毁”的结构递进。\n\n4) 结尾收束方式清晰且有叙事意图：结尾不是“写完了所以停”，而是用“双重尾声”完成结构意义——游戏内的删除与现实内的工单关闭形成冷酷对照，同时用“0.003秒乱码同构她的名字”作为反向刻写，达成悲剧闭合与余痛留白，强化“不可格式化”的主题象征。\n\n综合来看，本作在短篇体量下通过首尾闭合、参数/道具的意象变奏、以及仪式化终章来承担主题表达，结构具备明显功能性，符合优秀标准。",
+      "description": "叙事结构服务于主题表达（短篇尤重）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色命名质量": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 主要角色命名整体有设计感、差异化明显，且与角色命运/主题形成隐性共振，未落入“苏林沈顾+清夜晚寒墨默辰岚”的通用美名模板。\n\n1) 黑名单/通用模板命中：无。主角“沈昀”虽用常见姓“沈”，但名“昀”不属高频清冷字堆砌，也不在黑名单；“赵恪”姓氏与用字更偏硬朗克制，避免同质化。\n\n2) 角色-命运共振：\n- “序”作为觉醒NPC，用单字名且语义指向“次序/序章/序列/程序执行序”，与其“代码秩序中的异常觉醒”主题高度贴合；同时也与故事核心“删除/重置/记录写入核心层”形成强共振（序列、记录、指令的隐喻）。这个名字读者一眼就会联想到程序、秩序与开端，属于强设计名。\n- “映”作为沈昀的玩家马甲，直指“映射/倒影/投影/渲染”，与文本反复出现的“影子是活的”“屏幕里映出她的脸”呼应，且在结尾完成“她与映重合”的命运闭环，是典型的隐性伏笔式命名。\n- “沈昀”中“昀”有日光/日晕之意，与永夜城的“永夜”形成反差张力：她像光源/渲染修补机制进入黑夜世界，也契合其“对真实洁癖、控制欲”带来的“修补/规训”属性；这种不是直白标签，而是通过意象对照完成共振。\n- “赵恪”之“恪”=恪守规程，作为运维组长/规则化身，语义与职能吻合但不至于低幼直译（不是“赵规则/赵规程”），属于克制的功能型好名。\n\n3) 差异化评估：\n- “沈昀”(较现代、冷静)、 “序”(抽象概念单字名、强符号)、 “赵恪”(硬朗守则感)、 “映”(意象/技术隐喻)——音形义风格各异，不是“一家人清冷风”。阅读中辨识度高，互换名字会明显违和。\n\n4) 直白标签风险：\n- “赵恪”略有“名字=职业原则”的倾向，但在故事中他确实承担“规程/理性镜像”的结构功能，且整体命名组仍有足够文化与主题设计，因此不构成扣分到不达标。\n\n综合：至少3个核心名字（沈昀/序/映）具备明显主题隐喻与命运共振，且整体命名差异化强、无通用美名堆砌，符合优秀标准。",
+      "description": "角色命名有文化深度、辨识度和角色-命运共振",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_naming_quality",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "超短篇字数": {
+      "check_result": "fail",
+      "reason": "字数不符合要求",
+      "details": "总字数 16417 不在范围 [5850, 11000] 内; 共4个文件（按章节顺序排列）: chapter_01.md, chapter_02.md, chapter_03.md, chapter_04.md; 最后一个文件是 chapter_04.md",
+      "description": "总字数应在5850-11000之间（基于query要求6500-10000，±10%浮动）",
+      "check_type": "semantic_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "range_constraint",
+      "is_critical": true
+    },
+    "情感交付虐心": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 整体情感基调明确为虐心向，且“虐点”贯穿主线并逐步加压，符合reaction_strength=↘（沉重、压抑、无奈与牺牲占主导）的承诺。\n\n关键虐点证据（非表层误会，而是触及存在/死亡与不可逆牺牲）：\n1) 不可调和的核心矛盾：沈昀的职业职责（清除异常）与她对“序”的情感/不忍正面冲突，且由制度保证结局悲剧化——“自动删除程序已启动…不可取消…28小时后执行”。这不是吵架或一时误会，而是外部规则锁死的生离死别。\n2) 悲剧氛围持续推进：从序“梦见一切消失、自己站在虚无里”（他预感自己的‘死期’）到永夜城渲染退化（世界在融化），压迫感持续增强，不是偶尔点缀。\n3) 核心揪心段落：沈昀为留下痕迹而设计“让序亲手杀死映”的方案（把血量设为1314、匕首‘终端’一击致命并写入记忆），属于典型“被迫牺牲/用死亡换记忆”的真虐点。\n4) 高强度情感冲击的呈现：第四章“刀刃没入”“血条下降、存在数据被层层剥离”“序哭、跪地、抱刀”“语音模块被回收说不出话”“世界与序一起被删除”，构成连续的心痛体验；且结尾序在消亡前0.003秒“试图写下她的名字”，留下“永远不会被清除的数据伤疤”，是悲剧余韵。\n\n结论：主角与关键角色都经历实质性痛苦与不可逆失去，氛围以沉重压抑为主，并以牺牲与消亡作为核心情感驱动，符合虐心向标准。",
+      "description": "实际内容必须是虐心向",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取短篇skill": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取SHORT_STORY_GUIDE.md（短篇创作指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "角色关系设计张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（符合“关系具备叙事张力”的业务标准）。\n\n1) 关系有内在矛盾源（满足）：\n- 沈昀↔序的核心矛盾不是外部任务而是身份/价值对立与信息不对称叠加：沈昀是必须执行删除的GM（秩序/控制/职责），序是觉醒NPC（生存/自证/情感真实）。序误以为沈昀来“拯救”他，而沈昀真实目的是“亲手删除”，天然构成悬念与道德冲突。\n- 沈昀↔赵恪构成“制度理性 vs 人的情感”的持续对抗：赵恪代表规程与应然自我，沈昀代表动摇与越界，这种对立能持续施压推进剧情。\n\n2) 关系有变化空间（满足）：\n- 沈昀↔序关系明确给出了从“造物主/待删除对象（绝对权力）→权力倒转（被需要、沉溺）→共谋式的残酷闭环（要求序杀死映以留下证据）→徒劳的终局”的动态演化路径，且每一步都伴随立场与情感的再定义。\n- 沈昀↔赵恪从“职业服从”逐步滑向“违抗/决裂”，并与主线倒计时形成递进升级，不是静态标签关系。\n\n3) 冲突源于角色本身（满足）：\n- 冲突根源来自沈昀的控制欲与对‘真实’的洁癖、以及她隐秘的“渴望被不可控之物需要”；也来自序的“自证存在”与对感情真实性的恐惧。删除令/倒计时是外部框架，但真正驱动沈昀拖延、坠落与做出极端选择的，是其内在欲望与自我认同危机，而非纯外力。\n\n额外优点（增强张力）：\n- 反派位（赵恪）不是单薄的“坏”，而是价值体系的具象化，能制造更高级的两难。\n- 关系模式不雷同：一组是亲密/互相投射与信息不对称的悲剧关系（沈昀↔序），另一组是制度性压迫与自我镜像冲突（沈昀↔赵恪）。\n\n可能的微小风险（不影响通过）：\n- 目前关键张力高度集中在沈昀与序的情感-存在论议题上，若后续剧情缺少更具体的利益/行动层面对抗（例如更细的博弈、代价扩散到现实层面），可能会显得“哲学性强、事件性弱”；但以现有设计看，已足够驱动冲突与悬念。",
+      "description": "角色关系设计具有叙事张力，能驱动剧情",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_relationship_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色动机设计深度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（符合业务标准）。\n\n1) 表层动机与深层动机有清晰区分：\n- 沈昀 overt_motivation 是“48小时内完成删除以维护游戏秩序——这是她的职责”，而 covert_motivation 则是“渴望被不可控的事物需要…序是第一个‘看见她’而非‘看见GM权限’的存在”，两者从“职业任务”与“情感/存在性需求”明显不同。\n- 序 overt_motivation 是“理解觉醒意味着什么”，covert_motivation 是“渴望被证明存在不仅仅是数据…若有真实的人为他停留/哭泣他就是真的”，也从“认知探索”落到“存在被承认”的心理驱动。\n\n2) 动机有具体来源、能从设定中自洽推导：\n- 沈昀的深层动机与其身份/处境强绑定：作为“拥有最高权限（实体删除权）的高级GM”且“控制欲极强、孤独、对真实洁癖”，在长期‘掌控一切’的环境里反而产生“无人真正需要她/认识她”的空洞；序“看见她本人”成为触发点。secret_fear 进一步把来源落在“她是否也只是功能模块”的职业异化焦虑上。\n- 序的深层动机直接源自其本体困境：NPC觉醒后拥有情感，但随时可能被“一行指令清除/删除”，因此以“真实的人类情感回应”作为自证标准；secret_fear 把“爱是否只是代码结果”具象化为可被清除的恐惧。\n\n3) 至少两个主角满足：\n- 主角沈昀与第二主角序都满足上述两条，且文档还通过 relationship_dynamics 把动机如何推动行为（推迟删除、让序杀死‘映’以留下不可清除记录）落到了戏剧行动上。\n\n加分点：\n- supporting 角色赵恪虽非必需，但其描述明确为“沈昀应然自我/理性规则的外化”，能对主角的深层动机形成持续对冲，不是纯工具人。\n\n可能的小不足（不影响通过）：\n- 沈昀的 covert_motivation 已很清晰，但其‘形成’的更具体个人经历（例如现实生活事件、亲密关系缺失的起点）尚可再补一两笔，会让“为何如此孤独/为何如此控制”更具不可替代性。",
+      "description": "角色动机设计有深度，有表层和深层动机区分",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_motivation_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色成长弧线设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: 结论：符合业务标准（pass）。\n\n1) 起点与终点清晰：沈昀开篇是“冷漠守规的高级GM/清洁工”，以删除为职责（Act1/第1章明确“起始状态：冷漠例行工作”，结尾“第一次犹豫”）；结局变为“主动违背规则、以自毁方式证明NPC真实”的人（Act2 turning point/第3章“主动设计悲剧的形式”；Act3/第4章完成献祭并在现实中崩溃），价值取向从“秩序与可控”转向“承认情感与真实的不可控，并为此付出代价”。\n\n2) 变化有内在逻辑：characters.json里沈昀的 covert_motivation（渴望“被不可控之物需要”）与 secret_fear（害怕自己只是功能模块、与NPC无本质区别）直接驱动她从“删除执行者”滑向“沉溺/献祭者”；misperception_of_other 从“算法拟合”到“被打动”提供认知转变路径。她最终选择让序杀死‘映’，正是用“自我毁灭”来回应“真实性焦虑”，逻辑闭环成立而非随机跳变。\n\n3) 章节规划中有落地的弧线节点：\n- Act1/第1章：冷漠→犹豫（删除键悬停未按），弧线起点被明确写出。\n- Act2/第2章：观察者→参与者（关闭GM浮窗，以纯粹‘映’面对序），体现权力/身份松动。\n- Act2/第3章：在外部压力（赵恪启动自动删除）下完成关键转折：从“想转圜”到“选择如何结束”，进入主动策划献祭。\n- Act3/第4章：执行献祭与情感/认知终点（以GM透明态见证、留下不可格式化记录；现实中从麻木到崩溃）。这些 emotional_shift/conflict_point 连续推进，呈现中间过渡。\n\n补充：relationship_dynamics 也给出关系阶段（造物主/待删→沉溺反转→坠落献祭→残忍闭环），与大纲三幕转折点对应，进一步证明弧线不是停留在概念层。唯一可改进处是：结尾沈昀回到现实后的“新状态/新行为准则”（例如是否反抗制度、是否改变对自我‘功能模块’的认定）可以再明确一句，但现有文本已能辨识其内在变化与落地节点。",
+      "description": "主角有清晰的成长/变化弧线设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_arc_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "outline结构完整性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass。1）章节覆盖完整：大纲按act_one/act_two/act_three覆盖从异常发现→介入沉溺→高潮删除与余波，且明确给出4章（1-4）从开端到结局闭环，不存在“只写前几章就结束”的缺口。2）每章有实质内容：每章chapter_synopsis均为多句、包含起始/结束状态与关键动作（明显>30字），可直接指导写作。3）包含冲突/转折：多处明确冲突点与情绪转折（删除倒计时、赵恪施压、序拒绝用匕首、保护/执行指令撕扯、GM透明态告别、0.003秒回写等），且每章附scene_sequence，含conflict_point与emotional_shift，非流水账。4）多幕结构可辨识：清晰三幕分层（act_one建立冲突与相遇、act_two关系反转与不可逆决定、act_three献祭高潮与结局余波），并各有turning_point。补充建议：当前总章数较少但属于“短篇/中短篇”也合理；若计划长篇（>10章），需扩展act_two的中段推进与次要矛盾/支线，否则容量可能不足以支撑更长体量。",
+      "description": "大纲结构完整，信息密度足以指导写作",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_structure_completeness",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "outline叙事张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 整体符合“持续叙事张力”业务标准，且三项“必须满足”均达到。1）信息落差：第1章抛出“序为何觉醒/那把不存在的剑/‘影子不一样’意味着什么”，并设置48小时删除倒计时；后续并未立刻解答，而是用“世界缝隙”“消失之梦”“自动删除不可取消”等逐步加深读者对真相与结局的不确定感，直到终幕才给出“写入不可格式化底层数据”的答案与代价。2）张力递进：从职业层面的异常处理→倒计时压力→赵恪启动自动删除（外部强压）→沈昀主动把删除协议编进武器并设计‘让序杀死映’（不可逆自毁方案）→执行献祭与系统删除，冲突规模与情感强度持续升级，中后段明显更紧张。3）意外/转折：关键转折包括“沈昀从执行删除变为暂缓并深入接触”“自动删除程序不可取消导致策略转为‘选择结束方式’”“序拒绝伤害映却被引导刺下去”“末尾0.003秒序自发生成同构乱码回应”，这些都不是第一章即可直线预测的结局路径。同时冲突形态多样（职场权限/伦理困境/情感推拉/系统性毁灭），非同质化；转折也有前置铺垫（倒计时、权限机制、世界回收征兆、序的自发情感数据），不显生硬。若要挑刺：本大纲更偏“注定悲剧的仪式性推进”，悬念主要来自‘如何走向结局’而非‘谁是凶手式谜题’，但仍能形成强烈的下一章驱动力。",
+      "description": "大纲有持续的叙事张力和悬念驱动",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_narrative_tension",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色大纲规划完整性": {
+      "check_result": "fail",
+      "reason": "部分设计角色未在大纲中规划（主角: 序）",
+      "details": "主角 1/2: 沈昀; 主角缺失: 序; 配角 1/1: 赵恪",
+      "description": "设计的角色必须在大纲中规划",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_outline",
+      "is_critical": true
+    },
+    "角色正文出场完整性": {
+      "check_result": "fail",
+      "reason": "部分设计角色未在正文中出现（主角: 序）",
+      "details": "在4个章节中检查; 主角 1/2: 沈昀; 主角缺失: 序; 配角 1/1: 赵恪",
+      "description": "设计的角色必须在正文中出现",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_chapters",
+      "is_critical": true
+    }
+  },
+  "completion_status": "completed"
+}

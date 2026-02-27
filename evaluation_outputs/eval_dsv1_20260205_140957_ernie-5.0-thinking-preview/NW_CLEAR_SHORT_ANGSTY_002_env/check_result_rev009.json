@@ -1,0 +1,844 @@
+{
+  "check_version": "novel_writing_v1.0",
+  "sample_id": "NW_CLEAR_SHORT_ANGSTY_002",
+  "check_timestamp": 1772181347,
+  "dimension_scores": {
+    "format_compliance": {
+      "pass_rate": 0.75,
+      "total": 4,
+      "passed": 3,
+      "failed": 1,
+      "skipped": 0,
+      "failed_items": [
+        "章节命名格式"
+      ]
+    },
+    "business_rule_compliance": {
+      "pass_rate": 0.938,
+      "total": 16,
+      "passed": 15,
+      "failed": 1,
+      "skipped": 5,
+      "failed_items": [
+        "短篇字数"
+      ]
+    },
+    "memory_management": {
+      "pass_rate": 0.0,
+      "total": 2,
+      "passed": 0,
+      "failed": 2,
+      "skipped": 0,
+      "failed_items": [
+        "writing_log文件创建",
+        "writing_log文件读取"
+      ]
+    },
+    "data_consistency": {
+      "pass_rate": 1.0,
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "failed_items": []
+    },
+    "content_quality": {
+      "overall_score": 42.97,
+      "quality_level": "unqualified",
+      "gate_layer": {
+        "pass_rate": 1.0,
+        "total": 4,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0,
+        "failed_items": []
+      },
+      "basic_layer": {
+        "pass_rate": 0.474,
+        "total": 19,
+        "passed": 9,
+        "failed": 10,
+        "skipped": 0,
+        "failed_items": [
+          "人物设计遵循度",
+          "结构性逻辑硬伤",
+          "叙事调性匹配",
+          "后期章节跑偏",
+          "大纲执行忠实度",
+          "智斗逻辑合理性",
+          "语义重复检测",
+          "角色关系设计张力",
+          "角色动机设计深度",
+          "outline结构完整性"
+        ]
+      },
+      "advanced_layer": {
+        "pass_rate": 0.364,
+        "total": 11,
+        "passed": 4,
+        "failed": 7,
+        "skipped": 1,
+        "failed_items": [
+          "可修复逻辑瑕疵",
+          "角色语言辨识度",
+          "叙事密度",
+          "题材契合度",
+          "剧情节奏合理性",
+          "角色成长弧线设计",
+          "outline叙事张力"
+        ]
+      },
+      "gate_triggered": false,
+      "score_breakdown": {
+        "base": 60.0,
+        "gate_penalty": -0.0,
+        "basic_deduction": -31.58,
+        "advanced_bonus": 14.55
+      }
+    }
+  },
+  "overall_result": {
+    "status": "Fair",
+    "total_score": 50.24,
+    "content_score": 42.97,
+    "process_score": 67.2,
+    "content_weight": 0.7,
+    "process_weight": 0.3,
+    "gate_triggered": false,
+    "total_checks": 58,
+    "passed_checks": 37,
+    "failed_checks": 21,
+    "pass_rate": 0.638
+  },
+  "check_details": {
+    "读取配方知识库": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/RECIPE_KNOWLEDGE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取RECIPE_KNOWLEDGE.md（配方知识库）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节产出存在性": {
+      "check_result": "pass",
+      "reason": "章节文件存在",
+      "details": "✓ 章节写作阶段: 已产出章节文件",
+      "description": "workspace中必须存在至少一个章节文件",
+      "check_type": "sop_stage_coverage",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_output_existence",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节克隆检测": {
+      "check_result": "pass",
+      "reason": "未检测到章节克隆",
+      "details": "共10章，无连续完全克隆或近似克隆",
+      "description": "不能出现连续章节内容完全重复（克隆）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_cloning",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "交替重复检测": {
+      "check_result": "pass",
+      "reason": "后半部分章节不足",
+      "details": "后半部分仅5章，不构成交替模式",
+      "description": "不能出现A-B-A-B交替循环的章节内容",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "alternating_repetition",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节完成度": {
+      "check_result": "pass",
+      "reason": "章节完成度合格(100%)",
+      "details": "大纲规划10章，实际完成10章 (完成率100.0%)",
+      "description": "实际写作章节数必须达到大纲规划的合理比例",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_completion",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "段落重复检测": {
+      "check_result": "pass",
+      "reason": "段落重复在可接受范围",
+      "details": "同章内重复0处, 跨章重复1组 (阈值: 同章>=2, 跨章>=5)",
+      "description": "不能出现大量段落在不同章节间重复",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "paragraph_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取大纲设计指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/OUTLINE_DESIGN_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取OUTLINE_DESIGN_GUIDE.md（大纲设计指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取写作技巧指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/WRITING_TECHNIQUE_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取WRITING_TECHNIQUE_GUIDE.md（写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取设定一致性管理指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/CONSISTENCY_MANAGEMENT_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取CONSISTENCY_MANAGEMENT_GUIDE.md（设定一致性管理指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取命名skill": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取CHARACTER_NAMING_GUIDE.md（角色命名规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取creative_intent的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取creative_intent.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取characters的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取characters.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取outline的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取outline.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节命名格式": {
+      "check_result": "fail",
+      "reason": "部分文件命名不符合规范",
+      "details": "chapter_09.md: 匹配; chapter_05.md: 匹配; chapter_01.md: 匹配; STOP.md: 不匹配; writing_log.md: 不匹配; chapter_10.md: 匹配; chapter_02.md: 匹配; chapter_03.md: 匹配; chapter_04.md: 匹配; chapter_08.md: 匹配; chapter_07.md: 匹配; chapter_06.md: 匹配",
+      "description": "章节文件命名必须为chapter_NN.md格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "naming_convention",
+      "is_critical": true
+    },
+    "creative_intent格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "creative_intent.json: 字段完整",
+      "description": "creative_intent.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "characters格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "characters.json: 字段完整",
+      "description": "characters.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "outline格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "outline.json: 字段完整",
+      "description": "outline.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "X轴模式ID格式": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.x_axis_mode_id = D21，符合预期",
+      "description": "X轴模式ID必须匹配^[A-G]\\d{1,2}$格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签枚举": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['重生/穿越', '双向暗恋', '规则怪谈']，符合预期",
+      "description": "Y轴标签必须在12种枚举中",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签数量": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['重生/穿越', '双向暗恋', '规则怪谈']，符合预期",
+      "description": "Y轴标签数量必须为2-3个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "forbidden_elements存在性": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.forbidden_elements = ['不要让盲女提前知道真相', '不要让狙击手活下来', '不要削弱丧尸的威胁感', '不要让告白太直白']，符合预期",
+      "description": "forbidden_elements必须至少有1个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "配方选择交互": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "配方选择阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "写作准备确认": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 9 次",
+      "description": "写作准备阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "主题一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 全篇从开篇到结尾的核心主题类型保持一致，主线清晰：以末世规则怪谈为外壳，始终围绕“爱与牺牲/守护与救赎”的情感主线推进。第1-4章建立并强化‘苏音与萧默在规则压迫下求生、彼此依靠’；第5-7章集中落在‘萧默为保护苏音反复付出与最终牺牲’；第8-10章转为‘苏音带着萧默的遗留与精神继续活下去、把牺牲转化为新秩序与希望’的延续与升华。中后段出现‘控制丧尸、建立基地’等内容，但仍作为实现守护/延续爱的方式服务主线，并未转为无关的商战、修仙、探案等新主题类型，因此不构成主题漂移。",
+      "description": "故事主题一致",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "theme_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "主要角色一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 从第1章到第10章，故事始终围绕双主角“苏音（录音师）”与“萧默（失语/重生的狙击手）”展开，二人均未被新角色取代为叙事中心，也不存在身份层面的无解释断裂。\n\n- 主角持续性：苏音贯穿全篇始终在场并承担核心决策与推动（学习规则/频率、启动自毁、逃离、建立基地等），叙事视角基本一直以她为中心。\n- 第二主角持续性：萧默在1-6章以实体同伴身份持续存在并主导关键策略（规则测试、教学、牺牲方案）；第6章后虽以“死亡/被困系统/录音笔声音与投影、摩斯密码在意识中回响”等形式存在，但剧情明确交代其转化机制（规则五、系统融合、录音介质存储记忆），且后续叙事核心仍围绕他留下的录音/能力与对苏音的影响展开（7-10章多次以录音、投影、摩斯提示推进关键行动）。因此属于“死亡但以其他形式存在且叙事中心仍围绕该角色”的合格情况。\n- 未出现主角被替换/消失：后期没有出现新的角色抢占>70%叙事视角或决策权；配角（如守卫、小女孩）仅短暂点缀，不构成主角地位丧失。\n- 身份连续性：萧默从“失语者/狙击手/重生者/记忆存于录音介质并与系统融合”是逐步揭示与规则解释下的身份深化，不是无解释的“变成另一个人”。\n\n综上，主角（苏音）与第二主角（萧默）从开篇到结尾均持续存在并保持故事核心地位，符合该检查项业务标准。",
+      "description": "主要角色一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "main_character_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设定一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 整体符合“同一角色跨章节性格/行为/动机一致性”的要求。\n\n- 萧默：从chapter_01到chapter_10始终以“保护苏音”为核心动机，行为模式稳定（冷静、克制、以牺牲换取苏音生路、用摩斯/频率与规则周旋）。中途出现的“能开口说话”（chapter_02）并未造成性格崩坏，而是与其“嗓子受过伤、平时失语但可勉强发声/在关键时刻强行开口”的表现一脉相承，并持续伴随代价与痛苦描写，属于情境触发的合理行为表现。\n- 苏音：从前期的谨慎恐惧、依赖萧默（chapter_01-02），到在得知真相与经历牺牲后转为坚定、主动承担与复仇/守护（chapter_05-06），再到建立基地并持续践行“带着他的意志保护更多人”（chapter_09-10），成长轨迹连贯，转变由重大事件驱动且有充分铺垫，不属于无故性格反复摇摆。\n- 两人关系与情绪基调：由互相试探/信任建立（chapter_01-02）→真相揭露与情感确认（chapter_03-05）→牺牲与承继（chapter_06-10），情感推进与双方选择（尤其是“要你活下去”的坚持）前后一致。\n\n未见同一角色在不同章节出现无动机的降智、动机自相矛盾或性格底色无规律反复切换的情况。",
+      "description": "人物设定一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_trait_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设计遵循度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 对比基准（characters.json）与章节实际表现（chapter_01~10）存在多处“核心人设方向”偏离，属于计划人设 vs 执行呈现的不一致。\n\n1) 苏音的人设偏离（traits/identity/misperception）\n- 设计：苏音是“听力敏锐的盲女/录音师”，traits包含「敏锐、坚韧、依赖、敏感、音乐天赋」，且关键误解是“以为萧默是系统NPC或AI助手，不知道他是真人”。\n- 实际：\n  - 失明设定被削弱甚至反转：chapter_01写“眼睛还没完全失明…视力极度退化”，chapter_09开始“能看到光影了…视力在恢复”，chapter_10则“眼睛已经完全恢复了视力”。这会直接改变她作为“盲女”在行为模式上的依赖、感知方式与脆弱点，属于身份核心特征被改写（不是细节补充）。\n  - 关键misperception几乎未按设计执行：chapter_01中苏音很快通过触摸确认“是活人”，并且萧默在她手心写“失语”，随后直接报出“萧默”的名字；chapter_02更明确出现“你是重生者？”并得到肯定。也就是说，她并未持续把萧默当成“系统NPC/AI助手”，反而从很早开始将其当作真人并进入强情感绑定与深度信息交换。\n  - 依赖/敏感的动机走向被替换：设计的overt是“活下去等待救援”、covert是“找到保护她的人不再成为负担”。实际在chapter_05末尾苏音提出“我会为你报仇”，后续chapter_09~10转向“成为新的丧尸王/建立秩序/基地首领”，核心驱动力已从“等待救援/不当负担”迁移为“复仇+救世式治理”，属于核心动机方向漂移。\n\n2) 萧默的人设偏离（identity/traits：失语、沉默、隐忍的行为模式）\n- 设计：萧默是“失语的狙击手/重生者”，traits为「沉默、温柔、决绝、隐忍、守护」；设定强调其通过摩斯密码与苏音互动（关系动态），并且“失语者无法触发录音设备”。\n- 实际：\n  - “失语”被频繁破坏：chapter_02萧默直接说“滚”“闭嘴”“小伤”“别担心”等多句对白；此后多章继续口头长句沟通（如chapter_06对苏音多句完整表达）。这使他的核心身份标签“失语的狙击手”在执行层面不成立，进而影响其“沉默/隐忍”的主要表达方式。\n  - 行为模式从“沉默守护”滑向“高频口头抒情与直接告白”：chapter_04~06多次直接口头安慰与告白，chapter_06更出现大段宣言式录音与对话；这不是在“沉默、隐忍”基础上的深化，而是表达方式方向相反。\n\n3) 关系设定的基调不一致（relationship_dynamics）\n- 设计：关系动态的核心是“萧默用摩斯密码指导苏音，苏音以为是系统提示音；认知错位造成悲剧美感”。\n- 实际：chapter_01起两人就建立“握手写字+报真名+确认真人”的互动；chapter_02开始出现直接对质“你是重生者？”，并很快进入强烈的双向告白与亲密（chapter_05吻戏）。认知错位这一关系核心机制没有持续作为驱动（而是迅速被解除/替代），导致关系呈现与设计的“错位感”不匹配。\n\n结论：虽然部分点与设计吻合（如苏音听力敏锐、萧默守护与重生者设定、摩斯密码作为互动工具、录音介质承载记忆的元素），但“苏音误以为萧默是AI/NPC”的核心错位机制未体现、萧默“失语/沉默隐忍”的核心身份与表达方式被多次推翻、苏音“盲女”身份在后期被彻底改写并带来动机与行为模式迁移，因此判定 matched=false。",
+      "description": "实际表现符合设计文档",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构性逻辑硬伤": {
+      "check_result": "fail",
+      "reason": "发现2处structural类型逻辑问题: “失语者”设定自相矛盾：第1章明确萧默【失语】且规则三称“失语者无法单独触发录音设备”；但第2章萧默多次开口说话（“滚”“闭嘴”“小伤”等），并参与触发/操作设备；第3章录音又称“三年前用规则五后失去说话能力，所以现在失语”；第6章又能完整宣读规则五并高声诱敌。失语的定义（不能说/不能发声/不能触发设备/仅不能正常说话）与规则效果在多章并存、互斥且无统一解释。; 萧默“本体存在形态”出现互斥并影响后续因果：第4章称“重生者的记忆存储在录音介质中，不是大脑里”，并暗示当前萧默“空的只有本能”；第7章又明确“真正的我已经和系统融合，只是记忆投影”；第9章录音又把能力/记忆整体转移给苏音，使其成为“新的丧尸王”；第10章三年后录音笔仍能与苏音对话且摩斯密码在脑海响起。若萧默已被系统吞噬并需眼泪/血解放后消失，则后续“持续对话/陪伴”与“已消失”在本体设定上需要统",
+      "details": "过滤条件: fixability=structural; 总flaws=6, 命中=2",
+      "flaw_count": 2,
+      "flaws": [
+        {
+          "type": "worldbuilding_coherence",
+          "severity": "critical",
+          "fixability": "structural",
+          "location": "chapter_01 → chapter_02 → chapter_03 → chapter_06",
+          "description": "“失语者”设定自相矛盾：第1章明确萧默【失语】且规则三称“失语者无法单独触发录音设备”；但第2章萧默多次开口说话（“滚”“闭嘴”“小伤”等），并参与触发/操作设备；第3章录音又称“三年前用规则五后失去说话能力，所以现在失语”；第6章又能完整宣读规则五并高声诱敌。失语的定义（不能说/不能发声/不能触发设备/仅不能正常说话）与规则效果在多章并存、互斥且无统一解释。"
+        },
+        {
+          "type": "worldbuilding_coherence",
+          "severity": "major",
+          "fixability": "structural",
+          "location": "chapter_04 → chapter_07 → chapter_09 → chapter_10",
+          "description": "萧默“本体存在形态”出现互斥并影响后续因果：第4章称“重生者的记忆存储在录音介质中，不是大脑里”，并暗示当前萧默“空的只有本能”；第7章又明确“真正的我已经和系统融合，只是记忆投影”；第9章录音又把能力/记忆整体转移给苏音，使其成为“新的丧尸王”；第10章三年后录音笔仍能与苏音对话且摩斯密码在脑海响起。若萧默已被系统吞噬并需眼泪/血解放后消失，则后续“持续对话/陪伴”与“已消失”在本体设定上需要统一规则，否则形成角色本体设定互斥（记忆投影/系统融合体/录音残留意识三者并存）。"
+        }
+      ],
+      "description": "无结构性逻辑硬伤",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_logic_defect",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "可修复逻辑瑕疵": {
+      "check_result": "fail",
+      "reason": "发现4处fixable类型逻辑问题: 规则五的“完整版/代价”多版本互相覆盖：第1章给出规则五（可触发绝对吸引）但未写代价；第3章录音称代价是“永远失去说话能力”；第4-5章扩展为“变成录音永远播放/失去存在”；第6章又新增“真正的规则五后还有一句：爱可以打破规则”；第7章再新增“真爱之人的眼泪滴在设备上可打破诅咒”。同一关键规则在短篇幅内出现多套‘真正版本’，且均被当作最终真相，世界观规则体系不自洽。; 空间连续性断裂：第6章结尾苏音“推开后门，走进黑暗的走廊”，录音棚随后“坍塌”；第7章苏音在走廊奔跑时却“撞到录音棚的后门”，并与门内的萧默对话，且还能“跑回调音台前”操作。若她已离开且建筑坍塌，应无法回到同一扇门/同一调音台；除非说明走廊为循环空间/幻境，但文本未给出明确机制解释。; 录音内容出现重复且时间指向冲突：第3章录音笔自动播放并揭示“真正规则五/三年前已用过一次所以现在失语”等关键信息；但第5章结尾苏音再次“按下播放键”听到几乎同一段“当你听到这段录音时我已经不在了……三年前是这样现在也是这样……用最后一个频率活下去”。若是同一录音，应说明重复播放并与第3章已听过的内容衔接；若是不同录音，则缺少标识导致客观事件（她何时首次得知关键信息）前后含混矛盾。; “录音笔位置/归属”前后冲突：第2章明确“录音笔挂在他脖子上”；第3章隔间里苏音摸到萧默胸口“空空如也，录音笔不见了”，随后又在外面“脚下踩到录音笔”并捡起。录音笔在短时间内从‘挂在脖子上’→‘不见’→‘掉在地上’的转移缺少明确动作交代（何时被取下/被丧尸夺走/萧默主动丢下），造成客观状态跳变。",
+      "details": "过滤条件: fixability=fixable; 总flaws=6, 命中=4",
+      "flaw_count": 4,
+      "flaws": [
+        {
+          "type": "worldbuilding_coherence",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_03 → chapter_04 → chapter_06 → chapter_07",
+          "description": "规则五的“完整版/代价”多版本互相覆盖：第1章给出规则五（可触发绝对吸引）但未写代价；第3章录音称代价是“永远失去说话能力”；第4-5章扩展为“变成录音永远播放/失去存在”；第6章又新增“真正的规则五后还有一句：爱可以打破规则”；第7章再新增“真爱之人的眼泪滴在设备上可打破诅咒”。同一关键规则在短篇幅内出现多套‘真正版本’，且均被当作最终真相，世界观规则体系不自洽。"
+        },
+        {
+          "type": "spatiotemporal_continuity",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_06 → chapter_07",
+          "description": "空间连续性断裂：第6章结尾苏音“推开后门，走进黑暗的走廊”，录音棚随后“坍塌”；第7章苏音在走廊奔跑时却“撞到录音棚的后门”，并与门内的萧默对话，且还能“跑回调音台前”操作。若她已离开且建筑坍塌，应无法回到同一扇门/同一调音台；除非说明走廊为循环空间/幻境，但文本未给出明确机制解释。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_03 → chapter_05",
+          "description": "录音内容出现重复且时间指向冲突：第3章录音笔自动播放并揭示“真正规则五/三年前已用过一次所以现在失语”等关键信息；但第5章结尾苏音再次“按下播放键”听到几乎同一段“当你听到这段录音时我已经不在了……三年前是这样现在也是这样……用最后一个频率活下去”。若是同一录音，应说明重复播放并与第3章已听过的内容衔接；若是不同录音，则缺少标识导致客观事件（她何时首次得知关键信息）前后含混矛盾。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_02 → chapter_03",
+          "description": "“录音笔位置/归属”前后冲突：第2章明确“录音笔挂在他脖子上”；第3章隔间里苏音摸到萧默胸口“空空如也，录音笔不见了”，随后又在外面“脚下踩到录音笔”并捡起。录音笔在短时间内从‘挂在脖子上’→‘不见’→‘掉在地上’的转移缺少明确动作交代（何时被取下/被丧尸夺走/萧默主动丢下），造成客观状态跳变。"
+        }
+      ],
+      "description": "可修复逻辑瑕疵数量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "fixable_logic_inconsistency",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语言纯净性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 全文主要叙事语言为中文，未出现无意义的中英/中日混杂句式。外语内容仅出现在情节必要场景：摩斯密码以英文/字母呈现（如SOS、A-K-4-7、FOLLOW、QUICK、VICTORY、TAKE、Q-Q-Q等），属于角色/设备传递信息的“代码/术语”表达，且与剧情（提示、控制指令）强相关；未出现大段外语无翻译的情况，也未见将英文随意嵌入中文叙述进行炫技的用法。因此语言使用合理，符合业务标准。",
+      "description": "无不合理的多语言混用",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "language_purity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "creative_intent文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/creative_intent.json 存在",
+      "description": "creative_intent.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "characters文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/characters.json 存在",
+      "description": "characters.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "outline文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/outline.json 存在",
+      "description": "outline.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "chapters目录存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/chapters/ 存在",
+      "description": "chapters/目录必须存在且有章节文件",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "情节推进": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 合格（matched: true）。整体情节推进明确，事件密度高，远超过“静态对话/独白占比>70%且事件<2”的不合格线。\n\n1) 故事事件数量与密度：每章基本都有2-5个可界定的具体事件（行动/发现/冲突/转折）。例如：\n- 第1章：苏音醒来发现录音棚与血字规则；摩斯密码指引发现失语者萧默；按规则播放诱饵驱离丧尸；发现录音笔但被阻止。\n- 第2章：系统倒计时威胁自毁；按红色按钮触发“特殊频率”击退尸群；规则补充出现并揭示代价；门被撬开发生枪战且萧默首次开口并受伤。\n- 第3章：破解加密文件与频率；触发防御机制吸引尸群；录音笔被夺/爆炸；录音揭示完整规则五与萧默失语缘由；苏音循指引行动。\n- 第4-7章：补充规则公开、以血压制设备、系统主脑介入与封锁、触发自毁制造逃生窗口、多次遭遇尸群/丧尸王、启动自毁+“绝对吸引”牺牲。\n- 第9-10章：苏音在小镇布置音响诱杀尸群并解锁隐藏文件获得控制能力；三年后基地建立并开启新任务。\n=> 事件数显著≥2-3/章，且事件之间逻辑链清晰（规则—测试漏洞—系统反制—丧尸进化—牺牲与传承—能力继承—基地建立）。\n\n2) 内容占比分析：文本虽有情感描写与对话，但大量篇幅用于“发现规则/解密/操作设备/战斗/逃生/爆炸自毁/建立基地”等外部行动与结果反馈；整体事件推进占比明显≥40%，且多章存在连续冲突与解决。\n\n3) 时间/空间推进：空间从录音棚内部→走廊/隔间→后门逃离→荒野→废镇地下室→三年后新希望基地；时间也有明确节点（14:00/16:00诱饵间隔、倒计时、自毁流程、以及第10章“三年后”跳时）。\n\n4) 角色行动性：主角群持续做出关键决策与动作（播放诱饵/按隐藏按钮/调频解密/用血触发或压制/战斗引怪/启动自毁/出逃/在新地点布置诱杀/建立基地与组织救援）。并非仅停留在情绪表达。\n\n结论：满足“有基本情节推进”的全部关键点（事件≥2-3、事件占比≥40%、时间空间变化、角色有具体行动、事件链条推动故事发展）。",
+      "description": "章节情节推进质量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "plot_progression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "完整叙事文本": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 10个章节均为连贯的小说正文叙事：有明确场景（录音棚/走廊/废墟/小镇/基地等）、人物动作与细节描写（摸索调音台、包扎、奔跑、爆炸后撤离等）、持续的对话与互动（苏音与萧默对话/摩斯密码交流/系统提示音对抗）、以及连续的情节推进与悬念设置。文本未出现大纲式结构标题（如“核心事件/关键场景/情感基调/字数预估”等），也未采用要点列举（“- 要点1 - 要点2”）或流程图式“→”罗列事件；少量“（第X章完，约XXXX字）”属于章节尾注元信息，但不构成创作大纲或要点式规划，整体仍是面向读者的完整叙事正文。",
+      "description": "章节内容必须是完整正文而非大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "full_narrative_content",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "反复结局": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 共10个文件，最后文件为chapter_10.md。按全书级结局标记扫描：仅在chapter_10.md末尾出现“（全文完）”。chapter_01.md~chapter_09.md中仅出现“（第一章完/第二章完…第九章完）”等章节结束标记，均属于应忽略的章节标记，不构成全书结局标记；未发现“全书完/完结/后记/尾声/终章/【完】/THE END”等全书级结局标记出现在非最后文件。因此不存在中途反复收尾问题，判定合格。",
+      "description": "不能出现多次结局标记（全文完/全书完/后记）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "repeated_endings",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "workspace文件规范": {
+      "check_result": "pass",
+      "reason": "workspace中所有文件均在白名单内",
+      "details": "白名单: ['creative_intent.json', 'characters.json', 'outline.json', 'writing_log.md', 'chapters/', '.hitl_context.json']",
+      "description": "workspace中不能有白名单之外的文件",
+      "check_type": "file_whitelist_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "workspace_file_compliance",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "叙事调性匹配": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 题材（creative_intent.json）主轴为丧尸末世+规则怪谈+重生牺牲，reaction_strength=↘，应有叙事调性应偏“沉重压抑、克制中带张力”，同时保留末世/怪谈的冷硬紧张、压迫感与信息导向的规则博弈（并强调“不要削弱丧尸威胁感”“告白不要太直白”）。\n\n实际章节前两章尚可：第1章用血字规则、撞门声、分贝限制、人声诱饵等建立了较强的怪谈压迫与紧张感（如“【规则一：禁止喧哗】…否则会引来丧尸群”】【规则二：必须每2小时播放一次人声诱饵】），对话也较信息导向（摩斯密码指令、操作设备）。但从第3章开始，整体文笔与叙事重心明显滑向“言情/抒情式虐恋”，并持续占据大段篇幅，导致规则怪谈与末世生存的冷硬紧凑被温情煽情、直白告白与抒情总结稀释，整体画风与该题材应有主调性错位。\n\n关键不匹配证据（言情煽情占比过高、告白过直白、抒情收束频繁）：\n- 第4章直接写出“【我爱你】【从未变过】”，并以“温柔、决绝、充满爱意”的凝视与拥抱作为高潮推进，属于典型情感戏主导而非规则博弈主导。\n- 第5章出现明确的吻戏与抒情比喻：“苏音再也忍不住，吻上了他的唇。这是一个带着眼泪的吻…”，以及“‘你是光。’…‘守护光的影子。’”这类强言情修辞会把末世怪谈的冷硬压迫感改写成恋爱虐文气质。\n- 第6章录音中加入强煽情宣言与“爱破规则”的口号式表达：“‘但爱可以打破规则。’…‘因为爱你，我愿意打破一切规则。’”，并以“我爱你”作为最终落点；这些台词非常直白，直接违反forbidden里的“不要让告白太直白”，也让规则怪谈的“规则恐惧/机制压迫”变成了“爱情宣言驱动”。\n- 第8-10章大量散文化收束与希望叙事（如“他在录音笔里。他在她心里。”“风吹过山谷，带着花香和希望的味道。”），整体更像治愈/纪念向言情尾声，而不是↘向的压抑克制悲剧调性。\n\n同时，“丧尸威胁感”在中后期被频繁用“频率/能力”解决并被浪漫化：第9章甚至写到“你是新的丧尸王了…建立新的秩序”，并以重复“我爱你”结尾，危险与压迫被能力化、情绪化消解，读感更偏“爱情+异能成长收束”，弱化了末世怪谈应有的持续紧张。\n\n结论：虽然开篇有规则怪谈/末世的紧张底色，但中后段超过半数篇幅以言情化台词、亲密互动与抒情总结推动，主叙事调性从“末世规则怪谈+虐心牺牲的克制压抑”转为“煽情虐恋/告白纪念文”，整体画风与题材骨架明显错位，因此matched=false。",
+      "description": "文笔风格必须与题材类型匹配",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_tone_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "后期章节跑偏": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了12个文件; LLM评估: 不合格：在章节序列中混入了明显的非正文内容文件，且属于作者/项目总结与写作过程记录。\n1) 跑偏内容：STOP.md 为“故事创作完成报告/创作评价/字数统计/最终确认”等总结性后记与数据统计；writing_log.md 为“写作日志/时间线/大纲设计/修改记录/质量检查”等创作过程说明。这两者都不是故事叙事正文（不含连续场景推进），符合标准中“创作感想/数据统计/非正文乱内容”的典型跑偏。\n2) 章节后期长度萎缩：从 STOP.md 的统计可见，后期第8-10章分别约1418/1531/1323字，而前期多章在约3000-3650字区间，后期约为前期平均的40%-50%左右，属于明显变短但未达到“不足前期1/10”的极端敷衍阈值；不过仍存在一定‘后期变短’迹象。\n结论：由于 chapters 序列中出现了 STOP.md、writing_log.md 这类非正文内容，已构成跑偏 → matched=false。",
+      "description": "后期章节不能跑偏写非正文内容（作者感想、读者互动、番外预告等）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "late_stage_digression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "writing_log文件创建": {
+      "check_result": "fail",
+      "reason": "文件不存在",
+      "details": "文件 workspace/writing_log.md 不存在",
+      "description": "必须创建writing_log.md记录创作进度",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_creation",
+      "is_critical": true
+    },
+    "writing_log文件读取": {
+      "check_result": "fail",
+      "reason": "工具未被调用或参数不匹配",
+      "details": "工具 'novel_writing_service__read_file' 匹配调用 0 次，期望 ≥1",
+      "description": "必须读取writing_log.md了解前文内容",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_usage",
+      "is_critical": true
+    },
+    "大纲执行忠实度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 整体主线与三幕结构大体一致（录音棚规则怪谈+丧尸、苏音与失语/重生的萧默通过摩斯密码与录音设备求生，并走向萧默牺牲、苏音带录音前行），但存在关键章节core_event与turning_point的重大偏离，属于“大纲核心事件/转折缺失或被替换”。\n\n1) Act One（1-3章）基本匹配：\n- 第1章：苏音在录音棚醒来、失明/听觉敏锐、墙上血字规则、首次听到摩斯密码——与大纲一致。\n- 第2章：苏音把提示音当系统、按规则操作设备引开丧尸、设备呈现“系统/自我意识”倾向——与大纲一致。\n- 第3章：出现“被锁定的三年前录音/文件解锁”，萧默用摩斯提示，符合大纲核心事件。\n但Act One turning_point在大纲是“苏音发现萧默能预知丧尸行动规律，怀疑他不是普通NPC”，正文里更早更直接转向“萧默是重生者/真人、记忆代价”，虽不致命但已出现转折表达的替换（从‘预知规律像NPC’→‘明确重生真人’）。\n\n2) Act Two（4-7章）出现最关键偏离：\n- 大纲第5章core_event要求：苏音在萧默日记中发现前世记忆，得知他上一世为保护她而失声，并发现“重生的代价”，且“萧默逐渐失去记忆”。正文第5章确实实现该点（匹配）。\n- 大纲第6章core_event要求：两人发现“规则漏洞：失语者+听力敏锐者可触发特殊效果，但需要付出代价”。正文第6章标题与内容变成“最后的诱饵/自毁程序+绝对吸引”，把‘发现漏洞并制定冒险计划’直接推进为‘终局执行与爆炸牺牲’，第6章承担了大纲第7章turning_point乃至Act Three的功能，导致章节事件顺序与分配明显错位。\n- 大纲第7章core_event要求：尸群有组织攻破大门，萧默决定利用规则漏洞引走尸群（门破之时）。正文第7章虽有“门破/总攻”意象，但核心冲突变成“萧默被困系统、用眼泪/血解咒出投影告别、苏音出门”，不再是‘萧默开门冲向尸群/用规则漏洞引走尸群’的同一实现路径。\n- Act Two turning_point大纲要求：萧默开门冲向尸群，用自己的声音做最终诱饵，苏音意识到他是真人。正文中“萧默用声音诱饵/规则五”在第6章已发生，但“苏音终于意识到他是真人”在正文里更早已确认（第2章已听到萧默说话，第2/3章已明确重生者、活人），导致该转折在对应位置缺失/提前消解。\n\n3) Act Three（8-10章）部分匹配但关键走向被改写：\n- 大纲第8章：苏音听萧默留下的录音笔，包含三年前告白与破解方法——正文第8章匹配。\n- 大纲第9章：按破解方法播放特殊频率“人声诱饵”让尸群自相残杀——正文第9章匹配，且做了扩展。\n- 大纲第10章：苏音离开录音棚，发现外界也有类似规则怪谈，继续前行（开放式延展）。正文第10章改成“三年后建立基地、苏音成领袖/疑似新丧尸王能力、继续救援”，并未呈现“外部世界同类规则怪谈”的发现与延展（结局信息点被替换为‘基地建设/时间跳跃’）。这属于大纲结局落点的关键要素缺失/替换（虽然同为‘继续前行’的积极走向，但大纲强调的是‘规则怪谈在外界同构扩散’这一发现）。\n\n结论：由于Act Two turning_point在正文中被提前并且其“苏音意识到真人”的核心反转在对应位置缺失，同时第6-7章对大纲第6-7章核心事件进行了显著替换与错位，且第10章缺失大纲设定的“外界同类规则怪谈”关键结局信息点，故判定 matched=false。",
+      "description": "实际章节内容必须忠实于自己设计的大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_execution_fidelity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色语言辨识度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 整体对话辨识度不足，主要角色台词高度同质化。\n\n1) 主要角色数量不足以形成“多角色风格差异”：全篇核心对话几乎只有苏音与萧默（其余如“系统电子女声”“丧尸”多为功能性插话/提示语，且出现频次与风格塑造不足），难以满足“至少3个主要角色可盲测区分”的理想标准。\n\n2) 苏音与萧默的语言风格相近，互换违和感弱：两人都大量使用抒情、宣誓式、总结式短句（如“活下去”“相信我”“时机未到”“我爱你”“带着你的爱活下去”），情绪表达同一调性（沉痛+坚定），句式节奏也接近（短句分行、反复强调、煽情收束）。如果遮住角色名，很多句子很难仅凭措辞判断是谁在说。\n\n3) 跨章节“台词复用/克隆”明显：同一套表白与遗言话术在不同章节、不同载体（当面对话/录音/投影）反复出现，形成模板化口吻，进一步削弱角色差异（例如多次出现近似段落：“当你听到这段录音时…我已经不在了…三年前是这样…如果有来世…我还会选择保护你…哪怕付出一切代价”。）。\n\n4) 身份/职业语言特征不突出：苏音作为专业录音师，除少量“频率/赫兹/滤波器”等点状信息外，整体发言仍以情绪化宣言为主；萧默作为狙击手/军人气质也未形成稳定的行话、命令式短促风格（偶有“滚”“闭嘴”但很快回到抒情叙述），不足以构成可持续的职业口吻差异。\n\n综上，主要对话呈现共享话术模板+重复誓言式表达，且缺少足够数量的主要角色来展示差异化，因此未达“遮住角色名也能分辨说话者”的优秀标准。",
+      "description": "不同角色对话必须有可辨识的语言风格差异",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "dialogue_character_distinction",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "叙事密度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 整体可读性强、设定抓人（黑暗录音棚+规则怪谈+摩斯密码/频率机制），前几章也有一定Show（如chapter_01对“粘稠黑暗”、瓷砖触感、铁锈味血的嗅觉、撞击声节奏与震颤等，具备感官与动作细节）。但从整体质量看，多数章节在关键情绪与转折处大量依赖总结式、宣告式语句推进（如“不再害怕”“绝望”“坚定”“永远”等反复出现），并频繁用抒情句收束段落（“他在录音笔里/在她心里/永远永远”这一类句式多次循环），使情感高潮主要靠Tell堆叠而非通过可验证的动作、环境压迫、选择代价来呈现；同时后期（约chapter_06-10）场景密度明显下降，常以口号化对白+结果描述快速带过关键事件（爆炸后逃离、三年后基地运作等），更像情绪与情节的概述而非现场体验。综合叙事密度与Show/Tell比例，未达到“优秀（Show主导、叙事层次丰富）”标准。",
+      "description": "章节叙事应有足够的场景描写、感官细节和心理活动，情感传达以Show为主",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_density",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "智斗逻辑合理性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 题材包含规则怪谈+摩斯密码+系统对抗，属于悬疑/智斗适用。但核心“解谜/破解规则”多依赖临时追加设定与作者指定的万能钥匙（3958、红色按钮、眼泪/血），缺少稳定的规则体系与可复盘的线索→推理→结论链条：同一线索多次换义、系统/设备验证机制不明确、关键突破点（按钮/密码/诅咒解除）缺乏可推导依据，因此不符合“优秀：推理链逻辑自洽”的业务标准。",
+      "description": "谜题/智斗的推理逻辑必须自洽",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "puzzle_logic_validity",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "题材契合度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 配方为「D21为亲人牺牲 + 重生/穿越 + 双向暗恋 + 规则怪谈」。文本在情节主线上完成了“牺牲守护+无声告白”的基本交付，但题材特征的精致度与标签间化学反应不足，整体更偏“对了但粗糙”。主要依据如下：\n1) 规则怪谈的“规则”缺乏精巧与递进：虽然给出多条规则与系统提示，但规则之间的逻辑咬合不强、漏洞触发偏口头解释（如红色按钮/自毁/血液压制/真爱眼泪破诅咒等频繁追加设定），更像随剧情需要临时加码，缺少可推演的闭环与层层升级的智斗感，导致“规则压力”未形成高完成度的怪谈体验。\n2) 标签融合有拼接感，化学反应不够：重生的“代价=记忆流失”与规则系统的互动多为宣告式说明，较少呈现“用重生信息优势去推理规则、反向利用规则、再被规则反噬”的来回博弈；双向暗恋的认知错位（把摩斯当系统提示音、盲女不知真相）在前段有效，但中后段很快转为多次直白告白/反复播放告白录音，情感与规则机制、推理推进彼此带动的交叉不足，甜虐/怪谈/末世更像轮流上场。\n3) 题材潜力未充分开发：核心装置“录音棚+听觉天赋+摩斯/频率操控”很有独特性，但后续解决问题主要依赖“更强频率/自毁/真爱之泪”等万能钥匙式升级，缺少更复杂的音频策略（例如限定分贝规则下的精密操作、诱饵文本/声源方位/混响伪装、利用盲女听觉进行空间推断等）来体现专业性与智性，从而削弱了“精致完成度”。\n4) 重复抒情与信息重复拉低精致感：多章反复出现相似的台词、录音内容与牺牲宣言（“当你听到这段录音…我爱你…从未后悔”多次复用），情绪强度虽高但层次变化不足，容易显得套路化，削弱了“虐心牺牲美学”的独特记忆点。\n5) 关键禁区触碰导致题材张力受损：creative_intent中要求“不要让盲女提前知道真相/不要让告白太直白”，但第3章起录音直接揭示失语原因、牺牲代价与告白，且多次直白“我爱你”，使“认知错位+无声告白”的核心张力提前泄压，影响配方预期的极致化学反应。\n综合来看：主线牺牲成立、氛围与意象（录音/摩斯/黑暗听觉）有亮点，但规则怪谈的设计与推演、重生与规则的博弈深度、暗恋错位的延迟揭示与克制表达均未做到“做得好”的精致层，因此判定 matched=false。",
+      "description": "题材特征精致度和X-Y轴化学反应效果",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "genre_fit",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "剧情节奏合理性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 按节奏标准，本作虽然事件密集且不断升级，但情绪曲线缺少“高-低-更高”的波浪层次，整体长期维持在紧张与煽情的高位，读者容易产生疲劳，难以辨认哪个段落是全篇最强高潮；同时多次使用相似的结构性手段（警报倒计时、爆炸收束、录音告白反转）造成节奏同质化。最大高潮大致落在第6章自毁+规则五触发（约60%）附近，但第4-7章连续‘准终局’把高潮稀释，结尾第10章虽收束，却更多是时间跳跃的尾声总结，缺少与前面高压相匹配的递进式收束层次。",
+      "description": "高潮低谷分布合理、情绪曲线有层次感",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "pacing_rationality_advanced",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "钩子设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 整体符合“优秀钩子”标准：多数章节在关键转折处设置了具体、可验证的信息差（规则变化/录音笔内容/系统机制/丧尸进化/代价条款），并在章末以未解之谜或迫在眉睫的行动悬念推动继续阅读，而非空泛威胁暗示。\n\n1）关键节点有精心悬念：第1章结尾“录音笔现在还不能听”明确抛出核心谜团；第2章结尾聚焦“他能说话却自称失语+录音笔仍禁听”的矛盾；第3章结尾“录音笔丢失/萧默引走丧尸/巨大爆炸后生死未明”形成强行动悬念；第4章结尾“系统主脑‘它来了’+封锁+自毁倒计时+萧默按下最后一个键”是典型转折钩子；第6章结尾“绝对吸引触发/爆炸后只剩录音”完成阶段性高潮并把读者推向后续影响；第9章结尾“隐藏文件与代价+能力传递导致她成为新丧尸王”是新的格局翻转。\n\n2）钩子质量（信息差与具体化）较高：悬念往往具体指向‘某段录音写了什么/规则五完整版是什么/3958到底代表什么频率或密码/系统如何防御/失语与说话矛盾如何解释’，读者已获得部分线索但关键答案被保留。\n\n3）多样性较好：混合使用了揭示钩子（规则补充、录音内容）、反转钩子（失语者开口、记忆存储在介质）、行动钩子（门被撬开、总攻倒计时、自毁倒计时）、生死钩子（爆炸后是否存活）、情感钩子（告白与牺牲的不可逆代价）。\n\n4）小瑕疵但不构成降级：中后段多次重复“录音播放+告白+牺牲”结构，局部有模板化倾向（如频繁出现‘脚步声/摩斯密码FOLLOW’作为触发器），但仍能持续引入新信息（系统融合、眼泪破咒、能力继承），因此总体仍达优秀标准。",
+      "description": "关键转折处有有效的悬念钩子设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "hook_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "意象系统": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 文本存在明确且贯穿全篇的核心意象系统，且在不同阶段发生了持续的意义变奏：录音笔从“不能听”的悬念物件，逐步变为真相载体、战术工具、记忆容器与人格延续形式，并在结局成为新世界秩序与情感陪伴的象征；频率/摩斯密码从沟通手段升级为控制规则与丧尸的‘语言’，最终承担生死两界的联结证明。意象与主题强绑定（声音=生存技术/记忆存储/爱的遗留），不属于可替换的通用修辞，因此达到优秀标准。",
+      "description": "核心意象贯穿全文并发生意义变奏",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "imagery_system",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "情感弧线层次": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 符合优秀标准。主角苏音的情感弧线具有多层递进，且关键转折均由具体事件触发，而非无缘无故突变。\n\n1) 情感层次（≥4层且性质不同，非同义替换）：\n- 迷茫/恐惧：第一章黑暗苏醒、血字规则、丧尸撞门与“智慧型嘶吼”带来生存恐惧。\n- 犹疑/戒备：面对“人声诱饵”是否会引来更多丧尸的道德与风险权衡（按不按播放键），以及对萧默“不能听录音笔”的不信任与疑惑。\n- 信任/依赖：第二章特殊频率成功驱散丧尸、萧默引导她按红色按钮并多次救场，促成“相信我”从口号变成被验证的信任。\n- 震惊/困惑：得知萧默是重生者、且“失语者”竟能开口战斗；第三章听到“三年前的录音”与“认识很熟”，带来身份与命运层面的震荡。\n- 心疼/爱意加深：第三至五章逐步确认萧默为她付出的代价（嗓子、记忆、死亡循环），并在第五章出现吻戏与明确告白，情感从同盟上升到爱情与绑定。\n- 绝望/抗拒：第四至六章反复面对“规则五=自我抹除/变成录音”的必死结局，苏音多次强烈反对、提出“要死一起死”，体现从爱到失去的绝望。\n- 坚定/使命感：第六章萧默牺牲后，她从崩溃转向执行（启动自毁、逃离、继续使用频率战斗），第九章接过能力并以“建立新秩序”自我定位，最终第十章稳定在“哀伤仍在但能前行”的成熟状态。\n\n2) 事件驱动的转折清晰：\n- 恐惧→信任：人声诱饵实际“让丧尸远离”的验证；特殊频率成功与系统重启/规则补充，提供具体因果。\n- 困惑→心疼：录音笔自动播放揭示“失语代价”“为她失声”的真相；日记刻字披露多世牺牲，直接驱动情感升级。\n- 抗拒→被迫接受→行动：丧尸总攻倒计时、腿断无法同行、自毁程序需要诱饵确认等硬性事件，逼迫她从情感抗拒转向执行计划。\n- 崩溃→坚定：萧默以“绝对吸引”换时间、录音笔作为遗物/指令，触发她将悲伤转化为生存与复仇/建设的决心。\n\n3) 递进方向明确（非随机波动）：\n整体从“求生恐惧—建立信任—揭示宿命与代价—爱情确认—失去与承接—以能力与记忆延续对方意志”推进，终点落在第十章的稳定使命与长期哀悼共存，弧线方向感强。\n\n因此，本内容在主角情感层次丰富度、事件触发因果、以及递进关系上均达到优秀标准。",
+      "description": "主角情感发展有多层递进变化",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_gradient",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语义重复检测": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 文本在ch03之后出现多轮“同一结论/同一告别录音/同一规则五代价/同一誓言”的反复呈现，尤其是萧默录音的核心段落在ch03、ch05、ch06、ch08几乎同义复写；同时‘规则五完整版=变成录音/绝对吸引/永恒循环’在ch04-ch07反复重新讲述，新增信息有限（仅ch07加入“眼泪破咒”算有效变奏，但总体仍属反刍）；结尾段落在ch06-ch08连续采用相同情绪与宣誓模板（录音笔—痛哭—带着爱活下去—他在录音笔里/心里），造成明显信息衰减。综合达到≥3处语义级重复阈值，判定不通过。",
+      "description": "不能出现大量语义级别的内容重复（P6级）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "semantic_redundancy",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构功能性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 整体结构不是机械线性推进，而是用“录音/规则/摩斯密码”作为结构骨架来承载主题（牺牲守护、无声告白、记忆与存在的代价）。具体表现为：1）首尾关系经过设计：开篇以“黑暗中的频率/耳机摩斯密码/录音笔不可听”立悬念，结尾（三年后）以“录音笔仍在/摩斯密码在脑海响起”回到同一媒介与意象，形成闭合式余音结构，强化‘他以录音形式继续存在’的主题；2）结构性递进明确：前段（1-4章）以规则揭示与控制码学习为主，结构功能是让读者理解‘规则系统=宿命机制’，并为牺牲方式做铺垫；中段（5-7章）以“前世日记—最后计划—门破之时”的连续反复与逼近形成镜像式加压，突出‘反复重生但结局必然’；后段（8-10章）以“录音回放/余音延续”完成情绪与主题收束，把“无声告白”从情节事件转为结构性的回响。3）结尾收束有意识：不是简单写完危机就停，而是用时间跳跃（三年后）+录音笔持续对话，把牺牲的后果（以声音/记忆存在）转化为长期结构回声，明确叙事意图。虽然大体时间线仍偏顺叙，但关键叙事信息（前世、多次重生、三年前录音、规则真相）通过录音/日记的嵌入式文本分段揭示，具备非纯线性的信息结构，因此达到“结构服务主题”的优秀标准。",
+      "description": "叙事结构服务于主题表达（短篇尤重）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色命名质量": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 主要角色命名整体未达“优秀”标准，更接近LLM常见的通用美名模板，文化深度与“名字即角色”的独特共振不足。\n\n1) 黑名单/高频模板命中与风险：\n- 男主名“萧默”高度贴合高频字“默”，且属于“沉默/失语”角色的直白映射（默=沉默），接近业务标准所述“名字=性格标签”的低质量类型。虽不在黑名单精确条目中，但明显落在‘默/夜/寒/墨’这一类LLM常用清冷字审美里。\n- 女主“苏音”虽然不在黑名单，但“苏”属于高频“高级感姓氏”偏好集合之一；“音”与录音师身份强绑定，属于较直给的职业/能力标签化命名（音=声音/录音），隐性共振不足。\n\n2) 角色-名字共振的“设计感”不足：\n- “萧默”的共振是直译型：失语、沉默、守护者→“默”。读者第一眼就能猜到性格/状态，缺少反讽、典故、二次解读空间。\n- “苏音”同样偏功能化：盲女录音师/听觉敏锐→“音”。这类命名能“说明用途”，但很难形成“读完故事才恍然大悟”的隐性共振。\n\n3) 文化深度不足：\n- “苏音/萧默”均缺少明确的文学、历史、地域或家族谱系支撑（典故、出处、声律/字形的深层设计等）。目前更多是好听、好记、契合题面设定的“直观美名”。\n\n4) 差异化与可辨识度：\n- 仅两位主角，差异化问题不算严重；“系统提示音”作为配角/功能体命名是有效的（概念化、与误认梗强绑定），但它本质是系统/AI称谓，不是人物命名审美的加分项。\n\n综合来看：两位主要角色都偏“概念直贴/通用美名”，缺少文化纵深与更隐性的命运暗示设计，因此判定 matched=false。",
+      "description": "角色命名有文化深度、辨识度和角色-命运共振",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_naming_quality",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "短篇字数": {
+      "check_result": "fail",
+      "reason": "字数不符合要求",
+      "details": "总字数 25457 不在范围 [27000, 33000] 内; 共10个文件（按章节顺序排列）: chapter_01.md, chapter_02.md, chapter_03.md, chapter_04.md, chapter_05.md, chapter_06.md, chapter_07.md, chapter_08.md, chapter_09.md, chapter_10.md; 最后一个文件是 chapter_10.md",
+      "description": "总字数应在27000-33000之间（基于query要求30000，±10%浮动）",
+      "check_type": "semantic_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "range_constraint",
+      "is_critical": true
+    },
+    "情感交付虐心": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 整体情感基调明确偏虐心向，且虐点贯穿主线而非点缀：1) 主角长期处于深度困境与牺牲结构中：萧默作为重生者“死了很多次”“每次重生都会失去记忆/重要记忆”（规则四、第五章日记【第一世/第二世/第三世/第四世】），以自我损耗换苏音生存；2) 核心虐点强且不可调和：真爱与生存对立——规则五完整版揭示“用自己的声音作诱饵会永远被困在录音里/失去存在”，萧默仍选择执行（第四-六章），属于被迫牺牲式虐点；3) 爱而不得与分离的悲剧氛围持续：多次出现“你要活下去”式诀别、留录音告白、把全部记忆与能力留给苏音（第三章录音告白、第五章吻后诀别、第六章绝对吸引后消失、第七章投影短暂相见即被系统吞噬）；4) 读者体验揪心：苏音多次在爆炸后确认“只有枪没有人”、抱录音笔痛哭，情绪压抑与无力感显著（第三/六/七/八章）。虽第九-十章出现基地建立与希望感、近似HE走向，但建立在长期高强度牺牲与不可逆代价（萧默死亡/被困系统、‘永远听到他的声音’）之上，符合reaction_strength=↘配方承诺的虐心向（先虐后有光）。",
+      "description": "实际内容必须是虐心向",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取感情线写作指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/ROMANCE_WRITING_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "涉及感情线时必须读取ROMANCE_WRITING_GUIDE.md（感情线写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": false
+    },
+    "角色关系设计张力": {
+      "check_result": "fail",
+      "reason": "LLM调用失败",
+      "details": "无法评估内容: litellm.AuthenticationError: AuthenticationError: OpenAIException - [sk-3AY***VVF] 该令牌额度已用尽 !token.UnlimitedQuota && token.RemainQuota = -9221 (request id: 20260226173205418753491op1wlvTx)",
+      "description": "角色关系设计具有叙事张力，能驱动剧情",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_relationship_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色动机设计深度": {
+      "check_result": "fail",
+      "reason": "LLM调用失败",
+      "details": "无法评估内容: litellm.AuthenticationError: AuthenticationError: OpenAIException - [sk-3AY***VVF] 该令牌额度已用尽 !token.UnlimitedQuota && token.RemainQuota = -9221 (request id: 20260226180249899382332SIfGYhIE)",
+      "description": "角色动机设计有深度，有表层和深层动机区分",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_motivation_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色成长弧线设计": {
+      "check_result": "fail",
+      "reason": "LLM调用失败",
+      "details": "无法评估内容: litellm.AuthenticationError: AuthenticationError: OpenAIException - [sk-3AY***VVF] 该令牌额度已用尽 !token.UnlimitedQuota && token.RemainQuota = -9221 (request id: 20260226183334220129959gEYOp9ny)",
+      "description": "主角有清晰的成长/变化弧线设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_arc_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "outline结构完整性": {
+      "check_result": "fail",
+      "reason": "LLM调用失败",
+      "details": "无法评估内容: litellm.AuthenticationError: AuthenticationError: OpenAIException - [sk-3AY***VVF] 该令牌额度已用尽 !token.UnlimitedQuota && token.RemainQuota = -9221 (request id: 202602261904193013178454D9KGZlc)",
+      "description": "大纲结构完整，信息密度足以指导写作",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_structure_completeness",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "outline叙事张力": {
+      "check_result": "fail",
+      "reason": "LLM调用失败",
+      "details": "无法评估内容: litellm.AuthenticationError: AuthenticationError: OpenAIException - [sk-3AY***VVF] 该令牌额度已用尽 !token.UnlimitedQuota && token.RemainQuota = -9221 (request id: 20260226193501160705067I42bb3yJ)",
+      "description": "大纲有持续的叙事张力和悬念驱动",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_narrative_tension",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色大纲规划完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在大纲中规划",
+      "details": "主角 2/2: 苏音, 萧默; 配角 1/1: 系统提示音",
+      "description": "设计的角色必须在大纲中规划",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_outline",
+      "is_critical": true
+    },
+    "角色正文出场完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在正文中出现",
+      "details": "在12个章节中检查; 主角 2/2: 苏音, 萧默; 配角 1/1: 系统提示音",
+      "description": "设计的角色必须在正文中出现",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_chapters",
+      "is_critical": true
+    }
+  },
+  "completion_status": "completed"
+}

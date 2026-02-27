@@ -86,7 +86,9 @@ DEFAULT_CONFIG = {
     "check_result_revision": None,
 
     # 每个检查项的"人话说明"
-    "check_item_descriptions": {},
+    "check_item_descriptions": {
+        "主要角色一致性": "正文中主角名字/身份/核心设定前后不矛盾",
+    },
 
     # subcategory 的"人话说明"
     "subcategory_descriptions": {},
@@ -699,7 +701,7 @@ def _gen_per_check_name_tables(lines, models, model_data, config):
                         "dimension_id": check_info.get("dimension_id", ""),
                         "subcategory_id": check_info.get("subcategory_id", ""),
                         "quality_tier": check_info.get("quality_tier", ""),
-                        "description": check_info.get("description", ""),
+                        "description": config.get("check_item_descriptions", {}).get(check_name) or check_info.get("description", ""),
                     }
 
                 result = check_info.get("check_result", "")
@@ -799,15 +801,13 @@ BASIC_SUBGROUPS = {
     "outline结构完整性": "规划质量",
     "角色关系设计张力": "规划质量",
     "角色动机设计深度": "规划质量",
-    # 规划-执行一致性
-    "大纲执行忠实度": "规划-执行一致性",
-    "人物设计遵循度": "规划-执行一致性",
-    "反套路检查": "规划-执行一致性",
-    "女主独立性检查": "规划-执行一致性",
-    # 章节正文一致性
-    "主要角色一致性": "章节正文一致性",
-    "主题一致性": "章节正文一致性",
-    "人物设定一致性": "章节正文一致性",
+    # 规划-执行-维护一致性（执行）
+    "大纲执行忠实度": "规划-执行-维护一致性",
+    "人物设计遵循度": "规划-执行-维护一致性",
+    # 规划-执行-维护一致性（维护）
+    "主要角色一致性": "规划-执行-维护一致性",
+    "主题一致性": "规划-执行-维护一致性",
+    "人物设定一致性": "规划-执行-维护一致性",
     # 情感交付
     "伏笔回收检查": "情感交付",
     "情感交付冒险": "情感交付",
@@ -818,6 +818,8 @@ BASIC_SUBGROUPS = {
     "情感交付甜爽": "情感交付",
     "情感交付虐心": "情感交付",
     "非恋爱主线检查": "情感交付",
+    "反套路检查": "情感交付",
+    "女主独立性检查": "情感交付",
     # 后期写不动了（崩盘）
     "后期章节跑偏": "写不动了/后期崩盘",
     "反复结局": "写不动了/后期崩盘",
@@ -830,13 +832,14 @@ BASIC_SUBGROUPS = {
     "智斗逻辑合理性": "逻辑硬伤",
     # 基础文笔
     "叙事调性匹配": "基础文笔",
-    "情节推进": "基础文笔",
     "语言纯净性": "基础文笔",
+    # 故事精彩度
+    "情节推进": "故事精彩度",
 }
 
 BASIC_SUBGROUP_ORDER = [
-    "规划质量", "规划-执行一致性", "章节正文一致性",
-    "情感交付", "写不动了/后期崩盘", "逻辑硬伤", "基础文笔",
+    "规划质量", "规划-执行-维护一致性",
+    "情感交付", "写不动了/后期崩盘", "逻辑硬伤", "故事精彩度", "基础文笔",
 ]
 
 ADV_SUBGROUPS = {
@@ -854,13 +857,24 @@ ADV_SUBGROUPS = {
     # 文学性
     "叙事密度": "文学性",
     "意象系统": "文学性",
-    "题材契合度": "文学性",
+    # 故事精彩度
+    "题材契合度": "故事精彩度",
     # 逻辑严密性
     "可修复逻辑瑕疵": "逻辑严密性",
 }
 
 ADV_SUBGROUP_ORDER = [
-    "规划质量（高阶）", "节奏与结构", "角色塑造", "文学性", "逻辑严密性",
+    "规划质量（高阶）", "节奏与结构", "角色塑造", "故事精彩度", "文学性", "逻辑严密性",
+]
+
+# 同一分堆内检查项的展示顺序（规划→执行→维护）
+CHECK_NAME_ORDER = [
+    # 规划-执行-维护一致性：规划
+    "outline结构完整性", "角色关系设计张力", "角色动机设计深度",
+    # 规划-执行-维护一致性：执行
+    "大纲执行忠实度", "人物设计遵循度",
+    # 规划-执行-维护一致性：维护
+    "主要角色一致性", "主题一致性", "人物设定一致性",
 ]
 
 
@@ -891,14 +905,15 @@ def _append_grouped_check_tables(lines, items, models, check_descs,
 
 def _append_check_name_table(lines, items, models, check_descs=None):
     """输出按 check_name 展开的通过率表格"""
-    # 按 check_name 排序
-    items.sort(key=lambda x: x[0])
+    # 按自定义顺序排序，未指定的按 check_name 字母序排在后面
+    order_map = {name: i for i, name in enumerate(CHECK_NAME_ORDER)}
+    items.sort(key=lambda x: (order_map.get(x[0], 9999), x[0]))
 
-    header = "| 检查项 | 子类 | 描述 |"
+    header = "| 检查项 | 描述 |"
     for m in models:
         header += f" {m} |"
     lines.append(header)
-    sep = "|--------|------|------|"
+    sep = "|--------|------|"
     for _ in models:
         sep += "------|"
     lines.append(sep)
@@ -907,12 +922,11 @@ def _append_check_name_table(lines, items, models, check_descs=None):
         check_descs = {}
 
     for check_name, meta, model_stats in items:
-        sub_id = meta.get("subcategory_id", "")
         desc = check_descs.get(check_name, "") or meta.get("description", "")
         if len(desc) > 40:
             desc = desc[:38] + ".."
 
-        row = f"| {check_name} | {sub_id} | {desc} |"
+        row = f"| {check_name} | {desc} |"
         for model in models:
             s = model_stats.get(model, {"pass": 0, "fail": 0, "skip": 0})
             p, f_cnt, sk = s["pass"], s["fail"], s["skip"]

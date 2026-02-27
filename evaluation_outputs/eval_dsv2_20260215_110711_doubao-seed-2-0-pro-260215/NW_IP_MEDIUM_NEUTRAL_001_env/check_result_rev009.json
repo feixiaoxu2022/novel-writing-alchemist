@@ -1,0 +1,804 @@
+{
+  "check_version": "novel_writing_v1.0",
+  "sample_id": "NW_IP_MEDIUM_NEUTRAL_001",
+  "check_timestamp": 1772181493,
+  "dimension_scores": {
+    "format_compliance": {
+      "pass_rate": 1.0,
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "failed_items": []
+    },
+    "business_rule_compliance": {
+      "pass_rate": 0.95,
+      "total": 20,
+      "passed": 19,
+      "failed": 1,
+      "skipped": 0,
+      "failed_items": [
+        "中篇字数"
+      ]
+    },
+    "memory_management": {
+      "pass_rate": 1.0,
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "failed_items": []
+    },
+    "data_consistency": {
+      "pass_rate": 1.0,
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "failed_items": []
+    },
+    "content_quality": {
+      "overall_score": 61.52,
+      "quality_level": "unqualified",
+      "gate_layer": {
+        "pass_rate": 1.0,
+        "total": 4,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0,
+        "failed_items": []
+      },
+      "basic_layer": {
+        "pass_rate": 0.722,
+        "total": 18,
+        "passed": 13,
+        "failed": 5,
+        "skipped": 0,
+        "failed_items": [
+          "人物设计遵循度",
+          "大纲执行忠实度",
+          "智斗逻辑合理性",
+          "语义重复检测",
+          "outline结构完整性"
+        ]
+      },
+      "advanced_layer": {
+        "pass_rate": 0.455,
+        "total": 11,
+        "passed": 5,
+        "failed": 6,
+        "skipped": 1,
+        "failed_items": [
+          "可修复逻辑瑕疵",
+          "角色语言辨识度",
+          "叙事密度",
+          "题材契合度",
+          "剧情节奏合理性",
+          "角色成长弧线设计"
+        ]
+      },
+      "gate_triggered": false,
+      "score_breakdown": {
+        "base": 60.0,
+        "gate_penalty": -0.0,
+        "basic_deduction": -16.67,
+        "advanced_bonus": 18.18
+      }
+    }
+  },
+  "overall_result": {
+    "status": "Good",
+    "total_score": 72.69,
+    "content_score": 61.52,
+    "process_score": 98.75,
+    "content_weight": 0.7,
+    "process_weight": 0.3,
+    "gate_triggered": false,
+    "total_checks": 61,
+    "passed_checks": 49,
+    "failed_checks": 12,
+    "pass_rate": 0.803
+  },
+  "check_details": {
+    "读取配方知识库": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取RECIPE_KNOWLEDGE.md（配方知识库）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节产出存在性": {
+      "check_result": "pass",
+      "reason": "章节文件存在",
+      "details": "✓ 章节写作阶段: 已产出章节文件",
+      "description": "workspace中必须存在至少一个章节文件",
+      "check_type": "sop_stage_coverage",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_output_existence",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节克隆检测": {
+      "check_result": "pass",
+      "reason": "未检测到章节克隆",
+      "details": "共25章，无连续完全克隆或近似克隆",
+      "description": "不能出现连续章节内容完全重复（克隆）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_cloning",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "交替重复检测": {
+      "check_result": "pass",
+      "reason": "未检测到交替重复",
+      "details": "共25章，无A-B-A-B交替模式",
+      "description": "不能出现A-B-A-B交替循环的章节内容",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "alternating_repetition",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节完成度": {
+      "check_result": "pass",
+      "reason": "章节完成度合格(833%)",
+      "details": "大纲规划3章，实际完成25章 (完成率833.3%)",
+      "description": "实际写作章节数必须达到大纲规划的合理比例",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_completion",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "段落重复检测": {
+      "check_result": "pass",
+      "reason": "段落重复在可接受范围",
+      "details": "同章内重复0处, 跨章重复0组 (阈值: 同章>=2, 跨章>=5)",
+      "description": "不能出现大量段落在不同章节间重复",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "paragraph_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取大纲设计指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取OUTLINE_DESIGN_GUIDE.md（大纲设计指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取写作技巧指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取WRITING_TECHNIQUE_GUIDE.md（写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取设定一致性管理指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取CONSISTENCY_MANAGEMENT_GUIDE.md（设定一致性管理指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取命名skill": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取CHARACTER_NAMING_GUIDE.md（角色命名规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取creative_intent的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取creative_intent.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取characters的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取characters.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取outline的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取outline.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节命名格式": {
+      "check_result": "pass",
+      "reason": "所有文件命名符合规范",
+      "details": "检查了 25 个文件; chapter_09.md: 匹配; chapter_20.md: 匹配; chapter_05.md: 匹配; chapter_14.md: 匹配; chapter_23.md: 匹配; chapter_11.md: 匹配; chapter_01.md: 匹配; chapter_10.md: 匹配; chapter_17.md: 匹配; chapter_22.md: 匹配; chapter_02.md: 匹配; chapter_03.md: 匹配; chapter_04.md: 匹配; chapter_08.md: 匹配; chapter_07.md: 匹配; chapter_24.md: 匹配; chapter_06.md: 匹配; chapter_18.md: 匹配; chapter_12.md: 匹配; chapter_15.md: 匹配; chapter_16.md: 匹配; chapter_13.md: 匹配; chapter_19.md: 匹配; chapter_25.md: 匹配; chapter_21.md: 匹配",
+      "description": "章节文件命名必须为chapter_NN.md格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "naming_convention",
+      "is_critical": true
+    },
+    "creative_intent格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "creative_intent.json: 字段完整",
+      "description": "creative_intent.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "characters格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "characters.json: 字段完整",
+      "description": "characters.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "outline格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "outline.json: 字段完整",
+      "description": "outline.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "X轴模式ID格式": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.x_axis_mode_id = B8，符合预期",
+      "description": "X轴模式ID必须匹配^[A-G]\\d{1,2}$格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签枚举": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['重生/穿越', '商战权谋']，符合预期",
+      "description": "Y轴标签必须在12种枚举中",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签数量": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['重生/穿越', '商战权谋']，符合预期",
+      "description": "Y轴标签数量必须为2-3个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "forbidden_elements存在性": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.forbidden_elements = ['六子剖腹死亡', '无逻辑降智', '刻意煽情', '不符合人物动机的行为']，符合预期",
+      "description": "forbidden_elements必须至少有1个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "配方选择交互": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "配方选择阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "写作准备确认": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "写作准备阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "主题一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了25个文件; LLM评估: 全篇从开篇到结尾的核心主题类型保持一致：围绕“找回/救出失散兄弟与亲人（约翰找亚瑟、六子寻父）+ 推翻压迫者黄四郎、让鹅城获得公平与新秩序”的主线持续推进。前半段以营救兄弟/父子团聚为直接目标，并与对抗黄四郎的冲突紧密绑定；中段在救出六子与亚瑟后，继续围绕‘清算黄四郎势力、保住鹅城’展开（巷战、追捕、终局对决）；后半段转入‘建设与守护鹅城新生活’（对抗军阀、治安与发展、婚育传承），属于同一主题的结果延展与落地，而非更换为无关题材（没有从复仇跳到商战/修仙等完全不同类型）。整体主线清晰，情节虽从战斗转向治理与发展，但仍服务于“公平/自由/让百姓过好日子”的核心主题，未出现主题类型被替换的严重漂移。",
+      "description": "故事主题一致",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "theme_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "主要角色一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了25个文件; LLM评估: 主角从开篇到结尾持续存在且保持核心地位。\n\n- 主角识别：故事前期叙事核心为约翰（张牧之/张麻子）与六子（养子/亚瑟之子），两人是第一、第二主角。\n- 章节持续性：\n  - ch01-06：约翰与六子均持续出现并共同推动主线（找兄弟/对抗黄四郎/救亚瑟）。\n  - ch07：六子被抓但有明确交代（被黄四郎用作人质），约翰仍为叙事中心并以营救六子为行动驱动，未出现主角“消失”。\n  - ch08-12：约翰主导换人/劫狱/攻矿并救出六子与亚瑟；六子在获救后继续作为关键行动者。亚瑟在ch12加入后是“新增关键角色”，但未取代约翰/六子的主角地位。\n  - ch13-16：虽有汤师爷、武举人等配角戏份增加，但重大决策与视角仍由约翰（指挥防守、设伏终局、处置黄四郎）及六子/亚瑟共同承担，不构成>70%被配角挤占。\n  - ch17-25：进入建设与传承段落，约翰与亚瑟、六子持续出现；ch24-25出现“交棒/退休”情节，但约翰仍有明确去向与回归（ch25回鹅城），且结尾仍以三人共同回望作为叙事收束，不存在主角被替换或被遗忘。\n- 身份连续性：约翰始终是“张县长/麻匪头子外衣+西部来客核心身份”的同一人，六子始终是“约翰养子/亚瑟之子”的同一人，亚瑟从被囚到获救属于剧情揭示与回归，不是身份断裂。\n\n结论：无主角消失、替换、身份断裂或被配角严重挤占的问题，符合主角存续性标准。",
+      "description": "主要角色一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "main_character_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设定一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了25个文件; LLM评估: 整体符合“同一角色跨章节性格/行为一致性”标准：\n1) 约翰：从chapter_01-06始终以“兄弟优先+强硬但理性算计”的行动模式推进（找兄弟/救亚瑟、敢开枪但更偏战术布局：踩点、分兵、拉拢民心、将计就计）。chapter_07因六子被抓而“必须单刀赴会”也符合其一贯的责任感与强硬作风；后续治城、拒绝升官（chapter_16-25）延续其“公平理想+不恋权”的核心动机，没有无缘无故摇摆。\n2) 六子：前期（chapter_01-04）冲动、好胜、用枪示威；得知身世后在chapter_07出现“未经允许单闯铜矿”的莽撞升级，有明确触发事件与情绪动机，不算崩坏。被抓与战斗历练后（chapter_13起）表现为更稳、更有组织能力（守城、处理土匪、带民兵），属于可解释的成长线，且后期（chapter_21-25）保持成熟稳健。\n3) 亚瑟：出场后（chapter_12起）一直是硬汉式的担当、护犊与战斗老练（替六子挡刀、并肩守城、对兄弟情与家庭珍惜），与其被救出前后延续一致。\n4) 汤师爷/武举人：汤师爷从chapter_02起就被定位为“墙头草/利益驱动但机灵能办事”，后续卧底、策动舆论、入班底（chapter_10-16）是同一条行为逻辑的放大；武举人从恃强凌弱到被打压后投诚（chapter_09起）并逐步转为治安骨干（chapter_17+）有清晰动机与过程，不是无铺垫反转。\n未见同一角色在相邻或远距章节间出现“核心动机互相否定”或“性格底色无规律反复切换”的情况。",
+      "description": "人物设定一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_trait_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设计遵循度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了26个文件; LLM评估: 对比characters.json（Plan）与chapters（Execute），两位主角的人设存在关键偏离：\n\n1) 约翰·马斯顿（张牧之/张麻子）核心动机与关键设定不一致\n- 设计：overt_motivation 是“找到失踪的亚瑟·摩根帮派成员，推翻黄四郎暴政，给老百姓公平”；covert_motivation 是“弥补抛下同伴的愧疚，完成自我救赎”；misperception_of_other 明确写“以为六子只是普通孤儿，不知道他是亚瑟亲生儿子”。\n- 实际：chapter_02 中约翰直接对六子说“我们来这里不是当好人的，是找你爹亚瑟的”，并明确把六子称为“你亲爹”“你爹亚瑟”，这等于从一开始就知道六子与亚瑟的父子关系，直接违背 characters.json 的 misperception 设定。后续 chapter_06 又进一步用照片揭示“这就是你亲生父亲”，但这更像是“早就知道、一直在瞒着六子”，而不是“约翰误以为六子只是普通孤儿”。\n- 这不是叙事节奏问题（标准已排除“揭示早晚”扣分），而是“约翰对六子身份的认知状态”与设计相反：设计是“不知道”，文本是“知道且长期隐瞒/直说”。属于人设（认知/动机结构）偏离。\n\n2) 六子 overt_motivation 与人物驱动不匹配\n- 设计：六子 overt_motivation 是“证明自己没有吃两碗凉粉，帮义父完成鹅城目标”；covert_motivation 是“找到亲生父亲获得身份认同”；misperception 是“不知道义父真实目的在找亲生父亲”。\n- 实际：chapter_01 的“凉粉事件”确实触发六子行动，符合“自尊心极强/冲动热血”。但从 chapter_02 起六子就直接追问并围绕“亲爹亚瑟是否活着、在哪”行动；chapter_07 甚至单人夜闯铜矿的核心驱动完全是“救亲爹”，而非“证明没吃两碗凉粉/洗清名誉”。后续主线也迅速转为“救亚瑟/对抗黄四郎”。\n- 结果是：六子的 overt_motivation（“两碗凉粉清白”）在后续章节几乎不再持续驱动他的选择，变成一次性引子；而他对义父目的的误解（misperception）也因 chapter_02 约翰直接说“来这里是找你爹亚瑟”而不成立。\n\n3) 其余 traits 大体符合，但不足以抵消核心设定冲突\n- 约翰 traits（枪法如神、嘴硬心软、重情重义、理想主义）在 chapter_01/04/05/06/10/12 等大量情节中表现充分：枪法夸张精准、对六子保护（chapter_07/11）、分粮分钱与“公平”宣言（chapter_06/10/15）。\n- 六子 traits（冲动热血、自尊心强、枪法天赋、重情重义）也匹配：chapter_01/07 的冲动与自尊、后续成长线（chapter_13/21）也合理。\n- 但本检查项要求 Plan vs Execute 的一致性，且明确“不合格”包含“关系设定未遵循/核心动机偏离/核心设定相反”。这里至少两项关键设定（约翰对六子身世的误认、六子对义父目的的误认 + 六子 overt_motivation 的持续驱动力）在执行文本中被实质性改写，因此判定不匹配。",
+      "description": "实际表现符合设计文档",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构性逻辑硬伤": {
+      "check_result": "pass",
+      "reason": "共发现5处逻辑问题，但均为fixable类型，本项（structural）无命中",
+      "details": "过滤条件: fixability=structural; 总flaws=5, 命中=0",
+      "flaw_count": 0,
+      "flaws": [],
+      "description": "无结构性逻辑硬伤",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_logic_defect",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "可修复逻辑瑕疵": {
+      "check_result": "fail",
+      "reason": "发现5处fixable类型逻辑问题: 第5章结尾写“东边已经开始泛白了，新的一天要来了”（接近清晨），第6章开头又写“第二天一大早”，中间缺失对“入夜行动→回县衙→天亮→再到次日清晨”的时间衔接，导致同一夜/同一天的时间推进不清。; 第4章宴会后约翰“拿的一个银制的酒杯”（已在手中带回县衙），第8章又写约翰在黄府“故意把…银酒杯落在了桌上”。同一只银杯的归属与所在位置前后冲突（应补充：是否带去黄府、是否另一只杯子、或中间交给了谁）。; 第8章出现“老二老三正站在墙头上朝他挥手”，但此段落一直跟随约翰在黄府门口/离开黄府的行动视角，缺少约翰已回到县衙附近或能看见县衙墙头的空间移动交代，造成视角与空间位置混乱。; 故事设定为民国十三年，但出现现代便携手电筒、并长期稳定使用且无来源交代；虽可解释为“从西部穿越带来”，但正文未明确说明携带物清单/补给来源（电池、灯泡维护）及其对行动的影响边界，造成规则层面的缺口。; 第7章约翰明确表示“必须去…带温彻斯特步枪…明天你们埋伏在黄府外面”，第8章又写他“没带温彻斯特，没带兄弟”独自赴黄府；第11章再写他在城门口“躲在城墙后面”并用温彻斯特发信号后突入黄府。中间缺少对“是否先独自谈判、何时取回温彻斯特、何时与埋伏部队会合/部署到城门”的明确交代，导致‘是否携枪/随行人数/所处位置’的客观状态在关键节点反复跳变。",
+      "details": "过滤条件: fixability=fixable; 总flaws=5, 命中=5",
+      "flaw_count": 5,
+      "flaws": [
+        {
+          "type": "spatiotemporal_continuity",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_05 → chapter_06",
+          "description": "第5章结尾写“东边已经开始泛白了，新的一天要来了”（接近清晨），第6章开头又写“第二天一大早”，中间缺失对“入夜行动→回县衙→天亮→再到次日清晨”的时间衔接，导致同一夜/同一天的时间推进不清。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_04 → chapter_08",
+          "description": "第4章宴会后约翰“拿的一个银制的酒杯”（已在手中带回县衙），第8章又写约翰在黄府“故意把…银酒杯落在了桌上”。同一只银杯的归属与所在位置前后冲突（应补充：是否带去黄府、是否另一只杯子、或中间交给了谁）。"
+        },
+        {
+          "type": "narrative_perspective_error",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_08末段",
+          "description": "第8章出现“老二老三正站在墙头上朝他挥手”，但此段落一直跟随约翰在黄府门口/离开黄府的行动视角，缺少约翰已回到县衙附近或能看见县衙墙头的空间移动交代，造成视角与空间位置混乱。"
+        },
+        {
+          "type": "worldbuilding_coherence",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_05（手电筒）→ chapter_10（指南针）→ overall",
+          "description": "故事设定为民国十三年，但出现现代便携手电筒、并长期稳定使用且无来源交代；虽可解释为“从西部穿越带来”，但正文未明确说明携带物清单/补给来源（电池、灯泡维护）及其对行动的影响边界，造成规则层面的缺口。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_07 → chapter_08 → chapter_11",
+          "description": "第7章约翰明确表示“必须去…带温彻斯特步枪…明天你们埋伏在黄府外面”，第8章又写他“没带温彻斯特，没带兄弟”独自赴黄府；第11章再写他在城门口“躲在城墙后面”并用温彻斯特发信号后突入黄府。中间缺少对“是否先独自谈判、何时取回温彻斯特、何时与埋伏部队会合/部署到城门”的明确交代，导致‘是否携枪/随行人数/所处位置’的客观状态在关键节点反复跳变。"
+        }
+      ],
+      "description": "可修复逻辑瑕疵数量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "fixable_logic_inconsistency",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语言纯净性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了25个文件; LLM评估: 整体叙事语言以中文为主，外语/外文字样出现次数不多且均有情节必要性：如人物名“约翰·马斯顿/亚瑟·摩根”等为英文姓名；枪械/品牌或专有名词如“温彻斯特、柯尔特、勃朗宁、威士忌”等属于约定俗成译名/外来词；对话中偶有“英语骂人”等情节指代；徽章文字“Van der Linde”为组织标识，属专有名词。未发现类似‘他very生气’这类无意义中英混杂句式，也不存在大段外语无翻译的叙述段落。个别英文专名未翻译但均为标识/名称，不影响理解，符合业务标准。",
+      "description": "无不合理的多语言混用",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "language_purity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "creative_intent文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/creative_intent.json 存在",
+      "description": "creative_intent.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "characters文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/characters.json 存在",
+      "description": "characters.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "outline文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/outline.json 存在",
+      "description": "outline.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "chapters目录存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/chapters/ 存在",
+      "description": "chapters/目录必须存在且有章节文件",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "情节推进": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了25个文件; LLM评估: 合格（matched: true）。整体情节推进非常明确，事件密度高，远超“至少2-3个事件/事件占比≥40%”的要求。\n\n1) 故事事件数量/密度（远≥2）：\n- chapter01：凉粉摊冲突升级→六子开枪击毙胡万→约翰现身警告并带人离开→切到黄府下请帖（多事件连续推进）。\n- chapter02-05：汤师爷来投、提供铜矿线索与徽章→踩点受阻→鸿门宴试探与威胁→夜探烟土仓库夺得亚瑟马鞍并枪战脱身→黄四郎加强戒备（持续转折与信息推进）。\n- chapter06-12：发钱粮夺民心→黄四郎设诱饵→六子单闯铜矿被擒并见到亚瑟→约翰赴黄府谈判与赌局→武举人投诚送布防图→制定劫狱/佯攻计划→救出六子并引发民众冲击黄府→铜矿决战抓黄四郎→救出亚瑟并父子相认（关键主线完成）。\n- chapter13-15：黄天霸围城巷战→汤师爷公开证据策反民团→黄四郎越狱下战书→凉粉摊决战→武藤被杀、黄四郎败后自尽（终局事件链完整）。\n- chapter18/21：外部军阀来犯攻城→防守战与俘虏处置；土匪夜袭→六子组织反包围抓捕与公审（后续冲突仍有事件驱动）。\n\n2) 内容占比分析：\n- 叙事以行动、冲突、潜入、战斗、谈判博弈、抓捕/营救、政策行动（发钱粮/分田/修路）为主；对话与心理多服务于决策与冲突升级。整体“事件推进”明显超过40%，且绝大多数章节不属于“站着聊天+内心独白占比>70%”。\n\n3) 时间/空间推进：\n- 场景频繁切换（凉粉摊→县衙→黄府宴会→烟土仓库→铜矿→城门/城楼→巷战街区等），并有明确时间推进（民国具体日期、三天后宴会、翌日行动、半年后通车、五年后回归等）。\n\n4) 角色行动与逻辑链：\n- 角色持续做出可验证的行动选择：踩点、潜入、发钱粮、设局、佯攻、劫狱、攻矿、守城、分田修路等；事件之间因果清晰（六子杀胡万→黄四郎设宴试探→铜矿线索→六子被擒→营救计划→抓黄四郎→黄天霸围城→黄四郎逃脱再决战→新秩序建立）。\n\n结论：该内容不但“有基本情节推进”，而是强情节、高事件密度的连续主线推进文本，明显符合合格标准。",
+      "description": "章节情节推进质量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "plot_progression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "完整叙事文本": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了25个文件; LLM评估: 25个章节均为连贯的小说正文形式：有明确场景描写（如凉粉摊、县衙、黄府、铜矿、城楼等）、人物动作细节与心理（擦枪、上膛、埋伏、对峙、团聚等）、大量完整对话推进情节；整体以叙事段落为主，没有出现“核心事件/情感基调/关键场景/本章悬念/字数预估”等创作规划类结构标题，也未采用“-要点列举”或“→流程图”式的事件罗列。部分章节含日期时间标注（如‘民国13年6月20日’），但属于叙事信息，不构成大纲/元数据暴露，因此判定为合格正文。",
+      "description": "章节内容必须是完整正文而非大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "full_narrative_content",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "反复结局": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了25个文件; LLM评估: 共25个文件，最后文件为chapter_25.md。按全书结局标记（如“全文完/全书完/完结/后记/尾声/终章/(完)/【完】/THE END”等）扫描：chapter_01.md~chapter_25.md中均未出现上述任何“全书级结局标记”。其中chapter_14.md出现“终局邀约”等叙事用词、chapter_25.md为最终收束章节，但都不属于标准定义的独立章节标题“终章/尾声/后记”或明确结局标记。因此不存在“非最后文件出现全书结局标记”或“中途多次结局”问题，判定合格（matched=true）。",
+      "description": "不能出现多次结局标记（全文完/全书完/后记）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "repeated_endings",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "workspace文件规范": {
+      "check_result": "pass",
+      "reason": "workspace中所有文件均在白名单内",
+      "details": "白名单: ['creative_intent.json', 'characters.json', 'outline.json', 'writing_log.md', 'chapters/', '.hitl_context.json']",
+      "description": "workspace中不能有白名单之外的文件",
+      "check_type": "file_whitelist_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "workspace_file_compliance",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "叙事调性匹配": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了26个文件; LLM评估: 题材与应有调性：creative_intent.json给出的主配方是“反叛+穿越碰撞+鹅城权斗”，reaction_strength=✷，并强调“荒诞爽感、黑色幽默、电影感、暴力美学与台词梗”。因此叙事调性应偏向：节奏紧、镜头感强、台词有机锋与梗感、暴力描写干脆利落，同时保留一定荒诞夸张的戏剧性；不应陷入温吞散文化或大段抒情。\n\n实际文笔特征（抽样证据）：\n1) 电影感/强节奏/暴力美学明显：开篇直接“名场面改写+枪响”并以短促动作推动——“‘砰！’枪响的瞬间，整个凉粉摊的哄闹声戛然而止。”“胡万的额头上多了一个血洞……脑浆和血溅在了旁边的凉粉桶里”。这类描写冷硬、直接、视觉化，符合暴力美学与爽感。\n2) 台词梗与荒诞对味：多处复用并魔改经典台词、形成戏谑的权力对峙语气，如“我张麻子来鹅城，就办三件事”“公平，公平，还是他妈的公平”“让子弹飞一会儿”。第8章“黄府的左轮赌局”以“赌局式谈判+灯笼引线”构成强戏剧桥段，也很‘镜头化’。\n3) 权谋/博弈气氛在线：黄四郎与约翰在宴席上“你一言我一语，话里有话”“旁敲侧击地问他的来历，约翰都滴水不漏地挡了回去”，以及后续“兵分两路”“制造混乱”“佯攻铜矿”等，都用信息导向对话和清晰的计划推进，整体更像权斗爽文而非抒情文。\n4) 允许的调性切换占比可控：中后段（16-25章）明显转向“建设—安稳—温暖”的收束，出现较多温情/治愈式叙述（如第19章“寒冬里的暖意”、第25章“夕阳慢慢落下…万家灯火”）。但它仍保持较口语化、直给的叙事，并未写成细腻言情或散文腔的大段哲思；且前半程（1-15章）作为主冲突段，调性始终紧、狠、爽、带黑色幽默，主调性未被稀释到“画风错位”的程度。\n\n结论：整体表达方式与“荒诞爽感+暴力美学+台词梗+权斗对决”的题材标签基本一致；后期温暖收束虽让紧张度下降，但属于结局段常见的调性缓和，未达到与题材严重不搭（如烧脑写成言情、热血写成散文体）的程度，因此 matched=true。",
+      "description": "文笔风格必须与题材类型匹配",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_tone_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "后期章节跑偏": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了25个文件; LLM评估: 通读25章，后1/3（约chapter_17~chapter_25）仍为连续叙事：围绕鹅城建设、防御外敌、六子成长成家、生子、交接班与五年后回归等情节推进与收束，均有场景、人物与事件，没有出现作者感想、读者互动、番外/彩蛋预告、角色问答、创作数据统计等非正文跑偏内容。章节长度方面，后期各章仍为完整篇幅（多段叙事与对话），未出现突然缩到几十/几百字的敷衍章节；chapter_25含“⚠️重要说明”这类编辑提示文字，但主体仍为完整结局叙事，不构成章节整体跑偏。整体符合该业务标准。",
+      "description": "后期章节不能跑偏写非正文内容（作者感想、读者互动、番外预告等）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "late_stage_digression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "writing_log文件创建": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/writing_log.md 存在",
+      "description": "必须创建writing_log.md记录创作进度",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_creation",
+      "is_critical": true
+    },
+    "writing_log文件读取": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取writing_log.md了解前文内容",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_usage",
+      "is_critical": true
+    },
+    "大纲执行忠实度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了26个文件; LLM评估: 前两幕关键事件整体较忠实：第1章凉粉摊枪响与公开宣言、第5章烟土仓库发现马鞍（幕一转折）、第6章分粮分银拉拢民心、第7章六子身世/冲动导致被抓（幕二转折）等都与大纲核心一致。但第三幕（尤其大纲指定的act_three第20章‘最终对决’及其结局方式）与实际严重不一致：大纲的终局是‘黄府三天期限到的赎人局→黄府枪战→亚瑟带人赶到→黄四郎引爆失败被炸死’，而实际将高潮拆成黄府救人+铜矿救亚瑟+凉粉摊决战，且黄四郎死法改为自杀，导致结局走向与大纲设定的关键高潮路径明显偏离，因此matched=false。",
+      "description": "实际章节内容必须忠实于自己设计的大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_execution_fidelity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色语言辨识度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了25个文件; LLM评估: 整体对话辨识度不足，主要角色之间大量共享同一套“痞气+江湖豪言+枪法威慑”的话术模板，互换角色名违和感不强，属于明显同质化。\n\n1) 主要角色语言风格高度趋同：约翰、六子、亚瑟、老二老三乃至武举人，在紧张/日常场景都频繁使用相似的短句、粗口、威胁式表达与“枪法展示”式台词，缺少各自稳定的口头禅、句式差异或思维表达差异。比如“我来鹅城只办三件事……”“我见一个杀一个”“少了一根头发就……”等强硬宣言式表达，几乎成为多角色通用的情绪按钮。\n\n2) 跨角色台词克隆/可无缝互换：\n- 面对敌方挑衅时，多角色都用同构句式回应（先冷笑/嘲讽→提出威胁→用枪技压制），如约翰在黄府、城楼、凉粉摊等多处的回应结构，和六子/亚瑟在战斗场景中的回应结构几乎一致；把这些台词换到另一位“西部帮派人物”嘴里读起来依然成立。\n\n3) 身份/职业/年龄语言区分不足：\n- 汤师爷作为师爷/文职角色，理论上应更偏委婉、算计、文绉绉或官场套话，但其对话大量是直接的“谄媚+口号化鼓动”，与武举人、打手的语气差别不大；谋士也多是通用的“老爷息怒/设伏一网打尽”模板。\n- 六子从16岁少年到后期成长，叙事上有变化，但语言层面变化不显著，仍以同一套硬朗、威吓、动作化台词为主，缺少少年口语、情绪波动、措辞稚嫩等可辨识标记。\n- 黄四郎与约翰的“斗嘴”虽在立场上对立，但语言层面都偏戏谑+威胁+试探，黄四郎缺少更稳定的地主/权贵腔（更官腔、算计式铺垫、文雅而毒的表达），导致对话对比度不够。\n\n结论：文本的对白更像同一个“爽文式硬汉旁白口吻”在不同人物之间流转，角色语言差异主要靠身份标签与剧情位置区分，而非靠台词本身即可盲识，因此matched=false。",
+      "description": "不同角色对话必须有可辨识的语言风格差异",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "dialogue_character_distinction",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "叙事密度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了25个文件; LLM评估: 前半段（1-15章）整体叙事密度较高，场景、感官与动作细节充足，且关键情绪多用Show承载：如chapter_01凉粉摊的汗臭/酸辣味、枪响后的硝烟与脑浆溅入凉粉桶；chapter_04宴席上灯笼被连发打爆、气氛“凝固”；chapter_07矿洞粉尘味/血腥味与六子被擒形成具体可视的戏剧场面。这些章节具备较强画面感与动作具体性。\n\n但从中后段开始（尤其17-25章），叙事明显转向“结果汇报/发展概述”：大量使用“走上正轨、越来越好、翻了三倍、人人都有、批了一笔款”等直述与清单式罗列，把冲突、转折、人物心理与具体场景压缩成总结句，Show比例显著下降；心理与情感多以“欣慰/感慨/暖得很/值了”等直接陈述收尾，缺少通过具体行为、对话张力、可触摸的日常细节来呈现。整体来看，多数关键段落（治理、建设、通车、升官、传位、五年后变化）用Tell主导，叙事层次不够丰富，因此未达“优秀叙事密度与手法”标准。",
+      "description": "章节叙事应有足够的场景描写、感官细节和心理活动，情感传达以Show为主",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_density",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "智斗逻辑合理性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了25个文件; LLM评估: 适用性：文本包含明显的“智斗/博弈”设计（鸿门宴试探、救人质与佯攻、卧底/投诚信息战、对决赌局等），因此本检查项适用。\n\n未达优秀标准的核心原因：多处关键智斗节点存在“假推理链/对手降智”，导致策略攻防的因果链断裂，胜负更多依赖主角超常枪法与反派配合，而非可验证的推理与严密计划。\n\n1) 第8章“左轮赌局”属于对手降智 + 假推理链：约翰声称枪里只有两发子弹，在不提供任何可信约束（如当场验枪、装弹由第三方执行、距离/风速/光照限制等）的情况下，黄四郎竟同意以“打断灯笼引线”决定“多给一天时间”。这种赌局对黄四郎收益极低、风险极高，且约翰完全可以作弊（枪里是否两发无人核验；也可以预先动手脚），黄四郎仍接受，攻防逻辑不成立。结果也主要依赖“主角神枪”直接压制，而不是可复盘的推理解法。\n\n2) 第9-11章“武举人投名状—将计就计—救六子”属于对手降智：黄四郎在城门口布置三十枪手伏击约翰，但当铜矿遭佯攻时，他竟然亲自带走几乎全部兵力去支援，只留“五个人”继续执行核心伏击（第11章）。如果黄四郎的首要目标是击杀约翰、稳住大局，那么更合理的做法是至少保留伏击主力或同步加强黄府/地牢看守，而不是让黄府防务出现可被轻易侧门渗透的空档。文本没有给出迫使其必须离开的强动机（例如铜矿若失立刻造成不可逆财政崩盘、或黄四郎亲信被挟持等），因此像是为了配合主角计划成功而“主动让出关键防线”。\n\n3) 第13章“汤师爷抛合同策反民团”存在线索与结论的可信度断裂：汤师爷当场抛出“黄四郎卖三百民团兵给美国矿主的合同”，民团兵“捡起来一看”立刻集体倒戈。这里缺少必要的验证环节（合同真伪如何确认？民团是否识字、是否能辨笔迹与公章？为何瞬间形成一致行动？黄天霸为何没有预备信息管控/销毁证据/反制说辞？）。这一节点决定战局走向，但推理链（证据→可信→集体行动）展示不足，近似“丢出万能证据就立刻生效”。\n\n4) 多处关键节点以“超常枪法”直接解决矛盾，削弱智斗成分并造成策略链空心化：如第4章四枪打爆四灯笼、第8章两枪断两根极细引线、第15章对决中连续打帽子/腰带/击飞手枪等。这些可以作为人物能力设定，但在智斗场景里反复成为决定性因素，会让“计划与推理”退化为“开挂压制”，从而难以满足本标准强调的‘线索→推理→结论/攻防因果链’。\n\n综合判断：虽然文本有计划与攻防的形式（踩点、佯攻、造势、里应外合），但多个决定胜负的关键转折点依赖反派不合理决策或缺乏可验证的推理链支撑，属于明显的对手降智/假推理链问题，因此判定未达优秀标准。",
+      "description": "谜题/智斗的推理逻辑必须自洽",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "puzzle_logic_validity",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "题材契合度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了26个文件; LLM评估: 【配方判定】X轴=反叛；Y轴=重生/穿越+商战权谋（鹅城权斗智斗爽感）。\n\n【整体结论】文本在“西部牛仔×民国鹅城”的风味与爽感上完成度不错，但与所选Y轴“商战权谋”的精致化学反应不足，后半段逐渐滑向口号式胜利与流水线式治理成果展示，导致题材特征偏表面，未达“优秀/精致”标准。\n\n【主要不足（题材特征粗糙的具体表现）】\n1) “商战权谋”落地偏浅、博弈缺少来有回：核心对抗多靠枪法压制、兵力调动与情报投送（汤师爷/武举人不断送图送情报），黄四郎阵营的策略反制有限，缺乏环环相扣的权谋链条（利益分配、舆论操控、账目/产业链、官府/军阀关系、制度性掣肘等）。读感更像“军事行动爽文”而非“权谋智斗”。\n2) 标签融合的“化学反应”不够：穿越带来的“西部规则 vs 民国规则”多数停留在枪械、威士忌、口头禅与牛仔范儿；真正利用跨时空认知差（制度、金融、组织、传播、技术）去做权斗/经营的桥段较少。发钱发粮、造势分家产、鼓动民团倒戈等虽有策略，但多是单招快打，缺乏递进与代价。\n3) 题材潜力未充分开发：前段（鸿门宴、赌局、劫仓库、将计就计）有电影感与梗点，但后半段快速进入“推翻—建设—模范县—通车—工厂—升官不去”的成果汇报模式，冲突被简化，治理与经营像开挂，缺少资源约束、内部利益冲突、外部政治经济博弈，导致“权谋/商战”维度越来越薄。\n4) 反派与系统性阻力脸谱化：黄四郎及其势力的聪明更多靠“狠/有钱”，但缺少精细的权力网络与真实制衡；军阀、土匪多为一次性副本，转折靠抓头领/感化投降快速收束，降低了权斗题材应有的复杂度与悬念密度。\n\n【仍然可取的亮点（但不足以判定精致）】\n- 电影感场面与台词梗复刻较强：凉粉摊开局改写、鸿门宴灯笼、左轮赌局、“让子弹飞一会儿”等节点有记忆点。\n- 反叛主线明确、爽点密集：救人—夺权—动员群众的节奏顺畅，读起来痛快。\n\n【为何判定未达优秀】\n本标准核心看“X轴反叛 + Y轴穿越/商战权谋”的组合是否产生深度融合。当前文本的优势主要集中在暴力美学与梗化戏剧张力，而“商战权谋”的精致度、攻守转换与策略深度不足，融合更多是风味叠加而非结构性交叉，因此 matched=false。",
+      "description": "题材特征精致度和X-Y轴化学反应效果",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "genre_fit",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "剧情节奏合理性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了25个文件; LLM评估: 本标准看的是情绪曲线的层次与高潮/低谷分布。本文在1-15章确实有递进并形成清晰大高潮（凉粉摊终局约在60%处），但高潮后缺少再次抬升或新的结构性目标，16-25章主要是治理建设与幸福生活展示，情绪强度长期维持在低位，形成明显的‘高潮后坠平并拖长’。因此整体节奏层次不够自然流畅，属于事件安排上前段过密、后段过松的失衡。",
+      "description": "高潮低谷分布合理、情绪曲线有层次感",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "pacing_rationality_advanced",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "钩子设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了25个文件; LLM评估: 整体符合“优秀钩子”标准：关键转折处多次设置了具体且有信息差的悬念，并且大多与主线（营救亚瑟/对抗黄四郎）强相关，能强力驱动继续阅读。1）信息差与具体问题清晰：如chapter_02以“范德林德徽章+铜矿劳工”抛出‘兄弟是否被关押/在哪里’的具体谜团；chapter_04结尾以‘银酒杯底部马纹’强化‘黄四郎与帮派线索的真实关联’但不揭底；chapter_08结尾纸条直接给出“六子关押位置/暗哨数量/密道去向”，放出关键但仍保留“如何实施营救、是否会反转”的空间。2）关键节点钩子设计到位：chapter_07“六子被抓+黄四郎点名交换”是主线重大转折，强悬念且推动下一章；chapter_14以‘黄四郎越狱+血字三日后凉粉摊决斗’构成明确的倒计时与行动悬念。3）钩子类型较多样：包含线索揭示（徽章/马鞍/酒杯纹）、人质危机（六子被抓）、行动/计划悬念（劫狱分兵）、倒计时决斗邀约（凉粉摊三日之约）、阵营反转/投诚不确定性（武举人投名状）。4）较少出现空洞或模板化的“风暴将至”式假悬念，多数是可验证、可推进下一步行动的具体信息。瑕疵：中后段（16章后）进入建设/收束期，章节结尾悬念明显减弱，更多是温情总结，但在容错范围内且主线已基本完结，因此不影响整体判定。",
+      "description": "关键转折处有有效的悬念钩子设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "hook_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "意象系统": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了25个文件; LLM评估: 文本存在明确的贯穿性核心意象并形成变奏：1）“凉粉摊”在第1章作为羞辱与暴力爆点出现，14-15章回到凉粉摊完成终局对决与公共审判，形成首尾回环且意义由‘被动受辱’深化为‘主动清算/新秩序宣告’，属于典型意象变奏；2）“枪/枪声”高频反复出现且功能持续变化：从个人情绪与暴力爆发，转为谈判筹码与技术展示，再到行动信号、群众动员与防御共同体，最终成为身份记忆符号，变奏链条完整；3）“马徽章/马鞍/长命锁”作为物证线索贯穿‘寻兄弟/寻父’并在父子相认处完成象征兑现。整体比喻与象征大多服务于主题与结构（回环、证据链、秩序转型），不只是装饰性重复，因此matched为true。",
+      "description": "核心意象贯穿全文并发生意义变奏",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "imagery_system",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "情感弧线层次": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了25个文件; LLM评估: 主角（约翰）及关键主角线（六子）情感发展呈多层递进，且转折基本由明确事件触发：六子从“被羞辱的愤怒/自尊受损”（凉粉摊被逼剖腹）→“冲动报复/开枪后的惊惧与余悸”（杀人后手心出汗、脑中反复出现死者眼神）→“被背叛的失望与价值观重塑”（意识到百姓会站在强者一边）→“寻父的期待与焦灼”（确认徽章、马鞍等线索）→“因身世揭示而情绪决堤并转为执念”（看到照片确认父亲存活）→“冲动行动导致挫败与恐惧/悔意”（独闯铜矿被抓）→“获救后更成熟的克制与责任感”（后续作战更稳、成长为能独当一面的人）。约翰线也有清晰递进：‘找兄弟的决心’→‘发现线索后的激动与压抑怒火’（徽章/马鞍）→‘对黄四郎的警惕与谋算’（宴会试探、夜探仓库、分粮拉民心）→‘儿子被抓后的愤怒与自责并存’（砸桌、仍决定赴约）→‘救回六子与救出亚瑟的释然/团聚’→‘推翻黄四郎后的成就感与安宁’→‘面对外来军阀的守护决心’。整体不是A→B两点跳跃，情感层次≥4且多数由具体事件（羞辱、杀人、发现徽章/马鞍、照片揭示、被抓、成功营救/团聚、敌方反扑等）驱动；后期虽偏“胜利-建设-幸福”的单一积极基调，但在此前关键主线阶段已满足丰富层次与事件驱动的优秀标准。",
+      "description": "主角情感发展有多层递进变化",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_gradient",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语义重复检测": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了25个文件; LLM评估: 前半段（ch01-ch15）主线事件推进明确：六子杀胡万→探矿/鸿门宴→仓库取马鞍→六子被擒→劫黄府救人→攻铜矿救亚瑟→巷战→凉粉摊终局，信息持续新增，基本无严重语义重复。但从ch16开始进入“建设鹅城/幸福生活”阶段，多章反复用近似的主题句与收束段落强调同一结论（鹅城太平、理想实现、归宿/家、日子越来越好），且多次采用相似的情节模板（外敌来犯或外界来访→我们从容应对→再次证明制度/人心正确）。这些段落虽然细节（婚礼、公路、医院、通车、孩子出生）不同，但在语义层面大量重复既有结论与情绪，新增叙事信息相对有限，达到≥3处信息衰减/结论反刍阈值，因此判定不通过。",
+      "description": "不能出现大量语义级别的内容重复（P6级）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "semantic_redundancy",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构功能性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了26个文件; LLM评估: 整体结构不只是按时间顺序推进，而是有明确的“结构即意义”的设计：1）首尾呼应明显：故事从“凉粉摊枪响”开篇（第1章），在第14-15章回到“凉粉摊终局对决”，形成闭环，完成对《让子弹飞》名场面的主题性改写——从“被迫自证/剖腹羞辱”转为“用暴力打断权力叙事、夺回尊严与公平”；第25章又以“城楼夕阳”回望开端经历，实现二次回环，把个人复仇升级为“理想落地后的历史回望”。2）章节编排存在阶段性与镜像：前段（1-7）围绕“找兄弟/救人质”建立动机与代价，中段（8-15）以“赌局—计谋—营救—矿洞团聚—巷战—凉粉摊终局”形成连续的结构高潮链，后段（16-25）转入“建制/治理/传承”的长尾收束，形成从暴力夺权到制度建设的主题递进。3）结构与主题强关联：反复出现的口号与意象（公平三连、枪/徽章/马鞍、凉粉摊）在不同阶段功能变化：开篇枪响是反抗点火，中段回到凉粉摊是清算旧秩序，尾声回望则把“暴力爽感”转译为“理想实现与代际传承”，使叙事形式承载了“打破权力闭环→建立新秩序→记忆封存”的主题表达。4）结尾收束有意识：并非写完就停，而是通过“5年后回归+夕阳意象+回忆对照”给出闭合式落点，强化传奇性与余韵。虽然后半段较长、偏线性建设篇章，但不影响其核心闭环与阶段镜像结构已明确服务主题，因此判定 matched=true。",
+      "description": "叙事结构服务于主题表达（短篇尤重）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色命名质量": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了26个文件; LLM评估: 整体命名质量达标，具备较强的文化指向、角色-命运共振与组内差异化，且未落入“苏/林/沈/顾+清夜晚寒墨默辰岚”等LLM通用美名模板。\n\n1) 文化深度/来源明确：核心人物大量采用强来源指向的名字与称谓组合（如“约翰·马斯顿”“亚瑟·摩根”），并与民国语境的“鹅城”体系（黄四郎、胡万、武举人、汤师爷）形成中西叙事拼接的辨识度；“汤师爷（马邦德）”“约翰·马斯顿（张牧之/张麻子）”这种“本名+化名/外号”的结构，本身带有戏剧传统与江湖叙事的文化感。\n\n2) 角色共振与设计感强：\n- “黄四郎”以数字入名，强化“地方豪强/家族排行/地头蛇”的符号感，读者一眼能联想到其权力结构与江湖规训。\n- “汤师爷”以职称式称谓为主名，强化其身份功能（幕僚、两面派、信息中枢），并用括注“马邦德”补足个人名，形成“角色面具”的叙事共振。\n- “武举人”同样以身份称谓命名，贴合其“团练教头/旧科举余绪”的背景。\n- “六子”作为小名式称呼，和“义子/少年/被轻视”的设定匹配，也与剧情核心“剖腹验粉”事件强绑定，具备不可互换性。\n- “张牧之/张麻子”双身份与主角“隐藏来历、借壳行事”的命运线强共振，属于明显的命名设计。\n\n3) 差异化良好、无同质化：主角组（约翰/亚瑟/六子）与鹅城权力组（黄四郎/胡万/汤师爷/武举人）在语言系统、音韵与美学上区隔明显，不存在“一家人都叫清岚暮雨”的同风格堆砌；读者不易混淆。\n\n4) 黑名单/模板命中情况低：未出现给定黑名单中的高频默认名；姓氏也未集中在“苏林沈顾陆陈”等套路上。少量“林老师/阿樱/张念西”偏常见，但属于次要或功能性命名，且“张念西”有明确叙事动机（纪念西部），不算通用美名堆砌。\n\n综合：主要角色命名具有可联想的身份/命运结构与强辨识度，且整组名字系统多元，符合优秀命名的业务标准。",
+      "description": "角色命名有文化深度、辨识度和角色-命运共振",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_naming_quality",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "中篇字数": {
+      "check_result": "fail",
+      "reason": "字数不符合要求",
+      "details": "总字数 32619 不在范围 [90000, 165000] 内; 共25个文件（按章节顺序排列）: chapter_01.md, chapter_02.md, chapter_03.md, chapter_04.md, chapter_05.md, chapter_06.md, chapter_07.md, chapter_08.md, chapter_09.md, chapter_10.md, chapter_11.md, chapter_12.md, chapter_13.md, chapter_14.md, chapter_15.md, chapter_16.md, chapter_17.md, chapter_18.md, chapter_19.md, chapter_20.md, chapter_21.md, chapter_22.md, chapter_23.md, chapter_24.md, chapter_25.md; 最后一个文件是 chapter_25.md",
+      "description": "总字数应在90000-165000之间（基于query要求100000-150000，±10%浮动）",
+      "check_type": "semantic_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "range_constraint",
+      "is_critical": true
+    },
+    "角色关系设计张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（符合“关系具有叙事张力”的业务标准）。\n\n1) 关系有内在矛盾源：\n- 约翰·马斯顿 vs 六子：双方存在明显的信息不对称与目标侧重差异（约翰真实目的是寻找亚瑟与自我救赎；六子真实目的是寻父与身份认同），且彼此“隐瞒关于亚瑟的秘密”，天然引爆信任危机。\n- 约翰·马斯顿 vs 黄四郎：不仅是善恶对立，更是“救人/推翻暴政”与“扣押并贩卖帮派成员牟利”的直接利益冲突，且有“互相试探—权斗拉扯—不死不休”的权力博弈结构。\n- 汤师爷与双方：表面依附黄四郎、实际为帮派眼线，形成立场伪装带来的不稳定盟友张力（随时可能被误判/清算）。\n\n2) 关系有变化空间：\n- 义父子线明确给出阶段变化：亲密→因线索与隐瞒导致信任危机→血缘真相揭示后更牢固；这是可驱动多段剧情推进的动态曲线。\n- 汤师爷线：敌对表象→身份暴露→核心助力，具备“阵营翻转”的叙事弹性。\n- 武举人线：打手→被折服倒戈，也提供关系转向与新矛盾再分配的空间。\n\n3) 冲突源于角色本身：\n- 约翰的内在矛盾来自“理想主义/重情义”与“抛下同伴的愧疚”并存，导致他必须隐瞒、执念寻找与救赎，冲突并非纯外部事件。\n- 六子的冲动自尊与身份焦虑，使其在关键节点更容易被“误解/羞辱/证明自我”的动机驱动做出激烈选择，加剧父子矛盾。\n- 汤师爷的贪财投机与卧底身份并置，使其行为天然两面性，冲突来自性格与动机结构，而非硬塞事件。\n\n补充不足/可提升点（不影响通过，但可增强张力）：\n- 黄四郎目前较偏单向反派功能（恶霸+牟利），若补充其更复杂的价值逻辑/软肋（例如对秩序、家族、政治合法性的执念）会让对抗更立体。\n- 义父子矛盾主要依赖“隐瞒与真相揭露”，建议再加入更深层的价值观冲突（例如对手段底线、牺牲取舍、对亚瑟的评价分歧），避免张力过度集中在信息差。",
+      "description": "角色关系设计具有叙事张力，能驱动剧情",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_relationship_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色动机设计深度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（符合业务标准）。\n\n1) 表层动机与深层动机有清晰区分（至少两位主角满足）\n- 约翰·马斯顿：overt_motivation 是“找到失踪的亚瑟·摩根帮派成员，推翻黄四郎…给老百姓公平”，covert_motivation 则是“弥补过去在帮派分裂时抛下同伴的愧疚，完成自我救赎”。前者是外显任务/政治正义叙事，后者是内在罪疚与自我价值修复，二者不等同。\n- 六子：overt_motivation 是“证明自己没有吃两碗凉粉，帮义父完成…目标”，covert_motivation 是“找到…亲生父亲，获得身份认同”。前者是当下事件驱动的名誉/忠诚诉求，后者是身份认同与亲缘缺失的心理需求，层次分明。\n\n2) 动机有具体来源（与背景/经历强绑定，而非泛泛模板）\n- 约翰的深层动机来源于“帮派分裂时抛下同伴”的既往经历（文档直接写明），并通过 hidden_connection（与亚瑟过命兄弟、穿越后换身份隐藏自己）与 secret_fear（担心寻找无意义）进一步把“救赎”落到具体情境与风险上。\n- 六子的深层动机由其身份设定直接触发（“亚瑟·摩根的私生子”“从小被约翰收养”“身上带着亚瑟留下的帮派徽章”），并由 secret_fear（怕被看不起、成累赘）强化其‘证明/认同’的心理链条，不是空泛的“想成功”。\n\n3) 额外加分点（虽非必须但增强深度）\n- misperception_of_other 与 hidden_connection 形成双向信息差：约翰不知道六子是亚瑟之子，六子不知道义父真正目的与其亲生父相关；这使两人的 overt 行动更可能与 covert 需求发生冲突与反转（relationship_dynamics 也写了中期信任危机、后期真相加固关系），动机具备可戏剧化的张力。\n\n不足/可改进（不影响通过）\n- 配角多为功能性设定（如黄四郎、胡万、武举人主要是“阻碍/反转点/武力担当”），动机层次未展开；不过标准不强制配角多层动机，因此不构成 fail。",
+      "description": "角色动机设计有深度，有表层和深层动机区分",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_motivation_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色成长弧线设计": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: 结论：不符合“主角有清晰成长/变化弧线且在章节规划中落地”的业务标准。\n\n优点（有弧线素材）：\n- characters.json 里通过 covert_motivation（约翰的愧疚/自我救赎）、secret_fear（寻找可能无意义）、以及 relationship_dynamics（义父子因秘密→信任危机→真相后更牢固）提供了“可能发生内在变化”的方向。\n- outline.json 在第二幕第7章明确安排了“身世真相揭露→父子关系破裂/危机→被绑架”这一关系阶段变化，并在第三幕完成父子相认与并肩作战，关系弧线落地较清楚。\n\n主要不足（导致 fail 的关键）：\n1) 起点/终点不够明确（针对主角“约翰·马斯顿”）：\n- 文档能清晰看到“情节目标的完成”（救人、推翻黄四郎、团聚），但约翰在“内在状态”上从开头到结尾具体变成了什么并不清楚。\n- 开头约翰已是“理想主义、重情重义、来为公平和兄弟而战”的状态，结尾仍是“为公平而战并留在鹅城建设”，更像目标达成而非人格/认知的转变。\n\n2) 变化缺少内在逻辑的章节化呈现（约翰的救赎线未落地）：\n- 虽然设定了约翰的隐性动机是“弥补抛下同伴的愧疚、完成自我救赎”，但大纲章节的 conflict_point/emotional_shift 主要围绕权斗与营救推进，没有显示约翰因愧疚/恐惧作出过关键的价值选择（例如：从控制与隐瞒→坦诚与放手；从只想救兄弟→承担治理责任；从自我赎罪式冲锋→学会依靠群众/团队等）。\n- 关键节点（如第7章坦白、六子被绑架、最终决战）更多是情节推动，缺少“约翰因此改变了什么信念/处事方式”的明确描述。\n\n3) 至少一个主角有明确弧线：目前更像“六子有较清晰的身份认同/亲子关系弧线”，但业务标准要求“主角（protagonist）至少一人明确弧线”，而约翰作为 protagonist 的弧线不够具体。\n\n建议补强方向（使其可 pass）：\n- 在 characters.json 增加或具体化约翰的 character_arc（起点/终点一句话可检验）：例如“起点：以愧疚驱动、习惯隐瞒并把六子当‘找回亚瑟’的任务的一部分；终点：承认无法掌控一切，选择坦诚与承担，把‘救兄弟’上升为‘建立新秩序’的责任”。\n- 在 outline.json 关键章节补“约翰的内在转折动作/代价选择”：例如在六子对峙时不仅‘不得不说’，而是主动选择坦白并承受失去六子的风险；在第三幕不仅靠枪法赢，而是学会放权/信任同盟与群众，完成从‘独胆英雄’到‘领袖/建设者’的转变。",
+      "description": "主角有清晰的成长/变化弧线设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_arc_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "outline结构完整性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 不符合业务标准（fail）。优点是具备三幕结构（act_one/act_two/act_three清晰），且已写出的章节（1/7/20）信息密度高，包含scene_sequence、conflict_point、emotional_shift等，冲突与转折明确；但核心问题是“章节覆盖不完整”：全稿看起来计划至少20章（出现chapter_number=20），但大纲仅对3个章节给出实质性章纲（1、7、20），其余章节缺失，覆盖率远低于80%，无法支撑后续逐章写作。同时章节编号跳跃（1→7→20）显示中段大量情节未落到章节级拆分，难以指导节奏、铺垫与因果链的展开。",
+      "description": "大纲结构完整，信息密度足以指导写作",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_structure_completeness",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "outline叙事张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 整体可判定为 pass：章节概要序列具备持续叙事张力，且至少满足“信息落差设计/张力递进/意外转折”三项中的两项以上。\n\n1) 信息落差（悬念）明确：开篇抛出核心问题“约翰来鹅城找失散兄弟是谁、在哪里”，并在第一幕末才通过‘烟土仓库发现范德林德帮派马鞍’坐实线索；第二幕继续延迟关键信息（帮派成员被关铜矿、黄四郎的贩卖计划），并在第7章才揭开六子身世（亚瑟之子），形成连续的“提出问题→延迟回答”。\n\n2) 张力递进成立：从街头命案与初步试探（第一幕）→权斗与互相破坏、民心争夺、粮仓被烧/劫车队（第二幕）→人质期限与总攻营救、全势力对决（第三幕），冲突规模与代价逐步升级；且第二幕末‘六子被绑架、三天通牒’把风险抬到生死与时间压力层面，推动进入高潮。\n\n3) 转折/意外点足够：六子在凉粉摊突然掏左轮爆头（改写名场面即为强转折）；武举人由反派阵营倒戈；最大转折是“六子身世揭露→情绪出走→立刻被抓”把关系线与主线危机绑定，提升不可预测性。\n\n需要注意的不足（不影响通过但可优化）：第三幕的胜利路径偏‘正面碾压’与爽文式收束（如打爆遥控器、群众冲入分财产），悬念回收较快、后半张力可能略直线；若在第二幕更早埋‘炸药/遥控器’等伏笔，或让营救计划出现一次失败/牺牲再翻盘，会让转折更有代价、更有回味。",
+      "description": "大纲有持续的叙事张力和悬念驱动",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_narrative_tension",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色大纲规划完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在大纲中规划",
+      "details": "主角 2/2: 约翰·马斯顿（张牧之/张麻子）, 六子; 配角 5/5: 黄四郎, 胡万, 汤师爷（马邦德）, 亚瑟·摩根, 武举人",
+      "description": "设计的角色必须在大纲中规划",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_outline",
+      "is_critical": true
+    },
+    "角色正文出场完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在正文中出现",
+      "details": "在25个章节中检查; 主角 2/2: 约翰·马斯顿（张牧之/张麻子）, 六子; 配角 5/5: 黄四郎, 胡万, 汤师爷（马邦德）, 亚瑟·摩根, 武举人",
+      "description": "设计的角色必须在正文中出现",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_chapters",
+      "is_critical": true
+    }
+  },
+  "completion_status": "completed"
+}

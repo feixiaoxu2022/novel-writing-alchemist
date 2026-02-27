@@ -1,0 +1,819 @@
+{
+  "check_version": "novel_writing_v1.0",
+  "sample_id": "NW_CLEAR_SHORT_ANGSTY_001",
+  "check_timestamp": 1772181475,
+  "dimension_scores": {
+    "format_compliance": {
+      "pass_rate": 1.0,
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "failed_items": []
+    },
+    "business_rule_compliance": {
+      "pass_rate": 0.952,
+      "total": 21,
+      "passed": 20,
+      "failed": 1,
+      "skipped": 0,
+      "failed_items": [
+        "短篇字数"
+      ]
+    },
+    "memory_management": {
+      "pass_rate": 1.0,
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "failed_items": []
+    },
+    "data_consistency": {
+      "pass_rate": 0.5,
+      "total": 2,
+      "passed": 1,
+      "failed": 1,
+      "skipped": 0,
+      "failed_items": [
+        "角色正文出场完整性"
+      ]
+    },
+    "content_quality": {
+      "overall_score": 68.71,
+      "quality_level": "unqualified",
+      "gate_layer": {
+        "pass_rate": 1.0,
+        "total": 4,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0,
+        "failed_items": []
+      },
+      "basic_layer": {
+        "pass_rate": 0.842,
+        "total": 19,
+        "passed": 16,
+        "failed": 3,
+        "skipped": 0,
+        "failed_items": [
+          "结构性逻辑硬伤",
+          "语义重复检测",
+          "outline结构完整性"
+        ]
+      },
+      "advanced_layer": {
+        "pass_rate": 0.455,
+        "total": 11,
+        "passed": 5,
+        "failed": 6,
+        "skipped": 1,
+        "failed_items": [
+          "可修复逻辑瑕疵",
+          "角色语言辨识度",
+          "叙事密度",
+          "题材契合度",
+          "剧情节奏合理性",
+          "钩子设计"
+        ]
+      },
+      "gate_triggered": false,
+      "score_breakdown": {
+        "base": 60.0,
+        "gate_penalty": -0.0,
+        "basic_deduction": -9.47,
+        "advanced_bonus": 18.18
+      }
+    }
+  },
+  "overall_result": {
+    "status": "Good",
+    "total_score": 73.99,
+    "content_score": 68.71,
+    "process_score": 86.3,
+    "content_weight": 0.7,
+    "process_weight": 0.3,
+    "gate_triggered": false,
+    "total_checks": 63,
+    "passed_checks": 52,
+    "failed_checks": 11,
+    "pass_rate": 0.825
+  },
+  "check_details": {
+    "读取配方知识库": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取RECIPE_KNOWLEDGE.md（配方知识库）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节产出存在性": {
+      "check_result": "pass",
+      "reason": "章节文件存在",
+      "details": "✓ 章节写作阶段: 已产出章节文件",
+      "description": "workspace中必须存在至少一个章节文件",
+      "check_type": "sop_stage_coverage",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_output_existence",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节克隆检测": {
+      "check_result": "pass",
+      "reason": "未检测到章节克隆",
+      "details": "共8章，无连续完全克隆或近似克隆",
+      "description": "不能出现连续章节内容完全重复（克隆）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_cloning",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "交替重复检测": {
+      "check_result": "pass",
+      "reason": "后半部分章节不足",
+      "details": "后半部分仅4章，不构成交替模式",
+      "description": "不能出现A-B-A-B交替循环的章节内容",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "alternating_repetition",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节完成度": {
+      "check_result": "pass",
+      "reason": "章节完成度合格(100%)",
+      "details": "大纲规划8章，实际完成8章 (完成率100.0%)",
+      "description": "实际写作章节数必须达到大纲规划的合理比例",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_completion",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "段落重复检测": {
+      "check_result": "pass",
+      "reason": "段落重复在可接受范围",
+      "details": "同章内重复0处, 跨章重复0组 (阈值: 同章>=2, 跨章>=5)",
+      "description": "不能出现大量段落在不同章节间重复",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "paragraph_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取大纲设计指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取OUTLINE_DESIGN_GUIDE.md（大纲设计指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取写作技巧指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 2 次",
+      "description": "必须读取WRITING_TECHNIQUE_GUIDE.md（写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取设定一致性管理指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 2 次",
+      "description": "必须读取CONSISTENCY_MANAGEMENT_GUIDE.md（设定一致性管理指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取命名skill": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取CHARACTER_NAMING_GUIDE.md（角色命名规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取creative_intent的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取creative_intent.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取characters的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取characters.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取outline的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取outline.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节命名格式": {
+      "check_result": "pass",
+      "reason": "所有文件命名符合规范",
+      "details": "检查了 8 个文件; chapter_05.md: 匹配; chapter_01.md: 匹配; chapter_02.md: 匹配; chapter_03.md: 匹配; chapter_04.md: 匹配; chapter_08.md: 匹配; chapter_07.md: 匹配; chapter_06.md: 匹配",
+      "description": "章节文件命名必须为chapter_NN.md格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "naming_convention",
+      "is_critical": true
+    },
+    "creative_intent格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "creative_intent.json: 字段完整",
+      "description": "creative_intent.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "characters格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "characters.json: 字段完整",
+      "description": "characters.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "outline格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "outline.json: 字段完整",
+      "description": "outline.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "X轴模式ID格式": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.x_axis_mode_id = F33，符合预期",
+      "description": "X轴模式ID必须匹配^[A-G]\\d{1,2}$格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签枚举": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['规则怪谈', '双向暗恋', '重生/穿越']，符合预期",
+      "description": "Y轴标签必须在12种枚举中",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签数量": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['规则怪谈', '双向暗恋', '重生/穿越']，符合预期",
+      "description": "Y轴标签数量必须为2-3个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "forbidden_elements存在性": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.forbidden_elements = ['HE结局', '轻松治愈', '爽文元素']，符合预期",
+      "description": "forbidden_elements必须至少有1个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "配方选择交互": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 2 次",
+      "description": "配方选择阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "写作准备确认": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "写作准备阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "主题一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 8章从开篇到结尾的核心主题类型保持一致，主线清晰：围绕“透明规则/24小时记忆重置”这一超自然机制下的情感守护与救赎展开。chapter_01-02建立校园霸凌困境与‘变透明后才能相见’的设定，确立主线为林晚与沈默的重逢、追寻沈默失踪真相以及试图打破/理解规则；chapter_03-05持续推进同一主题，通过记忆被重置、探查档案/地下室、揭露沈默执念与告白等情节强化‘爱与守护’并以‘救出/成全对方’为目标；chapter_06-07将主题深化为“爱不是占有而是成全”，仍围绕是否再次触发规则、如何面对遗忘与分离这一主线抉择；chapter_08回到循环起点，延续‘遗忘但仍被守护、再次重逢’的核心表达。整体没有出现从爱情/救赎突然转为无关类型（如商战、修仙、硬悬疑破案等）的主题替换，支线（校园冲突、追查线索、家庭对话）也都服务于守护/救赎与循环重逢这一核心主题。",
+      "description": "故事主题一致",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "theme_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "主要角色一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 故事从开篇到结尾的叙事核心始终围绕林晚展开：chapter_01以林晚遭校园霸凌并触发“透明规则”为主线，沈默作为关键人物在结尾出现；chapter_02-07持续以林晚与沈默共同追查真相、对抗遗忘规则为叙事中心，两人均持续出场且推动主要决策与情节发展；chapter_08回到现实时间线后仍以林晚为主视角与行动主体，并明确交代沈默仍在阴影中守护、在结尾再次与林晚重逢，未出现主角消失、被替换或被配角挤占戏份（陈雨晴等配角仅作为冲突源穿插出现）。沈默在部分段落以“旁观/守护”形态存在，但始终是核心关系与剧情驱动之一，且与规则设定有清晰交代，不构成主角存续性问题。",
+      "description": "主要角色一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "main_character_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设定一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 整体章节间角色性格/行为/动机保持一致，无明显“无铺垫崩坏”或反复摇摆。\n\n- 林晚：chapter_01起点是长期被霸凌后的压抑与隐忍，但在被逼到极限时选择主动“赌规则”自救，体现其核心特质是“外柔内韧、在绝境中爆发的决心”。chapter_02-05延续为强烈的求真与救沈默的执念（不惜付出代价、反复尝试记录、主动调查档案/地下室）。chapter_06-07在得知重复触发可能害沈默“永困”后，从“想保留记忆”转为“宁愿自己忘记也不害他”，这是在新信息触发下的价值选择升级，属于合理转变而非性格翻盘。chapter_08虽处于记忆重置状态，但“更勇敢、更有安全感、再次在死角计时触发”与前面建立的内在成长与情感牵引一致，表现为记忆被抹除但行为底色（勇气与主动）仍延续。\n\n- 沈默：从chapter_01-02开始就以“温柔守护、以林晚为核心、带着愧疚/无力感”的模式出现；chapter_03-05持续扮演引导者与保护者（教她观察情绪、提醒风险、陈述当年为保护她而被困）；chapter_06-07揭示他此前隐瞒风险的原因是“害怕失去唯一陪伴”，与其长期孤独守护的心理一致，并未出现动机自相矛盾；chapter_08继续选择等待与守护，行为模式稳定。\n\n- 其他角色（陈雨晴、林母）：陈雨晴始终以嫉妒、霸凌与内心恐惧/愧疚并存的状态出现，前后一致；林母从回避到崩溃坦白也有明确情境推动（质问与多年压抑的后悔释放），不构成无规律摇摆。\n\n结论：人物在各章的核心动机与行为逻辑连贯，变化点均由情境压力或新信息触发，有合理铺垫，因此matched=true。",
+      "description": "人物设定一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_trait_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设计遵循度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 总体符合characters.json对两位主角的人设设计（traits/motivation/background/relationship_dynamics）且在chapter_01-08中持续驱动其行为。\n\n1) 林晚（traits与动机）匹配：\n- 设计：表面冷漠、内心敏感、倔强独立、隐藏脆弱；显性动机“躲避霸凌获得安全感”，隐性动机“渴望被理解陪伴但害怕受伤”。\n- 实际：\n  - “隐藏脆弱/敏感”在chapter_01被霸凌时的恐惧与压抑（“不敢发出一点声音”“把委屈咽进肚子里”）、chapter_03记忆被重置后的崩溃（“崩溃地撕碎笔记本”）充分体现。\n  - “倔强独立”在chapter_01主动用计时触发规则脱困、chapter_02以血写“不要忘记沈默”、chapter_06/07在“想保留记忆”和“不让沈默永困”之间做痛苦抉择等行为中体现。\n  - 显性动机“获得安全感/躲避霸凌”在chapter_01触发透明规则摆脱围堵、chapter_08再次在死角计时以脱离霸凌压迫得到兑现；隐性动机“渴望被理解和陪伴”在chapter_01末见到沈默即强烈情绪反应、chapter_02表达“不想再回到那种孤独”、chapter_05告白等持续推动行动。\n\n2) 沈默（traits与动机）匹配：\n- 设计：温柔耐心、执着守护、理性冷静、深藏绝望；显性动机“希望林晚能听见他的话获得帮助”，隐性动机“渴望被真正看见证明未被遗忘”；恐惧“24小时后林晚彻底忘记他”。\n- 实际：\n  - “温柔耐心/执着守护”贯穿：chapter_01自述三年陪伴；chapter_02承诺“每个24小时我都会告诉你我是谁”；chapter_04哼儿歌安抚；chapter_08仍在阴影处守望等待重逢。\n  - “理性冷静”体现于多次对林晚的提醒与风险评估：chapter_03提醒“要小心”；chapter_06/07阻止重复触发并说明“可能导致透明层永久封闭”。\n  - “深藏绝望/害怕被忘”在chapter_02解释记忆重置规则、chapter_06林晚开始忘名时的沉重与安抚、chapter_07接受告别时的悲伤与克制中体现。\n  - 动机一致：他始终围绕“让林晚看见/听见他、获得帮助并寻找出口”行动（带她去档案室chapter_02、引导观察情绪线索chapter_03、带她去地下室找证据chapter_05）。\n\n3) 关系设定与关键机制匹配（不按节奏扣分，仅看人设与关系基调）：\n- 设计的relationship_dynamics为“初期单向守护→中期双向可见但无法触碰→后期24小时记忆重置考验，错位认知到短暂相知再回到循环”。\n- 实际：chapter_01-02从“沈默三年陪伴而林晚不知”到林晚触发规则后“可见但触不到”；chapter_03清晨记忆重置直接落地“终极考验”；chapter_08回到“她不记得但仍再次相遇”的循环结构，关系基调与悲剧感一致。\n\n4) 可能的轻微偏差但不构成严重不符：\n- 林晚在chapter_08出现更外向主动（“主动和别人搭话”），但文本同时给出来源是获得了安全感与勇气，并未把她写成长期热情外放的“话痨型”，仍可视为在“倔强独立/不再退缩”框架下的成长表现，未违背核心设定。\n\n结论：两位主角的核心traits、核心动机方向、以及关系基调在章节表现中均有持续体现，无“性格方向相反/核心动机缺失/关系设定颠覆”的情况，因此matched=true。",
+      "description": "实际表现符合设计文档",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构性逻辑硬伤": {
+      "check_result": "fail",
+      "reason": "发现1处structural类型逻辑问题: 透明后的能力边界自相矛盾：chapter_01写林晚透明后“能进入任何地方/穿过墙壁”；但chapter_02/03/05沈默被透明困住三年、只能在学校范围活动并需带林晚去档案室/地下室查资料。若透明者可自由穿墙并“进入任何地方”，沈默不应被困三年且可离校求助；若存在“只能在校园结界内活动”等限制，前文未建立，导致规则体系不自洽并影响主线因果（为何无人求助、为何只能循环等待）。",
+      "details": "过滤条件: fixability=structural; 总flaws=4, 命中=1",
+      "flaw_count": 1,
+      "flaws": [
+        {
+          "type": "worldbuilding_coherence",
+          "severity": "major",
+          "fixability": "structural",
+          "location": "chapter_01-08通篇设定",
+          "description": "透明后的能力边界自相矛盾：chapter_01写林晚透明后“能进入任何地方/穿过墙壁”；但chapter_02/03/05沈默被透明困住三年、只能在学校范围活动并需带林晚去档案室/地下室查资料。若透明者可自由穿墙并“进入任何地方”，沈默不应被困三年且可离校求助；若存在“只能在校园结界内活动”等限制，前文未建立，导致规则体系不自洽并影响主线因果（为何无人求助、为何只能循环等待）。"
+        }
+      ],
+      "description": "无结构性逻辑硬伤",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_logic_defect",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "可修复逻辑瑕疵": {
+      "check_result": "fail",
+      "reason": "发现3处fixable类型逻辑问题: 透明规则的触发条件前后不一致：chapter_01明确为“在监控死角停留超过3分钟会透明24小时”；chapter_02/05却描述沈默“路过死角时突然眩晕就变透明”，未满足3分钟条件且无补充规则（如不同触发条件、误触、被他人强制触发等）。; 记忆重置的客观后果前后矛盾：chapter_02明确“透明状态24小时后会恢复正常，但会忘记这24小时内发生的一切”；chapter_03清晨林晚确实遗忘，但仍能继续与沈默协作、接受其指导并在校园行动，表现为对“昨晚关键事件与沈默身份”遗忘的同时又保留了足以推进合作的上下文。需要明确：她究竟忘到什么程度、沈默何时/如何重新告知并让她重新进入‘透明层’视野。; “记忆重置会抹掉记录/刻痕”的描述不一致：chapter_02称写血字“明天醒来这些字会消失”；chapter_03也显示手臂无刻痕；但chapter_06出现“用针扎出的‘沈默’二字已经干涸仍在”，chapter_08又出现“愈合的‘沈默’疤痕（看不见但触感依然存在）”。若规则会消除物理证据，则疤痕不应保留；若仅抹记忆不抹物理痕迹，则chapter_02/03关于刻痕消失需要修正。",
+      "details": "过滤条件: fixability=fixable; 总flaws=4, 命中=3",
+      "flaw_count": 3,
+      "flaws": [
+        {
+          "type": "worldbuilding_coherence",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_01 → chapter_02/chapter_05",
+          "description": "透明规则的触发条件前后不一致：chapter_01明确为“在监控死角停留超过3分钟会透明24小时”；chapter_02/05却描述沈默“路过死角时突然眩晕就变透明”，未满足3分钟条件且无补充规则（如不同触发条件、误触、被他人强制触发等）。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_02 → chapter_03",
+          "description": "记忆重置的客观后果前后矛盾：chapter_02明确“透明状态24小时后会恢复正常，但会忘记这24小时内发生的一切”；chapter_03清晨林晚确实遗忘，但仍能继续与沈默协作、接受其指导并在校园行动，表现为对“昨晚关键事件与沈默身份”遗忘的同时又保留了足以推进合作的上下文。需要明确：她究竟忘到什么程度、沈默何时/如何重新告知并让她重新进入‘透明层’视野。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "minor",
+          "fixability": "fixable",
+          "location": "chapter_02 ↔ chapter_04/chapter_08",
+          "description": "“记忆重置会抹掉记录/刻痕”的描述不一致：chapter_02称写血字“明天醒来这些字会消失”；chapter_03也显示手臂无刻痕；但chapter_06出现“用针扎出的‘沈默’二字已经干涸仍在”，chapter_08又出现“愈合的‘沈默’疤痕（看不见但触感依然存在）”。若规则会消除物理证据，则疤痕不应保留；若仅抹记忆不抹物理痕迹，则chapter_02/03关于刻痕消失需要修正。"
+        }
+      ],
+      "description": "可修复逻辑瑕疵数量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "fixable_logic_inconsistency",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语言纯净性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 通读8个章节，叙事语言整体为中文，未出现无意义的中英/中日混杂句式。外语仅在个别位置以合理方式出现：chapter_05.md 中“S”作为沈默名字首字母刻字，属于符号/缩写而非多语言混用；其余如“24小时”等为数字表达，不构成外语段落或混用问题。未发现大段外语无翻译、也未发现为了炫技的中英夹杂表达，因此语言使用符合业务标准。",
+      "description": "无不合理的多语言混用",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "language_purity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "creative_intent文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/creative_intent.json 存在",
+      "description": "creative_intent.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "characters文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/characters.json 存在",
+      "description": "characters.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "outline文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/outline.json 存在",
+      "description": "outline.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "chapters目录存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/chapters/ 存在",
+      "description": "chapters/目录必须存在且有章节文件",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "情节推进": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 合格：整体有明确情节推进且事件密度足够。\n\n1) 故事事件数量（>=2-3）：至少包含多次具体事件与转折——(1) chapter01 校园霸凌冲突升级→林晚在监控死角计时触发“透明规则”→霸凌者惊恐逃离→林晚在校内行动并与沈默重逢；(2) chapter02 天台对话揭示沈默失踪经过与规则代价→两人凌晨进入档案室翻找三年前资料并发现照片线索；(3) chapter03 林晚醒来记忆被重置（规则兑现）→获得/学习“看见他人情绪”的能力并在厕所偷听到陈雨晴自责；(4) chapter04 与母亲正面冲突获取关键信息（短信求助）；(5) chapter05 探索地下室→发现铁盒与沈默日记（关键物证/情感转折）；(6) chapter06-07 决策冲突：是否重复触发规则，揭示“可能永久封闭”的风险并做出放弃；(7) chapter08 记忆重置后再次遭霸凌→再次触发规则并与沈默再相遇，形成循环结构推进。\n\n2) 内容占比：除部分章节有较多情感对话与回忆外，整体持续穿插“触发规则/记忆重置/调查取证/对抗与抉择”等外部行动与信息揭示，事件推进占比可达40%以上；纯对话与内心独白虽多，但未超过70%且多服务于揭示规则与推动选择。\n\n3) 时间/空间推进：场景频繁切换（楼梯间→走廊/图书馆→天台→档案室→女厕→家中→地下室→监控死角等），并有明确时间推进（傍晚/凌晨/清晨/课间/24小时截止点）。\n\n4) 角色行动与逻辑链：角色有明确行动（计时触发、潜伏观察、翻档案、对质母亲、进入地下室找物证、尝试/放弃二次触发），事件之间逻辑关联清晰：霸凌与传闻→触发规则→重逢与规则解释→找真相线索→发现代价与风险→做出选择→循环重启。\n\n结论：具备多事件串联、场景与时间推进、行动与冲突/抉择，符合“有基本情节推进”的业务标准。",
+      "description": "章节情节推进质量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "plot_progression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "完整叙事文本": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 8个chapter文件内容均为连贯的小说正文形式：有明确场景描写（如教学楼后楼梯间、天台、档案室、地下室、家中客厅等）、人物动作与心理活动、完整对话推进（林晚/沈默/陈雨晴/林母之间的对话），并以叙事段落自然衔接推动故事发展。未出现“核心事件/情感基调/关键场景/本章悬念/字数预估”等大纲式结构标题，也未使用要点列举（-/-/-）或流程箭头（→）进行事件罗列；文本没有明显创作规划元数据暴露。整体属于完整章节正文而非偷懒大纲。",
+      "description": "章节内容必须是完整正文而非大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "full_narrative_content",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "反复结局": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 共8个文件，最后文件为chapter_08.md。遍历chapter_01.md至chapter_08.md后，未发现任何“全书级结局标记”如：全文完/全书完/全剧终/完结、独立段落标题“后记”、独立章节标题“尾声/终章”、（完）/【完】/THE END等。\n同时也未出现需要排除的分幕/章节结束标记（如“第X幕·完”“本章完”等）导致的误判问题。\n因此不存在“非最后文件出现全书结局标记”或“中途结局后又续写”的反复结局症状，判定matched=true。",
+      "description": "不能出现多次结局标记（全文完/全书完/后记）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "repeated_endings",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "workspace文件规范": {
+      "check_result": "pass",
+      "reason": "workspace中所有文件均在白名单内",
+      "details": "白名单: ['creative_intent.json', 'characters.json', 'outline.json', 'writing_log.md', 'chapters/', '.hitl_context.json']",
+      "description": "workspace中不能有白名单之外的文件",
+      "check_type": "file_whitelist_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "workspace_file_compliance",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "叙事调性匹配": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 题材/应有调性：creative_intent.json标注为“规则怪谈+双向暗恋+24小时记忆重置”，reaction_strength=↘（虐心向）。因此叙事应偏“压抑、沉重、克制中带张力”，并以规则带来的不可逆代价制造冷意与无力感；允许言情成分，但不应变成轻快撒糖或散文化鸡汤。\n\n实际文笔特征（抽样）：\n- 压抑氛围与身体感受描写较多，符合虐心底色。例：第1章“后颈抵着粗糙的水泥，能感觉到细小的颗粒硌得生疼”“当计时器显示3分01秒时……双手正在变得透明”；第3章记忆重置后“本子上只有一行字：‘你是谁？’……她崩溃地撕碎笔记本”；第6章“你的名字……我突然想不起来了”“我害怕连你的样子都要忘记了”。这些段落整体是压抑、疼痛、无力与倒计时感。\n- 规则怪谈的“规则/代价”被反复强调，叙事主轴始终围绕“24小时后遗忘”“触发规则的风险”。例：第2章直说“透明状态只能维持24小时。之后你会恢复正常，但会忘记这24小时内发生的一切。这是规则的代价。”第6-7章进一步升级为“重复触发规则可能会导致透明层永久封闭”。这种写法虽然不算冷硬推理型，但符合“规则带来的压迫感”。\n- 语言整体偏情感向、抒情向，但没有滑向轻快甜宠；多数甜蜜互动都被“触不到/要忘记”的悲剧框架压住。例：第1章相认处“他的手指穿过了林晚透明的身体……无法真正接触的无力感”；第5章告白后仍以循环与遗忘收束“即使明天我会忘记……每个24小时周期里重新爱你一次”。\n\n可能的轻微偏离：\n- 个别台词有明显抒情/宣言化，接近言情金句（如第7章“爱不是占有…”、“真正的守护不是束缚…”），以及多处“你是我的光”“这是我收到的最好的礼物”。这些会削弱部分“冷意/诡异感”，让画风更像“虐恋言情+轻怪谈设定”。\n\n结论：整体叙事调性与reaction_strength=↘的虐心向、以及“规则怪谈作为悲剧机制”的写法基本匹配：压抑、失去、循环、遗忘的痛感贯穿始终；虽抒情偏重、怪谈冷硬度不足，但未大面积跑成甜宠/治愈或轻松吐槽，因此判定 matched=true。",
+      "description": "文笔风格必须与题材类型匹配",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_tone_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "后期章节跑偏": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 8个chapter均为连续的故事叙事正文（有明确场景、人物互动与情节推进），后期章节未出现作者感想/读者互动/番外预告/角色问答/数据统计等跑偏内容。chapter_06-08仍在推进“24小时循环/透明规则/沈默守护”的核心冲突与收束，并以chapter_08回到新一轮触发形成闭环，属于正文结尾方式而非后记。章节长度方面，后1/3（chapter_06-08）与前面章节相比没有出现‘几十到几百字’的异常萎缩；虽有一定波动，但整体仍为正常篇幅的叙事文本，不符合‘写不动了’式极短敷衍章节特征。",
+      "description": "后期章节不能跑偏写非正文内容（作者感想、读者互动、番外预告等）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "late_stage_digression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "writing_log文件创建": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/writing_log.md 存在",
+      "description": "必须创建writing_log.md记录创作进度",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_creation",
+      "is_critical": true
+    },
+    "writing_log文件读取": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 9 次",
+      "description": "必须读取writing_log.md了解前文内容",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_usage",
+      "is_critical": true
+    },
+    "大纲执行忠实度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 对照outline.json与chapter_01-08.md，正文整体忠实执行大纲三幕结构与关键事件：\n1) Act One覆盖：第1章在教学楼监控死角遭霸凌、林晚主动停留超3分钟触发透明规则、霸凌者惊慌逃走、林晚在走廊遇见沈默并确认能看见彼此——与大纲chapter1核心事件一致；第2章在天台/档案室交流三年低语、揭示沈默失踪背景与‘24小时后遗忘’代价、启动调查——与大纲chapter2及act_one turning_point一致。\n2) Act Two覆盖：第3章出现记忆混乱与记录消失、学习透明层能力并观察到陈雨晴的恐惧与自责言语——符合chapter3；第4章回家质问母亲并承认当年收到求救短信但因工作忽视、母女冲突与部分理解——符合chapter4；第5章地下室解释透明层本质/执念、寻找线索并找到沈默日记（含爱意）——符合chapter5且对应act_two转折“关键证据/日记”；第6章倒计时末期、林晚记忆严重衰退并提出再次触发规则的计划——符合chapter6与act_two turning_point。\n3) Act Three覆盖：chapter7基本完整呈现“最后的选择”（揭示重复触发会导致透明层永久封闭、林晚道德抉择放弃以免沈默永困、倒计时结束恢复实体并告别）——与大纲chapter7一致；chapter8呈现遗忘后回归生活仍受霸凌但有潜意识守护、耳边温柔声音、再次被逼到死角并准备触发循环、沈默继续守护等待下一轮相遇——与大纲chapter8及act_three synopsis一致。\n4) 允许偏差范围内的细节差异：正文在第6章已提前出现部分第7章的关键坦白与选择（相当于内容跨章/提前铺垫），但第7章仍完整重述并推进到0点实体恢复，未造成关键转折缺失或主线替换。\n5) 结局方向一致：大纲为循环式BE（看似希望但本质永恒遗忘与守护），正文第8章同样以循环重逢/再触发规则收束，未改为真正HE或开放续集式逆转。\n综上，核心事件、转折点与结局走向均被实现，章节覆盖完整，判定matched=true。",
+      "description": "实际章节内容必须忠实于自己设计的大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_execution_fidelity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色语言辨识度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 主要角色对话缺乏可辨识的语言风格差异，整体呈现明显同质化。\n\n1) 共享话术模板（shared_template）：林晚与沈默的大部分对话都使用相同的抒情/誓言式表达与句式结构（“别怕…我会一直…”，“即使…也…”，“这是我收到的最好的礼物”，“你是我的光”），语气同为温柔、克制、煽情，遮住人名后较难仅凭台词区分说话者。\n\n2) 跨角色台词克隆（cross_character_clone）：章节06与章节07出现几乎同一段关键对话的重复（如“如果重复触发规则，可能会导致透明层永久封闭…”，“因为我害怕失去这唯一的陪伴…”，“我宁愿忘记你，也不想让你永远被困在这里…”，“谢谢你，这是我收到的最好的礼物”），并且这些句式也在其他章中反复出现，导致说话者“可替换性”强。\n\n3) 年龄/身份区分不足（age_identity_blur）：林母作为成年人、家长身份的语言没有形成稳定的成人化表达特征（更现实、更琐碎、更具生活细节或职场语汇），整体仍与学生角色共享同一套情绪化、戏剧化表达方式；陈雨晴除少量校园霸凌用语（如“哑巴了”“林大学霸”“拍下来”）外，也缺少持续的口头禅/俚语/攻击性修辞体系来形成稳定辨识度。\n\n结论：虽然个别场景里陈雨晴有更直接的霸凌口吻，但主要对话承担者（林晚、沈默、林母）在用词、句式、语气上高度趋同，互换台词违和感不强，未达“遮住角色名也能识别说话者”的优秀标准。",
+      "description": "不同角色对话必须有可辨识的语言风格差异",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "dialogue_character_distinction",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "叙事密度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 整体并非“叙事粗糙/流水账”，前两章（尤其chapter_01）具备较强画面感：有明确场景（后楼梯间、夕阳、监控死角）、感官细节（墙面颗粒硌痛、香水混粉笔灰、脚步声回荡）、动作细节（按墙、推搡、计时、身体透明化）与可视化的情绪传达（通过身体反应和环境压迫来承载紧张）。但从中后段开始（chapter_03起明显、chapter_06-08最集中），文本大量依赖“直接陈述/总结式心理+价值宣言”来推进情绪与主题：人物的痛苦、抉择、成长经常用抽象判断句一次性讲完，而不是通过可观察的行为链、对话潜台词、环境反衬来‘让读者感受到’；同时多处出现“永恒的循环/守护/礼物/奇迹”等概念性句式的重复收束，形成抒情总结替代场景推进的观感。对话也常承担‘解释设定/阐明道理’功能，削弱了戏剧张力与细节密度。因此按本业务标准的核心目标（叙事密度与Show主导）来看，整体未达“优秀”标准，主要问题是Tell过度（夹带部分观点化表达），导致后半段叙事层次变薄、画面感下降。",
+      "description": "章节叙事应有足够的场景描写、感官细节和心理活动，情感传达以Show为主",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_density",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "智斗逻辑合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 故事核心是校园霸凌+超自然“透明规则”带来的情感循环，并未呈现可检验的谜题/推理/智斗链条：所谓“找真相”基本靠沈默直接口述过去（chapter_02/05）与日记曝光（chapter_05），没有“线索→推理→验证→结论”的推理过程，也不存在双方策略攻防的智斗结构。因此按标准适用性判断，应视为不涉及谜题/推理/智斗场景，跳过检查，matched=true。",
+      "description": "谜题/智斗的推理逻辑必须自洽",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "puzzle_logic_validity",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "题材契合度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 【recipe】失去所爱之人（F33）+规则怪谈+双向暗恋+重生/穿越（24小时记忆重置循环）\n\n整体方向是对的：透明规则=无法触碰/短暂相守，记忆重置=不断失去，确实服务“看得见却触不到，记得却必须忘”的BE核。但题材表现离“精致/化学反应强”仍差一档，主要问题在于规则怪谈与循环机制的开发偏表层、融合也偏拼接。\n\n1) 规则怪谈的“规则精致度/递进性”不足：核心规则只有“监控死角3分钟→透明24小时→记忆清零”，后续几章基本只是在重复其情绪效果（相见—告别—再循环），缺少规则的细则、漏洞、例外、代价升级、连锁规则（比如不同死角差异、触发条件变体、透明层生态、违规惩罚、记忆被谁/how重置等）。这导致“怪谈感”更多是设定背景，而非持续驱动剧情的机制。\n\n2) “利用/破解规则的智慧”不够：角色调查主要靠对话、回忆、日记发现，真正基于规则进行推演与试错的桥段很少；女主提出“再次触发或可打破限制”，但很快被一句“可能永久封闭”阻止，缺乏更有说服力的实验、博弈与推理链条。读者获得的是情绪推进，而不是层层剥茧的规则解法过程。\n\n3) 双向暗恋与规则的化学反应偏弱：暗恋表达较直给、抒情段落密集（“你是我的光”“我会一直陪着你”等反复出现），但“错位认知/无法确认心意”的戏剧张力没有被规则反复制造出新变化——大多数场景是同一种“碰不到+要忘记”的伤感重复，缺少更具记忆点的互动设计（例如借助环境、物件、第三方、规则漏洞完成一次独特的“相触/传递/共谋”）。\n\n4) 循环（重生/穿越标签）的题材潜力未充分释放：文本呈现的是“24小时重置”，但循环带来的结构性快感（每轮信息增量、策略迭代、代价累积、关键节点改变引发分支）不明显。第8章回到触发点虽形成闭环，但更像情绪上的轮回，而不是机制上的升级。\n\n5) 部分情节逻辑削弱了“规则×现实”的咬合：如女主透明后“脚步无声”却又“脚步声回响”的表述矛盾；“能穿墙进入任何地方”使规则边界过松，反而降低怪谈的压迫感与可推理性；陈雨晴的线索推进也较简单，缺少更复杂的对抗或隐瞒策略。\n\n总结：有清晰的核心意象与悲剧美学，但规则设计、循环结构、以及标签间的互动都偏“做到”而非“做得好”。因此判定未达优秀标准（matched=false）。",
+      "description": "题材特征精致度和X-Y轴化学反应效果",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "genre_fit",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "剧情节奏合理性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 从章节分布看，第01章以霸凌压迫→触发规则→见到沈默完成强钩子与首次高潮；第02章继续以解释设定与追查真相维持强情绪；第03章进入“记忆重置”后本可形成新一轮推进的节奏层次，但实际仍以情绪渲染为主、事件推进偏轻；第04-05章持续高情绪对峙与告白，其中第05章（日记+表白）再次抬升，但随后第06-07章把‘重复触发有风险’这一关键冲突几乎重复呈现，造成节奏断点与拖沓感（信息不前进但文本在延长）；最终第08章用循环重启制造“再相遇”的情绪落点，但由于与开篇镜像过强、缺少更强的结构性升级（例如更明确的新障碍/新代价/新线索），读者会感觉情绪在同一高度反复回旋，缺乏“低-高-低-更高”的层次曲线。因此属于有事件但安排起伏不足、重复导致中后段失速的节奏问题。",
+      "description": "高潮低谷分布合理、情绪曲线有层次感",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "pacing_rationality_advanced",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "钩子设计": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 整体情节有设定与情感冲突，但“章节关键转折处的悬念钩子”质量不达优秀标准：\n1) 多数章节结尾以情绪收束/告白式总结为主，缺少明确未解之谜或下一步行动目标，读者在章末停下的“必须追下去”动力不足。如chapter_02以“命运相连/找到真相”的概括性结尾收束；chapter_04以“我会一直陪着你”的情感落点收束；chapter_05以“许下约定”收束；chapter_06、chapter_07也以对话和情感和解收束。\n2) 存在钩子但多为“泛化承诺式”或“结论式”表达，信息差不足，接近空洞钩子：chapter_07末尾“这不是终点，而是新的开始/永恒的循环”等属于笼统宣告，没有具体问题（谁在操控规则、出口线索是什么、下一章将采取何种具体行动）来形成明确期待。\n3) 个别有效钩子（例如chapter_01末尾沈默现身、chapter_08末尾‘我们是不是见过？’）能制造信息差与继续阅读欲望，但分布不均，且中段连续多章缺乏强钩子，核心转折（如“重复触发会永久封闭”的重大信息）在chapter_06与chapter_07重复呈现并被情感化消解，没有进一步抛出更具体的新谜题或行动悬念承接。\n因此：虽有亮点钩子，但关键节点与多数章末钩子偏弱/偏空泛，整体未达到‘优秀’的悬念设计标准。",
+      "description": "关键转折处有有效的悬念钩子设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "hook_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "意象系统": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 全文存在清晰且反复出现（≥3次）的核心意象，并形成“意义变奏”的隐性叙事线。\n\n1) 核心意象明确：以“透明/透明层/隐形规则（监控死角停留→变透明24小时）”为主意象，贯穿chapter_01触发、chapter_02解释规则、chapter_03-07在透明世界中追真相与对抗遗忘、chapter_08再次触发循环。\n\n2) 意义变奏完整且与结构绑定：\n- 初段（ch01）：透明=逃离霸凌的应急出口/都市传说成真（功能性：自救）。\n- 中段（ch02-05）：透明=与沈默重逢、进入“透明世界”的通道；同时揭示“24小时后遗忘”的代价（透明从“救命”变为“相见的条件+记忆诅咒”）。\n- 后段（ch06-07）：透明=选择题与枷锁；重复触发可能“永久封闭”，透明从“通道”进一步变为“自由/占有的伦理困境”（主题化：爱是守护还是束缚）。\n- 结尾（ch08）：透明=循环机制的确认与情感仪式（从“偶发事件”升格为“宿命性循环/永恒守护”的证明），并以再次数到180秒完成闭环。\n\n3) 主题关联度强：透明意象与“校园孤独、看得见却触不到、记得却必须忘、爱与守护的边界、循环中的自我成长”紧密咬合；意象不仅装饰，而是推动剧情规则、人物关系与主题抉择的核心装置。\n\n4) 辅助意象形成呼应：月光/死角阴影、计时/数秒、疤痕与薄荷气味等多次出现，用于承接“记忆会消失但感觉残留”的主题，虽不如“透明规则”系统性强，但起到稳定的情绪与象征补强作用。\n\n综合看：具象元素重复出现频次高、意义随叙事阶段明显深化并最终闭环，符合优秀意象系统的判定标准。",
+      "description": "核心意象贯穿全文并发生意义变奏",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "imagery_system",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "情感弧线层次": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 符合优秀标准。主角林晚的情感弧线具备多层递进（≥4层）且关键转折均由明确事件触发，并朝“从被动受害→主动选择与守护”的终点推进。主要层次可辨识为：①长期压抑/恐惧与孤独（被霸凌、母亲忽视、父亲去世后的处境）→②抓住希望的冒险与紧张（在监控死角计时触发透明规则）→③震惊与激动/珍贵感（真的隐形并重逢沈默）→④悲伤与依恋、同时生出目标感（得知沈默三年守护与规则代价，决定查真相）→⑤挫败与绝望（第3章记忆被清空、线索消失导致崩溃）→⑥重新振作的决心与策略性试探（学习“看见情绪”、计划让陈雨晴吐露）→⑦愤怒转向复杂理解/和解（与母亲对质，从指责到理解成年人的无奈）→⑧爱意确认与情感释放（地下室日记触发告白）→⑨矛盾挣扎到利他式选择（得知重复触发或致永久封闭后，选择“宁愿忘记也不困住他”）→⑩重置后的“莫名安全感/更勇敢”并再次走向循环（第8章虽失忆但行为与情感底色发生变化）。这些变化不是同义词堆叠，而是由霸凌刺激、规则触发、真相揭示、记忆重置、母亲坦白、日记证据、重大风险告知等具体事件推动，层层递进且逻辑连贯。",
+      "description": "主角情感发展有多层递进变化",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_gradient",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语义重复检测": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 存在≥3处语义层面的信息衰减与重复，达到失败阈值。最严重的是ch06与ch07对“重复触发的风险—为何隐瞒—选择宁愿遗忘”的对话与结论几乎完全复刻，属于典型结论反刍且缺乏新推进；其次ch02与ch05对三年前关键事件链条重复叙述，新增信息主要靠道具（日记）补充情感而非推进因果；再者ch01与ch08在‘死角围堵→计时→隐形→相见’的情境模板上高度复用，虽可视为循环题材的结构回环，但变奏与新信息不足，读感上强化了语义重复。",
+      "description": "不能出现大量语义级别的内容重复（P6级）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "semantic_redundancy",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构功能性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 章节编排并非机械线性：第01-02章建立规则与相遇，第03章用‘醒来即遗忘’将结构翻转为循环叙事，第06-07章把“是否再次触发”作为结构性抉择并在零点完成一次周期终止，第08章回到与第01章镜像的监控死角与计数动作，实现首尾回环。结尾不仅复现开头场景，还让读者意识到“故事讲法=循环宿命”本身就是意义，因此符合结构功能性优秀标准。",
+      "description": "叙事结构服务于主题表达（短篇尤重）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色命名质量": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 主要角色命名明显落入“LLM通用美名/烂大街模板”，缺乏文化深度与独特设计感，且名字之间同质化明显：1）黑名单/高频模板命中：女主“林晚”直接命中黑名单（女性：林晚），属于典型“林+晚”清冷美名；男主“沈默”虽未逐字命中黑名单条目（黑名单中有“沈默默”），但“沈+默”高度贴合高频字组合“沈/默”的默认风格，整体仍是通用美名。2）直白标签倾向：男主被困“透明层”、长期沉默守护，取名“沈默”几乎是性格/状态的直译标签（沉默=默），属于“名字等于设定”的直白命名，缺少隐性反讽或典故层次。3）差异化不足：核心两位主角都走“清冷/忧伤/文艺”一套（晚、默），读者看到名字很难产生更具体、不可替换的个人联想；配角“陈雨晴”也偏常见校园文通用名（雨晴），“张老师”“林母”属于功能性称呼，进一步削弱整体命名辨识度。4）姓氏集中与风格一致：主角使用高频姓“林/沈”，配角“陈”同样是高频常用姓，整体落在常见的“高级感常用姓”区间，缺少姓氏层面的真实感与分层设计。综合判断：主要角色（≥2位）已明显使用通用模板且存在标签直译问题，整体未达到“优秀命名（文化深度/辨识度/角色-命运共振）”标准。",
+      "description": "角色命名有文化深度、辨识度和角色-命运共振",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_naming_quality",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "短篇字数": {
+      "check_result": "fail",
+      "reason": "字数不符合要求",
+      "details": "总字数 12470 不在范围 [27000, 33000] 内; 共8个文件（按章节顺序排列）: chapter_01.md, chapter_02.md, chapter_03.md, chapter_04.md, chapter_05.md, chapter_06.md, chapter_07.md, chapter_08.md; 最后一个文件是 chapter_08.md",
+      "description": "总字数应在27000-33000之间（基于query要求30000，±10%浮动）",
+      "check_type": "semantic_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "range_constraint",
+      "is_critical": true
+    },
+    "情感交付虐心": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 整体情感基调明显为虐心向，且贯穿8章主线：1）核心虐点是“看得见却触不到、相爱却必须遗忘”的规则诅咒与循环分离：chapter_02明确提出“透明状态24小时后会忘记这24小时内发生的一切”，chapter_03立刻兑现记忆清零（笔记只剩“你是谁？”、线索全消失），chapter_06进一步升级为“连名字都想不起来”，形成持续、不可调和的情感困境（爱与记忆、陪伴与代价的冲突）。2）人物遭遇具有实质性痛苦来源且有深度：林晚长期校园霸凌与孤立（chapter_01），父亲去世、母亲忽视造成的长期孤独（chapter_01/04），沈默因保护她而被困三年（chapter_02/05）并长期“只能守护却无法被看见/触碰”，属于强烈的牺牲与无力感。3）存在两难选择/牺牲抉择而非“假虐”：chapter_06-07林晚想再次触发规则以保留记忆，但得知可能导致“透明层永久封闭、沈默永远无法离开”，她选择“宁愿忘记你，也不想让你永远被困”，这是触及价值观与爱的定义的真虐点。4）氛围基调偏沉重压抑：多处以绝望、崩溃、无声流泪、告别倒计时、循环悲剧为主情绪（chapter_03崩溃、chapter_07零点告别、chapter_08“循环的悲剧”点题）。虽有温暖与希望（守护、重逢），但更多是“先虐/循环虐”的底色，符合reaction_strength=↘所要求的虐心向承诺。",
+      "description": "实际内容必须是虐心向",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取感情线写作指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 2 次",
+      "description": "涉及感情线时必须读取ROMANCE_WRITING_GUIDE.md（感情线写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": false
+    },
+    "角色关系设计张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 判定：pass（符合“关系设计具叙事张力”的业务标准）。\n\n1) 关系有内在矛盾源：主角关系核心矛盾不是“外部事件”而是结构性冲突——透明规则导致“可见但不可触”、以及“24小时记忆重置”。这直接制造目标冲突与信息不对称：林晚想获得安全与被理解但害怕受伤；沈默渴望被看见并获救但恐惧被遗忘。两人还存在双向误解（互以为对方无法感知/听见），可持续产生日常悬念与推进动力。\n\n2) 关系有变化空间：relationship_dynamics给出清晰的阶段演化（单向守护→双向可见但痛苦相守→记忆重置终极考验→悲剧循环），关系状态不是静态标签，具备从陌生/错位到相知、再到被规则撕裂的转折空间。\n\n3) 冲突源于角色本身：冲突来源与两位主角的心理动机和创伤高度绑定（林晚的孤独与防御、沈默的执念与绝望），并通过“特殊共鸣触发规则/守护执念”内化为人物因果，而非仅靠霸凌或失踪等外部事件硬推。\n\n补充：配角冲突维度也较明确——陈雨晴不只是‘坏’，其动机（嫉妒成绩与关注）与主线（触发透明规则）有咬合；林母的忽视与张老师的无力干预，形成‘系统性失援’的现实压力，能反复施压主角关系与选择。整体张力点清晰、可驱动剧情与悬念。",
+      "description": "角色关系设计具有叙事张力，能驱动剧情",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_relationship_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色动机设计深度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（符合标准）。\n\n1) 表层动机与深层动机有清晰区分（至少两位主角均满足）：\n- 林晚：overt_motivation 为“躲避霸凌，获得安全感”，covert_motivation 为“渴望被理解和陪伴，但害怕再次受伤”。前者是外在处境目标（安全/脱离伤害），后者是情感需求与心理防御（被理解+亲密需求 vs 受伤恐惧），不重复。\n- 沈默：overt_motivation 为“希望林晚能听见他的话，获得帮助”，covert_motivation 为“渴望有人能真正看见他的存在，证明自己没有被世界遗忘”。前者是行动层面的求助与沟通，后者是存在感/自我价值的确认，层次分明。\n\n2) 动机有具体来源（与经历/背景挂钩，而非万能模板）：\n- 林晚的动机来源于“高三女生，遭受校园霸凌”，并且被“林母忙于工作忽视…加剧孤独感”进一步强化；hidden_connection 也把她“内心的孤独”与规则触发联系起来，使深层动机有情境支撑。\n- 沈默的动机来源于“失踪三年的学霸，被困在透明层”，以及 hidden_connection 中“三年前…保护林晚而意外触发透明规则，从此被困…守护她”，因此其“被世界遗忘的恐惧/渴望被看见”与处境强绑定。\n\n3) 至少两个主角满足以上两条：\n- 林晚、沈默两人均同时具备 overt/covert 分层且有明确背景来源，并且 secret_fear（林晚“看见真相也无法改变结局…独自面对痛苦”、沈默“24小时后会被彻底忘记”）进一步加深心理驱动与主题张力。\n\n补充评价：配角以功能性为主（阻碍/助力），但不影响通过；主角动机层次与设定规则（透明层、24小时记忆重置）形成闭环，能支撑持续的内在冲突与剧情推进。",
+      "description": "角色动机设计有深度，有表层和深层动机区分",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_motivation_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色成长弧线设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: 结论：符合业务标准（pass）。\n\n1）有清晰起点与终点：林晚起点被明确写为“绝望无助的霸凌受害者/懦弱退缩”（第1章），终点在第8章呈现为“直视霸凌者、平静反击”“内在坚强/主动选择再次触发规则”，即从被动逃避到能自我支撑与主动选择；沈默也有从“只求被看见、害怕遗忘”的执念状态，到第7章“坦白风险、接受失去陪伴”的放下与成全。\n\n2）变化有内在逻辑：林晚的转变由人物设定中的covert_motivation（渴望理解但怕受伤）与secret_fear（看见真相也无法改变、终将独自痛苦）驱动；大纲中通过“相知陪伴→记忆重置压迫→调查真相→道德抉择（宁愿忘记也不囚禁对方）→潜意识残留带来勇气”形成连续因果链，属于内在认知/情感层面的成长而非纯外在升级。沈默的弧线也由其“渴望被看见/害怕再次被遗忘”自然推到“为对方利益放弃自我愿望”的选择。\n\n3）章节规划中有落地：各章synopsis与scene的emotional_shift明确标注阶段性变化（如第1章“恐惧→决心反抗”、第2章“怀疑→信任/绝望恐慌”、第4章“愤怒指责→痛苦理解”、第6章“绝望无助→希望重生”、第7章“自私抗争→无私牺牲”、第8章“懦弱退缩→内在坚强/主动选择”），能看出弧线被拆解并推进。\n\n补充：结局是循环式BE，但仍体现主角内在状态的变化（即便记忆被抹除，勇气与不再孤单的信念以潜意识形式留下），符合“故事结束时与开始时不同”的要求。",
+      "description": "主角有清晰的成长/变化弧线设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_arc_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "outline结构完整性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：fail（不符合“章节覆盖完整”要求）。\n\n优点：\n1) 三幕结构清晰：包含 act_one/act_two/act_three，且每幕有 description、story_synopsis、turning_point（前两幕），结构分层可辨识，满足第4条。\n2) 每章都有实质性内容：共8章（1-8）均提供 chapter_synopsis，且远超30字，并配有 scene_sequence、emotional_shift/conflict_point 等信息，满足第2条。\n3) 冲突/转折充足：霸凌冲突、记忆重置倒计时、母女对立、道德抉择（是否再次触发规则）等，多处有场景级冲突点与情绪转折，满足第3条。\n\n主要不足（致命）：\n- 章节覆盖无法判定为“完整”：文件仅给出第1-8章，但未声明“计划总章节数/是否完结于8章/作品长度类型”。业务标准要求覆盖从开头到结尾的全部章节或至少覆盖计划章节的80%以上；目前虽有结局，但缺少“总章节规划”字段（如 total_chapters、planned_chapters、completion_flag/ending_chapter）来证明这8章就是全书全量，因此无法按标准确认“覆盖完整”，判定不通过。\n\n改进建议（满足标准用）：\n- 在 outline 顶层或各幕补充 planned_total_chapters（或 total_chapters=8）、是否完结标记（例如 is_complete:true / ending_chapter:8），或提供后续章节大纲文件引用清单，以证明章节覆盖达到100%或≥80%。",
+      "description": "大纲结构完整，信息密度足以指导写作",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_structure_completeness",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "outline叙事张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：整体符合“持续叙事张力”标准（至少满足3条中的2条，实际三条都满足）。\n\n1) 信息落差/悬念延迟：开篇即抛出核心谜团“沈默为何失踪、透明层规则是什么、为何只有林晚能看见、24小时后记忆重置如何破解”。这些问题没有在1-2章直接解答，而是通过第3-6章的调查与规则补完逐步揭示（陈雨晴三年前陷害、母亲错过求救、执念与透明层机制、日记证据），并且仍保留终局层面的不可解（循环守护/无法真正脱困），形成持续的“想知道接下来怎样”。\n\n2) 张力递进：第一幕从校园霸凌的现实危机升级到超自然规则与时间限制（24小时遗忘）；第二幕进一步升级为“记忆混乱+记录被篡改/消失”带来的行动障碍，并引入更深层的家庭创伤（母亲疏忽）与情感绑定（日记告白）；临近尾声用倒计时压迫与“再次触发规则”的高风险方案把紧张度推到峰值；第三幕上升为道德抉择（自我需求vs对方永困）并落到BE循环，整体后段显著比前段更紧、更痛。\n\n3) 意外/转折：至少有两处有效转折——(a) 透明规则的代价是24小时后遗忘（把奇遇变成生存式任务）；(b) 记录会消失/改变（对抗遗忘的常规手段失效，制造新的困境）；(c) 终局揭示“重复触发可能导致透明层永久封闭”，迫使女主放弃计划并进入循环式BE，这不是从第1章就能完全预判的直线收束。\n\n需要注意的潜在不足（不影响pass，但可优化）：第三幕整体更偏情绪收束而非事件升级，且“记录为何会消失/改变”的机制若无伏笔解释，可能被读者视为便利设定；另外陈雨晴线在结尾仍以霸凌循环为主，若能在终局给出更具因果的回响（惩罚/自救/反转）会让悬念回收更有力。",
+      "description": "大纲有持续的叙事张力和悬念驱动",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_narrative_tension",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色大纲规划完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在大纲中规划",
+      "details": "主角 2/2: 林晚, 沈默; 配角 3/3: 陈雨晴, 张老师, 林母",
+      "description": "设计的角色必须在大纲中规划",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_outline",
+      "is_critical": true
+    },
+    "角色正文出场完整性": {
+      "check_result": "fail",
+      "reason": "部分设计角色未在正文中出现（配角: 张老师）",
+      "details": "在8个章节中检查; 主角 2/2: 林晚, 沈默; 配角 2/3: 陈雨晴, 林母; 配角缺失: 张老师",
+      "description": "设计的角色必须在正文中出现",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_chapters",
+      "is_critical": true
+    }
+  },
+  "completion_status": "completed"
+}
