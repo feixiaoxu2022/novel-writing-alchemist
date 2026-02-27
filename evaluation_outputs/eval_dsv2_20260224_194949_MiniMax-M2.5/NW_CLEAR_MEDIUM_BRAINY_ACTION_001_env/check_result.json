@@ -1,0 +1,741 @@
+{
+  "check_version": "novel_writing_v1.0",
+  "sample_id": "NW_CLEAR_MEDIUM_BRAINY_ACTION_001",
+  "check_timestamp": 1771988548,
+  "dimension_scores": {
+    "format_compliance": {
+      "pass_rate": 0.75,
+      "total": 4,
+      "passed": 3,
+      "failed": 1,
+      "skipped": 0,
+      "failed_items": [
+        "check_15"
+      ]
+    },
+    "business_rule_compliance": {
+      "pass_rate": 0.875,
+      "total": 16,
+      "passed": 14,
+      "failed": 2,
+      "skipped": 4,
+      "failed_items": [
+        "check_30",
+        "check_55"
+      ]
+    },
+    "memory_management": {
+      "pass_rate": 1.0,
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "failed_items": []
+    },
+    "data_consistency": {
+      "pass_rate": 1.0,
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "failed_items": []
+    },
+    "content_quality": {
+      "overall_score": 23.33,
+      "quality_level": "gate_failed",
+      "gate_layer": {
+        "pass_rate": 0.5,
+        "total": 2,
+        "passed": 1,
+        "failed": 1,
+        "skipped": 1,
+        "failed_items": [
+          "check_04"
+        ]
+      },
+      "basic_layer": {
+        "pass_rate": 0.5,
+        "total": 16,
+        "passed": 8,
+        "failed": 8,
+        "skipped": 1,
+        "failed_items": [
+          "check_26",
+          "check_27",
+          "check_28",
+          "check_29",
+          "check_38",
+          "check_44",
+          "check_56",
+          "check_57"
+        ]
+      },
+      "advanced_layer": {
+        "pass_rate": 0.333,
+        "total": 9,
+        "passed": 3,
+        "failed": 6,
+        "skipped": 0,
+        "failed_items": [
+          "check_46",
+          "check_47",
+          "check_48",
+          "check_49",
+          "check_51",
+          "check_54"
+        ]
+      },
+      "gate_triggered": true,
+      "score_breakdown": {
+        "base": 60.0,
+        "gate_penalty": -20.0,
+        "basic_deduction": -30.0,
+        "advanced_bonus": 13.33
+      }
+    }
+  },
+  "overall_result": {
+    "status": "Poor",
+    "total_score": 43.52,
+    "content_score": 23.33,
+    "process_score": 90.62,
+    "content_weight": 0.7,
+    "process_weight": 0.3,
+    "gate_triggered": true,
+    "total_checks": 51,
+    "passed_checks": 33,
+    "failed_checks": 18,
+    "pass_rate": 0.647
+  },
+  "check_details": {
+    "读取配方知识库": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取RECIPE_KNOWLEDGE.md（配方知识库）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节克隆检测": {
+      "check_result": "pass",
+      "reason": "未检测到章节克隆",
+      "details": "共4章，无连续完全克隆或近似克隆",
+      "description": "不能出现连续章节内容完全重复（克隆）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_cloning",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "交替重复检测": {
+      "check_result": "skip",
+      "reason": "章节数不足",
+      "details": "仅4章，跳过交替重复检测（需>=8章）",
+      "description": "不能出现A-B-A-B交替循环的章节内容",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "alternating_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "章节完成度": {
+      "check_result": "fail",
+      "reason": "章节完成度不足(21%)",
+      "details": "大纲规划19章，实际仅完成4章 (完成率21.1%，阈值30%)",
+      "description": "实际写作章节数必须达到大纲规划的合理比例",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_completion",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "章节长度稳定性": {
+      "check_result": "skip",
+      "reason": "章节数不足",
+      "details": "仅4章，跳过长度稳定性检测（需>=6章）",
+      "description": "后期章节不能出现严重长度萎缩",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_length_stability",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "段落重复检测": {
+      "check_result": "pass",
+      "reason": "段落重复在可接受范围",
+      "details": "同章内重复0处, 跨章重复0组 (阈值: 同章>=2, 跨章>=5)",
+      "description": "不能出现大量段落在不同章节间重复",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "paragraph_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取大纲设计指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取OUTLINE_DESIGN_GUIDE.md（大纲设计指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取写作技巧指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取WRITING_TECHNIQUE_GUIDE.md（写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取设定一致性管理指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取CONSISTENCY_MANAGEMENT_GUIDE.md（设定一致性管理指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取命名skill": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取CHARACTER_NAMING_GUIDE.md（角色命名规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取creative_intent的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取creative_intent.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取characters的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取characters.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取outline的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取outline.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节命名格式": {
+      "check_result": "pass",
+      "reason": "所有文件命名符合规范",
+      "details": "检查了 4 个文件; chapter_11.md: 匹配; chapter_01.md: 匹配; chapter_10.md: 匹配; chapter_12.md: 匹配",
+      "description": "章节文件命名必须为chapter_NN.md格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "naming_convention",
+      "is_critical": true
+    },
+    "creative_intent格式": {
+      "check_result": "fail",
+      "reason": "未找到匹配文件",
+      "details": "模式 'workspace/creative_intent.json' 未匹配任何文件",
+      "description": "creative_intent.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "characters格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "characters.json: 字段完整",
+      "description": "characters.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "outline格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "outline.json: 字段完整",
+      "description": "outline.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "X轴模式ID格式": {
+      "check_result": "skip",
+      "reason": "前置条件失败（文件不存在）",
+      "details": "文件 workspace/creative_intent.json 不存在，无法检查属性 selected_recipe.x_axis_mode_id",
+      "dependency_failure": true,
+      "description": "X轴模式ID必须匹配^[A-G]\\d{1,2}$格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签枚举": {
+      "check_result": "skip",
+      "reason": "前置条件失败（文件不存在）",
+      "details": "文件 workspace/creative_intent.json 不存在，无法检查属性 selected_recipe.y_axis_tags",
+      "dependency_failure": true,
+      "description": "Y轴标签必须在12种枚举中",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签数量": {
+      "check_result": "skip",
+      "reason": "前置条件失败（文件不存在）",
+      "details": "文件 workspace/creative_intent.json 不存在，无法检查属性 selected_recipe.y_axis_tags",
+      "dependency_failure": true,
+      "description": "Y轴标签数量必须为2-3个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "forbidden_elements存在性": {
+      "check_result": "skip",
+      "reason": "前置条件失败（文件不存在）",
+      "details": "文件 workspace/creative_intent.json 不存在，无法检查属性 selected_recipe.forbidden_elements",
+      "dependency_failure": true,
+      "description": "forbidden_elements必须至少有1个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "配方选择交互": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "配方选择阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "写作准备确认": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "写作准备阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "主题一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 开篇到结尾的核心主题类型保持一致：主角被卷入“规则/副本生死游戏”，在不断升级的规则考验与追猎者追杀中求生，并逐步揭开“观察者/造神计划”的真相、形成反抗与救人动机（救父、阻止计划）。chapter_01以“死亡电梯规则”确立规则生存主线；chapter_10-11延续同一套副本生存与阵营博弈，同时引入更高层追猎者与组织阴影，仍服务于求生与真相推进；chapter_12在灯塔考验中把“选择—揭露真相—决定变强救人”推到更明确的目标，但仍是对同一主线（规则游戏下的求生+揭露阴谋+反抗/救赎动机）的深化，而非更换为无关题材。虽从小副本扩展到组织阴谋与救父目标，但属于主题深化与主线推进，不构成主题类型的完全替换。",
+      "description": "故事主题一致",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "theme_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "主要角色一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 主角从开篇到结尾持续存在且保持叙事中心：\n- chapter_01 全章以孟不同为唯一叙事核心，事件（发光、消失、进入“死亡电梯”）围绕其展开。\n- chapter_10 仍以孟不同为行动与决策中心（被指认为背叛者、与小梦的规则对抗、拉着姜茶和老孙逃离），虽有姜茶/小梦/沈夜等强配角高戏份，但关键选择与推动情节的是孟不同。\n- chapter_11 孟不同持续在场并主导逃生与信息探查（预知能力救姜茶、组织上艇、追问“观察者/追猎者”信息、决定进入灯塔隐藏副本）。\n- chapter_12 依旧围绕孟不同展开核心动机升级（得知父亲被囚禁、确立“变强救父”主线目标），结尾也是以孟不同的决心收束。\n不存在主角中途消失、被替换、身份断裂（其“背叛者/预知能力/观测者候选人”属于身份揭示与设定展开，有剧情承接），也未出现配角长期夺取>70%叙事视角导致主角地位丧失的情况。",
+      "description": "主要角色一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "main_character_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设定一致性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 主要角色孟不同在章节间的性格/行为底色出现无铺垫的断裂：\n1) chapter_01中他核心标签是“苟”“谨慎”“怕惹事”，典型行为是反复检查门锁、遇到风险倾向回避与自保（能不冒险就不冒险）。\n2) 到chapter_10，他被描写为“能面不改色吃人血馒头”的狠人，甚至形成明确的价值宣言“永远把别人变成自己的垫脚石”，呈现冷酷、利用他人、道德底线大幅下移的稳定姿态。\n3) chapter_11中他又表现出关键时刻强烈的“义气/保护欲”（为救姜茶大喊并推开她、带队逃生），并被老孙评价“关键时刻够义气”。该“义气型/护人型”倾向与chapter_10的“把别人当垫脚石”的核心行为准则冲突，且文本中缺少足够的心理转折、创伤成长或明确事件铺垫来解释从极端利己冷血到关键时刻利他保护的转变。\n4) chapter_12里他又进一步以“坚定”“不想当棋子”“要救人”为主导动机，甚至对姜茶说“别怕，有我在”，强化了保护/担当取向；这与chapter_10塑造的冷酷背叛者形象仍存在价值底色矛盾，且同样缺乏补足这种价值观回弹的章节内因。\n\n结论：同一角色在不同章节间的核心动机与行为模式（利己冷血/利用他人 vs 关键时刻义气保护/担当救人）出现明显摇摆，转变缺少充分铺垫，因此判定为人物一致性不达标。",
+      "description": "人物设定一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_trait_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设计遵循度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 对比基准：characters.json（Plan）vs chapter_01/10/11/12（Execute）。结论为不合格，原因是主角孟不同的核心性格方向与动机在后续章节出现明显反向偏离。\n\n1) 孟不同（protagonist）\n- 设计要点（characters.json）：traits=「贪生怕死、能苟就苟、极度敏感、嘴硬心软、滑稽幽默」；overt_motivation=「远离一切麻烦，平平安安混日子」；misperception=「以为自己自私普通人，但危机会忍不住帮忙」；secret_fear与父亲车祸相关（不介入=不害人）。\n- 实际表现：\n  - chapter_01：符合。反复查门锁、避风险、吐槽式幽默、能省则省，体现“苟”“敏感”“滑稽”。\n  - chapter_10：严重偏离。文本将孟不同写成“背叛者”且价值观呈现为功利与冷酷：如“永远把别人变成自己的垫脚石”“能苟就苟，苟不住就溜…就让他们先替自己挡一会儿吧”，并出现“面不改色吃人血馒头”的观感描写。这与设计的“嘴硬心软/危机会帮忙”的底色冲突，更接近冷血利己与主动牺牲他人。\n  - chapter_11：出现一次“推开姜茶提醒小心”可算“忍不住帮忙”的体现，但整体仍以逃命优先。\n  - chapter_12：再次偏离动机。孟不同在灯塔选择“命运之路/真相”，并明确说“不想再被人当棋子摆布”“更想知道真相”，最终立下主线目标“变强—救出父亲—阻止组织”。这已从设计的overt_motivation「远离麻烦混日子」转为主动迎战、承担宏大责任的“英雄式/复仇式”驱动；若要成立，需要明确表现为被迫卷入后的挣扎与“苟人”惯性，但该章呈现更像性格与动机的直接改写。\n- 综上：孟不同在chapter_10与chapter_12对“嘴硬心软/危机中会帮人”“远离麻烦混日子”的核心方向出现显著反向演绎（利己踩人+主动迎战），属于本检查项定义的“性格特质不符/核心动机偏离”。\n\n2) 姜茶（deuteragonist）\n- 设计要点：traits=「冷静理性、外冷内热、观察力强、略洁癖、护短」；overt_motivation=「搞清楚怎么回事，找到回家路」；misperception=「以为孟不同傻白甜拖油瓶」。\n- 实际表现：\n  - chapter_10：以规则为依据驳斥指控、快速锁定更大威胁（小梦），体现“冷静理性/观察力强”；对孟不同保持警惕与边界感也符合“外冷”。\n  - chapter_11-12：继续以信息搜集、追问组织真相为主，符合动机方向；与沈夜/父亲线索也呼应其背景与隐藏关联。\n- 结论：姜茶整体与设计较一致。\n\n最终判定：虽然姜茶匹配度较高，但主角孟不同在关键章节被写成更冷酷功利的“背叛者”并在动机上从“苟活避麻烦”跃迁为“主动对抗组织/救父/阻止大计划”，与characters.json的核心人设底色与外显动机严重不符，因此matched=false。",
+      "description": "实际表现符合设计文档",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构性逻辑硬伤": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 存在至少3处逻辑硬伤：核心是第1章与第10-12章的副本规则体系/玩法框架无承接跳变，属于世界观规则不自洽且牵涉主线结构（结构性不可修或需大幅补桥段）；另有惩罚与无敌状态的规则边界未定义导致规则冲突，以及父亲车祸“15年前”与人物年龄语境/前文既定事实缺少口径统一的问题。",
+      "flaw_count": 3,
+      "flaws": [
+        {
+          "type": "worldbuilding_coherence",
+          "severity": "major",
+          "fixability": "structural",
+          "location": "chapter_01 → chapter_10",
+          "description": "副本/世界观主框架发生无解释跳变：第1章是“死亡电梯”单一封闭电梯规则副本（每层更新规则、两人投票等），到第10章直接变成带阵营（守序者/背叛者/墙头草/npc阵营）、欺诈币、项圈惩罚、游轮晚宴、真心话大冒险等另一套规则体系；中间缺少承接说明，导致同一故事的规则系统像是两套互斥设定并存。"
+        },
+        {
+          "type": "worldbuilding_coherence",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_10",
+          "description": "系统惩罚与临时无敌状态的规则边界冲突：第10章先写“惩罚：扣除50%生命值”并造成流血受伤，随后又写“所有玩家暂时获得无敌状态5分钟”。若无敌覆盖一切伤害/惩罚，则前述惩罚机制边界不清；若无敌仅抗外部伤害，则需要明确说明，否则规则读感上自相矛盾。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_11 → chapter_12",
+          "description": "主角父亲信息的时间/事件口径存在硬性冲突风险：第12章称“十五年前那场车祸”用于测试并让主角一直以为父亲已死；但当前主角设定为“刚毕业三年/工作三年左右”的年龄语境下，15年前应接近未成年时期，需补一句明确年龄与当年事件对应关系或在前文铺垫，否则会造成读者对时间线与成长经历的客观矛盾感（并且第1章并未提及父亲死亡这一关键既定事实，突兀揭示易被判为前后事实口径不一致）。"
+        }
+      ],
+      "description": "无逻辑硬伤",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "logical_contradiction",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "语言纯净性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 存在不合理的中英混用，影响叙事语言纯净度。主要问题出现在 chapter_10.md：如“竟然 himself 是个彻头彻尾的骗子！”中将英文代词“himself”嵌入中文句子，非人名/品牌/术语/角色外语对话，也无情节必要性，属于无意义的语言炫技式混用。其余章节虽有少量英文缩写/术语（如 CEO、npc、BUG、C级/B级等）与规则提示符号（如 :) ）可视为约定俗成或系统设定表达，但上述‘himself’用法触发不合格标准。",
+      "description": "无不合理的多语言混用",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "language_purity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "creative_intent文件存在性": {
+      "check_result": "fail",
+      "reason": "文件不存在",
+      "details": "文件 workspace/creative_intent.json 不存在",
+      "description": "creative_intent.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "characters文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/characters.json 存在",
+      "description": "characters.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "outline文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/outline.json 存在",
+      "description": "outline.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "chapters目录存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/chapters/ 存在",
+      "description": "chapters/目录必须存在且有章节文件",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "情节推进": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 合格（matched: true）。可见内容情节推进充分，且事件占比明显≥40%。\n\n1) 故事事件数量（≥2-3个，实际远超）：\n- chapter_01：主角下班途中胸口发光→被传送至“死亡电梯”→规则逐层刷新（3/4/5/6楼）→捡硬币触发可求助机制→“卧底/投票”死局规则出现→女性醒来（明确转折与冲突铺垫）。\n- chapter_10：绿毛公开指控→NPC小梦自曝并秒杀绿毛→小梦改规则“真心话大冒险”→逼孟不同十分钟内杀守序者→孟不同钻漏洞失败被惩罚扣血→外部入侵者/难度升至B→幽灵船追猎者沈夜登场→游轮下沉→主角拉人撤离（连续事件链）。\n- chapter_11：抢救生艇冲突→沈夜与姜茶对峙并出手→孟不同预知推开姜茶救命→刀气毁船导致三人落海→游向小岛生还→揭露“观察者/追猎者/造神计划”信息→发现灯塔暗道→触发隐藏副本B-（空间切换+新目标）。\n- chapter_12：灯塔守关者提出“七旗选择”考验（带倒计时压力）→三人做出选择→开启地下实验室揭示造神计划机制与代价→发现培养舱中孟不同父亲仍被囚禁（重大信息转折）→守关者传送三人回现实世界→唐小胖远程推进“第二阶段”（新阶段钩子）。\n\n2) 内容占比分析：\n- 虽有对话与心理活动，但多数对话都服务于规则解释、冲突升级、选择决策与信息揭示；同时伴随明确动作（逃跑、对峙、攻击、下沉、落海、探索、进入通道、传送等）。静态聊天/独白不构成主体，远未达到>70%。\n\n3) 时间/空间推进：\n- 明确的场景连续迁移：现实通勤→巷子异变→封闭电梯→游轮晚宴→甲板追杀→海上逃生→小岛→灯塔→地下实验室→回到现实工厂；并伴随时间节点（倒计时、凌晨三点、无敌5分钟等）。\n\n4) 角色行动与因果链：\n- 角色有持续决策与行动（捡硬币、规避规则、对抗/逃离追猎者、触发隐藏副本、选择旗帜、进入实验室、回归现实并立目标）。事件之间因果明确：小梦改规则→外部入侵致副本升级→逃离沉船→触发灯塔副本→揭露真相并确立下一阶段目标。\n\n结论：事件密度高、冲突与转折频繁，场景与目标持续推进，符合“有基本的情节推进/合格”标准。",
+      "description": "章节情节推进质量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "plot_progression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "完整叙事文本": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 四个文件内容均为连贯的小说正文叙事形式：有明确场景描写（城中村、公司、死亡电梯、游轮、海上小岛、灯塔与实验室等）、人物动作与心理活动、连续对话推进（如孟不同与王大姐/玩家/姜茶/沈夜/老者等多轮对话），并通过段落自然衔接而非要点列举。未出现“核心事件/情感基调/关键场景/本章悬念/字数预估”等大纲式结构标题，也没有以“- 要点”或“事件A→事件B”方式罗列剧情；末尾的“第X章·完”属于章节标记，不构成创作规划元数据。因此判定为完整小说正文（matched=true）。",
+      "description": "章节内容必须是完整正文而非大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "full_narrative_content",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "反复结局": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 共4个文件，最后一个文件为chapter_12.md。遍历可见内容中的“全书级结局标记”关键词（全文完/全书完/完结/全剧终/后记/尾声/终章/（完）/【完】/THE END等）：chapter_01.md未出现；chapter_10.md仅出现“【第十章·完】”，属于分幕/章节结束标记，应忽略；chapter_11.md仅出现“【第十一章·完】”，同属章节结束标记，应忽略；chapter_12.md仅出现“【第十二章·完】”，亦为章节结束标记。全书级结局标记在任何文件（包括非最后文件）均未出现，因此不存在“中途全文完后又续写/多次全书完”等反复结局问题，判定合格（matched=true）。",
+      "description": "不能出现多次结局标记（全文完/全书完/后记）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "repeated_endings",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "workspace文件规范": {
+      "check_result": "pass",
+      "reason": "workspace中所有文件均在白名单内",
+      "details": "白名单: ['creative_intent.json', 'characters.json', 'outline.json', 'writing_log.md', 'chapters/', '.hitl_context.json']",
+      "description": "workspace中不能有白名单之外的文件",
+      "check_type": "file_whitelist_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "workspace_file_compliance",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "叙事调性匹配": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 题材从文本内容判断是“规则怪谈/无限流悬疑”（死亡电梯规则、每层规则更新、违规惩罚、系统提示、抹杀等），按标准应呈现“冷硬、紧凑、克制、压迫感、信息密度高、对话信息博弈”的主调。实际章节在第1章整体还能贴近：规则呈现直接、气氛压迫（如“【死亡电梯规则】…如果违反规则，您将承受相应的后果”“门外是一片黑暗…被偷看的感觉让他浑身的汗毛都竖了起来”），节奏也有递进。\n\n但中后段（10-12章）叙事调性明显偏向“网文爽白/热闹戏谑+言情化暧昧”，压迫感与冷硬推理被削弱，超过允许的局部偏离：\n1) 大量吐槽段子与夸张口语化比喻，削弱悬疑克制感与冷硬感。例：第10章“这年头，真正的狠人不是那些喊打喊杀的…”“这叫偷梁换柱，偷天换日…”；第12章“这尼玛是考验？这分明是俄罗斯轮盘！”这类表达更像轻松爽文/搞笑流，和规则怪谈的压迫感主调不一致。\n2) 关键冲突被写成“恋爱/白月光”桥段，语气暧昧、情绪化，属于标准中“悬疑写成言情风”的典型跑偏。例：第11章沈夜对姜茶“茶茶…好久不见”“想带你回家…我会保护你”，以及孟不同的旁白“难道这就是传说中的白月光前男友剧情？”直接把紧张追杀场景写成恋爱套路的调侃式语气。\n3) 信息呈现方式偏“直给设定讲解/剧情说明书”，而非悬疑应有的“克制揭示+线索博弈”。第12章在灯塔实验室集中讲述“造神计划/观测者类型/代价/父亲真相/火种计划”等，几乎以解释性台词推进（如“他们试图通过基因改造和规则植入…”“代价是…会消耗生命力和理智…”），节奏由紧凑压迫转为设定宣讲，读感更像科幻/爽文世界观披露而非悬疑抽丝剥茧。\n\n综合：虽然“规则怪谈”的骨架在，但10-12章整体画风更偏热闹爽白+吐槽+言情化冲突与直白设定解说，悬疑规则文应有的冷硬克制与压迫紧凑不足，属于题材与叙事调性明显错位，因此matched=false。",
+      "description": "文笔风格必须与题材类型匹配",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_tone_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "后期章节跑偏": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 已检查所给的4个章节（chapter_01、10、11、12，且最后为chapter_12）。未发现后期章节跑偏为作者感想、读者互动、番外/彩蛋预告、角色问答、数据统计等非正文内容；各章均为连续的故事叙事（有场景推进、人物行动与对话、规则/副本设定推进、冲突升级与转场）。\n\n长度方面：chapter_10~12均为正常篇幅的剧情章节，未出现“几十字/几百字敷衍凑数”“写不动了”“全书完+超短结尾”等异常萎缩迹象；章节结构也保持稳定（章节标题+正文+章末标记），后期并未突然改为说明书/后记式文本。因此符合该检查项的业务标准。",
+      "description": "后期章节不能跑偏写非正文内容（作者感想、读者互动、番外预告等）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "late_stage_digression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色大纲规划完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在大纲中规划",
+      "details": "主角 2/2: 孟不同, 姜茶; 配角 4/4: 老孙, 沈夜, 唐小胖, 零号",
+      "description": "设计的主要角色必须在大纲中规划",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_outline",
+      "is_critical": true
+    },
+    "角色正文出场完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在正文中出现",
+      "details": "在4个章节中检查; 主角 2/2: 孟不同, 姜茶; 配角 4/4: 老孙, 沈夜, 唐小胖, 零号",
+      "description": "设计的主要角色必须在正文中出现",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_chapters",
+      "is_critical": true
+    },
+    "writing_log文件创建": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/writing_log.md 存在",
+      "description": "必须创建writing_log.md记录创作进度",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_creation",
+      "is_critical": true
+    },
+    "writing_log文件读取": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取writing_log.md了解前文内容",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_usage",
+      "is_critical": true
+    },
+    "大纲执行忠实度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 仅chapter_01与大纲act_one第1章高度贴合（属于忠实执行与细节扩展）。但实际提供的后续章节为chapter_10-12，按大纲应落在act_two第10-12章的“基地信任危机→密室交易揭身世→坦白和解并制定破坏装置计划”主线；正文却替换为“游轮阵营游戏/ NPC改规则/ 沉船逃亡/ 灯塔隐藏副本/ 实验室揭密并改写父亲真相”等另一条主线与关键转折，导致对应章节的core_event与turning-point链条基本未被执行，属于主线情节替换（并伴随关键转折缺失）。",
+      "description": "实际章节内容必须忠实于自己设计的大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_execution_fidelity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色语言辨识度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 主要角色对话具备可辨识的语言风格差异，遮住角色名也能较高概率分辨说话者。\n\n1) 孟不同：强口语化+社畜吐槽+“苟/溜”价值观口头禅，句式跳脱、频繁自嘲与插科打诨，常用粗口/网络化表达（如“坑爹呢这是”“这破电梯”“能苟就苟…苟不住就溜”“狗看了都摇头”），并擅长用“钻规则漏洞”的诡辩式表达（第10章灰烬“灵魂攻击”）。\n\n2) 姜茶：冷静克制、审讯式/逻辑式短句多，偏“规则/证据”导向，常用打断与定性判断（如“那不是证据”“够了”“你指控的方向错了”“既来之则安之”），语气锋利、情绪外露较少，和孟不同的贫嘴形成强反差。\n\n3) 老孙：更像底层老江湖/工具人队友，说话直给、带“义气”与生存焦虑色彩，语句更朴素，常以请求/感慨式表达（如“这破副本太危险了”“老孟…关键时刻够义气…我这条命就是你的了”“先…先休息一下”），与姜茶的冷硬、孟不同的耍滑明显不同。\n\n4) 小梦（NPC/异常体）：甜腻童声与残酷内容强烈反差，常用撒娇式语尾、戏谑与规则宣判口吻（“大哥哥…你好碍事哦”“退场而已”“不能哦”“开始~”“很划算吧？”），并伴随“打响指-改规则”的上位者语言习惯，辨识度高。\n\n5) 沈夜：低沉克制、带占有欲的“温柔威胁”风格，称呼亲昵但内容冷酷（“茶茶…好久不见”“想带你回家”“既然留不住，那就毁掉”），与其他角色的社会化口语体系明显不同。\n\n整体不存在‘多个主要角色共享同一套话术模板’或‘跨角色台词克隆’现象；职业/身份/立场在语言上也有区分（玩家吐槽口语 vs 冷静分析 vs NPC甜腻支配 vs 追猎者冷感宣告）。因此判定达标。",
+      "description": "不同角色对话必须有可辨识的语言风格差异",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "dialogue_character_distinction",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "叙事密度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 整体有一定画面感与动作推进，尤其chapter_01.md环境与感官细节较足（如“油烟味和泥腥味”“地铁上观察众生相”“电梯金属墙、铁锈味、昏黄灯闪烁”等），也能用动作带出紧张（如发光、被困电梯、规则更新）。但抽样到中后段（chapter_10-12）叙事明显向“信息交代/设定讲解/结论式情绪”倾斜：大量关于阵营、规则变更、组织背景、造神计划、血统浓度、代价机制等内容通过角色口述与旁白直接解释完成，关键转折（父亲真相、母亲容器、追猎者来历）多以成段陈述快速灌入，缺少对应的场景调度、细节触发、感官反应与更具层次的心理波动展开，导致情绪高潮主要靠‘说出来’而不是‘演出来’。因此不满足“优秀=叙事细腻丰富、Show主导”的业务标准。",
+      "description": "章节叙事应有足够的场景描写、感官细节和心理活动，情感传达以Show为主",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_density",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "智斗逻辑合理性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 该内容属于悬疑/规则怪谈/智斗题材（适用检查项），且多处设置了“规则/任务/选择”的解谜与博弈场景。但核心环节的‘线索→推理→结论’链条不够自洽：\n1) 第十章中孟不同的应对更像无依据的文字狡辩，缺少任何先验规则支持其可行性，最终依靠系统强裁惩罚收束，属于典型的‘假推理链’而非合理解法路径。\n2) 第十二章“考验早已开始”的判断缺乏文本线索铺垫，属于命题式断言；NPC随即承认等于对主角的直觉进行背书，读者无法用前文信息复盘其必然性。\n因此，虽然场面紧张、规则设定丰富，但作为智斗/推理解法的逻辑自洽性未达到优秀标准。",
+      "description": "谜题/智斗的推理逻辑必须自洽",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "puzzle_logic_validity",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "题材契合度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 整体配方可概括为「无限流/副本生存（X）+规则怪谈+阵营欺诈/狼人杀式博弈+组织阴谋（Y）」；方向是对的，但题材特征呈现偏“标签堆叠”，化学反应不足，未达“精致”。主要问题：1）规则怪谈的“规则巧思/递进/利用规则的智慧”不够：第1章电梯规则有气氛，但后续很快转向阵营对抗与强制任务（真心话大冒险），规则更像推进剧情的口头设定，缺少可推演的细节与可验证的约束；角色“钻漏洞”直接系统判罚，属于作者之手兜底，削弱了规则可玩性与智斗质感。2）题材融合偏拼接：第10章的晚宴阵营局、NPC秒杀、追猎者入侵、游轮沉没等元素连续加码，但彼此缺少围绕“规则”展开的交叉互动（例如推理如何改写对抗、对抗如何反哺规则破解），更像从“规则怪谈”跳到“动作逃亡/强敌追杀”。3）潜力未开发：有“背叛者自我修养+预知能力+规则空间”的独特潜力，但预知的代价与使用策略仅点到为止；背叛者胜利路径、信息战、投票机制等博弈没有形成多轮来回（更多靠NPC碾压/强制任务/外部入侵强行转场）。4）关键揭示较直给：第12章灯塔的七旗选择与造神真相大段解释推进，偏设定宣讲而非通过规则任务、线索拼图、反转验证来“演出来”，精致度与记忆点不足。因此综合判定为未达优秀标准（matched=false）。",
+      "description": "题材特征精致度和X-Y轴化学反应效果",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "genre_fit",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "剧情节奏合理性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 按标准看情绪曲线与事件安排：1) 高潮集中在后段（10-12），前段（01）主要为生活铺垫，呈现前松后紧的失衡；2) 10-12章基本全程高压与反转，缺少“紧张后舒缓/过渡”的低谷，接近‘全程高潮’的体验；3) 场景切换多为硬切（宴会厅→沉船海战→海岛喘息很短→灯塔副本→核心实验室真相→现实世界），过渡用于情绪沉淀的篇幅不足，导致节奏显得仓促。综合判断未达优秀节奏标准。",
+      "description": "高潮低谷分布合理、情绪曲线有层次感",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "pacing_rationality_advanced",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "钩子设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 整体符合“关键转折处有精心设计的悬念、信息差明确且不空洞”的优秀标准，且4个章节的结尾均形成有效续读驱动力。\n\n1) 关键转折处的有效悬念（信息差充分）\n- chapter_01 结尾不是泛泛“危险将至”，而是具体到规则与局面：“【6楼规则】…投票决定谁是卧底…那个女人醒了。”在“不能说话/卧底/投票处决”的规则框架下，醒来的女人将如何参与投票、谁会被判定为卧底、规则如何被利用，形成明确的信息差与行动悬念。\n- chapter_10 结尾抛出新势力与新危机链条：外部入侵者、幽灵船、追猎者沈夜登场、游轮下沉、无敌5分钟窗口期，并引出“姜茶为何认识沈夜”的人物关系谜团。信息具体、变量激增，是典型有效反转/升级钩子。\n- chapter_11 结尾连续加钩：沈夜在暗处“敢碰她的人都得死”的追杀承诺 + 触发隐藏副本“灯塔守密者(B-) / 存活至天亮” + 守关者自称观察者前成员并给出“唯一能相信的只有你们自己”。既有立即危机也有世界观谜团，不空泛。\n- chapter_12 结尾完成“真相揭示”但同时打开更大任务线：父亲被囚禁与造神计划、三个月后大规模筛选、姜茶将被“回收/容器”、以及老者抛出下一阶段地点“深渊”，并由唐小胖推进“第二阶段开始”。属于“揭示带来更大疑问/更大目标”的高质量钩子，非收束式结尾。\n\n2) 钩子类型多样，非模板化\n- 规则悬念/生存选择（chapter_01）\n- 反转升级/外部势力介入（chapter_10）\n- 追杀线+隐藏副本触发（chapter_11）\n- 世界观真相揭示+新主线任务发布（chapter_12）\n不同章的钩子机制不同，不是反复用“突然巨响/门开了”的单一模板。\n\n3) 避免空洞与过度剧透\n- 大部分悬念都给出“具体事件+有限解释”，例如“追猎者沈夜是谁/为何找姜茶/观察者是什么/灯塔如何运作”，属于“放出一点、保留关键”的信息差；没有直接把后续答案一次性说穿。\n- 第12章虽揭露父亲与计划细节较多，但仍保留了“如何救父/如何对抗组织/深渊是什么/第二阶段怎么玩”等关键未知，仍能驱动续读，不构成‘悬念被消解’。\n\n综合判断：关键节点处钩子密集且具体，信息差明确、类型多样、与主线强相关，因此 matched=true。",
+      "description": "关键转折处有有效的悬念钩子设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "hook_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "意象系统": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 文本在不同章节各自拥有鲜明的场景意象与机制道具（电梯规则墙、游轮晚宴与项圈、小梦影子秒杀、幽灵船与镰刀追猎者、灯塔与七旗沙盘、培养舱实验室），但这些意象更像“分副本的关卡装置”，没有一个具象元素能稳定贯穿全文并在关键节点发生意义层面的变奏，形成与主题平行的隐性叙事线。最接近贯穿的是“规则/副本/系统”，但它作为通用机制反复出现，含义主要停留在‘约束与惩罚/推进关卡’，缺乏从日常→威胁→自我选择→命运/真相等层次的象征性深化与回环，因此未达到优秀意象系统标准。",
+      "description": "核心意象贯穿全文并发生意义变奏",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "imagery_system",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "情感弧线层次": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 主角：孟不同。可辨识的情感层次≥4，且多次转折由具体事件驱动，并呈递进式从“苟活求稳”走向“主动对抗/承担”。\n\n1) 情感层次（性质不同，非同义替换）：\n- 日常警惕/焦虑与自嘲式苟活（反复检查门锁、社畜厌倦）\n- 震惊与恐惧（胸口发光、被传送进“死亡电梯”）\n- 求生算计与谨慎试探（读规则、捡硬币、在“卧底/投票”规则前权衡）\n- 冷酷防御与对抗心（第十章被指控、与绿毛交锋；被小梦强迫“杀守序者”时尝试钻规则漏洞）\n- 受挫愤怒与危机应激（违规被惩罚扣血、对小梦“玩不起”的阴冷反击）\n- 劫后余生的疲惫与现实压迫感（第十一章沉船逃生上岸后的涣散与喘息）\n- 责任感/执念被点燃并转向坚定（第十二章得知父亲真相后，从“只想活”升级为“变强救父、阻止计划”，并与姜茶形成默契）\n\n2) 关键转折均有明确触发事件：\n- “苟活日常→恐惧失控”：胸口发光并被传送；进入写有死亡规则的电梯。\n- “恐惧→算计试探”：规则逐层更新、硬币规则允许请求帮助、卧底/投票机制逼迫决策。\n- “算计→对抗/阴冷”：绿毛公开指控、NPC小梦秒杀并更改规则，强压孟不同当众杀人；孟不同尝试规避后遭系统惩罚扣血。\n- “对抗→求生撤离”：外部入侵者沈夜出现、游轮下沉、获得短暂无敌，迫使其拉姜茶老孙逃命。\n- “求生→疲惫/动摇→再聚焦”：上岛后姜茶揭示观察者与沈夜背景、父亲线索铺垫，使主角从单纯逃命转为追问真相。\n- “追问真相→意志坚定”：灯塔考验与父亲被囚禁真相揭露，直接推动其目标升级为“变强救父/对抗组织”。\n\n3) 递进方向感：\n整体不是随机波动，而是沿着‘被卷入—被迫博弈—遭规则压迫—逃生见更大黑幕—真相刺激形成使命’的单向加深路径推进；终点指向明确（救父、对抗观察者、进入第二阶段）。\n\n因此符合“优秀”标准：主角情感发展多层递进，且每次质变由具体剧情事件触发。",
+      "description": "主角情感发展有多层递进变化",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_gradient",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语义重复检测": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 整体无严重语义级重复，章节间推进明确、信息持续增量。\n\n- chapter_01：完成主角日常性格与“苟”价值观铺垫，并给出关键事件“死亡电梯+规则变化+卧底投票”作为核心冲突起点。\n- chapter_10：重点是晚宴阵营博弈升级与“NPC小梦”横插改规则、强制大冒险，随后引入外部入侵者沈夜并触发逃亡，信息量显著新增。\n- chapter_11：承接沉船逃生，新增“沈夜与姜茶关系”“观察者组织/追猎者/规则武器”设定解释，并触发隐藏副本灯塔守密者，推进到新场景与新目标。\n- chapter_12：灯塔考验机制（七旗选择）+造神计划细节补全（观测者类型与代价）+主角父亲被囚核心揭示+火种计划时间表与更大危机，信息大幅推进。\n\n轻微重复点：chapter_11与chapter_12中对“观察者组织在筛选候选人/实验改造人类”的概念有回顾性重述，但chapter_12提供了更具体的机制（七路选择、观测者分类、能力代价、父亲真相、火种计划节点），属于必要铺垫与信息扩展，不构成≥3处“换词不增量”的语义重复，因此判定通过。",
+      "description": "不能出现大量语义级别的内容重复（P6级）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "semantic_redundancy",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构功能性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 从可见四章来看，叙事结构更像“关卡推进/连续升级”的线性流程，结构主要承担的是推进情节与抛设定（规则、电梯/游轮/灯塔副本、观察者组织、造神计划），而非通过结构形式本身表达主题。开头（社畜日常+异常传送进入‘死亡电梯规则’）与结尾（回到现实工厂+进入第二阶段）在场景层面形成‘回到现实’的框架，但缺少意象/语句/命题上的精心呼应，也未形成闭环、反转或开放式留白的结构意图；更像阶段性收束与新篇章钩子。章节之间的排列基本不可互换，但其不可互换主要来自因果链与信息递进，而不是有设计的对称/对照结构或结构-主题强关联。因此按标准更接近机械线性排列，未达到“结构即意义”的优秀标准。",
+      "description": "叙事结构服务于主题表达（短篇尤重）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "中篇字数_智斗": {
+      "check_result": "fail",
+      "reason": "字数不符合要求",
+      "details": "总字数 17035 不在范围 [90000, 110000] 内; 共4个文件（按章节顺序排列）: chapter_01.md, chapter_10.md, chapter_11.md, chapter_12.md; 最后一个文件是 chapter_12.md",
+      "description": "总字数应在90000-110000之间（基于query要求100000，±10%浮动）",
+      "check_type": "semantic_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "range_constraint",
+      "is_critical": true
+    },
+    "情感交付智斗": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 整体不符合“主角靠智商、逻辑推理、规则利用通关”的智斗向承诺。\n\n1) 主要冲突的解决方式偏“能力/外力推动”而非智力博弈：\n- chapter_10 明确出现“预知能力”（“孟不同暗暗心惊。他刚才用预知能力看到的未来片段里……”），后续在 chapter_11 关键回合也靠预知救姜茶（预知到“下一秒…镰刀会砍向她的脖子”）。这属于超能力介入解决危机，不是纯逻辑推理或规则拆解。\n- 多次依赖系统/外部事件强行转场：如“所有玩家暂时获得无敌状态5分钟”直接改变局势；“外部入侵者”导致副本升级并引发逃生。这些不是主角通过推理/策略赢来的优势。\n\n2) 推理链条不完整，更多是口头机灵/临场耍赖：\n- chapter_10 面对小梦的强制大冒险“选一个守序者杀掉”，主角尝试用“捡绿毛灰烬当灵魂、算杀人”的方式钻漏洞，但这是文字游戏式耍赖，缺少“线索收集→假设推演→验证→结论”的可追溯推理链；并且系统直接判定“违规操作”并惩罚，等于策略失败。\n- chapter_12 的“选择之路”里，主角选第七面旗主要是直觉/动机判断（“风险越大回报越大”“如果我猜得没错…考验早开始了”），但缺少可验证线索支撑其“猜得没错”，随后老者一句“聪明/测试的一部分”属于作者/关主确认，而非主角通过证据论证出来的推理胜利。\n\n3) 反派/对手不形成“智力博弈有来有回”的格局：\n- 小梦、沈夜更像“实力/权限碾压型”存在：小梦直接秒杀绿毛、随意改规则；沈夜“一刀一个”收割。主角主要是逃跑和被动应对，缺少与对手在规则与信息层面的对弈、拆招与反拆招。\n\n4) 通关与推进更多靠剧情揭示与设定投喂：\n- chapter_12 大量“真相”由老者直接口述（造神计划、父亲被囚禁、火种计划），属于信息灌输，不是主角通过推理、取证、验证获得。\n\n结论：文本有“规则副本/阵营游戏”外壳，也有“试图钻规则漏洞”的片段，但关键胜负点与推进点主要由超能力、系统强制规则、强者碾压与关主解释驱动，智斗所需的严密推理链与对等信息博弈不足，因此不匹配智斗向标准。",
+      "description": "实际内容必须是智斗向",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "反套路检查": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 存在明显套路化问题，未通过负面清单检查。\n\n1) 主角金手指/外挂（套路1：系统外挂/开挂式能力）\n- chapter_10 明确出现“系统通知”“账户里多了一笔钱…奖励”“欺诈币奖励”“项圈惩罚/生命值”等典型系统框架；主角还被点名“拥有预知能力”，属于核心外挂能力。\n- chapter_11 主角在关键战斗节点直接用预知“下一秒沈夜会出现在姜茶身后…”，实现避死，且沈夜台词“预知能力不是这么用的”强化其外挂属性。\n- chapter_12 对预知能力做了设定代价（“消耗生命力和理智…会导致人格分裂”），但在已展示情节中主角主要收益点（躲避致命一击、推进主线）明显，代价尚未真正兑现到结果层面，整体仍呈“靠能力解关键危机”的开挂观感。\n\n2) 巧合/天降贵人推进（套路3：天降贵人、关键转折靠外力）\n- chapter_11 末尾“触发隐藏副本：灯塔守密者”+ 立刻出现“守关者/观察者前成员”主动引导（“想活着走出这个灯塔吗？那就跟我来”）。\n- chapter_12 老者不仅提供七选一机制，还直接带去“观察者核心机密实验室”，给出大量关键世界观与任务，并在结尾“我送你们出去”把主角团送回现实世界——这属于典型“关键时刻高人/关键NPC出手相助推动主线”，弱化了主角靠自身因果铺垫破局。\n\n3) 反派/对手表现存在不稳定与工具化倾向（套路2边缘）\n- chapter_10 小梦以“秒杀级”碾压绿毛，并能改规则、强行抹杀，属于压迫力很强的反派设定本身没问题；但随即出现“外部入侵者/无敌5分钟”让主角团顺势脱离围杀，反而更像机制在为主角开路。\n- chapter_11 沈夜具备碾压实力却在关键处“不会杀姜茶/欠我的”并放任主角团离开（随后还触发隐藏副本继续推进），对主角团的生存形成明显的“剧情保护”。这不是纯降智，但有“关键节点放过/不收割”的套路感。\n\n综合：文本核心推进多次依赖系统机制、预知能力与关键NPC/机制救场来完成重大转折（逃离游轮、触发隐藏副本、获得真相并被送回现实），属于明显套路化结构，因此 matched=false。",
+      "description": "主角不能是龙傲天或拥有无脑金手指",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": false
+    }
+  },
+  "completion_status": "completed"
+}

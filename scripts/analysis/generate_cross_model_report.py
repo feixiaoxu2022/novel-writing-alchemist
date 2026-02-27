@@ -728,17 +728,19 @@ def _gen_per_check_name_tables(lines, models, model_data, config):
         dim_label = dim_names.get(dim_id, dim_id)
         items = dim_groups[dim_id]
 
+        check_descs = config.get("check_item_descriptions", {})
         if dim_id == "content_quality":
-            _gen_content_quality_check_names(lines, items, models, dim_label)
+            _gen_content_quality_check_names(lines, items, models, dim_label, check_descs)
         else:
             lines.append(f"### {dim_label}")
             lines.append("")
-            _append_check_name_table(lines, items, models)
+            _append_check_name_table(lines, items, models, check_descs)
             lines.append("")
 
 
-def _gen_content_quality_check_names(lines, items, models, dim_label):
-    """内容质量按 gate/basic/advanced 分组，逐 check_name 展开"""
+def _gen_content_quality_check_names(lines, items, models, dim_label, check_descs):
+    """内容质量按 gate/basic/advanced 分组，逐 check_name 展开。
+    basic/advanced 内部再按语义子组分块，用小标题隔开。"""
     tier_groups = {"gate": [], "basic": [], "advanced": [], "": []}
 
     for check_name, meta, model_stats in items:
@@ -751,17 +753,143 @@ def _gen_content_quality_check_names(lines, items, models, dim_label):
     lines.append(f"### {dim_label}")
     lines.append("")
 
-    for tier, label in [("gate", "Gate层"), ("basic", "Basic层"), ("advanced", "Advanced层"), ("", "其他")]:
-        tier_items = tier_groups.get(tier, [])
-        if not tier_items:
+    # gate 层直接输出
+    gate_items = tier_groups.get("gate", [])
+    if gate_items:
+        lines.append("#### Gate层")
+        lines.append("")
+        _append_check_name_table(lines, gate_items, models, check_descs)
+        lines.append("")
+
+    # basic 层按子组输出
+    basic_items = tier_groups.get("basic", [])
+    if basic_items:
+        lines.append("#### Basic层")
+        lines.append("")
+        _append_grouped_check_tables(lines, basic_items, models, check_descs,
+                                     BASIC_SUBGROUPS, BASIC_SUBGROUP_ORDER)
+        lines.append("")
+
+    # advanced 层按子组输出
+    adv_items = tier_groups.get("advanced", [])
+    if adv_items:
+        lines.append("#### Advanced层")
+        lines.append("")
+        _append_grouped_check_tables(lines, adv_items, models, check_descs,
+                                     ADV_SUBGROUPS, ADV_SUBGROUP_ORDER)
+        lines.append("")
+
+    # 其他
+    other_items = tier_groups.get("", [])
+    if other_items:
+        lines.append("#### 其他")
+        lines.append("")
+        _append_check_name_table(lines, other_items, models, check_descs)
+        lines.append("")
+
+
+# ------------------------------------------------------------------
+# Basic/Advanced 内部语义子组定义
+# key = check_name, value = 子组名
+# 未列出的检查项归入 "其他"
+# ------------------------------------------------------------------
+
+BASIC_SUBGROUPS = {
+    # 规划质量
+    "outline结构完整性": "规划质量",
+    "角色关系设计张力": "规划质量",
+    "角色动机设计深度": "规划质量",
+    # 规划-执行一致性
+    "大纲执行忠实度": "规划-执行一致性",
+    "人物设计遵循度": "规划-执行一致性",
+    "反套路检查": "规划-执行一致性",
+    "女主独立性检查": "规划-执行一致性",
+    # 章节正文一致性
+    "主要角色一致性": "章节正文一致性",
+    "主题一致性": "章节正文一致性",
+    "人物设定一致性": "章节正文一致性",
+    # 情感交付
+    "伏笔回收检查": "情感交付",
+    "情感交付冒险": "情感交付",
+    "情感交付大女主": "情感交付",
+    "情感交付智斗": "情感交付",
+    "情感交付烧脑": "情感交付",
+    "情感交付甜宠外虐": "情感交付",
+    "情感交付甜爽": "情感交付",
+    "情感交付虐心": "情感交付",
+    "非恋爱主线检查": "情感交付",
+    # 后期写不动了（崩盘）
+    "后期章节跑偏": "写不动了/后期崩盘",
+    "反复结局": "写不动了/后期崩盘",
+    "段落重复检测": "写不动了/后期崩盘",
+    "语义重复检测": "写不动了/后期崩盘",
+    "章节长度稳定性": "写不动了/后期崩盘",
+    "完整叙事文本": "写不动了/后期崩盘",
+    # 结构性逻辑硬伤
+    "结构性逻辑硬伤": "逻辑硬伤",
+    "智斗逻辑合理性": "逻辑硬伤",
+    # 基础文笔
+    "叙事调性匹配": "基础文笔",
+    "情节推进": "基础文笔",
+    "语言纯净性": "基础文笔",
+}
+
+BASIC_SUBGROUP_ORDER = [
+    "规划质量", "规划-执行一致性", "章节正文一致性",
+    "情感交付", "写不动了/后期崩盘", "逻辑硬伤", "基础文笔",
+]
+
+ADV_SUBGROUPS = {
+    # 规划质量（高阶）
+    "outline叙事张力": "规划质量（高阶）",
+    # 节奏与结构
+    "剧情节奏合理性": "节奏与结构",
+    "结构功能性": "节奏与结构",
+    "钩子设计": "节奏与结构",
+    # 角色塑造
+    "角色成长弧线设计": "角色塑造",
+    "角色语言辨识度": "角色塑造",
+    "角色命名质量": "角色塑造",
+    "情感弧线层次": "角色塑造",
+    # 文学性
+    "叙事密度": "文学性",
+    "意象系统": "文学性",
+    "题材契合度": "文学性",
+    # 逻辑严密性
+    "可修复逻辑瑕疵": "逻辑严密性",
+}
+
+ADV_SUBGROUP_ORDER = [
+    "规划质量（高阶）", "节奏与结构", "角色塑造", "文学性", "逻辑严密性",
+]
+
+
+def _append_grouped_check_tables(lines, items, models, check_descs,
+                                  subgroup_map, subgroup_order):
+    """将检查项按子组分块输出，每个子组一个小标题 + 一张表"""
+    # 分组
+    groups = defaultdict(list)
+    for check_name, meta, model_stats in items:
+        group = subgroup_map.get(check_name, "其他")
+        groups[group].append((check_name, meta, model_stats))
+
+    # 按指定顺序输出
+    output_order = list(subgroup_order)
+    for g in groups:
+        if g not in output_order:
+            output_order.append(g)
+
+    for group_name in output_order:
+        group_items = groups.get(group_name)
+        if not group_items:
             continue
-        lines.append(f"#### {label}")
+        lines.append(f"**{group_name}**")
         lines.append("")
-        _append_check_name_table(lines, tier_items, models)
+        _append_check_name_table(lines, group_items, models, check_descs)
         lines.append("")
 
 
-def _append_check_name_table(lines, items, models):
+def _append_check_name_table(lines, items, models, check_descs=None):
     """输出按 check_name 展开的通过率表格"""
     # 按 check_name 排序
     items.sort(key=lambda x: x[0])
@@ -775,11 +903,14 @@ def _append_check_name_table(lines, items, models):
         sep += "------|"
     lines.append(sep)
 
+    if check_descs is None:
+        check_descs = {}
+
     for check_name, meta, model_stats in items:
         sub_id = meta.get("subcategory_id", "")
-        desc = meta.get("description", "")
-        if len(desc) > 30:
-            desc = desc[:28] + ".."
+        desc = check_descs.get(check_name, "") or meta.get("description", "")
+        if len(desc) > 40:
+            desc = desc[:38] + ".."
 
         row = f"| {check_name} | {sub_id} | {desc} |"
         for model in models:

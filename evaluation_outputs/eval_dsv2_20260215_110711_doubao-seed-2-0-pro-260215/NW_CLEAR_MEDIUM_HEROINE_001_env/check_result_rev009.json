@@ -1,0 +1,809 @@
+{
+  "check_version": "novel_writing_v1.0",
+  "sample_id": "NW_CLEAR_MEDIUM_HEROINE_001",
+  "check_timestamp": 1772097215,
+  "dimension_scores": {
+    "format_compliance": {
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "pass_rate": 1.0,
+      "score": 100.0
+    },
+    "business_rule_compliance": {
+      "total": 20,
+      "passed": 14,
+      "failed": 6,
+      "skipped": 0,
+      "pass_rate": 0.7,
+      "score": 70.0
+    },
+    "memory_management": {
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "pass_rate": 1.0,
+      "score": 100.0
+    },
+    "data_consistency": {
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "pass_rate": 1.0,
+      "score": 100.0
+    },
+    "content_quality": {
+      "overall_score": 74.81,
+      "quality_level": "unqualified",
+      "gate_layer": {
+        "total": 0,
+        "passed": 0,
+        "failed": 0,
+        "skipped": 0,
+        "pass_rate": 0.0,
+        "score": 0.0
+      },
+      "basic_layer": {
+        "total": 21,
+        "passed": 16,
+        "failed": 5,
+        "skipped": 0,
+        "pass_rate": 0.7619,
+        "score": 76.19
+      },
+      "advanced_layer": {
+        "total": 11,
+        "passed": 8,
+        "failed": 3,
+        "skipped": 1,
+        "pass_rate": 0.7273,
+        "score": 72.73
+      },
+      "gate_triggered": false,
+      "score_breakdown": {
+        "base": 60.0,
+        "gate_penalty": -0.0,
+        "basic_deduction": -14.29,
+        "advanced_bonus": 29.09
+      }
+    }
+  },
+  "overall_result": {
+    "total_score": 80.12,
+    "content_score": 74.81,
+    "process_score": 92.5,
+    "quality_level": "unqualified"
+  },
+  "check_details": {
+    "读取配方知识库": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取RECIPE_KNOWLEDGE.md（配方知识库）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节产出存在性": {
+      "check_result": "pass",
+      "reason": "章节文件存在",
+      "details": "✓ 章节写作阶段: 已产出章节文件",
+      "description": "workspace中必须存在至少一个章节文件",
+      "check_type": "sop_stage_coverage",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_output_existence",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节克隆检测": {
+      "check_result": "pass",
+      "reason": "未检测到章节克隆",
+      "details": "共12章，无连续完全克隆或近似克隆",
+      "description": "不能出现连续章节内容完全重复（克隆）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_cloning",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "交替重复检测": {
+      "check_result": "pass",
+      "reason": "未检测到交替重复",
+      "details": "共12章，无A-B-A-B交替模式",
+      "description": "不能出现A-B-A-B交替循环的章节内容",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "alternating_repetition",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节完成度": {
+      "check_result": "pass",
+      "reason": "章节完成度合格(400%)",
+      "details": "大纲规划3章，实际完成12章 (完成率400.0%)",
+      "description": "实际写作章节数必须达到大纲规划的合理比例",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_completion",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节长度稳定性": {
+      "check_result": "pass",
+      "reason": "章节长度稳定",
+      "details": "前4章均值2496字, 后3章均值2599字 (后/前比率1.04)",
+      "description": "后期章节不能出现严重长度萎缩",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_length_stability",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "段落重复检测": {
+      "check_result": "pass",
+      "reason": "段落重复在可接受范围",
+      "details": "同章内重复0处, 跨章重复0组 (阈值: 同章>=2, 跨章>=5)",
+      "description": "不能出现大量段落在不同章节间重复",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "paragraph_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取大纲设计指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取OUTLINE_DESIGN_GUIDE.md（大纲设计指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取写作技巧指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取WRITING_TECHNIQUE_GUIDE.md（写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取设定一致性管理指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取CONSISTENCY_MANAGEMENT_GUIDE.md（设定一致性管理指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取命名skill": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取CHARACTER_NAMING_GUIDE.md（角色命名规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取creative_intent的schema": {
+      "check_result": "fail",
+      "reason": "工具未被调用或参数不匹配",
+      "details": "工具 'novel_writing_service__read_file' 匹配调用 0 次，期望 ≥1",
+      "description": "必须读取creative_intent.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取characters的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取characters.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取outline的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取outline.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节命名格式": {
+      "check_result": "pass",
+      "reason": "所有文件命名符合规范",
+      "details": "检查了 12 个文件; chapter_09.md: 匹配; chapter_05.md: 匹配; chapter_11.md: 匹配; chapter_01.md: 匹配; chapter_10.md: 匹配; chapter_02.md: 匹配; chapter_03.md: 匹配; chapter_04.md: 匹配; chapter_08.md: 匹配; chapter_07.md: 匹配; chapter_06.md: 匹配; chapter_12.md: 匹配",
+      "description": "章节文件命名必须为chapter_NN.md格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "naming_convention",
+      "is_critical": true
+    },
+    "creative_intent格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "creative_intent.json: 字段完整",
+      "description": "creative_intent.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "characters格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "characters.json: 字段完整",
+      "description": "characters.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "outline格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "outline.json: 字段完整",
+      "description": "outline.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "X轴模式ID格式": {
+      "check_result": "fail",
+      "reason": "属性值不符合预期",
+      "details": "selected_recipe.x_axis_mode_id = None，期望 {'regex': '^[A-G]\\\\d{1,2}$'}",
+      "description": "X轴模式ID必须匹配^[A-G]\\d{1,2}$格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签枚举": {
+      "check_result": "fail",
+      "reason": "属性值不符合预期",
+      "details": "selected_recipe.y_axis_tags = None，期望 {'array_item_type': 'string', 'enum': ['双向暗恋', '系统流', '无限流', '种田流', '赛博朋克', '规则怪谈', '重生/穿越', '商战权谋', '克苏鲁', '第四天灾', '仙侠修真', '刑侦悬疑']}",
+      "description": "Y轴标签必须在12种枚举中",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签数量": {
+      "check_result": "fail",
+      "reason": "属性值不符合预期",
+      "details": "selected_recipe.y_axis_tags = None，期望 {'array_min_length': 2, 'array_max_length': 3}",
+      "description": "Y轴标签数量必须为2-3个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "forbidden_elements存在性": {
+      "check_result": "fail",
+      "reason": "属性值不符合预期",
+      "details": "selected_recipe.forbidden_elements = None，期望 {'array_min_length': 1}",
+      "description": "forbidden_elements必须至少有1个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "配方选择交互": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "配方选择阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "写作准备确认": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "写作准备阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "主题一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了12个文件; LLM评估: 整体核心主题从开篇到结尾保持一致：以“离婚后自我重建/女性成长独立”为主线，并以“凭专业能力在古玩鉴定领域翻身、守住并夺回属于自己的东西”为持续驱动力。第1章离婚与发现永乐青花罐奠定‘摆脱豪门压迫→靠本事翻盘’的动机；第2-6章围绕古玩交易、鉴定、证据与资金压力推进同一主线；第7-10章与陆时衍结成同盟、打假反杀，仍服务于‘事业立身+对抗旧势力’；第11章法庭胜诉完成‘夺回/守住’的阶段性终局；第12章工作室开业、职业影响力扩大与情感落点，属于主题的自然收束与升华（从个人翻身到事业成就与人生圆满），未出现从商战/修仙/科幻等完全换类型的主题漂移。爱情线作为辅线贯穿并强化“新生活的建立”，没有取代主线。",
+      "description": "故事主题一致",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "theme_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "主要角色一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了12个文件; LLM评估: 主角从开篇到结尾持续存在且保持核心地位：全篇叙事始终围绕苏清宁展开，她在12章中均有出场并推动关键决策（离婚后处理旧物/发现青花罐、应对周家试探与诉讼、鉴定中心取证、资金困境与职业转向、与陆时衍合作、行业反击张百川、法院胜诉、开设工作室与后续事业发展）。第二主角陆时衍自第2章登场后贯穿中后期（第4章再遇、第5章起冲突、第6-12章持续参与并作为盟友/合伙人/恋人推动剧情），未出现被替换或突然消失。不存在配角长期抢占叙事中心的情况：林薇薇、陈敬之、周家母子、张百川等均为功能性配角，视角与决策权仍以苏清宁为主，偶有描写陆时衍的行动也服务于主线。整体无主角身份断裂或主角地位丧失问题。",
+      "description": "主要角色一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "main_character_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设定一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了12个文件; LLM评估: 各主要角色在12章内的性格底色、行为模式与核心动机整体前后一致，没有出现无铺垫的“性格反复横跳”或突然降智/能力崩坏。\n\n- 苏清宁：从第1章开始就呈现“专业能力强、隐忍冷静、被逼后会主动反击、对关键利益（青花罐）高度谨慎”的稳定特征。第2-5章面对压价、试探、律师函，她始终以克制和证据意识应对（隐瞒青花罐、找律师、做检测），符合其谨慎与专业；第6章因急需资金导致走眼属于情境压力下的合理失误，且后续迅速回到高水准鉴定表现（第7-12章），不构成无理由降智。对陆时衍的态度从警惕→误会疏远→澄清后合作与情感升温，也有明确触发事件与心理链条支撑。\n\n- 陆时衍：始终表现为“资源/人脉强、做事沉稳、偏保护型、对张百川与永乐罐有长期目标”的一致行为模式。第2章暗号提醒、第4章预警周家动向、第7章用证据逼退张百川并提出合作、第8-11章持续提供支持与渠道，动机稳定（帮她、同时推进家族心愿与行业打假），没有出现前后立场自相矛盾。\n\n- 周子豪/冯美兰：从第1章的傲慢轻蔑与控制欲，到第3-8章的试探、威逼、诉讼与入室翻找，再到第11章庭审崩盘后周子豪哀求，整体符合“利益驱动、强势欺压、形势逆转后示弱”的一贯模式，属于处境变化下的合理反应。\n\n- 林薇薇：各章均为直爽强势、以法律手段护友的定位，行动（答辩、出庭、提供策略）前后一致。\n\n总体看，人物在不同章节间的性格底色与行为逻辑能够互相印证，变化均由剧情压力或信息更新触发，符合本检查项标准。",
+      "description": "人物设定一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_trait_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设计遵循度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了13个文件; LLM评估: 总体一致（matched=true）。\n\n1) 苏清宁（protagonist）\n- 设计traits：\"冷静理智\"、\"专业偏执\"、\"嘴硬心软\"、\"轻度社恐\"。\n  - 冷静理智：chapter_01离婚现场面对周子豪挑衅“不哭不闹、声音很平静”；chapter_04接到拍卖行试探电话后先否认并观察胡同口车辆，理性判断“被盯上”；chapter_11庭审中全程沉着应对。\n  - 专业偏执/专业能力：chapter_01对永乐青花罐的细节判断（铁锈斑、底款、窑裂与外公记录对应）；chapter_04主动去鉴定中心做成分检测拿正式报告；chapter_07、08、12多次快速抓到高仿破绽并给出工艺/款识依据。\n  - 嘴硬心软：chapter_05对陆时衍口吻很冷、拉黑；但chapter_01对外公温柔、chapter_03与林薇薇互动暖、chapter_11胜诉后情绪外露并感谢。\n  - 轻度社恐：外显较弱但仍可见：多次“含糊带过/不多说”（chapter_02初见陆时衍、chapter_04被问防震箱内容时回避），对人际信任谨慎、避免扩散消息（chapter_03-05对闺蜜也暂不透露青花罐），符合轻度社交防御型表现。\n- 设计动机：overt“守住永乐青花罐/站稳脚跟/反击周家追讨”，covert“证明专业价值、获得认可”。\n  - overt贯穿：chapter_03-05应对冯美兰试探与律师函并转移青花罐；chapter_08周家上门要罐拒绝；chapter_11法庭争夺所有权。\n  - covert贯穿：chapter_01末“我是鉴定师…亲手拿回来”；chapter_08靠鉴定费获得独立收入与自我确认；chapter_09名气提升；chapter_12开设“清宁文物鉴定工作室”。\n- secret_fear：\"害怕专业判断出错\"。\n  - chapter_06“走眼”买到高仿汝窑后崩溃自我怀疑，正对应该恐惧设定，并非性格走样。\n- misperception_of_other：\"以为陆时衍接近自己只是为了永乐青花罐的利益\"。\n  - chapter_04末到chapter_05明确形成并导致她拉黑；chapter_06被解释后缓解。属于设计内的误解路径。\n- hidden_connection：外公与陆时衍爷爷故宫同事/同门。\n  - chapter_02陆时衍拿出两位老人合影；chapter_04苏清宁在外公资料中发现“明远兄”照片并串联，均有呈现。\n\n2) 陆时衍（deuteragonist）\n- 设计traits：\"表面腹黑\"、\"内心正直\"、\"专业严谨\"、\"不擅表达\"。\n  - 表面腹黑：chapter_07对张百川以证据与威胁“要么退钱要么文物局”强势压制；对周家也冷硬（chapter_08）。\n  - 内心正直：chapter_02提醒不被坑并给公道价；chapter_04提醒周家动向；chapter_07-10持续打假、端造假证据；与其overt动机“维护行业规则”一致。\n  - 专业严谨：多次亲自看货、拿证据链（chapter_07鉴定会客室、chapter_10准备交易记录/证词/视频）。\n  - 不擅表达：多处以行动代替表达（准备同款工具、无糖豆浆、安排住处；chapter_10告白被打断后也“把话咽回去”），整体符合“不会说但会做”。\n- 设计动机：overt“合作打击造假乱象、维护规则”；covert“弥补爷爷遗憾、保护苏清宁”。\n  - overt体现：chapter_07-10直接围绕揭穿张百川造假并引来警方；chapter_12继续“端造假窝点”。\n  - covert体现：chapter_06说明爷爷遗愿“找到并捐故宫”；chapter_08提供住所、垫付诉讼费、挡周家人，持续保护。\n- misperception_of_other：\"以为苏清宁对自己只有商业合作，没有好感\"。\n  - 文本里他对她的好感更早更明确（chapter_11告白“从第一次…就喜欢你”），但这属于他内心判断/误解是否持续的描写偏少；不过未出现与设定相反的强烈表现（比如自信认为她必然喜欢自己并据此鲁莽推进），因此不构成严重不符。\n- secret_fear（投资失败黑历史）：在章节中几乎未被触及或驱动行为。\n  - 这是唯一明显“核心设定未体现”的点，但它不是当前剧情的主要冲突线，且不影响其核心性格/动机呈现；按标准不至于判matched=false。\n\n结论：两位主角的核心traits与主要动机（尤其苏清宁的冷静专业、自我证明与护罐反击；陆时衍的外冷强势内里正直、行业打假与保护）在chapters中持续、明确地表现出来；误解与隐藏关联也按设计出现。仅有陆时衍的secret_fear未明显落地，但不足以构成“严重不符”。",
+      "description": "实际表现符合设计文档",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构性逻辑硬伤": {
+      "check_result": "fail",
+      "reason": "发现1处structural类型逻辑问题: 青花罐法律归属与‘违法所得应上缴国家’发生根本冲突：chapter_11中证据证明青花罐为2004年冯美兰非法向盗墓者收购（违法所得），文本同时又主张苏清宁“善意取得”并判决“青花罐归苏清宁所有”，且仅“借展十年”。在同一世界观/法律事实下，‘明确的盗掘文物交易链条’与‘个人所有权最终确认’是互斥结论，属于核心事实翻转级矛盾；且该结论支撑后续借展、工作室展示、结尾“从故宫借展回来的青花罐”等多章情",
+      "details": "过滤条件: fixability=structural; 总flaws=4, 命中=1",
+      "flaw_count": 1,
+      "flaws": [
+        {
+          "type": "factual_consistency",
+          "severity": "critical",
+          "fixability": "structural",
+          "location": "chapter_06 / chapter_07 / chapter_11",
+          "description": "青花罐法律归属与‘违法所得应上缴国家’发生根本冲突：chapter_11中证据证明青花罐为2004年冯美兰非法向盗墓者收购（违法所得），文本同时又主张苏清宁“善意取得”并判决“青花罐归苏清宁所有”，且仅“借展十年”。在同一世界观/法律事实下，‘明确的盗掘文物交易链条’与‘个人所有权最终确认’是互斥结论，属于核心事实翻转级矛盾；且该结论支撑后续借展、工作室展示、结尾“从故宫借展回来的青花罐”等多章情节，牵连面广。"
+        }
+      ],
+      "description": "无结构性逻辑硬伤",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_logic_defect",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "可修复逻辑瑕疵": {
+      "check_result": "fail",
+      "reason": "发现3处fixable类型逻辑问题: chapter_04提到“取一点胎样做成分检测”，但chapter_06直接给出“胎质成分、釉色参数完全匹配”的报告结果；若真取胎样通常会造成可见损伤/需说明取样部位与方式（如取底足内侧微量粉末/不破坏性检测）。当前前后对“取样”对器物状态影响的客观事实交代缺失，容易形成‘取样但器物毫无痕迹/无成本’的硬伤观感。; chapter_06称“周家申请财产保全，要冻结你的所有资产！”并与“刚赔了五十万”叠加制造绝境；chapter_07结尾又称“法院通知…暂时冻不了你的账户了”。中间缺少任何对‘为何财产保全申请有问题/何时被驳回或暂缓’的事实链条说明，导致同一事件状态在相邻章节内跳变。; chapter_11明确“愿意将青花罐无偿借给故宫博物院展览十年”，但chapter_12结尾写“旁边放着从故宫借展回来的永乐青花罐”，时间点仍在离婚后一周年左右（同章还写2024-12-20开业，婚礼定在离婚一周年秋天），与“借展十年”在时间线上冲突：十年借展不可能一年左右就‘借展回来了’，除非说明提前归还/借展期限变更。",
+      "details": "过滤条件: fixability=fixable; 总flaws=4, 命中=3",
+      "flaw_count": 3,
+      "flaws": [
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_04 → chapter_06",
+          "description": "chapter_04提到“取一点胎样做成分检测”，但chapter_06直接给出“胎质成分、釉色参数完全匹配”的报告结果；若真取胎样通常会造成可见损伤/需说明取样部位与方式（如取底足内侧微量粉末/不破坏性检测）。当前前后对“取样”对器物状态影响的客观事实交代缺失，容易形成‘取样但器物毫无痕迹/无成本’的硬伤观感。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_06 → chapter_07",
+          "description": "chapter_06称“周家申请财产保全，要冻结你的所有资产！”并与“刚赔了五十万”叠加制造绝境；chapter_07结尾又称“法院通知…暂时冻不了你的账户了”。中间缺少任何对‘为何财产保全申请有问题/何时被驳回或暂缓’的事实链条说明，导致同一事件状态在相邻章节内跳变。"
+        },
+        {
+          "type": "spatiotemporal_continuity",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_12（结尾段落）",
+          "description": "chapter_11明确“愿意将青花罐无偿借给故宫博物院展览十年”，但chapter_12结尾写“旁边放着从故宫借展回来的永乐青花罐”，时间点仍在离婚后一周年左右（同章还写2024-12-20开业，婚礼定在离婚一周年秋天），与“借展十年”在时间线上冲突：十年借展不可能一年左右就‘借展回来了’，除非说明提前归还/借展期限变更。"
+        }
+      ],
+      "description": "可修复逻辑瑕疵数量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "fixable_logic_inconsistency",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语言纯净性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了12个文件; LLM评估: 通篇叙事语言以中文为主，未出现大段外语无翻译的情况。外语出现主要为合理场景：如“logo”（常见术语/标识）、“EMS”（快递专有名词/缩写）、“U盘”（约定俗成的外来词/缩写），以及品牌/专有名词如“宾利”。未发现类似“他very生气地说”“这个idea真的不错”等无意义的中英混杂句式，也未出现无情节需要的日文混用。整体语言使用纯净且外语使用具有必要性，符合标准。",
+      "description": "无不合理的多语言混用",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "language_purity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "creative_intent文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/creative_intent.json 存在",
+      "description": "creative_intent.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "characters文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/characters.json 存在",
+      "description": "characters.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "outline文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/outline.json 存在",
+      "description": "outline.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "chapters目录存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/chapters/ 存在",
+      "description": "chapters/目录必须存在且有章节文件",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "情节推进": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了12个文件; LLM评估: 合格（matched: true）。整体12章情节推进充分，事件密度高且占比明显≥40%，对话/内心独白未超过70%，并且持续有时间/空间变化与角色实质行动。\n\n1) 故事事件密度（远超2-3个）：\n- ch1：离婚拿证→回外公小院→开箱发现永乐青花罐→联系外公确认→联系渠道准备出手。\n- ch2：去潘家园卖物→遭压价冲突→陆时衍暗号提醒→转卖成交→埋下两家长辈渊源伏笔。\n- ch3：周家助理上门试探搜箱→找律师同学确权→外公来电提供支持。\n- ch4：携罐去鉴定中心取样→遇陆时衍提醒周家动向→周子豪疑似跟踪→陌生拍卖行来电泄密→发现胡同口监视车辆。\n- ch5：收到周家律师函起诉→与律师制定应对→转移青花罐入外公保险柜→与陆时衍冲突拉黑。\n- ch6：鉴定报告坐实真品→为律师费去潘家园买“汝窑”被坑→同事鉴定为高仿→陆时衍解释泄密源→周家申请财产保全。\n- ch7：结盟合作→上门逼退张百川退回50万（录音/证据对抗）→在时斋鉴定客户“永乐梅瓶”为假→达成合作与诉讼垫资安排。\n- ch8：上岗接单赚钱→周家带律师到店逼交罐被赶走→回家发现被撬门盗翻→报警→搬入安全住所。\n- ch9：参加拍卖会→竞价对抗张百川→发现天球瓶夹层鼻烟壶实现捡漏大赚→业务增长→张百川反诉诽谤。\n- ch10：交流会公开举证反杀→警方带走张百川→获得关键口供指向冯美兰非法收购→周家案准备开庭。\n- ch11：法院庭审举证→判决青花罐归苏清宁并牵出冯美兰刑事问题→故宫借展与讲座邀约→感情线推进确定关系。\n- ch12：开工作室开业→张磊上门找茬鉴定打脸并道歉→事业扩张（打假、粉丝、端窝点）→求婚结婚收束。\n\n2) 内容占比与推进节奏：每章都有明确“行动—冲突—结果/转折”，例如鉴定取证、起诉/应诉、跟踪/入室、拍卖竞价、公开揭露造假、法庭胜诉、开业应战等；情感描写多用于支撑动机与关系变化，未替代事件本身。\n\n3) 时间/空间变化：民政局→小院→潘家园→鉴定中心→故宫/法院/酒店交流会→新工作室等多场景切换；时间线从离婚当日推进到次年开业/婚礼，推进清晰。\n\n4) 角色行动与逻辑链：主角持续采取“确权（律师/证据）—保全（转移文物）—赚钱（鉴定/捡漏）—反制（揭露造假、庭审举证）”的策略链，事件之间因果明确，推动主线（青花罐归属与自立事业）与支线（陆时衍合作/感情）同步发展。",
+      "description": "章节情节推进质量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "plot_progression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "完整叙事文本": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了12个文件; LLM评估: 12个章节均为连贯的小说正文体裁：有明确场景描写（如民政局、潘家园、鉴定中心、法院、工作室开业等）、人物动作细节与心理活动（紧张、怀疑、愤怒、释然等）、大量完整对话推动情节，并以自然段叙事呈现。未出现“核心事件/情感基调/关键场景/本章悬念/字数预估”等创作规划元数据，也不存在用要点符号、编号条目或“→”流程图式的事件罗列结构。整体属于完整章节文本而非大纲式提纲。",
+      "description": "章节内容必须是完整正文而非大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "full_narrative_content",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "反复结局": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了12个文件; LLM评估: 共12个文件，最后一个文件为chapter_12.md。逐章扫描全书级结局标记（如“全文完/全书完/完结/全剧终/后记/尾声/终章/（完）/【完】/THE END”等）：chapter_01.md~chapter_11.md未出现上述全书结局标记；chapter_12.md末尾虽出现“圆满人生”等收束性表述，但未出现标准中定义的全书结局标记关键词或独立标题式“后记/尾声/终章”等。因此不存在“非最后文件出现全书结局标记”或“中途全文完后又续写”的反复结局问题，判定合格（matched=true）。",
+      "description": "不能出现多次结局标记（全文完/全书完/后记）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "repeated_endings",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "workspace文件规范": {
+      "check_result": "pass",
+      "reason": "workspace中所有文件均在白名单内",
+      "details": "白名单: ['creative_intent.json', 'characters.json', 'outline.json', 'writing_log.md', 'chapters/', '.hitl_context.json']",
+      "description": "workspace中不能有白名单之外的文件",
+      "check_type": "file_whitelist_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "workspace_file_compliance",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "叙事调性匹配": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了13个文件; LLM评估: 题材（creative_intent.json）：y轴含“商战权谋+刑侦悬疑+双向暗恋”，reaction_strength=↘，并注明“写实、克制、有挫折有成长，非爽文”。按标准应呈现偏沉重克制、干练锋锐、暗流涌动的叙事调性：对话更信息/博弈导向，节奏更紧凑压迫，情绪表达节制。\n\n实际章节文笔与节奏：整体更接近“甜爽言情+爽文式打脸升级”的轻快与撒糖感，且多处煽情/暧昧化处理，削弱了↘向与权谋/悬疑应有的冷硬克制。\n\n1）言情撒糖与暧昧氛围占比高，语气温柔、甜感强，明显与↘和权谋悬疑的主调冲突。\n- ch07：“窗外的阳光…落在两个人交握的手上…她的心跳漏了一拍…陆时衍的耳尖也悄悄红了。”\n- ch08：“店员…‘老板昨天特意交代给你买的无糖豆浆’…‘这个人，总是在这些细节上格外用心’；…‘他碰过的地方…还残留着他掌心的温度，心跳得有点快’”\n- ch10：“火锅店热气腾腾…陆时衍…不停给她夹菜，眼神温柔得能滴出水来。”\n这些段落是典型甜宠/暧昧描写，频率高且篇幅不短，主导阅读体感。\n\n2）爽文式“反杀/打脸”叙事偏多，节奏偏快，冲突解决过于顺滑，呈现的是“爽感升级”而非↘要求的“沉重压抑、克制张力”。\n- ch07 张百川退钱桥段：录音/视频一摆立刻转账，“算你们狠”迅速收束；\n- ch10 交流会“反杀”：证据连放+警察当场入场带走张百川，戏剧性强、爽点集中；\n- ch11 开庭直接胜诉且冯美兰当场被戴手铐带走。\n这些写法更像快节奏爽文（一路开挂解决麻烦），与“写实、克制、有挫折有成长，非爽文”的声明不一致，也让“商战权谋/刑侦悬疑”的压迫与暗流不足。\n\n3）对话风格偏情绪宣示与口号化，缺少权谋/悬疑应有的机锋与信息博弈质感。\n- ch05 林薇薇台词：“让他们吹牛逼。”\n- ch05 结尾：“来吧，不管是什么牛鬼蛇神，她都接着。”\n- ch09 陆时衍：“我不会让任何人伤害你的。”\n更像言情/爽文的情绪推动，而不是商战权谋的冷静算计、悬疑的线索交锋。\n\n结论：虽然开篇（ch01-04）有一定写实底色与压力感（如离婚雨景、被试探、被跟踪、律师函等），但从中后段开始甜宠互动与爽文化解决占比明显上升，整体“闭眼读”的体感更像“甜爽言情+打脸升级”，而非↘向的克制写实、商战权谋/刑侦悬疑的冷硬紧绷。因此判定叙事调性与题材要求整体不匹配。",
+      "description": "文笔风格必须与题材类型匹配",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_tone_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "后期章节跑偏": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了12个文件; LLM评估: 通读12章（含后1/3的chapter_09~chapter_12），内容均为连续的故事叙事：有明确场景（拍卖会、交流会、法院、工作室开业等）、人物行动与对话、冲突推进与收尾（张百川反诉/被抓、周家官司胜诉、开工作室与后续发展）。未发现作者视角感想、读者互动/征集、番外预告、角色问答、数据统计等“非正文跑偏”内容。章节长度方面：后期章节（9-12章）与前期相比未出现明显萎缩到几十/几百字的敷衍情况，仍为正常篇幅叙事；第12章虽包含较快的时间跨度总结（类似快节奏收尾），但仍属于剧情收束而非后记/互动，因此符合本检查项标准。",
+      "description": "后期章节不能跑偏写非正文内容（作者感想、读者互动、番外预告等）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "late_stage_digression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色大纲规划完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在大纲中规划",
+      "details": "主角 2/2: 苏清宁, 陆时衍; 配角 5/5: 周子豪, 冯美兰, 陈敬之, 张百川, 林薇薇",
+      "description": "设计的角色必须在大纲中规划",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_outline",
+      "is_critical": true
+    },
+    "角色正文出场完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在正文中出现",
+      "details": "在12个章节中检查; 主角 2/2: 苏清宁, 陆时衍; 配角 5/5: 周子豪, 冯美兰, 陈敬之, 张百川, 林薇薇",
+      "description": "设计的角色必须在正文中出现",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_chapters",
+      "is_critical": true
+    },
+    "writing_log文件创建": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/writing_log.md 存在",
+      "description": "必须创建writing_log.md记录创作进度",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_creation",
+      "is_critical": true
+    },
+    "writing_log文件读取": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取writing_log.md了解前文内容",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_usage",
+      "is_critical": true
+    },
+    "大纲执行忠实度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了13个文件; LLM评估: 正文整体主线方向（离婚得罐→周家索回诉讼→与陆时衍合作对抗行业造假→张百川牵出冯美兰非法来源→庭审胜诉→开工作室并确认关系）与大纲的核心结局走向基本一致，未出现明显‘结局方向偏离’或‘主线情节替换’；但存在显著的执行层面偏离：1）大纲规划三幕共24章，实际仅12章即完结，导致act_two/act_three的大量章节与过程缺失；2）大量关键事件被提前、压缩并合并在少数章节中完成，尤其第三幕（19-24章）的高潮与收束被提前到11-12章完成，属于严重“章节大幅缺失”，因此判定 matched=false。",
+      "description": "实际章节内容必须忠实于自己设计的大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_execution_fidelity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色语言辨识度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了12个文件; LLM评估: 整体未达“优秀（遮住角色名也能识别说话者）”标准。文本里虽然有少量身份/情绪差异（如周子豪更傲慢、林薇薇更咋呼），但主要角色（苏清宁、陆时衍、林薇薇、陈敬之）在大量对话中共享同一套“干净、顺滑、说明式”的话术模板：句式完整、逻辑严密、很少口头禅/方言/行业黑话的稳定区分，导致互换角色名时常常不违和。\n\n具体表现：\n1) 共享话术模板（shared_template）：\n- 陆时衍高频使用“举手之劳”“别担心”“我帮你想办法/我不会让任何人伤害你”“一切都会好的”等安抚+承诺句式；苏清宁也频繁以“谢谢你”“我能处理好”“我不想麻烦你”等礼貌克制句式回应，两人的语体都偏“稳、顺、标准书面口语”，缺少能盲测识别的强特征。\n- 多处对话呈现“问题—解释—给方案”的同构结构（尤其在第7-10章合作、反杀、开庭前后），像同一个叙述者在推动信息，而不是角色各自的语言习惯在说话。\n\n2) 身份/年龄区分不足（age_identity_blur）：\n- 陈敬之（76岁老匠人/故宫体系修复师）台词多为温和关切与功能性信息，缺少更稳定的年代感口吻、行当用语、口头习惯（例如老派称呼、手艺人行话、碎碎念式叮嘱等），与年轻角色的“清晰完整句”差异不够大。\n- 律师林薇薇虽有情绪化表达（“王八蛋”“吹牛逼”“我靠”），但在提供法律意见时迅速回到与其他角色类似的理性解释体（“谁主张谁举证”“法院不会受理”等），其“咋呼风格”不够贯穿稳定。\n\n3) 跨角色台词可互换的风险较高（cross_character_clone 的倾向）：\n- 多处“理性解释+给结论”的表达，放在苏清宁/陆时衍/林薇薇嘴里都能成立，例如围绕证据、赢面、别担心、我来处理等内容，角色间缺少独特的用词偏好、句长节奏、反问/祈使习惯的显著差异。\n\n总结：作品的对话在信息传递上清楚，但主要角色语言风格区分不足，存在明显同质化倾向，达不到“遮住角色名也能识别说话者”的优秀标准。",
+      "description": "不同角色对话必须有可辨识的语言风格差异",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "dialogue_character_distinction",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "叙事密度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了12个文件; LLM评估: 整体符合优秀标准：多数章节具备高叙事密度，场景/感官/动作细节充足，关键情绪多以细节承载，画面感稳定。\n\n1) 叙事密度（场景+感官）明显充足：\n- chapter_01开场用环境与物件细节建立情绪与阶层对比：如“深秋的雨带着砭骨的冷，砸在民政局门口的青石板上”“红封皮被雨丝打湿了一角，像一块凝固的血”“百达翡丽…闪了一下，晃得人眼睛疼”，以及回到小院后“樟木和樟脑的味道”“灰尘被光线扬起…慢悠悠地转”等，空间、气味、光线、触觉齐全。\n- chapter_02的潘家园“空气里混着樟木味、旧纸张味、劣质檀香味，还有此起彼伏的叫卖声”，直接用嗅觉+听觉做场景密度。\n\n2) 动作细节具体，能承载心理与冲突：\n- chapter_01“指尖轻轻摩挲…细疤”“拖着箱子慢慢走”“把棉絮拆开来…呼吸瞬间顿住了”等，用动作与身体反应替代纯陈述。\n- chapter_07张百川对峙段落，不是“他很生气/她很害怕”的抽象堆叠，而是“把手机放在柜台上，点开录音文件”“额头上冒出冷汗”“咬了咬牙…转了五十万”等可视化动作推动。\n\n3) Show为主但并非纯Show：\n- 亮点是多处用物件/细节映射情绪（如离婚证“像凝固的血”、雨停后“釉面温润的光”对应心理转折），属于有效Show。\n- 同时中后期存在一定Tell增多的趋势，尤其在“成长宣言/情绪总结”处较常见，如chapter_01结尾“从今天起…她是…”以及chapter_12收束段“原来老天爷给你关上一扇门…打开一扇窗”，更偏直白归纳。但这些多发生在段落收束或过渡，并未让整章退化为流水账或议论文体。\n\n4) 心理层次总体够用，但部分章节有模板化直述：\n- 前半（1-4章）心理与环境结合较好，例如chapter_04看到老照片后“心里翻起惊涛骇浪”“瞬间冷了下来”前有暗号、照片背书、电话泄密等触发点，心理转折有因有果。\n- 后半（10-12章）在恋爱与事业顺遂段落，心理表达更依赖“心里暖暖的/踏实/甜丝丝的/无比幸福”等直接判断，细腻度略低于前期，但仍穿插行为与细节（无糖豆浆、工具台、钥匙、摸头等）维持一定Show。\n\n5) 低密度退化检测：\n- 12章整体更像“结局式概括”，时间跳跃大、成果罗列偏多（账号涨粉、端窝点、买院子、求婚婚礼等），有轻微“事件流水账/总结式收束”的倾向，但前面仍有开业当天的找茬对戏与鉴定细节支撑，不构成全章纯流水账，更不至于超过50%章节低密度。\n\n结论：多数章节（至少前1-11章）叙事层次丰富，场景与感官细节稳定输出，冲突段落多用动作/细节呈现；虽然后期收束略偏Tell与总结，但整体仍达“优秀叙事密度与手法质量”的要求。",
+      "description": "章节叙事应有足够的场景描写、感官细节和心理活动，情感传达以Show为主",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_density",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "智斗逻辑合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了12个文件; LLM评估: 适用：故事包含多处“鉴伪/捡漏/攻防取证/法庭博弈”等智斗场景。\n\n1) chapter_02 反坑压价：苏清宁依据行业暗号“三长两短”判断被坑并撤退，随后用多家询价交叉验证陆时衍报价合理，再成交——线索→判断→验证→结论链完整。\n\n2) chapter_06 走眼与纠偏：汝窑笔洗先因“开片过均匀、胎质偏重”等细节被拍卖行同事指出为高仿，属于可核验的鉴定依据；主角承认疏忽并修正认知，不是无依据猜测。\n\n3) chapter_07 追赃谈判：陆时衍用“录音/作坊证据”对张百川形成可执行威慑，苏清宁补充“交易录音”形成闭环证据链，促使对方退钱——攻防因果明确，不靠暴力或降智配合。\n\n4) chapter_09 捡漏夹层：拍卖现场主角观察到底部小孔→推断夹层瓶→回店验证暗刻款与空洞回声→取出鼻烟壶兑现推断，推理步骤与验证手段清晰。\n\n5) chapter_10 公开反杀：先放“交易录音+鉴定中心报告”反证掉包指控，再出“作坊视频+受害者证词+交易记录”加强证明，最终警方介入——证据递进符合现实博弈逻辑。\n\n6) chapter_11 法庭主线：离婚协议条款+周子豪“破烂”录音反驳“重大误解”；再以张百川口供与转账记录否定“祖传财产”主张，并与“善意取得/出借展览”形成裁判理由——从线索到判决的论证链条基本自洽。\n\n整体未见核心谜题靠盲猜/假推理/暴力绕过；反派虽强势但多数被证据压制而非无端降智。个别点（如警方当场进入交流会抓捕、善意取得与涉盗文物处置的法理细节）略有戏剧化，但不构成主线推理链断裂。",
+      "description": "谜题/智斗的推理逻辑必须自洽",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "puzzle_logic_validity",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "题材契合度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了13个文件; LLM评估: 【配方】A3复仇的罪 + Y8商战权谋 / Y1双向暗恋 / Y12刑侦悬疑。\n\n【总体判断】文本在古董行/文物鉴定题材与“离婚后自我重建”的主线完成度较高，但与配方要求的三标签“化学反应”不足：商战权谋、刑侦悬疑、复仇追凶三条能力线没有形成互相驱动的闭环，更多是线性推进与外部反派轮番施压，呈现偏标签化，因此未达“优秀/精致”标准。\n\n【主要不足点】\n1) “复仇的罪(A3)”内核不够：主角的核心行动多为保全财产、打官司、行业打假，并非“追踪犯罪者”的持续推进；冯美兰的犯罪（盗墓链条/非法收购）在后段通过张百川口供快速交代，缺少长期侦查、证据链拼接、道德两难（正义与利益/捐赠与自保）的深挖，复仇的道德纠结也较轻。\n2) “刑侦悬疑(Y12)”偏弱且节奏依赖巧合：关键突破多靠外力送证据（偷拍视频、口供当场招供、警察直接进会场带人），缺少主角/同盟通过推理、排除、布控、反侦察等“刑侦过程感”；悬念的“层层剥茧”不足，反转多为信息揭示而非推理得出。\n3) “商战权谋(Y8)”表现更像行业对抗而非权谋博弈：冲突主要在古玩圈的收售、打假、名誉诉讼、客户资源，并未形成明确的商业目标（股权/控制权/核心资产争夺）与“攻守转换”的策略链条；周氏集团作为商战载体基本只承担反派施压，缺乏来有回的商业博弈与多方势力博弈格局。\n4) 三标签融合偏拼接：恋爱线（双向暗恋）主要以细节撒糖推动；打假线与周家诉讼线分别推进，和“刑侦/追凶”没有强交叉机制（例如：商业手段反哺取证、取证反制商战、情感关系成为卧底/反间/证据交换的关键变量）。整体像“古董行业成长文 + 律政对抗 + 甜恋”并列，而不是互相催化。\n\n【已有亮点但不足以拉到优秀】\n- 古董鉴定细节（胎釉、款识、开片、暗号等）相对具体，行业氛围有质感；\n- 女主成长线从受压到独立开工作室较顺；\n- 反派施压（试探、律师函、入室翻找、名誉诉讼）让冲突密度在线。\n\n【结论】题材完成度“做到了”，但商战权谋/刑侦悬疑/复仇追凶三者未形成强互动与高密度智斗推演，关键节点偏巧合与外力递证，导致题材特征精致度与化学反应不足，判定matched=false。",
+      "description": "题材特征精致度和X-Y轴化学反应效果",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "genre_fit",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "剧情节奏合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了12个文件; LLM评估: 整体节奏层次清晰：1）前4章用“离婚—发现重宝—被盯上”迅速建立主线冲突并抛出高价值钩子，情绪强度递增；2）第5-6章通过律师函+走眼破财形成明显低谷与加压点，推动角色入绝境，为后续同盟与反杀做铺垫，铺垫-回报比匹配；3）第7章退钱与结盟是有效的阶段性回落/转折，让读者喘息，同时把冲突升级到可对抗的结构；4）第8-9章以“工作起势+再度找茬/起诉”形成波浪式起伏，不是单线攀升；5）第10章大会公开反杀与警方介入构成强高潮之一，第11章庭审胜诉构成终局高潮并顺势收束；6）过渡较自然：从行业打假线（张百川）到周家诉讼线在第10章通过口供证据实现汇合，避免了突兀跳转。整体不存在明显的前松后紧、全程高潮或节奏断裂问题。",
+      "description": "高潮低谷分布合理、情绪曲线有层次感",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "pacing_rationality_advanced",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "钩子设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了12个文件; LLM评估: 整体达到优秀标准：关键转折处基本都设置了“具体化的信息差”式钩子，而非泛泛的‘更大风暴’空洞暗示；并且钩子与主线（永乐青花罐归属、周家追索、行业造假势力、陆时衍真实动机/关系）高度相关，能稳定驱动读者跨章阅读。\n\n1) 章节结尾悬念密度与位置：第2章“老照片+终于找到你了”、第4章“拍卖行来电+被盯梢+消息泄露”、第6章“走眼亏钱+周家冻结资产”、第8章“入室翻找”、第9章“张百川起诉500万”、第10章“告白被打断+冯美兰非法来源证据”、第12章“开业被张磊带假货挑衅”等，均在转折点或阶段收束点抛出下一步核心问题。\n\n2) 钩子质量（放出一点、保留关键）：多处给出“已发生的具体异常/证据/行动”但不揭示幕后机制（例如消息为何泄露、周家如何拿到证据、陆时衍真正目的、谁在盯梢/入室），形成真实信息差。\n\n3) 多样性：既有身份线索（老照片/同事关系）、外部威胁（跟踪/入室/冻结资产）、法律冲突（律师函/财产保全/诽谤诉讼）、行业对抗（造假链条/反杀）、情感线中断（告白被电话打断）等，不是单一模板反复使用。\n\n4) 需要注意的瑕疵：个别章节使用了较常见的“电话打断告白/好消息插入”桥段（第10章），略带模板感，但因为同步推进了主线证据（冯美兰非法来源）并非纯拖延，所以仍属有效钩子；末章后半段偏收尾型，新增悬念较少，符合容错范围。",
+      "description": "关键转折处有有效的悬念钩子设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "hook_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "意象系统": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了12个文件; LLM评估: 全文存在明确且高频的核心具象元素“永乐青花罐”，贯穿12章并在不同阶段发生实质性的意义变奏：从离婚创伤背景中的意外所得，到被周家与黑市觊觎的风险源，再到法律战与行业打假的证据中心，继而成为两代修复者心愿的承接物与男女主同盟的纽带，最后回归公共文化场域（故宫借展、讲座）并成为新生活秩序的象征。伴生的光/雨/月光对釉面反光的反复书写，也形成首尾呼应的情绪线，强化“从冷到暖、从压抑到圆满”的主题推进。因此符合‘有意象系统且有变奏’的优秀标准。",
+      "description": "核心意象贯穿全文并发生意义变奏",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "imagery_system",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "情感弧线层次": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了12个文件; LLM评估: 主角：苏清宁。情感发展具备多层递进且每次转折都有明确事件驱动，整体方向从“被动受压/自我怀疑”走向“掌控局面/自我确认/建立新生活”。可辨识的情感层至少6层：①麻木克制与压抑（离婚当日“很平静”）→②震惊与解放感/重新燃起自信（发现永乐青花罐、给外公视频）→③谨慎与警惕（周家助理上门试探、开始藏罐、找律师朋友）→④信任裂痕与被背叛感/愤怒（发现陆家照片+拍卖行来电导致“以为陆时衍泄密”并拉黑）→⑤恐慌与绝望（律师函、跟踪、财产保全、再叠加“走眼”损失五十万）→⑥羞愧自责与脆弱（路边哭、怀疑自己专业能力）→⑦被解释后释疑与重新建立信任、获得支撑（陆时衍澄清泄密源+帮要回钱，形成同盟合作）→⑧成就感与自我价值确认（连续鉴定成功、拍卖捡漏、业内认可）→⑨反击的笃定与胜利后的释然（交流会反杀张百川、法庭胜诉）→⑩温暖安定与幸福感（确认恋爱、开工作室、人生重建）。这些层次之间有递进关系：外部压力升级→主角从防御到反击再到重建；且关键转折点均由具体事件触发（发现国宝、上门试探、鉴定中心照片与陌生来电、律师函/保全、被骗走眼、澄清与退钱、入室翻找、公开揭露造假、庭审胜诉、工作室开业与再度找茬）。因此符合“优秀”标准。",
+      "description": "主角情感发展有多层递进变化",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_gradient",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语义重复检测": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了12个文件; LLM评估: 整体通过：12章推进的信息点持续新增，未出现≥3处“换了说法但在讲同一件事”的严重语义级重复。\n\n主要新增信息链清晰：ch01离婚+发现永乐青花罐；ch02结识陆时衍并建立行业线索；ch03周家试探+律师朋友介入；ch04官方鉴定与“陆家/陈家”关系伏笔+消息外泄；ch05周家发律师函并转移文物；ch06汝窑笔洗被骗（走眼）+周家财产保全升级+陆时衍澄清动机；ch07追回款项并结盟合作；ch08周家上门和解威胁+入室翻找升级冲突；ch09拍卖捡漏建立职业声望+张百川反诉；ch10交流会公开反杀张百川并推动周家案证据落地；ch11庭审胜诉与冯美兰违法线定案+感情线确认；ch12事业闭环（工作室）+再一次“找茬鉴定”作为能力展示与尾声。\n\n存在的轻微重复（可容错1-2处）：\n- ch07-09多次强调“她不再一个人扛/靠专业赚钱/名声起来了”，属于阶段性强化主旨，但每次都伴随新事件（合作落地、客户增多、拍卖捡漏、收入变化），信息并非空转。\n- ch12的“开业被找茬鉴定”与前面多次打假/鉴定高仿在情境上相似，但功能不同：作为收束章节的能力背书与事业落点，不构成连续多章的情境模板复制。\n\n未发现达到阈值的模式：没有连续3章反复在结尾重申同一认知/情绪、也没有同一关键结论被‘重新意识到’≥3次而不新增剧情推进。",
+      "description": "不能出现大量语义级别的内容重复（P6级）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "semantic_redundancy",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构功能性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了13个文件; LLM评估: 1) 开头-结尾关系明确：第一章以离婚雨天、‘破烂箱子’与青花罐作为人生翻盘的起点；第11-12章以青花罐进入公共文化体系（借展/故宫讲座）和她建立工作室作终点，且最终镜头回到‘修复室+青花罐+月光’的核心意象，形成从‘被动获得/被追夺’到‘主动保全/公开呈现’的意义闭环。2) 章节编排有设计感：不是任意章节可互换的线性堆事件，而是关卡式递进——试探(3)→鉴定泄密(4)→律师函(5)→走眼低谷(6)→结盟(7)→对抗升级(8-10)→法庭终局(11)→新生落地(12)，每一关都在补主题所需的能力拼图。3) 结构与主题强关联：‘专业’在第1、8、9、12章反复被验证；‘缺乏江湖经验’在第2压价、第6走眼、第8入室翻找等处被惩罚；‘成长’通过与陆时衍结盟、证据战、法庭战完成。整体读完对“故事怎么讲（以罐为轴的关卡成长+首尾意象闭合）”会有清晰印象，符合结构功能性优秀标准。",
+      "description": "叙事结构服务于主题表达（短篇尤重）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色命名质量": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了13个文件; LLM评估: 整体命名大量落在“好听但通用”的网文/LLM高频审美上：主角“苏清宁”命中姓氏偏好且由高频字“清/宁”组成，容易与任意都市/古董题材女主互换；男主“陆时衍”也属于常见雅字拼装型，缺少能让读者一眼联想到其背景（鉴定师/时斋/家学渊源/守护规则）的独特设计；高频配角“林薇薇”同样是常见叠字名。虽有部分配角如“张百川、陈敬之、冯美兰、周子豪”相对更具社会质感与差异化，但核心主角组未达到“优秀命名（文化深度+独特辨识度+角色命运共振）”标准，因此判定 matched=false。",
+      "description": "角色命名有文化深度、辨识度和角色-命运共振",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_naming_quality",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "中篇字数_大女主": {
+      "check_result": "fail",
+      "reason": "字数不符合要求",
+      "details": "总字数 31156 不在范围 [108000, 132000] 内; 共12个文件（按章节顺序排列）: chapter_01.md, chapter_02.md, chapter_03.md, chapter_04.md, chapter_05.md, chapter_06.md, chapter_07.md, chapter_08.md, chapter_09.md, chapter_10.md, chapter_11.md, chapter_12.md; 最后一个文件是 chapter_12.md",
+      "description": "总字数应在108000-132000之间（基于query要求120000，±10%浮动）",
+      "check_type": "semantic_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "range_constraint",
+      "is_critical": true
+    },
+    "情感交付大女主": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了12个文件; LLM评估: 整体符合“大女主向”标准：剧情核心驱动力是女主苏清宁的自我实现（重拾鉴定/修复事业、保住文物所有权、建立个人工作室并成为业内权威），且关键节点由她主导决策并推动走向。\n\n1) 女主是绝对决策中心、推动剧情：\n- 第1章离婚后主动回到外公小院、确认青花罐价值并立刻联系渠道变现（主动“拨通张哥电话”寻找出手渠道），明确“从今天起她是苏清宁……鉴定师”。\n- 第4章决定做官方检测、拿到鉴定报告为未来纠纷做证据（“取样检测…开个正式鉴定报告”）。\n- 第5章面对周家律师函，选择转移青花罐、并要求“答辩函写硬气…还要公开道歉”，从防守转为反击。\n- 第7-10章从被坑、被诉的困境中反转：她与陆时衍结盟后，仍是靠自己专业在“时斋”鉴定立威（第7章三分钟识破永乐梅瓶高仿；第8章判定乾隆珐琅彩真品；第9章拍卖会上她判断天球瓶夹层并指挥出价；第10章交流会她上台主导证据链公开反杀张百川）。\n- 第11章庭审中女主本人出示修复记录与检测报告，并提出“无偿借给故宫展览十年”的方案，体现对文物处置的价值选择与主张。\n- 第12章开业现场面对张磊挑衅，她亲自鉴定拆穿元青花高仿并设定对赌条件（“看错我双倍赔三千万；看对你道歉走人”），再次由她掌控局面。\n\n2) 以自身能力/专业推动剧情，而非靠外力开挂：\n- 专业背景铺垫充分：外公修复系统、从七岁起在修复室、拍卖行鉴定助理经历（第1章起即给出能力来源）。\n- 多次以可验证的鉴定逻辑取胜：款识笔锋、胎釉气泡、开片、胎土密度、苏麻离青铁锈斑深浅等（第7/8/12章大量细节），属于“靠技能解决问题”。\n- 成长弧线可信：从离婚后资金紧张、被坑走眼（第6章“高仿汝窑笔洗”重大挫折）到复盘再起、逐步建立口碑、赢官司、开工作室（第8-12章），有过程、有代价、有修正。\n\n3) 自我实现目标清晰，感情线为辅：\n- 核心目标是事业与名誉的重建、夺回话语权与尊严：开工作室、成为“苏老师”、参与打假与公益修复（第3章明确“要开自己的修复工作室”；第12章实现并扩张）。\n- 感情线存在但不构成主线驱动：关键矛盾（周家夺罐诉讼、行业造假张百川、职业立威）都围绕女主职业与权益展开，恋爱更多是结尾收束与陪伴。\n\n4) 逆袭翻盘的关键转折主要由女主完成：\n- 行业层面翻盘：第10章交流会“上台放证据—警察带走张百川”，女主完成公开清算。\n- 法律层面翻盘：第11章以离婚协议、录音、口供与修复资料完成胜诉并反向让冯美兰被立案。\n- 事业层面翻盘：第8章起靠鉴定收费、捡漏盈利，第12章成立个人品牌与工作室。\n\n综合来看，本内容的主轴是女主凭借专业能力与主动决策，从豪门婚姻边缘人逆转为行业权威与事业主理人，符合大女主向。",
+      "description": "实际内容必须是大女主逆袭向",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "女主独立性检查": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了12个文件; LLM评估: 女主核心翻盘与多处关键节点明显依赖男性角色（陆时衍）提供决定性资源/人脉/保护，属于“男主光环/霸总拯救”范畴，女主不满足“关键决策与核心成功独立于男性角色”。\n\n关键成功节点与男性作用：\n1) 资金危机翻盘（chapter_07）：女主50万买到高仿、周家申请财产保全导致走投无路时，陆时衍带她上门以掌握的录音/视频证据威胁张百川，直接追回50万——这是女主避免破产、维持诉讼能力的决定性救场。\n2) 诉讼资源保障（chapter_07）：陆时衍“联系最好的律师”、并“所有诉讼费用先由陆时衍垫付，等以后从分红扣”。诉讼能打下去的关键资源（费用+律师渠道）由男主提供，具有决定性。\n3) 安全与生活保障（chapter_08）：女主家被撬、居住安全受威胁，陆时衍报警并提供空房让她免费住（“员工福利”）。这属于关键危机时刻的保护性资源支持，削弱女主独立性。\n4) 事业起盘渠道（chapter_07~09）：合作模式中，陆时衍提供“客户资源和渠道、人脉”，女主提供鉴定能力。虽然女主承担核心专业工作，但其业务增长与收入爆发（声誉扩散、更多客户上门）建立在男主平台/资源上，属于“在其庇护/平台下成长”的结构。\n5) 张百川反杀的关键证据储备（chapter_10）：陆时衍提前交付U盘，称包含张百川三年卖假记录、证词、造假作坊视频等“足够让他翻不了身”的核心证据。女主在交流会公开揭露虽由她主导呈现，但关键证据主要来自男主长期调查积累，偏决定性。\n6) 周家案胜诉的决定性证据触发（chapter_10~11）：冯美兰非法收购的关键证据来自“张百川在警局招供”（chapter_10）。虽非男主直接提供，但女主整体破局链条中多次由男主推动/兜底（前述资金、律师、保护）。\n\n女主自身独立的部分（优点）：\n- 女主的核心能力（鉴定、判断、当庭陈述意志）很强：如多次快速识别赝品（chapter_07/08/12）、拍卖会识别夹层价值（chapter_09）、在交流会上主动上台反击（chapter_10）。这些体现“能力独立”。\n\n但不合格的根因：\n- 本标准只看“关键决策与核心成功是否独立于男性角色”。本故事中，多次关键转折（资金救场、诉讼资源、居住安全、证据库/渠道）若去掉陆时衍，女主大概率无法完成同等程度的翻盘与胜诉推进，因此整体判定为不独立（matched=false）。",
+      "description": "女主关键成功不能依赖男性角色",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色关系设计张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 总体符合“关系具备叙事张力”的业务标准，可判为 pass：\n1) 关系有内在矛盾源：苏清宁与陆时衍存在明显的信息不对称与动机误读（她以为他为罐而来；他以为她只谈合作），叠加两人各自的隐性动机/恐惧（她害怕判断出错、被否定；他害怕黑历史连累她）可自然引发信任与合作边界冲突；苏清宁与周子豪/冯美兰则是价值观与利益对立（专业尊严 vs 豪门掠夺与控制），冲突明确。\n2) 关系有变化空间：relationship_dynamics 给出清晰的阶段曲线（试探不信任→盟友→好感未明→信任危机→坦诚→平等伙伴），张百川也有“勾结坑害→自保反水”的关系翻转，具备推进剧情的转折点。\n3) 冲突源于角色本身：主要冲突并非纯外部灾难，而是由角色性格与动机驱动——苏清宁的专业偏执与自我证明需求、陆时衍的不擅表达与隐瞒黑历史、周家母子的傲慢控制与逐利本性、张百川的伪善与投机，均能内生地制造摩擦、误判与背刺/结盟变化。\n不足与风险点：周子豪/冯美兰目前偏“夺宝型反派”（动机集中在利益与控制），若后续缺少更具体的个人底层诉求或与主角的情感/名誉/家族压力等更深层纠葛，可能显得功能性；此外主角线的“信任危机”触发点尚未具体化（最好落到陆的黑历史曝光方式、苏的专业判断失误/被利用等可验证事件），以避免张力停留在口头描述。整体仍满足三条必须条件。",
+      "description": "角色关系设计具有叙事张力，能驱动剧情",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_relationship_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色动机设计深度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：通过业务标准（pass）。\n\n1) 表层动机与深层动机有区分（满足）：\n- 苏清宁 overt 是“守住永乐青花罐…反击前夫家族的恶意追讨”，covert 是“证明自己的专业价值不是豪门的点缀，获得行业和自我的双重认可”。前者是具体外部目标与对抗，后者是身份/自我价值的心理需求，层次清晰。\n- 陆时衍 overt 是“合作打击造假乱象，维护行业规则”，covert 是“弥补爷爷遗憾…保护苏清宁不被坑害”。前者是公共叙事与职业使命，后者是私人遗憾与情感投射/保护欲，动机不重合。\n\n2) 动机有具体来源（满足）：\n- 苏清宁的深层驱动来自其经历与身份落差：设定为“前豪门儿媳”“被否定的自我怀疑”（secret_fear 明确指出“三年豪门生活中被否定”），使“渴望被认可/证明专业价值”有明确因果来源；同时“出身文物修复世家、古董鉴定师”也让守罐与行业立足具备职业与家学支撑。\n- 陆时衍的深层驱动来自家族史与个人旧账：covert 直接给出“爷爷没能保住完整永乐青花罐的遗憾”，hidden_connection 强化两家渊源（“同门师兄弟/故宫同事”），secret_fear 里的“过去投资失败黑历史”进一步提供其谨慎与保护声誉的心理根源。\n\n3) 至少两个主角满足以上两条（满足）：\n- main_characters 中两位（protagonist 与 deuteragonist）均具备 overt/covert 区分且有背景/经历支撑。\n\n加分点（不影响通过但体现深度）：\n- secret_fear、misperception_of_other、hidden_connection 均能为动机提供冲突与误解来源（如苏清宁“害怕判断出错”、陆时衍“黑历史曝光”），使动机不仅是口号而可转化为剧情压力与人物选择。",
+      "description": "角色动机设计有深度，有表层和深层动机区分",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_motivation_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色成长弧线设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: 结论：符合业务标准（pass）。\n\n1) 有清晰起点与终点：\n- 起点（characters+outline Act1）：苏清宁“冷静理智/专业偏执/嘴硬心软+轻度社恐”，动机是“守住青花罐、在古董行站稳脚跟、反击周家”，隐性动机是“证明专业价值”；核心恐惧是“判断出错、被否定导致自我怀疑”。大纲第1章与第一幕强调她离婚后压抑、谨慎隐忍、对行业规则陌生且不信任他人（对陆时衍的误解也在角色表里给出）。\n- 终点（Act3+第24章）：她“成立鉴定工作室、坚持行业底线、愿意将青花罐借展十年”，并在情感上“走出过去阴影、与陆时衍成为平等伙伴”。这不仅是地位/事业结果，更是价值观与自我认同的落点（从‘证明自己’到‘以专业服务公众、守规则’）。\n\n2) 变化有内在逻辑：\n- 弧线驱动力来自她的动机与恐惧：想证明专业价值、却害怕出错。第二幕“走眼赔五十万”正好击穿其‘专业自信/偏执’与‘害怕判断错误’的矛盾，迫使她从“单凭自信与经验”走向“更成熟地理解行业风险与规则、学会合作与取证”。\n- 关系弧线也提供逻辑支撑：relationship_dynamics 明确写了“互相试探不信任→盟友→信任危机后坦诚→平等伙伴”，并在大纲中有对应事件落地（Act1陆提醒但不点破；Act2合作、共同对抗造假链与周家压力；Act3确认关系）。\n- 价值选择作为内在变化的证据：Act1她面对外公“交给国家”的建议犹豫、认为是补偿；Act3她提出“借展十年”并走向公益鉴定/打假，体现从‘把青花罐当个人补偿/筹码’到‘承担行业与公共责任’的认知升级。\n\n3) 至少一个主角有明确弧线：\n- 苏清宁弧线最清楚：自我怀疑与不信任（对人/对行业/对自己）→挫败与学习（走眼、被设局、取证）→自我认同与开放合作（掌握证据、胜诉、创立工作室、确认亲密关系）。\n- 陆时衍也有潜在弧线线索（“不擅表达+隐性保护动机+黑历史恐惧”），但大纲可见部分对其‘暴露黑历史/信任危机’的章节落点不够具体；不过这不影响“至少一个主角弧线明确”的通过判定。\n\n不足（不影响通过，但可优化）：第二幕描述里提到“经历信任危机后坦诚心意”，但在可见 key_chapters 里只展示了“走眼”这一章，缺少对‘信任危机’的具体章节节点/情绪转折场景展示；建议在7-18章中明确安排1-2个章节写陆时衍黑历史或青花罐利益冲突引发的破裂与修复，以让弧线落点更扎实。",
+      "description": "主角有清晰的成长/变化弧线设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_arc_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "outline结构完整性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：fail（未达到“结构足够完整可支撑写作”的业务标准）。\n\n1) 章节覆盖不完整：三幕描述里声明共24章（1-6、7-18、19-24），但 key_chapters 仅给出了第1章、第7章、第24章的细化，其余章节缺失具体章节级概要与事件推进，无法视为覆盖计划章节的80%以上。\n\n2) 每章实质性内容描述不足：虽然每一幕有较完整的 story_synopsis，但“每章至少有 synopsis/概要”未满足；绝大多数章节没有 chapter_synopsis（只有3章有）。\n\n3) 冲突/转折信息：已满足一部分——第1章、第7章、第24章都有 scene_sequence、conflict_point、emotional_shift；三幕也各有 turning_point，并且第二幕/第三幕的核心反转、证据链、法庭对决清晰。\n\n4) 三幕结构可辨识：满足——act_one/act_two/act_three 分层明确，每幕有 description、story_synopsis、turning_point。\n\n总体评价：宏观结构（多幕/主线冲突/关键反转/结局落点）合格，但章节层面的覆盖与细化严重不足，现有文件更像“三幕梗概 + 3个示例章节”，不足以直接支撑按章写作与节奏控制。建议补齐至少19-22个章节的 chapter_synopsis（每章明确目标、冲突、转折/钩子），并为关键章节补充场景序列或冲突点。",
+      "description": "大纲结构完整，信息密度足以指导写作",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_structure_completeness",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "outline叙事张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 整体符合“持续叙事张力”的业务标准，判定为 pass（满足3项必须条件中的至少2项，实际满足3项）。\n\n1) 信息落差/悬念设计：第一幕核心悬念是“旧物箱里到底有什么、青花罐的真实来路与归属、周家为何突然追讨”。大纲明确采用“发现高价值文物→隐瞒不声张→周家试探/调查→律师函逼迫”的延迟揭示链条；第二幕末再揭示更大的信息（青花罐来自冯美兰非法收购、周家牵涉倒卖文物），属于典型的延迟回答与信息不对称。\n\n2) 张力递进：冲突从个人层面的离婚与自我重建（第一幕）升级到生存/行业层面的双线压力（官司+古董行设局、被骗50万、威胁骚扰、调查造假链，第二幕），再到法庭正面交锋与刑事风险（第三幕冯美兰被立案调查）。整体风险和复杂度是递增的，中后段明显更紧张。\n\n3) 意外/转折：至少有两处有效转折——(a) 张百川从“行业泰斗/设局者”转为“提供关键证据的反水者”；(b) 青花罐并非单纯‘天降横财’，而牵出周家早年非法倒卖文物的黑历史与来路记录，直接反转诉讼攻守关系。\n\n需要注意的不足：第三幕概要偏“收束型胜利结算”，法庭胜诉与‘善意取得+借展’的解决路径较顺滑，若正文缺少庭审攻防/证据博弈的多轮拉扯，可能出现“高潮不够尖/情绪过早落地”的风险。但从现有概要序列看，悬念—升级—反转—对决的结构成立，读者驱动力较强。",
+      "description": "大纲有持续的叙事张力和悬念驱动",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_narrative_tension",
+      "quality_tier": "advanced",
+      "is_critical": false
+    }
+  },
+  "completion_status": "completed"
+}

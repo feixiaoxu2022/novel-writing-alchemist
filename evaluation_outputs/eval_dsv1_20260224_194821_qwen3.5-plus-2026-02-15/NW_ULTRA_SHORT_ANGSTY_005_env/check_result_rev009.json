@@ -1,0 +1,823 @@
+{
+  "check_version": "novel_writing_v1.0",
+  "sample_id": "NW_ULTRA_SHORT_ANGSTY_005",
+  "check_timestamp": 1772092118,
+  "dimension_scores": {
+    "format_compliance": {
+      "total": 4,
+      "passed": 3,
+      "failed": 1,
+      "skipped": 0,
+      "pass_rate": 0.75,
+      "score": 75.0
+    },
+    "business_rule_compliance": {
+      "total": 15,
+      "passed": 14,
+      "failed": 1,
+      "skipped": 6,
+      "pass_rate": 0.9333,
+      "score": 93.33
+    },
+    "memory_management": {
+      "total": 0,
+      "passed": 0,
+      "failed": 0,
+      "skipped": 2,
+      "pass_rate": 0.0,
+      "score": 0.0
+    },
+    "data_consistency": {
+      "total": 2,
+      "passed": 0,
+      "failed": 2,
+      "skipped": 0,
+      "pass_rate": 0.0,
+      "score": 0.0
+    },
+    "content_quality": {
+      "overall_score": 69.82,
+      "quality_level": "unqualified",
+      "gate_layer": {
+        "total": 0,
+        "passed": 0,
+        "failed": 0,
+        "skipped": 0,
+        "pass_rate": 0.0,
+        "score": 0.0
+      },
+      "basic_layer": {
+        "total": 20,
+        "passed": 16,
+        "failed": 4,
+        "skipped": 0,
+        "pass_rate": 0.8,
+        "score": 80.0
+      },
+      "advanced_layer": {
+        "total": 11,
+        "passed": 6,
+        "failed": 5,
+        "skipped": 1,
+        "pass_rate": 0.5455,
+        "score": 54.55
+      },
+      "gate_triggered": false,
+      "score_breakdown": {
+        "base": 60.0,
+        "gate_penalty": -0.0,
+        "basic_deduction": -12.0,
+        "advanced_bonus": 21.82
+      }
+    }
+  },
+  "overall_result": {
+    "total_score": 65.71,
+    "content_score": 69.82,
+    "process_score": 56.11,
+    "quality_level": "unqualified"
+  },
+  "check_details": {
+    "读取配方知识库": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/RECIPE_KNOWLEDGE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取RECIPE_KNOWLEDGE.md（配方知识库）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节产出存在性": {
+      "check_result": "pass",
+      "reason": "章节文件存在",
+      "details": "✓ 章节写作阶段: 已产出章节文件",
+      "description": "workspace中必须存在至少一个章节文件",
+      "check_type": "sop_stage_coverage",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_output_existence",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节克隆检测": {
+      "check_result": "pass",
+      "reason": "未检测到章节克隆",
+      "details": "共6章，无连续完全克隆或近似克隆",
+      "description": "不能出现连续章节内容完全重复（克隆）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_cloning",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "交替重复检测": {
+      "check_result": "skip",
+      "reason": "章节数不足",
+      "details": "仅6章，跳过交替重复检测（需>=8章）",
+      "description": "不能出现A-B-A-B交替循环的章节内容",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "alternating_repetition",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节完成度": {
+      "check_result": "pass",
+      "reason": "章节完成度合格(100%)",
+      "details": "大纲规划6章，实际完成6章 (完成率100.0%)",
+      "description": "实际写作章节数必须达到大纲规划的合理比例",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_completion",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节长度稳定性": {
+      "check_result": "pass",
+      "reason": "章节长度稳定",
+      "details": "前2章均值2737字, 后2章均值3192字 (后/前比率1.17)",
+      "description": "后期章节不能出现严重长度萎缩",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_length_stability",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "段落重复检测": {
+      "check_result": "pass",
+      "reason": "段落重复在可接受范围",
+      "details": "同章内重复0处, 跨章重复2组 (阈值: 同章>=2, 跨章>=5)",
+      "description": "不能出现大量段落在不同章节间重复",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "paragraph_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取大纲设计指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/OUTLINE_DESIGN_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取OUTLINE_DESIGN_GUIDE.md（大纲设计指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取写作技巧指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/WRITING_TECHNIQUE_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取WRITING_TECHNIQUE_GUIDE.md（写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取设定一致性管理指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/CONSISTENCY_MANAGEMENT_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取CONSISTENCY_MANAGEMENT_GUIDE.md（设定一致性管理指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取命名skill": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取CHARACTER_NAMING_GUIDE.md（角色命名规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取creative_intent的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取creative_intent.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取characters的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取characters.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取outline的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取outline.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节命名格式": {
+      "check_result": "pass",
+      "reason": "所有文件命名符合规范",
+      "details": "检查了 6 个文件; chapter_05.md: 匹配; chapter_01.md: 匹配; chapter_02.md: 匹配; chapter_03.md: 匹配; chapter_04.md: 匹配; chapter_06.md: 匹配",
+      "description": "章节文件命名必须为chapter_NN.md格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "naming_convention",
+      "is_critical": true
+    },
+    "creative_intent格式": {
+      "check_result": "fail",
+      "reason": "部分文件结构不完整",
+      "details": "creative_intent.json: JSON格式不合法（行2列98）",
+      "description": "creative_intent.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "characters格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "characters.json: 字段完整",
+      "description": "characters.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "outline格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "outline.json: 字段完整",
+      "description": "outline.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "X轴模式ID格式": {
+      "check_result": "pass",
+      "reason": "属性值符合预期（semantic fallback）",
+      "details": "文件JSON不合法，但语义提取值='E28'，匹配期望值'{'regex': '^[A-G]\\\\d{1,2}$'}'。原始文本中在 selected_recipe 对象下明确写有 \"x_axis_mode_id\": \"E28\"。该值满足正则 ^[A-G]\\d{1,2}$（首字母为A-G之一的E，后接两位数字28）。",
+      "semantic_fallback": true,
+      "json_parse_error": true,
+      "description": "X轴模式ID必须匹配^[A-G]\\d{1,2}$格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签枚举": {
+      "check_result": "pass",
+      "reason": "属性值符合预期（semantic fallback）",
+      "details": "文件JSON不合法，但语义提取值='['双向暗恋', '商战权谋']'，匹配期望值'{'array_item_type': 'string', 'enum': ['双向暗恋', '系统流', '无限流', '种田流', '赛博朋克', '规则怪谈', '重生/穿越', '商战权谋', '克苏鲁', '第四天灾', '仙侠修真', '刑侦悬疑']}'。原始文本中在 selected_recipe 下明确给出 y_axis_tags: [\"双向暗恋\", \"商战权谋\"]，且两项均在期望枚举列表中，为字符串数组，语义与字段意图一致。",
+      "semantic_fallback": true,
+      "json_parse_error": true,
+      "description": "Y轴标签必须在12种枚举中",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签数量": {
+      "check_result": "pass",
+      "reason": "属性值符合预期（semantic fallback）",
+      "details": "文件JSON不合法，但语义提取值='[\"双向暗恋\", \"商战权谋\"]'，匹配期望值'{'array_min_length': 2, 'array_max_length': 3}'。在原始文本的 selected_recipe 对象中，字段 y_axis_tags 明确写为 [\"双向暗恋\", \"商战权谋\"]；为数组且包含2个元素，满足期望的 array_min_length=2 且 array_max_length=3。",
+      "semantic_fallback": true,
+      "json_parse_error": true,
+      "description": "Y轴标签数量必须为2-3个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "forbidden_elements存在性": {
+      "check_result": "pass",
+      "reason": "属性值符合预期（semantic fallback）",
+      "details": "文件JSON不合法，但语义提取值='['不要超自然元素', '不要系统/重生/穿越', '不要第三者插足', '不要突然失忆/绝症', '不要强行HE']'，匹配期望值'{'array_min_length': 1}'。在原始文本的 selected_recipe 对象中明确出现字段 \"forbidden_elements\": [\"不要超自然元素\", \"不要系统/重生/穿越\", \"不要第三者插足\", \"不要突然失忆/绝症\", \"不要强行HE\"]，为数组且长度≥1，符合期望约束。",
+      "semantic_fallback": true,
+      "json_parse_error": true,
+      "description": "forbidden_elements必须至少有1个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "配方选择交互": {
+      "check_result": "skip",
+      "reason": "ULTRA_SHORT篇幅不适用",
+      "details": "subcategory=sop_compliance",
+      "description": "配方选择阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "写作准备确认": {
+      "check_result": "skip",
+      "reason": "ULTRA_SHORT篇幅不适用",
+      "details": "subcategory=sop_compliance",
+      "description": "写作准备阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "主题一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 六章从开篇到结尾都围绕同一条主线推进：一段在旅途中逐步确认关系、以“婚床/枕巾/红丝巾”为象征的爱情与承诺故事，并在结尾走向离别与无法兑现的誓言（爱情/牺牲/遗憾的情感主题）。前期以“押货跑长途”作为外壳，但情节重点始终落在两人关系的拉近、陈劲反复暗示的“不是为了钱”、检查站“媳妇”称呼、枕巾数量累积带来的情感悬念；第五章揭示“求婚/结婚仪式”动机后，主题进一步收束并升华为承诺与成全；第六章虽出现交易失败、分离与死亡，但仍是对同一情感主线的收束与悲剧化完成，并未转向商战、悬疑、奇幻等新的主题类型，因此主题一致、主线清晰。",
+      "description": "故事主题一致",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "theme_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "主要角色一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 主角为苏晓与陈劲（开篇明确围绕两人展开）。chapter_01-05全程以两人同行的旅程为叙事核心，关键事件（押货/买枕巾/过检查站/情感推进/揭示“不是生意是求婚”）均由二人驱动，未出现叙事中心转移到配角的情况。chapter_06中陈劲短暂离场进入厂内谈判，但有明确交代且仍是当前情节的核心；随后两人冲突与分离仍围绕二人展开。结尾三个月后在深圳的段落，陈劲虽不再“在场”，但通过报纸信息与苏晓的持续行动/情感指向，叙事中心仍围绕陈劲与其结局展开，属于“死亡/缺席但以剧情影响持续存在”的允许情形。全篇未出现主角被替换、身份断裂（陈劲始终为倒爷/骑摩托的行动者，苏晓始终为下岗女工并作为叙事视角核心）、或被配角抢占>70%戏份的问题，因此合格。",
+      "description": "主要角色一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "main_character_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设定一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 整体人物性格/行为在6章间前后一致，未出现无铺垫的“性格崩坏”。\n\n- 陈劲：前几章一直表现为沉默寡言、行动导向、强保护欲（给衣服、让她吃饭、雨天坚持赶路、检查站用“媳妇”策略挡检查）、且对“这单不只是钱”反复强调，核心动机始终指向“带苏晓走一趟/成双成对/想娶她”。第5章揭示“枕巾=婚礼仪式”是对前4章反常购买行为与暧昧措辞的集中解释，属于剧情驱动的合理揭露而非性格突变。第6章在交易失败后选择独自承担、用冷硬语气逼她下车、留下车票钱，符合他一贯的“自我牺牲+掌控局面+不善表达”的行为模式；表面变冷有明确情境压力（失败与自责）支撑。\n\n- 苏晓：从谨慎克制、对倒爷有距离感（第1章）到逐步信任、在意、害怕结束（第2-4章），再到第5章接受求婚意向、第6章强烈挽留与最终独自去深圳，成长线连贯。她的情绪升级都有持续铺垫（被照顾、共同经历检查站/暴雨、反复的“成双成对”暗示），没有无缘无故的反复摇摆。\n\n结论：两位主角的性格底色、核心动机与行为策略在章节间保持一致，变化均由旅途压力与真相揭示推动，属于合理发展。",
+      "description": "人物设定一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_trait_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设计遵循度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 总体符合characters.json对两位主角的核心人设设计，traits/motivation/background/relationship基调在chapter_01~06中均有明确落地，仅有少量表达强度偏戏剧化但不构成“方向相反”的偏离。\n\n1) 陈劲（protagonist）\n- 身份/背景：设计为“个体户/倒爷”。实际在chapter_01开场即被厂里姐妹议论为“倒爷、个体户”，边斗里装小商品跑省县道、频繁过检查站（chapter_01~04、06），完全吻合。\n- traits：\n  - “胆大心细”：胆大体现在敢拉着苏晓跑七天、面对检查站用“我媳妇”做掩护（chapter_03、04）；心细体现在路上照顾她（给夹克、外套、红丝巾、防着凉；chapter_02~03）、骑行稳、遇暴雨减速并找镇子躲雨（chapter_03）。\n  - “浪漫隐忍”：核心浪漫点就是hidden_connection所述“流浪婚礼/买鸳鸯枕巾当聘礼”，在chapter_01起就开始买枕巾并用“样品”掩饰，直到chapter_05才坦白“这趟不是生意，是婚礼”，并说“规矩…送枕巾”“一万张婚床”，浪漫表达与隐忍克制（长期不说破）一致。\n  - “赌徒心态”：overt动机“做成生意赚够钱娶她”，实际多次强调“赔了就赔了”“有些东西不能光算钱”（chapter_01、02），以及明知买家未落实仍押注把她带上路、最后政策变了生意失败（chapter_06），属于以高风险换取人生翻盘的赌徒式选择。\n  - “重情义”：持续用行动照顾苏晓（吃的、衣物、风险时挡在前面），并在chapter_06赔了后把摩托/钱留给她、自己离开（虽极端，但动机是“给她退路/不拖累”），符合重情义与自我牺牲倾向。\n- motivation：\n  - overt“赚钱娶她”：前期以“生意”为名推进旅程（chapter_01~04），中后期坦白“想娶你”（chapter_05），与“娶她”目标一致。\n  - covert“证明自己不是不务正业的倒爷、给她一个家”：chapter_05直说自己是倒爷、怕给不了她生活；chapter_06更是因为“给不了你想要的生活”强行让她下车并留车票钱，属于强烈的自我证明/自卑驱动，和covert动机吻合。\n- secret_fear：设计为“赔了没资格娶她，只能死在路上”。实际反复出现“赔了怎么办”“摩托归你，我归摩托”（chapter_02起贯穿，chapter_06兑现为极端离开并最终车祸死亡），与恐惧高度贴合。\n- misperception_of_other：设计为“以为她只看钱，其实她早就动心”。实际前期他把她视为“押货女的方便过检查”（chapter_01~02），并担心坦白她会不跟（chapter_05：‘早说你还会跟我走吗’）；而苏晓从chapter_03开始画心、到chapter_05明确“我愿意”，证明她并非只看钱，符合误解设定。\n- hidden_connection：设计为“每经过一个县城买一对鸳鸯枕巾当聘礼/流浪婚礼”。实际chapter_01起每到县城进供销社买鸳鸯枕巾（chapter_01~04重复），chapter_05揭示“这趟不是生意…婚礼…流浪婚礼”，直接命中。\n\n2) 苏晓（deuteragonist）\n- 身份/背景：设计为“国营厂下岗女工”。chapter_01完整呈现下岗通知、工牌、厂门等细节；符合。\n- traits：\n  - “坚韧务实、自尊心强”：她一开始谈清楚工期与报酬（chapter_01问‘七天？多少？’），对“倒爷”有戒心且不轻易表露情绪（下岗不哭、擦工牌；chapter_01），表现出务实与自尊。\n  - “外冷内热、细腻敏感”：外冷体现在早期寡言、谨慎、反复追问枕巾与“瞒着我什么”（chapter_01~04）；内热体现在逐步关心他受冻受累、在暴雨里担心他（chapter_03）、在他要独自承担后果时坚决反对并抓住他（chapter_05~06）；细腻则体现在对供销社老板娘笑容的敏感、对“成双成对”词语的心理反应、以及私下在地图上画心（chapter_02~03）。\n- motivation：\n  - overt“押货赚钱，攒钱去深圳”：chapter_01明确她把这当“离厂后的第一份工作”，对三百报酬敏感；chapter_06三个月后她确实在深圳找工作，且车票钱成为关键道具，说明深圳目标贯穿。\n  - covert“寻找归属感，被需要被珍视”：她对陈劲的照顾/承诺极其在意（红丝巾、称她‘媳妇’、枕巾仪式），并在chapter_05接受求婚式告白、chapter_06仍戴红丝巾、保留信封与车票，体现“被珍视/归属”驱动。\n- secret_fear：设计为“再次被抛弃，成为累赘”。chapter_06陈劲强行让她下车并离开，正击中‘被抛弃’恐惧；她的绝望与之后长期保留物件、烧掉车票等反应，与该恐惧一致。\n- misperception_of_other：设计为“以为只是雇她押货，不知是流浪婚礼”。chapter_01~04她一直以为是押货生意、对枕巾疑惑；chapter_05才揭晓，完全符合。\n- hidden_connection：设计为“偷偷在地图上画心，早就动心却不敢说破”。chapter_03明确出现她在地图上画小爱心并慌忙藏起；吻合。\n\n3) 关系设定与基调\n- 设计为“从雇佣关系开始，封闭空间逐渐生情；他是策划者（暗恋），她逐渐动心；信息差张力到最后揭晓”。实际chapter_01是雇佣谈价；chapter_01~04信息差通过枕巾与‘样品’维持；chapter_05揭晓‘流浪婚礼’并达成‘我愿意’；整体关系动力与信息差呈现符合。\n\n4) 小瑕疵（不构成matched=false）\n- 陈劲在chapter_06突然用“很冷”的强硬方式赶她下车，表达强度较极端，但动机仍围绕“怕拖累/没资格娶/赔了”的secret_fear与covert动机展开，属于同一核心设定的戏剧化升级，不是性格方向反转。",
+      "description": "实际表现符合设计文档",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构性逻辑硬伤": {
+      "check_result": "fail",
+      "reason": "发现1处structural类型逻辑问题: 时间线出现断裂：第5章明确“七天。还有一天”，意味着当时为第6天结束；但第6章直接以“第七天”开场，中间“第六天/最后一天之前一晚到次日”的关键过渡缺失。且第6章内又出现“三个月后，深圳”，对“第七天当天”发生车祸的具体时间点与苏晓行程的因果衔接较弱，需补足过渡事件才能自洽。",
+      "details": "过滤条件: fixability=structural; 总flaws=5, 命中=1",
+      "flaw_count": 1,
+      "flaws": [
+        {
+          "type": "spatiotemporal_continuity",
+          "severity": "major",
+          "fixability": "structural",
+          "location": "chapter_05末尾 → chapter_06开头",
+          "description": "时间线出现断裂：第5章明确“七天。还有一天”，意味着当时为第6天结束；但第6章直接以“第七天”开场，中间“第六天/最后一天之前一晚到次日”的关键过渡缺失。且第6章内又出现“三个月后，深圳”，对“第七天当天”发生车祸的具体时间点与苏晓行程的因果衔接较弱，需补足过渡事件才能自洽。"
+        }
+      ],
+      "description": "无结构性逻辑硬伤",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_logic_defect",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "可修复逻辑瑕疵": {
+      "check_result": "fail",
+      "reason": "发现4处fixable类型逻辑问题: 枕巾数量的客观计算前后不一致：第2章叙述“第一天两条、第二天又两条”，按此到第4天应为8条，但第4章点数为“12个袋子×2条=24条”，中间新增数量缺少对应购买/获取过程，且与前文‘每天两条’的节奏不一致。; 第4章明确清点为“24条枕巾”；第5章开头却说“五天买了四十条枕巾”，与前一章的已知数量及购买节奏矛盾（未交代第4天夜里/第5天早上额外大量购入）。; 第5章开头推算“再往北还有两天…两天就是五十六条”，但同章桥洞处实际清点为“四十个袋子=八十条”。同一章内对总量的两套数字体系（40/56/80）互相冲突。; 第5章桥洞铺开为“八十条枕巾”，第6章却变为“七天，一百六十条枕巾”，且第6章开头仍写“那八十条枕巾上”。总量从80→160缺少任何新增来源与过程说明，属于明确数字冲突。",
+      "details": "过滤条件: fixability=fixable; 总flaws=5, 命中=4",
+      "flaw_count": 4,
+      "flaws": [
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_02 → chapter_04",
+          "description": "枕巾数量的客观计算前后不一致：第2章叙述“第一天两条、第二天又两条”，按此到第4天应为8条，但第4章点数为“12个袋子×2条=24条”，中间新增数量缺少对应购买/获取过程，且与前文‘每天两条’的节奏不一致。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_04 → chapter_05",
+          "description": "第4章明确清点为“24条枕巾”；第5章开头却说“五天买了四十条枕巾”，与前一章的已知数量及购买节奏矛盾（未交代第4天夜里/第5天早上额外大量购入）。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_05（开头）→ chapter_05（桥洞清点）",
+          "description": "第5章开头推算“再往北还有两天…两天就是五十六条”，但同章桥洞处实际清点为“四十个袋子=八十条”。同一章内对总量的两套数字体系（40/56/80）互相冲突。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_05 → chapter_06",
+          "description": "第5章桥洞铺开为“八十条枕巾”，第6章却变为“七天，一百六十条枕巾”，且第6章开头仍写“那八十条枕巾上”。总量从80→160缺少任何新增来源与过程说明，属于明确数字冲突。"
+        }
+      ],
+      "description": "可修复逻辑瑕疵数量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "fixable_logic_inconsistency",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语言纯净性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 整体叙事语言为中文，但存在不合理的中英混用：chapter_01 末尾出现“helmet”且未作为角色对话/品牌/专有名词呈现，也无情节必要性，属于无意义外语夹杂，按标准应判定为不合格。其余如“嘉陵JH70”等为型号/专有名词使用可接受，但单处不必要英文已触发不合格规则。",
+      "description": "无不合理的多语言混用",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "language_purity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "creative_intent文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/creative_intent.json 存在",
+      "description": "creative_intent.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "characters文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/characters.json 存在",
+      "description": "characters.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "outline文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/outline.json 存在",
+      "description": "outline.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "chapters目录存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/chapters/ 存在",
+      "description": "chapters/目录必须存在且有章节文件",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "情节推进": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 合格（matched: true）。六章整体具备明确的情节推进与连续事件链，事件占比明显高于40%，对话/内心独白虽多但并未导致“静态聊天”，每章都有外部行动与转折推动。\n\n1) 故事事件数量与密度（远超2-3个）：\n- Chapter1：苏晓下岗→陈劲接她上摩托出发→路途中吃饭/补给→供销社交易/购“样品”→野外露宿。\n- Chapter2：继续赶路→到县城再次购枕巾并埋下疑点→路途对话揭示“带女伴过检查”策略→桥洞避雨过夜并强化悬念。\n- Chapter3：暴雨行进→镇上购买红丝巾（关键道具）→遇检查站并以“媳妇”身份过关（情节策略事件）→废工棚落脚。\n- Chapter4：多县城连续补货导致边斗“满了”（量变推进）→再次检查站重复确认身份策略→河边露宿与关系推进。\n- Chapter5：陈劲在桥洞把大量枕巾铺满形成“仪式场面”→核心真相揭示：不是生意而是求婚/婚俗动机→苏晓明确表态愿意→决定去深圳（目标落地）。\n- Chapter6：到北河镇交易失败（政策变、拒收）→陈劲兑现“摩托归你”与强行分离→信封给车票钱（行动结果）→三个月后深圳报纸揭示车祸死亡（终局转折）。\n\n2) 内容占比分析：\n- 大量段落为赶路、买卖、检查站应对、露宿、铺枕巾“婚床”、谈判失败、分离、去深圳、得知死讯等“可指认事件”。对话/独白主要服务于悬念揭示与关系推进，不是无事件的原地聊天；静态抒情集中在夜晚收尾，但每章前中段都有行动与变化。\n- 纯对话与内心独白占比未超过70%，且关键节点（检查站、求婚真相、交易失败、分离与死亡信息）均为外部事件驱动。\n\n3) 时间/空间推进：\n- 明确以“七天行程”推进（第1天到第7天），地点从工厂门口→国道/省道/县城/桥洞/工棚/河边→北河镇→三个月后深圳；空间持续变化，时间跳转清晰。\n\n4) 角色行动与逻辑链：\n- 陈劲持续行动：接人出发、补货、应付检查站、购买丝巾、铺枕巾仪式、坦白求婚、到镇上谈判、分离安排、留下钱与纸条、最终车祸信息。\n- 苏晓也有行动：接受上路、观察与质疑、在地图画心、跟进厂里偷听谈判、拒绝下车/最终上客车去深圳、三个月后求职与确认噩耗。\n- 事件逻辑连贯：频繁购枕巾与“媳妇”身份→埋悬念→第5章集中揭示动机并完成情感转折→第6章以交易失败触发分离→深圳端用报纸完成结局反转与收束。\n\n结论：具备多事件、高密度推进、明显时空变化与因果链，符合“合格（matched: true）”标准。",
+      "description": "章节情节推进质量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "plot_progression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "完整叙事文本": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 6个章节均为连贯的小说正文而非大纲：每章都有具体场景（纺织厂门口、路边摊/饭馆、桥洞、工棚、河边、北河镇厂区、深圳人才市场等）、人物动作与细节（骑行颠簸、雨中停靠、铺枕巾、检查摩托、递外套/雨衣等）、完整对话推进（与供销社店员、检查站人员、厂里买家、两人多轮对话），并包含心理描写与叙事节奏衔接。未出现“核心事件/情感基调/关键场景/本章悬念/字数预估”等创作规划标题，也没有以要点列举、流程箭头或元数据暴露来组织内容，因此符合‘完整小说正文’的业务底线标准。",
+      "description": "章节内容必须是完整正文而非大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "full_narrative_content",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "反复结局": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 共6个文件，最后一个文件为chapter_06.md。遍历chapter_01.md至chapter_06.md后，未发现任何“全文完/全书完/全剧终/完结/（完）/【完】/THE END”等全书级结局标记；也未发现以独立段落标题形式出现的“后记/尾声/终章”。文本仅在chapter_06.md出现情节意义上的结局（人物分别与后续深圳段落），但未使用业务标准定义的“全书结局标记”。因此不存在“非最后文件出现全书结局标记”或“中途多次结局标记后又续写”的反复结局问题，判定合格。",
+      "description": "不能出现多次结局标记（全文完/全书完/后记）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "repeated_endings",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "workspace文件规范": {
+      "check_result": "pass",
+      "reason": "workspace中所有文件均在白名单内",
+      "details": "白名单: ['creative_intent.json', 'characters.json', 'outline.json', 'writing_log.md', 'chapters/', '.hitl_context.json']",
+      "description": "workspace中不能有白名单之外的文件",
+      "check_type": "file_whitelist_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "workspace_file_compliance",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "叙事调性匹配": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 题材应有调性：creative_intent.json给出reaction_strength=↘（虐心向），并带“时代洪流/身份差异/经济风险”的爱情阻碍；对应叙事应偏沉重、压抑、克制中有情感张力，节奏由路途推进与风险压迫推动，环境/时代细节烘托无力感。\n\n实际章节文笔特征：整体为写实年代公路爱情，句式偏短促克制，情绪多通过细节与重复意象累积而非高密度抒情宣言；环境描写服务氛围（雨、桥洞、工棚、检查站）并不断施压；对话朴素、信息量集中在“赔了怎么办”“看情况吧”“我媳妇”等关键句上，形成反复回环的压抑感与信息差张力。\n- 压抑与不祥感的开篇铺垫符合虐向：如“‘纺织’两个字只剩下…像某种不祥的预兆”“下岗通知…她没哭”。\n- 以现实压力推进情绪而非甜宠撒糖：检查站与政策风险反复出现（如第3-4章“检查站…‘你媳妇？’…‘嗯’”“政策变了…这批货不能收”），让爱情始终被现实钳制。\n- 克制但高张力的虐点表达：第6章“‘摩托归你了。’…‘我归摩托。’”“他的语气突然很冷”，不是温软治愈口吻，而是冷硬决绝，符合↘向的“克制中带张力”。\n- 结局的沉重落点契合虐心调性：深圳段落以新闻剪影收束（“国道发生重大车祸…随身物品中有大量红色枕巾”】【“一人死亡”】【“她烧了…在陈劲的墓前”】【“像某种永远无法兑现的誓言”】【“再也回不去了”】），形成强烈的时代无力感与余痛。\n\n匹配性结论：文本整体“写出来像虐向年代爱情”，沉重现实与克制抒情占主导，没有把虐文写成轻快甜宠，也未出现严肃论述式或搞笑吐槽破坏氛围；虽有少量浪漫意象（红丝巾、鸳鸯枕巾）与拥抱桥段，但更多作为仪式与宿命的对照来增强压抑与悲剧感（如第6章将枕巾写成“像…祭奠”），因此叙事调性与题材基本匹配。",
+      "description": "文笔风格必须与题材类型匹配",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_tone_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "后期章节跑偏": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: chapters共6章均为连续的小说叙事正文（有明确场景、人物行动与对话、情节推进与结局收束：从押货出发→沿途检查站与枕巾伏笔→第五章揭示求婚动机→第六章交易失败/分离/深圳后续与死亡消息）。未出现作者感想、读者互动、番外预告、角色问答、创作数据统计等“跑偏”非正文内容。后期章节（chapter_05、chapter_06）篇幅不但未异常萎缩，仍保持与前几章相近甚至更长的叙事密度与完整结构，不存在‘写不动了’式的几十到几百字敷衍章节。因此符合该项业务标准。",
+      "description": "后期章节不能跑偏写非正文内容（作者感想、读者互动、番外预告等）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "late_stage_digression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色大纲规划完整性": {
+      "check_result": "fail",
+      "reason": "部分设计角色未在大纲中规划（配角: 供销社老板娘, 检查站人员）",
+      "details": "主角 2/2: 陈劲, 苏晓; 配角 0/2: 无; 配角缺失: 供销社老板娘, 检查站人员",
+      "description": "设计的角色必须在大纲中规划",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_outline",
+      "is_critical": true
+    },
+    "角色正文出场完整性": {
+      "check_result": "fail",
+      "reason": "部分设计角色未在正文中出现（配角: 供销社老板娘, 检查站人员）",
+      "details": "在6个章节中检查; 主角 2/2: 陈劲, 苏晓; 配角 0/2: 无; 配角缺失: 供销社老板娘, 检查站人员",
+      "description": "设计的角色必须在正文中出现",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_chapters",
+      "is_critical": true
+    },
+    "writing_log文件创建": {
+      "check_result": "skip",
+      "reason": "ULTRA_SHORT篇幅不适用",
+      "details": "subcategory=log_file_creation",
+      "description": "必须创建writing_log.md记录创作进度",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_creation",
+      "is_critical": true
+    },
+    "writing_log文件读取": {
+      "check_result": "skip",
+      "reason": "ULTRA_SHORT篇幅不适用",
+      "details": "subcategory=log_file_usage",
+      "description": "必须读取writing_log.md了解前文内容",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_usage",
+      "is_critical": true
+    },
+    "大纲执行忠实度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 正文整体高度遵循outline.json：核心事件（出发/买枕巾/第一夜铺枕巾、暴雨红丝巾与画心、枕巾堆积引发怀疑与检查站、桥洞“一万张婚床”反转、抵达北方毁约赔本与“我归摩托”离开并死讯、女主独自面对未来）均在对应章节出现且走向一致；允许的偏差主要是细节扩写与时间分配更细（如枕巾数量夸张化、部分“第六夜”内容提前铺垫到第2章、结尾地点从‘车站’扩展到‘深圳人才市场+报纸’），但不改变结局方向与关键转折，因此判定matched=true。",
+      "description": "实际章节内容必须忠实于自己设计的大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_execution_fidelity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色语言辨识度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 该文本主要角色（苏晓、陈劲）以及多位次要角色（供销社女人、检查站人员、厂办公室男人）的对白在语言风格上区分度不足，整体呈现强烈的“共享话术模板+跨角色台词克隆”倾向，盲测遮住人名后较难仅凭措辞判断说话者。\n\n1) 共享话术模板明显：大量对话都采用同一套“短句—停顿—重复确认—深眼神描写—收束句（睡吧/上路吧/看情况吧）”结构，情绪推进也常靠同一句式反复出现，导致不同角色说话节奏、句式高度一致。\n\n2) 跨角色台词克隆：多处关键台词在不同章节、不同场景几乎原样复用，且常由同一角色反复使用形成模板化表达，而非因情境变化产生语言差异。例如：\n- 陈劲反复使用“样品”“那边要得多”“寓意好/成双成对，谁不喜欢？”作为万能解释；\n- “赔了就赔了”“有些东西，不能光算钱”“看情况吧”“睡吧/上路吧”等作为多场景通用收口语；\n- 对话常出现“真的？——真的。”这类机械确认。\n这些重复使得对话更像作者统一话术，而不是角色各自的语言习惯。\n\n3) 年龄/身份不区分（次要角色尤甚）：\n- 检查站制服人员、供销社中年女人、厂里办公室男人的发言缺乏职业/身份语言特征，基本停留在通用口语问答（“证件/打开看看/政策变了”）层面；\n- 缺少明显行话、地域口头禅、职业化表达方式来拉开差异，互换角色名读起来违和感不强。\n\n4) 主角间辨识度也不够：苏晓与陈劲在对白层面都以简短问答推进（“嗯/为什么/真的/没什么/看情况”），词汇层级、句长偏好、语气策略差异不突出；大量关键“深情/神秘”信息不通过语言个性呈现，而是通过叙述性描写（眼神很深、像要把人吸进去）承担，进一步削弱对白辨识度。\n\n综合来看，虽然人物行动与叙述塑造较强，但本检查项只看“对话语言风格差异”，该文本主要角色对白可互换性较高，整体同质化明显，因此判定为未达优秀标准。",
+      "description": "不同角色对话必须有可辨识的语言风格差异",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "dialogue_character_distinction",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "叙事密度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 整体叙事密度高，具备稳定的场景/感官/动作细节支撑，并且多处用细节与物件（枕巾、红丝巾、嘉陵发动机声、桥洞雨声、工棚漏风等）来承载关系变化与悬念，画面感强，远高于“对话骨架/流水账”。例如开篇用厂门红漆剥落、“纺织”残字、工牌擦拭等具象细节落地时代与人物处境；路途段落用“皮座椅被太阳晒得发烫”“夹克上机油混着烟草还有汗味”“雨点打在脸上生疼”等感官细节持续提供沉浸；检查站段落通过“你媳妇？”与陈劲的应对把情绪与风险都落在可见动作上。关键转折（第5章揭示枕巾=婚床）也有仪式化动作‘一条一条、整整齐齐铺满桥洞’来Show。\n不足在于后半程存在明显的句式与段落结构复用，导致部分心理推进偏Tell与口头化总结（如多次循环“她不知道这X天会发生什么/有些东西已经不一样了/像某种承诺像某种告别”“那眼神很深像要把她吸进去”“她开始害怕了/是怕结束”），以及章节间重复同构场景（醒来-盖衣服-上路-供销社-枕巾-夜宿）带来“模板感”。但总体仍以具体场景与可感细节为主导，Tell虽多但未压过主要叙事呈现，故判定达优秀标准（matched=true）。",
+      "description": "章节叙事应有足够的场景描写、感官细节和心理活动，情感传达以Show为主",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_density",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "智斗逻辑合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 本故事为现实年代背景的情感/公路叙事，核心冲突是人物动机与关系推进（借“押货”之名求婚、最终生意失败与分离/死亡），不存在需要读者或角色通过线索→推理→结论来解开的谜题，也不存在双方策略博弈型的智斗攻防。因此该“智斗逻辑推理链”标准不适用，按规则直接判定通过。",
+      "description": "谜题/智斗的推理逻辑必须自洽",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "puzzle_logic_validity",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "题材契合度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 配方为「E28爱情的阻碍 + 双向暗恋 + 商战权谋」。文本在“时代/身份差异+经济风险”层面的爱情阻碍与双向暗恋（信息差、她以为雇佣他在求婚）完成度较高，枕巾/红丝巾/检查站“媳妇”形成了明确的意象链条与递进揭示，具备记忆点；但作为该配方的另一核心标签“商战权谋”基本未被开发，生意线几乎等同于一句“政策变了、货卖不出去”，缺少交易博弈、信息策略、渠道周旋、风险对冲等“商战/权谋”应有的来有回与策略深度，导致Y轴标签融合不产生化学反应，更像“公路虐恋+时代背景”的单线推进。此外，后半段用报纸车祸快速收束（‘大量红色枕巾’等）偏功能性与标签化，反转/落点缺少前文因果链的精细铺垫与多重选择空间，整体呈现为基调与题材方向对了，但题材深度与标签融合未达‘优秀/精致’标准。",
+      "description": "题材特征精致度和X-Y轴化学反应效果",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "genre_fit",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "剧情节奏合理性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 整体情绪曲线呈“前段平缓重复铺垫（约60-70%篇幅）→第5章集中爆发→第6章迅速堆叠冲突与结局”的前松后紧结构。前半的多次检查站/买枕巾/夜宿对话在节奏与信息增量上相似，缺少逐级升级的阶段性小高潮，读者容易产生拖沓感；而核心回报（枕巾=婚床、真正目的）与最终代价（赔单分离+死亡）又被压缩在最后两章内连续释放，高潮与结尾的情绪密度过高、喘息与过渡不足，使高潮有“集中倾倒”和收尾仓促的阅读体验。因此未达‘节奏有层次、情绪曲线自然流畅’的优秀标准。",
+      "description": "高潮低谷分布合理、情绪曲线有层次感",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "pacing_rationality_advanced",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "钩子设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 整体符合“关键转折处有有效悬念钩子”的优秀标准。\n\n1) 章节结尾普遍有延续性悬念：\n- ch01以“七天。还有六天/她不知道会发生什么”收束，虽略偏泛，但同时前文已埋下“边斗里鼓鼓囊囊+单独拿出的塑料袋+鸳鸯枕巾不对劲”等具体疑点，形成信息差。\n- ch02结尾“摩托归你，我归摩托”属于具体化的谜语式信息差（读者不知道其真实含义与后果），能驱动继续阅读。\n- ch03在检查站被称“媳妇”后，结尾围绕红丝巾的象征与“像承诺/像告别”的情绪悬念叠加“那是什么意思”的行动/动机悬念，具备有效钩子。\n- ch04继续强化“枕巾数量异常+反复称媳妇+字面意思”的未解之谜，并在结尾落到“她好像陷进去了”，保持读者对真相与关系走向的期待。\n\n2) 关键转折处钩子设计有回报且非空洞：\n- 前4章持续“放出一点保留一些”：枕巾反复出现、供销社女人意味深长、检查站身份伪装、陈劲反复话术（有些东西不能光算钱/看情况/我归摩托），都是具体线索而非泛泛“危险将至”。\n- ch05完成核心揭示反转（枕巾=婚礼规矩，“这趟不是生意”），属于高回报的揭示型钩子；同时又抛出新的前进目标“去深圳”，形成下一章期待。\n- ch06用“到达后政策变更导致生意失败→逼迫分离→留信封车票→三个月后车祸死讯”的连续转折，在“陈劲是否会回来/是否死亡”上制造强信息差，且最终给出沉重回报，钩子有效。\n\n3) 钩子多样性较好：动机悬念（为何买枕巾/为何说媳妇）、身份/关系悬念（真假情侣）、承诺悬念（深圳）、行动悬念（检查站/生意被拒/分离）、情感悬念（告别意味）。虽然“七天倒计时+像承诺像告别”句式有一定重复，但并未沦为千篇一律的纯模板，因为每次都绑定了新增信息（枕巾数量递增、称媳妇、婚礼真相、失败与车祸）。\n\n结论：悬念钩子整体具体、有信息差，并在ch05、ch06等关键节点提供强反转/强回报，因此matched=true。",
+      "description": "关键转折处有有效的悬念钩子设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "hook_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "意象系统": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 全文有明确且高频的核心意象（红枕巾/鸳鸯、红丝巾、嘉陵摩托），并且都在不同情节阶段发生功能与意义的递进变化：从遮掩与道具到身份与仪式，再到悲剧的证物与悼念符号。意象不是装饰性重复，而是推动悬念（为何买枕巾）、推进关系（检查站“媳妇”）、完成主题表达（婚床→祭奠）的结构骨架，符合“贯穿全文+意义变奏+主题深度关联”的优秀标准。",
+      "description": "核心意象贯穿全文并发生意义变奏",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "imagery_system",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "情感弧线层次": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 主角苏晓的情感发展具备明显的多层递进，且每次转折基本都有具体事件驱动，整体弧线朝“从陌生/求生到投入爱情，再到被迫分别与丧失后的余生承受”推进。\n\n可辨识的主要情感层（≥4层，且性质不同而非同义替换）：\n1) 现实压力下的克制与不安：下岗后接单，上车前的犹豫与算账（第1章下岗通知、接押货单）。\n2) 紧张→逐步放松与信任：长途骑行体验、陈劲照顾她吃饭/让她抓紧、给衣服御寒等具体照料（第1-2章）。\n3) 疑惑与警惕：反复购买“鸳鸯枕巾”、供销社女人意味深长的笑、陈劲含糊其辞（第2章起）。\n4) 心动与暧昧确认：红丝巾礼物、地图上画爱心、检查站陈劲称她“媳妇”带来的强烈情绪波动（第3章）。\n5) 害怕失去/不确定性焦虑：对“这单重要吗”“完了之后怎么办”的追问、对陈劲“看情况”“摩托归你我归摩托”的不祥预感（第3-4章）。\n6) 震惊→被打动→接受承诺：桥洞铺满枕巾揭示“不是生意是求婚”，苏晓从震动、落泪到明确回应“我愿意”（第5章）。\n7) 崩塌与绝望：到达后生意失败触发陈劲强行分离；苏晓从拒绝下车到被迫接受，继而在深圳得知死讯进入长期哀恸（第6章）。\n\n关键转折的事件驱动也较清晰：\n- 信任建立由陈劲的具体照顾行为驱动（加蛋面、夹克御寒、雨天买包子/丝巾）。\n- 怀疑由“枕巾数量异常+外部角色反应（供销社女人的笑）+陈劲反复回避解释”驱动。\n- 心动强化由“红丝巾赠送+检查站称呼‘媳妇’”等明确事件驱动。\n- 接受关系由“铺满枕巾并坦白求婚动机”这一揭示事件驱动。\n- 终局绝望由“买家拒收政策变化→陈劲执行‘摩托归你’分离→报纸确认死亡”连续事件驱动。\n\n整体上情感层次丰富且递进明确，因此判定 matched=true。",
+      "description": "主角情感发展有多层递进变化",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_gradient",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语义重复检测": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 存在≥3处明显的语义级重复，且多发生在相邻章节，属于“情境模板复制+结论反刍”，信息增量不足。\n\n1) 情境模板复制（多章重复同一日程结构）：ch01-ch04（并延续到ch05）反复使用“醒来/发现盖着陈劲衣服→陈劲不在或在忙→上路→到县城/供销社→买枕巾→夜宿（桥洞/工棚/河边）→铺枕巾→两人对视/隔一臂距离→‘七天还有X天’收束”的模板，仅替换天气与落脚点，核心叙事信息高度重叠。\n\n2) 结论反刍（同一疑问与同一回答反复出现）：苏晓多次提出“这单生意重要吗/赔了怎么办/你瞒着我什么/你为什么买这么多枕巾”，陈劲多次用几乎同义的回答回避或重复——如“有些东西不能光算钱”“样品/那边要得多”“成双成对寓意好”“赔了就赔了”。这些在ch01、ch02、ch04中多次循环，直到ch05才给出真正解释，前几次从第三次起基本不再提供新信息。\n\n3) 关键表述与象征反复堆叠但语境未变（同义反复倾向）：如“那眼神很深像要把她吸进去”“红丝巾像某种承诺/告别”“她只知道从坐上嘉陵开始有些东西不一样了/回不去了”等句式与含义在ch01-ch04、ch06结尾处多次出现，且多数并非首尾呼应或变奏式重复，而是用相近语义不断重申同一情绪结论。\n\n4) 检查站‘你媳妇’桥段重复：ch03与ch04出现几乎同构的检查站情节（查货→看到枕巾→问关系→陈劲答“我媳妇”→放行），第二次的叙事功能与信息增量有限，属于情境复刻。\n\n综合来看，语义重复实例已≥3处，并且集中在连续章节中，导致明显信息衰减，因此判定不通过。",
+      "description": "不能出现大量语义级别的内容重复（P6级）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "semantic_redundancy",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构功能性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 并非机械的第1天到第7天流水账：每章都围绕同一结构母题（赶路—县城/检查—夜宿铺枕巾）进行重复与升级，使‘枕巾数量递增’成为叙事结构的计量器与情感压力表；同时关键句“摩托归你，我归摩托”在前半反复出现形成结构性伏笔，最终在第6章以‘赔了→他逼她下车→死亡’完成意义闭合。第5章集中揭示“婚床/婚礼”的结构拐点，使前面所有重复获得主题解释，结尾再用深圳时间跳转把“新生”与“代价”并置，结构服务主题表达清晰。",
+      "description": "叙事结构服务于主题表达（短篇尤重）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色命名质量": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 主要角色仅“陈劲、苏晓”两人，均为常见、可互换且缺乏明显文化典故/隐性共振的日常化命名：读者很难从名字本身联想到“倒爷+流浪婚礼+鸳鸯枕巾仪式+最终车祸”的核心意象与命运张力。虽然未命中黑名单高频模板（非清冷系苏/林/沈/顾+清夜晚寒墨默辰岚），且两人名字风格不算严重同质化，但整体仍属于“好听但泛用”的默认命名，没有体现命名设计感（例如与‘嘉陵发动’、‘北河镇’、‘枕巾/鸳鸯/红丝巾’等关键符号的呼应、反讽或隐喻）。配角直接用职务称谓也进一步削弱命名层面的辨识度与完成度。",
+      "description": "角色命名有文化深度、辨识度和角色-命运共振",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_naming_quality",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "超短篇字数": {
+      "check_result": "fail",
+      "reason": "字数不符合要求",
+      "details": "总字数 18217 不在范围 [5850, 11000] 内; 共6个文件（按章节顺序排列）: chapter_01.md, chapter_02.md, chapter_03.md, chapter_04.md, chapter_05.md, chapter_06.md; 最后一个文件是 chapter_06.md",
+      "description": "总字数应在5850-11000之间（基于query要求6500-10000，±10%浮动）",
+      "check_type": "semantic_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "range_constraint",
+      "is_critical": true
+    },
+    "情感交付虐心": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 整体情感基调明确为虐心向，且虐点贯穿主线而非点缀。\n\n1) 核心虐点清晰且具“不可调和”的牺牲/分离：第5章揭示“这趟不是生意，是想娶你”，建立强烈情感承诺后，第6章立刻反转为“政策变了、货不能收”导致生意失败；陈劲兑现早前伏笔“摩托归你，我归摩托”，强行让苏晓下车并说“不会回来”，属于典型的被迫分离与自我牺牲（以‘给不了你想要的生活’为理由）。\n\n2) 悲剧氛围收束成硬结局：苏晓三个月后在深圳从报纸得知“国道发生重大车祸…一人死亡…随身物品中有大量红色枕巾…”，暗示陈劲死亡；红丝巾、枕巾（婚床意象）从“承诺/开始”转为“祭奠/永远无法兑现的誓言”，结尾“再也回不去了”强化悲剧余痛。\n\n3) 虐的深度来自人物底线与价值观冲突，而非表面吵架：陈劲的核心冲突是“爱与责任/体面”对撞——想娶她却认为自己无法给未来，因此选择以伤害对方的方式完成成全；苏晓的核心痛苦是明明两情相悦却被迫接受分离与死亡的事实（爱而不得、誓言落空）。\n\n4) 读者体验预判：从前期反复铺垫的‘告别感’（红丝巾“像承诺又像告别”、多次出现“看情况吧”“我归摩托”）到第6章的分手与死亡信息，形成持续压抑与强烈心痛的情感冲击，符合reaction_strength=↘所要求的下行悲伤走向。\n\n因此该内容符合“虐心向”标准。",
+      "description": "实际内容必须是虐心向",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取短篇skill": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取SHORT_STORY_GUIDE.md（短篇创作指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "角色关系设计张力": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 整体有一定叙事张力（核心靠“信息不对称/暗恋策划”推进），但未满足业务标准中的“关系有内在矛盾源”和“冲突源于角色本身”两项。1）内在矛盾源不足：陈劲与苏晓的根本目标并不对立——两人都在押货赚钱、寻求未来与归属，关系描述以“从雇佣到相爱”单向升温为主，缺少价值观/原则层面的硬分歧（如风险偏好、道德底线、人生路径选择）来持续驱动冲突。2）变化空间有，但偏单线：从雇佣/陌生→动心/同行，主要是情感推进，没有设计“可能走向破裂/背叛/对立”的分叉可能，张力更像悬念而非关系冲突。3）冲突更多依赖外部与技巧性悬念：检查站制造紧张、读者知道而女主不知道的“惊喜揭晓”，容易落入“误会/隐瞒”型推进；而角色性格与动机虽丰富（赌徒心态 vs 务实自尊、被抛弃恐惧），但尚未被转化为明确的对抗性抉择（例如她是否反感被‘安排’、他是否为了赚钱再次冒险牺牲她的安全、她去深圳的计划与他成家定居的矛盾等）。建议在关系层加入可持续的立场冲突与底线碰撞，让信息差之外仍能产生必然对抗与转变。",
+      "description": "角色关系设计具有叙事张力，能驱动剧情",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_relationship_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色动机设计深度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（符合“主要角色动机有深度”的业务标准）。\n\n1) 表层动机与深层动机有明确区分（至少两位主角都满足）\n- 陈劲：overt_motivation 是“把这单生意做成，赚够钱娶她”，covert_motivation 是“给她一个家，证明自己不是‘不务正业’的倒爷”。前者是可见目标（赚钱结婚），后者是心理需求（被认可/洗刷社会标签、建立自我价值）。此外 secret_fear“赔了，没资格娶她，只能死在路上”把表层风险与自我否定绑定，进一步加深驱动。\n- 苏晓：overt_motivation 是“押货赚钱，攒钱去深圳”，covert_motivation 是“寻找归属感，被需要被珍视”。前者是行动目标（攒钱出走），后者是情感缺口（安全感与被爱的确认）。secret_fear“再次被抛弃，成为累赘”与其深层动机直接呼应。\n\n2) 动机有具体来源/个人化支撑，而非万能模板\n- 身份与时代处境提供动机来源：陈劲是“个体户/倒爷”，其深层动机“证明自己不是‘不务正业’的倒爷”明显来自社会评价与身份污名；苏晓是“国营厂下岗女工”，表层“去深圳”与下岗后的出路焦虑贴合，深层“归属感”也与被抛弃恐惧相互印证。\n- hidden_connection 将动机落到可执行的行为设计：陈劲“策划了一场‘流浪婚礼’…买一对鸳鸯枕巾当聘礼”，把“给她一个家/证明自己”的抽象需求具体化为贯穿旅程的仪式；苏晓“地图上画心…动心却不敢说破”让“被珍视”的需求在行动细节里可见。\n\n3) 至少两个主角达标\n- 陈劲与苏晓均同时具备：清晰的 overt/covert 分层 + 与身份/经历相连的来源（并由 secret_fear、hidden_connection 强化），满足标准第3条。\n\n补充观察（不影响通过，但可加分点）\n- misperception_of_other 与 relationship_dynamics 的“信息差”机制，让角色的深层需求在互动中被持续触发与考验（他怕不被认可，她怕再被抛弃），有利于形成情节推进与情感弧线。",
+      "description": "角色动机设计有深度，有表层和深层动机区分",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_motivation_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色成长弧线设计": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: 整体有“情感递进”和关系变化，但按业务标准看，主角的“成长/变化弧线”不够清晰落地：\n1) 起点与终点：大纲明确了关系从雇佣到动心、揭晓心意再到BE分离；但这更像情节/关系推进。陈劲从开头到结尾仍是“赌徒式用命证明自己”的状态（甚至以死亡兑现赌注），属于性格/价值观的延续而非转变；苏晓结局“一个人带着遗憾面对未来”，未写明她在认知/选择上从A到B的稳定终点（例如从‘不敢被需要’到‘敢于承诺/自我成全’，或从‘去深圳’到‘重新定义归属’），更多是遭遇创伤后的处境。\n2) 内在逻辑：人物动机与恐惧（陈劲怕赔了没资格娶、苏晓怕被抛弃）与事件推进逻辑自洽；但这些驱动没有导向“克服/修正误解或恐惧”的弧线节点，反而被结局强化（陈劲用死亡证明，苏晓再次被留下）。\n3) 至少一个主角明确弧线：目前章节 synopsis/emotional_tone/turning_point 主要记录情绪升级与信息差揭晓，没有体现主角在关键章节做出“价值观/认知更新”的决定性转折并在结尾完成落点（例如陈劲学会求助/放弃赌命证明、苏晓从害怕累赘到主动选择共担风险并形成新的生活方向）。因此不满足“至少一个主角有明确弧线”的pass要求。\n结论：可视为有清晰的关系弧线与悲剧走向，但缺少可辨识、可验证的主角内在成长/变化弧线及其章节化落地。",
+      "description": "主角有清晰的成长/变化弧线设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_arc_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "outline结构完整性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（符合业务标准）。\n1) 章节覆盖完整：大纲明确为7天倒计时故事，覆盖chapter 1-6并在act_three收束到结局，已覆盖从开端（出发）→发展（风险/疑点升级）→高潮结局（到达、赔了、离开/死亡）的全流程；按该体量看覆盖充分。\n2) 每章有实质内容：每章均有core_event+情绪基调+key_scenes，信息量足以支撑扩写，不是仅有标题。\n3) 包含冲突/转折：存在外部冲突（暴雨、检查站、毁约/生意赔了、生存风险）与内部冲突/情感转折（雇佣关系下暗恋、枕巾异常引发怀疑、‘一万张婚床’点破心意），且每幕提供turning_point，具备明确转折与张力。\n4) 三幕结构可辨识：act_one/act_two/act_three分层清晰，每幕有description与turning_point，结构完整。\n小缺点：第3幕只有1章（chapter 6）略显压缩，若计划中长篇写作可考虑补充到达前后、毁约交涉、分别过程等场景章节以增强高潮段落的铺陈；但就当前“短篇/小中篇7天结构”而言仍可支撑写作。",
+      "description": "大纲结构完整，信息密度足以指导写作",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_structure_completeness",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "outline叙事张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（符合“持续叙事张力”标准）。\n\n1) 信息落差设计（满足）：第2章起“买枕巾”被当作生意行为，但第4章明确出现异常（数量激增、全是鸳鸯图案、检查站差点暴露、陈劲回避），直到第5章用“一万张婚床”才部分揭示其真实含义，形成“提出疑问→多章延迟→揭示”的悬念链；同时第6章的“赌注/车票钱/去向”也在离场后才由旁听消息补全，仍有信息不对称驱动读者追问。\n\n2) 张力递进（满足）：外部风险从普通赶路（第1章）升级为暴雨（第3章）→检查站暴露风险（第4章）→临近终点的高压与情感摊牌（第5章）→到达后毁约导致生意崩盘与生死后果（第6章）。内部张力也从克制疏离→试探悸动→怀疑不安→情感觉醒→不可挽回的BE收束，中后段明显更紧张、更复杂。\n\n3) 意外/转折（满足）：第5章“一万张婚床”将“倒爷生意”转为强烈的情感隐喻/动机揭示，是预期外的意义翻转；第6章“生意赔了+他兑现‘我归摩托’并可能死去”的结局转折也具冲击力，非单线打怪式推进。\n\n总体不足/风险点：大纲篇幅短（仅6章），结局的“听说他出车祸死了”若正文缺少前置伏笔，可能被读者感到略快或工具化；但就概要序列而言，悬念链（枕巾之谜）与风险链（检查站/毁约/雨夜离场）仍能形成持续的‘想知道接下来怎样’驱动力。",
+      "description": "大纲有持续的叙事张力和悬念驱动",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_narrative_tension",
+      "quality_tier": "advanced",
+      "is_critical": false
+    }
+  },
+  "completion_status": "completed"
+}

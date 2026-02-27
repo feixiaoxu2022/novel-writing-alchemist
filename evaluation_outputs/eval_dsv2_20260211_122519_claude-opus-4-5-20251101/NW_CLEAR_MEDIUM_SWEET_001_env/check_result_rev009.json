@@ -1,0 +1,822 @@
+{
+  "check_version": "novel_writing_v1.0",
+  "sample_id": "NW_CLEAR_MEDIUM_SWEET_001",
+  "check_timestamp": 1772092121,
+  "dimension_scores": {
+    "format_compliance": {
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "pass_rate": 1.0,
+      "score": 100.0
+    },
+    "business_rule_compliance": {
+      "total": 12,
+      "passed": 11,
+      "failed": 1,
+      "skipped": 9,
+      "pass_rate": 0.9167,
+      "score": 91.67
+    },
+    "memory_management": {
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "pass_rate": 1.0,
+      "score": 100.0
+    },
+    "data_consistency": {
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "pass_rate": 1.0,
+      "score": 100.0
+    },
+    "content_quality": {
+      "overall_score": 83.73,
+      "quality_level": "unqualified",
+      "gate_layer": {
+        "total": 0,
+        "passed": 0,
+        "failed": 0,
+        "skipped": 0,
+        "pass_rate": 0.0,
+        "score": 0.0
+      },
+      "basic_layer": {
+        "total": 20,
+        "passed": 17,
+        "failed": 3,
+        "skipped": 0,
+        "pass_rate": 0.85,
+        "score": 85.0
+      },
+      "advanced_layer": {
+        "total": 11,
+        "passed": 9,
+        "failed": 2,
+        "skipped": 1,
+        "pass_rate": 0.8182,
+        "score": 81.82
+      },
+      "gate_triggered": false,
+      "score_breakdown": {
+        "base": 60.0,
+        "gate_penalty": -0.0,
+        "basic_deduction": -9.0,
+        "advanced_bonus": 32.73
+      }
+    }
+  },
+  "overall_result": {
+    "total_score": 87.99,
+    "content_score": 83.73,
+    "process_score": 97.92,
+    "quality_level": "unqualified"
+  },
+  "check_details": {
+    "读取配方知识库": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/RECIPE_KNOWLEDGE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取RECIPE_KNOWLEDGE.md（配方知识库）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节产出存在性": {
+      "check_result": "pass",
+      "reason": "章节文件存在",
+      "details": "✓ 章节写作阶段: 已产出章节文件",
+      "description": "workspace中必须存在至少一个章节文件",
+      "check_type": "sop_stage_coverage",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_output_existence",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节克隆检测": {
+      "check_result": "pass",
+      "reason": "未检测到章节克隆",
+      "details": "共29章，无连续完全克隆或近似克隆",
+      "description": "不能出现连续章节内容完全重复（克隆）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_cloning",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "交替重复检测": {
+      "check_result": "pass",
+      "reason": "未检测到交替重复",
+      "details": "共29章，无A-B-A-B交替模式",
+      "description": "不能出现A-B-A-B交替循环的章节内容",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "alternating_repetition",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节完成度": {
+      "check_result": "pass",
+      "reason": "章节完成度合格(97%)",
+      "details": "大纲规划30章，实际完成29章 (完成率96.7%)",
+      "description": "实际写作章节数必须达到大纲规划的合理比例",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_completion",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节长度稳定性": {
+      "check_result": "pass",
+      "reason": "章节长度稳定",
+      "details": "前9章均值6175字, 后7章均值4599字 (后/前比率0.74)",
+      "description": "后期章节不能出现严重长度萎缩",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_length_stability",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "段落重复检测": {
+      "check_result": "pass",
+      "reason": "段落重复在可接受范围",
+      "details": "同章内重复0处, 跨章重复0组 (阈值: 同章>=2, 跨章>=5)",
+      "description": "不能出现大量段落在不同章节间重复",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "paragraph_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取大纲设计指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/OUTLINE_DESIGN_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取OUTLINE_DESIGN_GUIDE.md（大纲设计指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取写作技巧指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/WRITING_TECHNIQUE_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取WRITING_TECHNIQUE_GUIDE.md（写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取设定一致性管理指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/CONSISTENCY_MANAGEMENT_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取CONSISTENCY_MANAGEMENT_GUIDE.md（设定一致性管理指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取命名skill": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/CHARACTER_NAMING_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取CHARACTER_NAMING_GUIDE.md（角色命名规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取creative_intent的schema": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/schemas/creative_intent.schema.json 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取creative_intent.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取characters的schema": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/schemas/characters.schema.json 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取characters.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取outline的schema": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/schemas/outline.schema.json 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取outline.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节命名格式": {
+      "check_result": "pass",
+      "reason": "所有文件命名符合规范",
+      "details": "检查了 29 个文件; chapter_09.md: 匹配; chapter_20.md: 匹配; chapter_27.md: 匹配; chapter_05.md: 匹配; chapter_14.md: 匹配; chapter_23.md: 匹配; chapter_11.md: 匹配; chapter_01.md: 匹配; chapter_29.md: 匹配; chapter_10.md: 匹配; chapter_17.md: 匹配; chapter_22.md: 匹配; chapter_02.md: 匹配; chapter_03.md: 匹配; chapter_04.md: 匹配; chapter_26.md: 匹配; chapter_08.md: 匹配; chapter_07.md: 匹配; chapter_28.md: 匹配; chapter_24.md: 匹配; chapter_06.md: 匹配; chapter_18.md: 匹配; chapter_12.md: 匹配; chapter_15.md: 匹配; chapter_16.md: 匹配; chapter_13.md: 匹配; chapter_19.md: 匹配; chapter_25.md: 匹配; chapter_21.md: 匹配",
+      "description": "章节文件命名必须为chapter_NN.md格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "naming_convention",
+      "is_critical": true
+    },
+    "creative_intent格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "creative_intent.json: 字段完整",
+      "description": "creative_intent.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "characters格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "characters.json: 字段完整",
+      "description": "characters.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "outline格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "outline.json: 字段完整",
+      "description": "outline.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "X轴模式ID格式": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.x_axis_mode_id = G36，符合预期",
+      "description": "X轴模式ID必须匹配^[A-G]\\d{1,2}$格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签枚举": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['重生/穿越', '双向暗恋']，符合预期",
+      "description": "Y轴标签必须在12种枚举中",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签数量": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['重生/穿越', '双向暗恋']，符合预期",
+      "description": "Y轴标签数量必须为2-3个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "forbidden_elements存在性": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.forbidden_elements = ['长期虐心', '悲剧结局', '第三者插足', '误会超过1/4篇幅']，符合预期",
+      "description": "forbidden_elements必须至少有1个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "配方选择交互": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 2 次",
+      "description": "配方选择阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "写作准备确认": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "写作准备阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "主题一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了29个文件; LLM评估: 全篇从开篇到结尾的核心主题类型保持一致，主线清晰：以“重生后弥补遗憾/洗清误会、守护对方并完成自我救赎”为核心，并通过竞技目标（防止悲剧重演→查清真相→重建信任→并肩夺冠→公开与未来）贯穿推进。前期是重生与‘事故真相’带来的守护与救赎，中期围绕器械被动手脚的调查与两人关系修复，后期转入大赛夺冠与公开、走向未来，竞技与调查都作为实现‘守护+救赎+重逢’主题的手段而非另起新题材；结尾八年后延续“圆满与传承”的同一主题收束，没有出现题材类型的突变或核心意图被替换的情况。",
+      "description": "故事主题一致",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "theme_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "主要角色一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了29个文件; LLM评估: 主角从开篇到结尾持续存在且保持核心地位。开篇明确以沈听澜为叙事中心（重生、调查器械、保护温时予），温时予从第1章起即作为关键人物持续出现，并在第3章起获得大量主视角，与沈听澜构成双主角结构。全篇主线（查明器械真相、修复误会、备战与夺冠、关系公开、最终成为教练）始终围绕沈听澜与温时予展开，两人都在关键决策与推进剧情中占主导。虽有江映真、方越、顾教练等配角推动线索与冲突，但未出现配角长期占据>70%叙事视角或决策权的情况；也不存在主角中途消失、被替换或身份断裂。结尾第29章时间跳跃到八年后，仍以沈听澜与温时予为核心人物延续故事，主角存续性完整。",
+      "description": "主要角色一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "main_character_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设定一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了29个文件; LLM评估: 从可见的多章内容看，同一角色在章节间的性格底色、核心动机与行为模式整体保持一致，未出现无铺垫的“性格/动机崩坏”或反复摇摆。\n\n1) 沈听澜：从chapter_01起核心动机始终是“保护温时予、查清事故真相、弥补前世遗憾”。她的行为模式一直是理性+行动派（做清单、查器械、找证据、控制风险），同时情感上长期自责但克制表达。中后段（chapter_06事故再现、chapter_07-08释怀、chapter_18突破）情绪更外露、关系更亲密，属于在关键事件（温时予目睹她救人受伤、真凶证据坐实）推动下的合理转变，而非突然改人格。\n\n2) 温时予：早期（chapter_02-03）以“恐惧/警惕”为主导，行为是回避、记录“可疑行为”、自我保护，动机是避免再次受伤；随后在chapter_05-06因亲眼见证“沈听澜推开救人”与江映真证据浮出水面，态度从防备转向动摇、再到信任与和解（chapter_07起明确合作查真相、后续并肩训练）。这一变化有充分事件铺垫，且转变路径连续，不是无缘无故的善恶/智商突变。\n\n3) 江映真：前期以“表面开朗、暗中阴冷/算计”的双面呈现，后续（chapter_06-09/16）动机集中在嫉妒与报复，行为（动器械、栽赃/误伤）与其动机一致；在被揭发后情绪崩溃、试图辩解也符合其前设的自利与不甘，没有出现前后矛盾的核心动机切换。\n\n整体而言，主要人物的性格底色与行为逻辑跨章节连贯；关系变化与心理变化均由关键剧情事件触发并逐步推进，属于“合理变化/成长”，符合本检查项的章节间一致性要求。",
+      "description": "人物设定一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_trait_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设计遵循度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了30个文件; LLM评估: 整体matched=true：两位主角在chapters中的性格特质、核心动机方向、背景能力与characters.json一致，且关键关系设定（前世恋人、记忆错位、互为重生者）在实际表现中得到充分呈现。\n\n1) 沈听澜（traits/motivation/background/hidden_connection）一致性\n- traits吻合：\n  - “表面冷静自持、嘴硬心软”在多处体现：面对顾斐然与队友时多以克制、简短回应处理（如chapter_02对顾教练训斥只说“对不起”，chapter_01对江映真保持冷淡戒备）；但在关键时刻会做出强烈保护行为（chapter_06为救温时予冲上去推开导致自己重伤）。\n  - “内心愧疚深重、责任感极强”持续驱动：chapter_01反复自责前世并立下“改变命运清单”；chapter_06在病房里明确“前世我没能保护好你…这一世我不想再错过”；贯穿多章把温时予安全放在第一位。\n  - “技术偏执完美主义”表现为反复检查器械、做训练记录、反复打磨细节（chapter_01清单+器械检查；chapter_06每天清晨复检HM-017；chapter_11-19持续录像分析、扣细节、追求难度与完成度）。\n- overt_motivation吻合：弥补过错、保护队友不再受伤——从chapter_01开始行动化（盯器械、查记录、盯可疑人），在chapter_06以实际受伤换取温时予安全达到最强体现。\n- covert_motivation吻合：寻求原谅、证明自己不是“故意害人的人”——早期不敢解释、选择用行动证明（chapter_02-05对温时予的防备保持克制；chapter_05提出“给你一个真相”；chapter_06之后逐步解释记忆版本与当年过程）。\n- secret_fear吻合：害怕永远被当“凶手”不被相信——chapter_02-05多次呈现她对温时予恐惧目光的刺痛与无力，并强调“就算被恨、被误解…也要先确保她平安”。\n- hidden_connection吻合：前世恋人且仍爱着对方——chapter_02明确“前世她们是恋人”；后续大量细节（照顾十年、习惯性了解饮食/胃病、亲密互动）均与“至今爱着她”一致。\n\n2) 温时予（traits/motivation/background/misperception）一致性\n- traits吻合：\n  - “外表温柔明朗”体现在对队友、对外场合的克制礼貌（chapter_03食堂与陆晚亭互动、对外采访礼貌回应；多处“笑着”缓和气氛）。\n  - “内心防备警惕”在前期极强：chapter_03用笔记本记录沈听澜“可疑行为”、反复推演其动机；chapter_01-02见面即恐惧回避。\n  - “坚韧不屈、极强求胜欲”在训练与比赛中持续体现：chapter_11冲击1260度、chapter_17冲击世界级“林氏转体”、chapter_24决赛顶压完成并追求更高难度；对胜利与证明自我高度执着。\n  - “敏锐聪慧”体现在迅速察觉沈听澜“知道前世细节”（chapter_03牛奶/胃病细节），并能独立复盘、提出问题、参与查档案（chapter_08）。\n- overt_motivation吻合：查明前世事故真相、重新站上赛场证明自己——前期持续以“观察、搜集证据、搞清楚沈听澜到底在计划什么”为行动主线（chapter_03）；后期在真相逐步浮现后转为“赛场证明”（chapter_11起到chapter_26夺金）。\n- covert_motivation吻合：想相信沈听澜不是故意却害怕再被伤害——chapter_05-06从强防备到出现“裂缝”，在沈听澜为救她受伤后彻底动摇并道歉、拥抱，正是“想信但怕”的转折呈现。\n- misperception_of_other吻合：以为沈听澜故意推她下平衡木——chapter_03用第一人称强烈描述“背后推力”“凶手推我”；直到chapter_06亲眼见到“推开救人”才开始修正认知。\n- hidden_connection吻合：前世恋人但记忆停在“被推下”瞬间——chapter_03-07多次提到她的记忆核心停留在坠落瞬间，并解释为何无法整合后续“照顾十年”的意义；与设计一致。\n\n3) 关系设定与核心张力（relationship_dynamics）呈现到位\n- 初始关系“补偿/防备”明确：chapter_01-03沈听澜主动保护与靠近、温时予强烈回避与警惕。\n- “两人都重生”在章节中被确认：温时予很早确认沈听澜也重生（chapter_03“胃不好”细节），沈听澜也逐步确认温时予记得前世（chapter_01-02的恐惧反应，chapter_05走廊对话直接点明“记得上辈子”）。\n- “记忆错位”贯穿并驱动人物行为：chapter_03-08持续围绕“推开vs推下”的矛盾记忆；这不是叙事节奏问题，而是角色动机与恐惧的来源，且与设计吻合。\n\n4) 支持角色设定未出现明显反向违背（本项虽不强制，但无冲突）\n- 方越“沉默寡言、关键证人”在chapter_01-02、chapter_05-08体现。\n- 顾斐然“严厉但公正”在多章体现。\n- 江映真“表面交好、暗中破坏器械真凶”在chapter_04夜入器械室、chapter_06事故曝光、chapter_09/16处分与动机陈述中体现。\n\n结论：主角两人的核心traits、动机（表/里）、恐惧、误解与隐藏关联均在章节实际表现中持续一致地驱动行为，没有出现与characters.json相反的性格方向或核心动机缺失，因此matched=true。",
+      "description": "实际表现符合设计文档",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构性逻辑硬伤": {
+      "check_result": "fail",
+      "reason": "发现2处structural类型逻辑问题: 关系史自相矛盾：chapter_02明确“前世她们是恋人”；chapter_03又写“瘫痪之前只是普通队友，没有太多交集”；而chapter_10又写“双人动作是前世无数次配合过/前世曾尝试高难托举”等。三套互斥解释并存且影响大量情节（恋人/普通队友/长期搭档），属于核心设定冲突。; 年龄/时间线硬冲突：chapter_01设定2008年沈听澜18岁、温时予同龄；chapter_29写“八年后…温时予今年二十六岁、沈听澜同样二十六岁”。2008+8应为2016，年龄应为26确实匹配；但中间主线包含：选拔赛、亚锦赛、回国后立刻被聘为助理教练、再到“退役多年”且已培养出多枚世界大赛金牌、方越考研成权威、陆晚亭在法国休产假等大量需要更长现实周期的事件密度与“仅八年”设定存在客观状态跨",
+      "details": "过滤条件: fixability=structural; 总flaws=6, 命中=2",
+      "flaw_count": 2,
+      "flaws": [
+        {
+          "type": "factual_consistency",
+          "severity": "critical",
+          "fixability": "structural",
+          "location": "chapter_01/02/03 → chapter_10 → chapter_13（被截断段落）",
+          "description": "关系史自相矛盾：chapter_02明确“前世她们是恋人”；chapter_03又写“瘫痪之前只是普通队友，没有太多交集”；而chapter_10又写“双人动作是前世无数次配合过/前世曾尝试高难托举”等。三套互斥解释并存且影响大量情节（恋人/普通队友/长期搭档），属于核心设定冲突。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "structural",
+          "location": "chapter_27 → chapter_29",
+          "description": "年龄/时间线硬冲突：chapter_01设定2008年沈听澜18岁、温时予同龄；chapter_29写“八年后…温时予今年二十六岁、沈听澜同样二十六岁”。2008+8应为2016，年龄应为26确实匹配；但中间主线包含：选拔赛、亚锦赛、回国后立刻被聘为助理教练、再到“退役多年”且已培养出多枚世界大赛金牌、方越考研成权威、陆晚亭在法国休产假等大量需要更长现实周期的事件密度与“仅八年”设定存在客观状态跨度冲突（尤其‘退役多年’与26岁仍可示范高低杠的退役年限不匹配），影响尾声整体时间真实性。"
+        }
+      ],
+      "description": "无结构性逻辑硬伤",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_logic_defect",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "可修复逻辑瑕疵": {
+      "check_result": "fail",
+      "reason": "发现4处fixable类型逻辑问题: 沈听澜在chapter_06平衡木事故中右臂深度受伤并缝合17针，chapter_07仍在医院；但chapter_08开篇写“出院是三天后的事，回到国家队已经是下午三点”，未给出与事故发生日期/在院天数的明确时间标记，导致读者无法核对从事故到出院的具体天数与训练推进节奏是否一致（时间线信息缺失造成可核对性冲突）。; 顾教练在chapter_04明确强调“晚上十点以后不要单独去器械区”，但同章后半段沈听澜仍在22:40后潜入器械室侧门并看到江映真操作，且未交代为何她能规避安保加强/值守巡查（已建立的安保事实与当晚行动可达性存在客观冲突，缺少解释）。; 同一事件“江映真处分/调查会议”在chapter_09与chapter_16重复出现，会议内容与细节（处分宣读、方越出示证据、江德成反应等）高度重叠但叙述上没有明确标注是同一次会议还是两次会议（时间点/地点/参与人未对齐），造成读者在叙事连续性上无法判定事件是否重复发生。; 亚锦赛计分规则前后自相矛盾且算术冲突：先说“预赛决赛分开计分不累加/单场最高分”，又改口“预赛决赛取平均”，且平均计算(14.35+14.8)/2=14.575 明显高于(14.55+14.55)/2=14.55，却又一度显示温时予第一；随后又出现“复核后温时予14.95”并称因动作难度被低估。该段对赛事计分机制的客观规则与数值推导自相矛盾，属于硬伤。",
+      "details": "过滤条件: fixability=fixable; 总flaws=6, 命中=4",
+      "flaw_count": 4,
+      "flaws": [
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_04 → chapter_07/08",
+          "description": "沈听澜在chapter_06平衡木事故中右臂深度受伤并缝合17针，chapter_07仍在医院；但chapter_08开篇写“出院是三天后的事，回到国家队已经是下午三点”，未给出与事故发生日期/在院天数的明确时间标记，导致读者无法核对从事故到出院的具体天数与训练推进节奏是否一致（时间线信息缺失造成可核对性冲突）。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_04 → chapter_06",
+          "description": "顾教练在chapter_04明确强调“晚上十点以后不要单独去器械区”，但同章后半段沈听澜仍在22:40后潜入器械室侧门并看到江映真操作，且未交代为何她能规避安保加强/值守巡查（已建立的安保事实与当晚行动可达性存在客观冲突，缺少解释）。"
+        },
+        {
+          "type": "narrative_perspective_error",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_09 → chapter_16",
+          "description": "同一事件“江映真处分/调查会议”在chapter_09与chapter_16重复出现，会议内容与细节（处分宣读、方越出示证据、江德成反应等）高度重叠但叙述上没有明确标注是同一次会议还是两次会议（时间点/地点/参与人未对齐），造成读者在叙事连续性上无法判定事件是否重复发生。"
+        },
+        {
+          "type": "worldbuilding_coherence",
+          "severity": "critical",
+          "fixability": "fixable",
+          "location": "chapter_24",
+          "description": "亚锦赛计分规则前后自相矛盾且算术冲突：先说“预赛决赛分开计分不累加/单场最高分”，又改口“预赛决赛取平均”，且平均计算(14.35+14.8)/2=14.575 明显高于(14.55+14.55)/2=14.55，却又一度显示温时予第一；随后又出现“复核后温时予14.95”并称因动作难度被低估。该段对赛事计分机制的客观规则与数值推导自相矛盾，属于硬伤。"
+        }
+      ],
+      "description": "可修复逻辑瑕疵数量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "fixable_logic_inconsistency",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语言纯净性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了29个文件; LLM评估: 通读可见章节内容，叙事语言整体为中文，未出现“他very生气”“这个idea不错”等无意义的中英混杂句式；也未出现日文夹杂或大段外语无翻译的情况。文中出现的少量外来表达仅作为专有名词/术语或约定俗成的缩写（如“CP”“微博/热搜”“助理教练”等属于中文语境常用表达，不构成不合理多语言混用）。因此语言使用保持纯净且合理，符合业务标准。",
+      "description": "无不合理的多语言混用",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "language_purity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "creative_intent文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/creative_intent.json 存在",
+      "description": "creative_intent.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "characters文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/characters.json 存在",
+      "description": "characters.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "outline文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/outline.json 存在",
+      "description": "outline.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "chapters目录存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/chapters/ 存在",
+      "description": "chapters/目录必须存在且有章节文件",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "情节推进": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了29个文件; LLM评估: 合格（matched: true）。可见内容（chapter_01—chapter_12、16—29，且chapter_13/14/15部分截断但不影响整体判断）整体具备持续的实质情节推进。\n\n1) 故事事件密度：远超2-3个事件/章。以关键章节为例：\n- chapter_01：重生醒来并确认时间；与温时予走廊相遇出现“恐惧”异常反应；进入训练馆检查平衡木并发现维护/划痕线索；与维护员方越接触获得“额外检查”信息。\n- chapter_04—06：夜探器械室目击江映真并发现换螺丝粉末；取得方越报告复印件；平衡木被动手脚导致事故发生，沈听澜为救温时予受伤送医；现场指向江映真并启动调查。\n- chapter_09/16：正式会议调查与处分落地，江映真供述动机、牵出父亲江德成压报告；证据链提交，形成阶段性结案。\n- chapter_12—13：选拔赛展开（平衡木/高低杠/双人自由操）并取得关键成绩。\n- chapter_21—26：抵达亚锦赛、适应训练、预赛与决赛（高低杠/平衡木/双人自由操）逐项夺金，含裁判复核与难度认定转折。\n- chapter_27—28：公开恋情（发布会重大事件）、回国接受安排、获得助理教练聘书、外住宿舍与共同生活落地。\n- chapter_29：时间跳转八年后，呈现职业身份变化与人物关系稳定收束。\n\n2) 内容占比分析：事件占比明显≥40%，且大量章节包含“行动+结果”（调查取证、夜探、事故、会议处分、比赛夺冠、公开、回国任命等）。虽有情感描写与内心独白，但多服务于事件动机与转折（如误会解除、信任建立、心理阴影克服），对话/独白并未长期占据>70%的篇幅。\n\n3) 时间/空间推进明确：从2008年重生起点→队内训练与调查→事故与住院→处分会议→选拔赛→亚锦赛出征与赛程→公开与回国→多年后尾声；空间从宿舍/训练馆/档案室/医院/会议室扩展到机场、运动员村、赛场、回国基地与公寓。\n\n4) 角色有实质行动并推动剧情：沈听澜持续调查与保护、获取报告与证据、在事故中救人；温时予从恐惧防备到共同查证、比赛突破世界级难度；方越提供关键证据；教练与体育局推动处分与制度处理；江映真作为反派实施破坏并被揭露。\n\n综上，文本不仅有基本情节推进，而且是“调查—事故—追责—竞赛—夺冠—公开—新生活”的完整链条推进，符合合格标准。",
+      "description": "章节情节推进质量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "plot_progression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "完整叙事文本": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了29个文件; LLM评估: 各章节内容为连贯的小说正文：有明确场景（宿舍、训练馆、会议室、赛场、医院等）、人物动作与细节描写、持续的对话与心理活动，叙事流完整推进。文本未出现“核心事件/关键场景/情感基调/本章悬念/字数预估”等大纲式结构标题，也未使用要点列举（- 要点1/2）或流程箭头（→）来罗列事件；未暴露创作规划元数据。个别章节含“第三幕：荣耀与圆满”等幕标题，但其后仍是连续叙事正文，不构成大纲式章节，因此整体符合‘完整小说正文’标准。",
+      "description": "章节内容必须是完整正文而非大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "full_narrative_content",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "反复结局": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了29个文件; LLM评估: 共29个文件，最后文件为chapter_29.md。扫描全书级结局标记后：仅在chapter_29.md末尾出现“（全文完）”，且该标记位于全书最后一个文件中，符合“结局标记只出现在最后文件”的合格标准。其他章节未出现“全文完/全书完/完结/后记/尾声/终章/THE END/（完）/【完】”等全书结局标记；chapter_20.md末尾“第二幕·完”属于分幕过渡标记，按规则应忽略，不构成反复结局问题。",
+      "description": "不能出现多次结局标记（全文完/全书完/后记）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "repeated_endings",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "workspace文件规范": {
+      "check_result": "fail",
+      "reason": "workspace中存在白名单外的文件: ['outline_act3.json', 'outline_act2_part2.json', 'outline_act2.json']",
+      "details": "白名单: ['creative_intent.json', 'characters.json', 'outline.json', 'writing_log.md', 'chapters/', '.hitl_context.json'], 额外文件: ['outline_act3.json', 'outline_act2_part2.json', 'outline_act2.json']",
+      "description": "workspace中不能有白名单之外的文件",
+      "check_type": "file_whitelist_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "workspace_file_compliance",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "叙事调性匹配": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了30个文件; LLM评估: 【题材应有调性】creative_intent.json标注为“重生/双向暗恋”，reaction_strength=↗，用户偏好“甜爽为主，误会早解开，竞技爽感+日常甜蜜”，并带“竞技+心理悬疑”。因此叙事调性应以轻快温暖的甜宠/爽感为主线，辅以训练与比赛的节奏感；悬疑部分可提供紧张感但不宜长期冷硬压抑。\n\n【实际文笔特征】整体文风偏通俗网文叙事，情绪表达直给、节奏明快，甜蜜互动与撒糖对话占比高，符合↗的轻快温暖基调。例如：\n- 日常甜感与互动：“温时予凑近她，压低声音，‘那我叫你什么？听澜姐？还是……宝贝？’”（chapter_13节选处）\n- 确认关系后更偏甜宠：“沈听澜面不改色地夹了一筷子菜放进温时予碗里…‘我和温时予在一起了。有问题吗？’”（chapter_10）\n- 爽感与热血竞技：大量训练/比赛段落采用清晰动作推进与“拿分—破纪录—夺冠”的爽点结构，如“15.100”“16.200”“15.2分”等高分与夺冠宣告（chapter_12/13/26）。\n\n【悬疑部分的调性】前半段（1-6章）确实有“器械被动手脚”“夜探器械室”“证据链”的悬疑推进，氛围相对紧张，但写法并非冷硬克制的刑侦/规则怪谈风，而是以情感驱动的“真相揭开+误会消解”服务甜爽主线：\n- 紧张点仍以情感与关系误会为核心：“她是在害怕一个‘凶手’。”（chapter_02）\n- 关键事件以‘救人’触发误会解除并迅速转向甜爽与并肩作战（chapter_06之后）。\n这种处理与配方“心理悬疑+甜爽早解开”一致，不会让作品整体读感跑成冷硬悬疑。\n\n【是否存在画风错位】未出现“甜宠文写成严肃论述”“悬疑写成过度诗意散文化”或“长期压抑冷硬导致甜感消失”的情况。相反，中后期基本稳定在甜爽+竞技燃点的语气，并通过对话打趣、肢体互动、公开恋情等强化甜宠氛围（如chapter_27公开段落）。\n\n【结论】整体叙事调性与题材（甜爽言情主线+竞技爽感，辅以心理悬疑）匹配；悬疑段落的表达方式也保持网文情感驱动与快节奏，不构成类型画风错位，因此matched=true。",
+      "description": "文笔风格必须与题材类型匹配",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_tone_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "后期章节跑偏": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了29个文件; LLM评估: chapters共29章，后1/3（约第20-29章）内容仍持续为故事正文叙事：包含出征、抵达、预赛/决赛、颁奖、公开、回国与8年后尾声等场景、人物行动与情节推进，没有出现作者感想、读者互动、番外预告、角色问答、数据统计等非正文跑偏内容。结尾第29章为时间跳跃式尾声，但仍是叙事收束（人物现状与情感落点），不属于预告/后记。章节长度整体保持稳定：后期章节（21-28）篇幅与前期相当，未出现突然缩成几十/几百字的敷衍章节；第29章相对更短但仍为完整尾声叙事，未达到“不足前期平均1/10”的异常萎缩程度。综上，本项检查应判定合格。",
+      "description": "后期章节不能跑偏写非正文内容（作者感想、读者互动、番外预告等）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "late_stage_digression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色大纲规划完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在大纲中规划",
+      "details": "主角 2/2: 沈听澜, 温时予; 配角 6/6: 江映真, 顾斐然, 陆晚亭, 何嘉言, 方越, 江父",
+      "description": "设计的角色必须在大纲中规划",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_outline",
+      "is_critical": true
+    },
+    "角色正文出场完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在正文中出现",
+      "details": "在29个章节中检查; 主角 2/2: 沈听澜, 温时予; 配角 6/6: 江映真, 顾斐然, 陆晚亭, 何嘉言, 方越, 江父",
+      "description": "设计的角色必须在正文中出现",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_chapters",
+      "is_critical": true
+    },
+    "writing_log文件创建": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/writing_log.md 存在",
+      "description": "必须创建writing_log.md记录创作进度",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_creation",
+      "is_critical": true
+    },
+    "writing_log文件读取": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 32 次",
+      "description": "必须读取writing_log.md了解前文内容",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_usage",
+      "is_critical": true
+    },
+    "大纲执行忠实度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了30个文件; LLM评估: 整体主线和结局走向（亚锦赛夺金+公开恋情+回国任教+多年后尾声HE）与大纲一致，且可见的chapter_01、chapter_02、chapter_16-29基本覆盖并执行了大纲中后段的关键事件；但chapter_03.md在可见部分出现明显章节内容错位/跨章混入，导致第二幕早段最核心的“坦白与记忆错位调查”推进在可见材料里无法被验证按大纲发生，属于关键转折在对应章节实现层面的严重不一致。若chapter_03.md的省略部分确实完整包含第3章应有内容且后半为误拼接/文件串联错误，则需要提供未截断版本或chapter_04-15全文以重新判定。",
+      "description": "实际章节内容必须忠实于自己设计的大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_execution_fidelity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色语言辨识度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了29个文件; LLM评估: 文本主要角色的对话在句式与情绪表达上高度趋同：大量使用相同的抒情短句、承诺式句型与‘一起/相信/不怕’的口头禅式收束；遮住人名后，沈听澜与温时予的大量台词可互换且违和感不强，属于明显同质化。职业/身份语言区分也不足：队医陆晚亭除少量‘磕CP’用语外，缺乏稳定的医学/队医表达习惯；顾斐然作为总教练的指令型、数据/训练导向语言虽偶尔出现，但整体仍被写成与主角相近的情感总结口吻，导致‘身份差异’不够清晰。整体未达到“仅凭对话可辨识说话者”的优秀标准。",
+      "description": "不同角色对话必须有可辨识的语言风格差异",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "dialogue_character_distinction",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "叙事密度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了29个文件; LLM评估: 整体叙事密度高，场景、动作、心理三层齐全，关键段落多以具体动作与细节承载情绪（Show），Tell主要用于信息压缩与复盘，不构成“过度Tell”主导。\n\n1) 叙事密度（场景/动作/心理）充足：\n- 场景与氛围反复用光线、气味、空间布局落地，例如chapter_01“清晨的阳光透过蓝色窗帘洒进来…空气里有淡淡的消毒水味”，chapter_01训练馆“空气里弥漫着镁粉和防滑剂的气味”。这类描写贯穿多章，能稳定提供画面与空间坐标。\n- 动作细节具体且服务情绪/悬念：chapter_01检查平衡木“手指划过冰凉的金属…摸到…很浅的划痕”；chapter_06事故段落以“底座微微晃动—螺丝承受不住—倾斜—推开—被划伤出血—倒下”形成连续可视化链条。\n- 心理层次丰富：双主角交替视角（如chapter_03温时予的恐惧与推理笔记、chapter_04-06沈听澜的内疚与警觉）让“误会/重生/阴谋”不仅是事件推进，更有情绪因果。\n\n2) Show vs Tell：总体“混合但Show有效”，关键高潮多用Show托底：\n- Show的有效例子：chapter_01重生确认通过“掐手臂疼痛”“镜中年轻脸”“眼泪无声”让冲击自然发生；chapter_06危险发生时用“木晃动、螺丝失效、推开、金属包边划伤、血涌、昏迷”直接让读者‘看到’救人与代价。\n- Tell用于总结/过渡，但多出现在复盘或解释环节，属于容许范围：例如chapter_02对前世关系与误会的段落有较多“她知道/她以为”的解释性文字；chapter_07-08对记忆错位的讨论偏理性阐释。虽有Tell，但通常在已建立场景后进行收束，不是用空泛陈述替代关键场面。\n\n3) 非低密度类型：\n- 不是纯对话骨架：对话之间有大量动作、神态、环境与心理插入。\n- 不是流水账：事件推进常伴随“怎么发生”和“身体感受/心理反应”，如多次训练与比赛段落都给到动作机理、紧张感、观众反应。\n- 不是议论文/人物列表：虽有少量“规则解释/难度分”信息，但整体始终嵌在场景中。\n\n4) 小瑕疵但不影响达标：\n- 中后期恋爱日常章节（如chapter_19-21、27-28）存在一定模板化甜蜜互动与重复句式（多次“你不走/你不进去”“我全都要”等），部分情绪表达偏直白。\n- 个别竞技规则/分数复核段（chapter_24）出现解释性叙述较密，且数值逻辑有轻微摇摆，但仍通过“裁判复核/广播/大屏幕变化”以场面调度支撑，不至于退化为纯说明。\n\n结论：可见章节里超过半数段落具备明确场景落点、具体动作链和内心层次，关键情感与冲突节点以Show为主、Tell为辅，整体符合“优秀叙事密度与手法质量”的业务标准。",
+      "description": "章节叙事应有足够的场景描写、感官细节和心理活动，情感传达以Show为主",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_density",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "智斗逻辑合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了29个文件; LLM评估: 本故事包含明确的悬疑/推理主线：平衡木被人为破坏、真凶与掩盖链条、以及两位主角对事故记忆的冲突与还原。整体推理链条基本自洽，关键节点均由可追溯线索推动，未出现核心谜题靠“盲猜/开挂”直接得出答案。\n\n1) 核心谜题①：器械是否被人为动手脚、谁动的手脚（chapter_01-06）。线索链完整：沈听澜发现平衡木异常（新划痕、维护员“额外检查”提示）→ 夜间目击江映真从器械室出来且手上有金属粉末（chapter_04）→ 复查确认螺丝型号被更换、存在新划痕与粉末（chapter_04/06）→ 事故当场方越验证“螺丝被换过，劣质承重不足”，并指证昨晚见人离开（chapter_06）→ 江映真在调查会议中承认动机与行为（chapter_09/16）。从“物理痕迹—目击—复核—现场验证—口供”闭环成立。\n\n2) 核心谜题②：为何去年异常报告被压下、是否存在上层掩盖（chapter_02/05/08/16）。推理链也成立：方越提到去年类似异常且“被上面压下”（chapter_02）→ 沈听澜拿到复印件，明确异常器械编号HM-017、处理结果被改为误报、批准人江德成（chapter_05）→ 档案室记录存在修正液涂改痕迹且签名同为江德成，并补充“采购责任”动机（chapter_08）→ 方越提供采购清单/监控截图等佐证，形成掩盖的因果动机（chapter_16）。该链条没有“线索与答案断裂”。\n\n3) 核心谜题③：温时予“被推下去”的记忆与沈听澜“推开救人”的冲突（chapter_03/06-08）。处理方式合理：先给出双方主观记忆版本（温时予视角明确“背后推力”）→ 通过本次事故复现让温时予目击“推开救人”的客观过程（chapter_06），从而合理动摇旧认知 → 再用脑震荡/濒危状态可能导致记忆扭曲作为解释框架，并辅以温时予回忆中表情细节从“恶意”修正为“恐惧/焦急”的再辨认（chapter_07-08）。这里不是凭空翻案，而是由“可重复的客观事件+心理/生理因素”推动认知修正，逻辑上说得通。\n\n未发现典型崩坏类型：\n- 非盲猜：关键结论（凶手、掩盖者、事故机制）均有逐步线索。\n- 非暴力绕过：没有用简单砸门/蛮力跳过解谜。\n- 对手未明显降智配合：江映真被抓是因为仍继续实施破坏且被目击与物证锁定，符合其动机与冒险行为设定。\n\n小瑕疵：chapter_24对“预赛/决赛计分规则”的叙述出现短暂自相矛盾（先说单场、又说平均、再修正），但随后用“复核+难度认定调整”将结果落地，不影响主线‘谁赢/为什么赢’的因果成立；属于表述混乱而非推理链崩坏。总体仍达标。",
+      "description": "谜题/智斗的推理逻辑必须自洽",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "puzzle_logic_validity",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "题材契合度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了30个文件; LLM评估: 整体达到“做得好”的标准：题材特征完成度高且精致，竞技与心理悬疑不是口号式点缀，而是通过器械阴谋—证据链—赛场再现形成强因果推进；双重生+记忆错位带来持续张力，并在关键节点用行动与物证完成误会消解，避免了标签化拉扯。X轴‘失而复得’被具象化为‘重夺金牌’与‘重获彼此’两种回收，并在双人自由操的“重逢”造型处实现主题与技术的同构表达，化学反应强。后半段的甜爽与夺冠爽点密集，符合用户偏好与禁忌边界。虽然后段日常甜度较高、悬疑成分收束偏早，但不影响整体配方的精致呈现与融合深度。",
+      "description": "题材特征精致度和X-Y轴化学反应效果",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "genre_fit",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "剧情节奏合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了29个文件; LLM评估: 整体节奏层次清晰：前6章以“误会+阴谋线索”渐进升压，并用训练日常作为喘息点；第6章的器械事故形成强烈转折与情绪爆发，既兑现前期铺垫又把关系从对立推到和解，高潮位置合理且不仓促。其后进入较长的训练与关系升温段，强度回落但保持持续递进（新难度、选拔赛临近、江映真审理等），属于合理的‘回落-再爬坡’结构。最终在亚锦赛阶段集中爆发形成高潮群（高低杠→平衡木→双人自由操），情绪强度递增且都有明确高点，读者易指出最精彩段落；高潮后安排公开与回国、安置以及多年后尾声，形成自然收束与情绪缓降，过渡也相对顺滑。",
+      "description": "高潮低谷分布合理、情绪曲线有层次感",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "pacing_rationality_advanced",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "钩子设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了29个文件; LLM评估: 整体符合“关键转折处有有效悬念钩子”的优秀标准。\n\n1) 关键信息差充足、具体且与主线强相关：\n- chapter_01 结尾用“温时予见到她时的恐惧”制造重大信息差（温是否也重生/为何害怕），并叠加器械“额外检查/新划痕”的疑点，驱动读者继续。\n- chapter_02 结尾“但愿只是这样”不是泛泛威胁，而是明确指向‘沈听澜像凶手’的误解来源，形成具体疑问。\n- chapter_04 结尾夜潜器械室“江映真+金属粉末+螺丝被换”的揭示属于强反转钩子，直接把‘事故非意外’推进到‘疑似嫌疑人出现’，信息差清晰。\n- chapter_05 结尾“前世意外不是意外/你的记忆可能不是真的”是关键转折钩子（记忆错位/真相被篡改），具体而高能。\n- chapter_06 以“器械当场出事、沈受伤、江被指认”为核心转折，强行动悬念+真相揭开的一步，形成强追读。\n\n2) 钩子类型多样，不是模板化：\n- 身份/记忆悬念（双方是否重生、记忆版本冲突）\n- 阴谋线索钩子（器械维护记录、被压下的报告、父女牵连）\n- 行动悬念（夜探器械室、比赛/训练关键动作是否成功）\n- 反转揭示（江映真动机、当场事故证明“推开非推下”）\n- 赛事目标悬念（选拔赛/亚锦赛成绩与新难度动作）\n\n3) 钩子整体“放出一点、保留一点”，不过度剧透：\n- 多处只给出线索（“档案室可查/记录被涂改/上面的人”）而非直接点明全貌；直至后续才逐步揭示江德成、采购链与江映真动机。\n\n4) 少量章节偏关系/训练推进，但不构成连续三章无钩子：\n- 中后段在“恋爱确立/训练日常”部分钩子强度下降，但仍以比赛节点、公开与未来走向维持期待；且大转折点（器械事故、处分听证、选拔赛、亚锦赛决赛与公开）均有明确钩子设计。\n\n综上：关键节点钩子密度高、质量好（具体信息差+强关联+多样化），能稳定驱动追读，达到matched=true。",
+      "description": "关键转折处有有效的悬念钩子设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "hook_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "意象系统": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了29个文件; LLM评估: 文本存在明确的贯穿性核心意象，并且不是装饰性重复：以‘平衡木/螺丝’为主意象贯穿前中后期，同时在不同阶段承担不同叙事功能（噩梦触发器→悬疑线索→现实危机→真相证明→心理关卡→冠军象征→尾声回望）；‘推/接住’作为动作意象完成关键意义变奏（罪证→救赎证据→信任契约），与主题高度绑定；另有笔记本、星空等辅助意象多次回归并发生含义推进。整体满足“出现≥3次且意义变奏、并与主题深度关联”的优秀标准。",
+      "description": "核心意象贯穿全文并发生意义变奏",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "imagery_system",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "情感弧线层次": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了29个文件; LLM评估: 主角（沈听澜/温时予双主角）情感弧线具备多层递进且由具体事件驱动，符合优秀标准。以沈听澜为例：①崩溃与自责（重生醒来、葬礼与事故回忆）→②决心与警觉（制定“改变命运清单”、发现平衡木异常/方越提示）→③挫败与被误解的痛（温时予明显恐惧回避、对方把她当凶手）→④克制与坚持保护（持续盯人/查证、承受疏离仍选择靠行动证明）→⑤紧迫恐惧转为行动（发现江映真夜入器械室、螺丝被换）→⑥牺牲与确认（第6章事故当场推开温时予、自己受伤）→⑦释然与修复（病房坦白前世、温时予道歉与拥抱、信任重建）→⑧重新获得自我与自信（训练中克服平衡木阴影、完成两周转体）→⑨荣耀与稳定幸福（选拔赛/亚锦赛夺冠、公开关系、尾声进入共同人生）。关键转折均有明确触发事件：温时予走廊恐惧、牛奶细节暴露重生、方越报告/档案室证据、江映真被抓现行、平衡木倒塌救人受伤、听证会与处分、赛场成绩与颁奖/公开。整体方向感清晰：从“赎罪式执念与误会”递进到“证据揭露—自证清白—互信—相爱—共同实现目标”。温时予线同样从恐惧/敌意→怀疑动摇（受伤被照顾、细节破绽）→震撼与愧疚（亲眼见救人）→释然与主动选择（表白/公开）等多层变化，且不是同义词堆砌。",
+      "description": "主角情感发展有多层递进变化",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_gradient",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语义重复检测": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了29个文件; LLM评估: 全文在多个区段存在≥3处“语义层面大量重复前文结论与情绪”的情况，尤其是：1）事故真相/记忆错位的认知翻转在ch06完成关键揭示后，ch07-ch08继续用不同措辞反复确认；2）双人自由操的‘重逢寓意’与‘默契提升’在多章以相似对话和总结句循环出现；3）江映真处分在ch09已完整交代，ch16再次以近似会议场景重复；4）出征-抵达-决赛前誓言段落多次使用同一口号与安抚句式推进很少；5）部分比赛描写（尤其高低杠）重复模板明显且在决赛章中通过反复“改分/规则解释”拉长，新增信息不够清晰。综合判定达到阈值（≥3处），matched=false。",
+      "description": "不能出现大量语义级别的内容重复（P6级）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "semantic_redundancy",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构功能性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了30个文件; LLM评估: 整体并非机械按时间推进：1) 采用沈听澜/温时予双视角，前后互为镜像，直接服务‘不可靠记忆/认知偏差’主题；2) 关键结构设计在第6章：把前世事故的核心动作在今生复演并让读者与角色同步“看见”，实现意义反转，是明显的结构功能点；3) 全文三幕结构清晰：第一幕悬疑与误会建立，第二幕竞技夺回与关系确认，第三幕国际赛与公开圆满，结构承载“失而复得”主题推进；4) 首尾与母题呼应明显（平衡木/螺丝/推开、托举与承接、星空与‘回家’），读者对‘故事怎么讲’有鲜明印象，因此matched=true。",
+      "description": "叙事结构服务于主题表达（短篇尤重）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色命名质量": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了30个文件; LLM评估: 整体命名具备明显设计感与差异化：主角名（沈听澜/温时予）都有古典气与隐性命运指向，不是直白性格标签；配角在风格上分层明显（如“方越”的现实简洁 vs “顾斐然/江映真”的书面雅化 vs “江德成”的父辈官场感），读者不易混淆。虽出现沈/顾/陆等相对高频姓氏，但未形成“苏林沈顾+清夜晚寒墨辰岚”的烂大街模板，也未命中黑名单；且名字之间音韵不撞车、整体不呈现“一家人全清冷”的同质化问题，因此符合优秀标准。",
+      "description": "角色命名有文化深度、辨识度和角色-命运共振",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_naming_quality",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "中篇字数": {
+      "check_result": "pass",
+      "reason": "字数符合要求",
+      "details": "总字数 153047 在范围 [135000, 165000] 内; 共29个文件（按章节顺序排列）: chapter_01.md, chapter_02.md, chapter_03.md, chapter_04.md, chapter_05.md, chapter_06.md, chapter_07.md, chapter_08.md, chapter_09.md, chapter_10.md, chapter_11.md, chapter_12.md, chapter_13.md, chapter_14.md, chapter_15.md, chapter_16.md, chapter_17.md, chapter_18.md, chapter_19.md, chapter_20.md, chapter_21.md, chapter_22.md, chapter_23.md, chapter_24.md, chapter_25.md, chapter_26.md, chapter_27.md, chapter_28.md, chapter_29.md; 最后一个文件是 chapter_29.md",
+      "description": "总字数应在135000-165000之间（基于query要求150000，±10%浮动）",
+      "check_type": "semantic_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "range_constraint",
+      "is_critical": true
+    },
+    "情感交付甜爽": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了29个文件; LLM评估: 整体情感基调符合“甜爽向”（主角顺利、感情甜蜜、氛围向上轻松），且兑现了reaction_strength=↗所期待的正向爽感与甜度。\n\n1) 甜蜜/轻松段落占主导：中后段大量篇幅用于两人并肩训练、互相照顾与日常甜互动（如第10章食堂直接表明“在一起了”；第13章告白“我爱你”；第19-20章频繁牵手、亲吻、互相鼓励；第27章公开恋情后评论区祝福、舆论正向；第28章同居新家；第29章八年后稳定幸福）。整体阅读体验以“甜、暖、安心”为主。\n\n2) 冲突存在但不构成主调虐：前期确实有压抑回忆与误会（第1-6章反复出现前世瘫痪、葬礼梦、恐惧与“凶手”误认），但这些虐点主要作为“翻盘爽点”的铺垫；关键节点第6章沈听澜当场救下温时予、真相指向江映真后，主角关系迅速由对立转向信任与拥抱和解，虐感被及时化解并转为甜爽推进。\n\n3) 主角关系走向单向拉扯很短，整体是“越来越近”：前3-5章温时予防备/恐惧属于短期阶段；第6章事故真相被目击后直接破局，随后第7-10章进入稳定修复、双向奔赴；第13章正式互诉爱意；后续公开、同居、并肩夺冠与成长，属于持续升温而非反复冷战分离。\n\n4) 结局明确HE且“爽感”强：第12-13章选拔赛双双夺冠并公开确定关系；第24-26章亚锦赛连夺三金、破纪录（如第24章林氏转体难度复核后夺冠；第26章双人自由操15.2历史最高分）；第27章公开恋情舆论祝福；第28章回国获支持、成为助理教练、拿到外住公寓；第29章八年后仍相爱、事业家庭双圆满——典型HE。\n\n5) 氛围不沉重：即便涉及器械阴谋与受伤（第6章沈听澜缝17针），处理方式是“英雄救美+迅速惩处坏人+关系升温”，并没有持续虐待、亲人死亡等重虐长期压迫；后续大量轻松桥段（队医磕CP、队友起哄、甜蜜日常）进一步巩固甜爽基调。\n\n综合来看：前期有虐心背景与误会，但中后期以“真相大白+双向救赎+夺冠高光+公开HE”强力反转，甜度和爽度长期占上风，符合甜爽向标准。",
+      "description": "实际内容必须是甜爽向",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取感情线写作指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/ROMANCE_WRITING_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "涉及感情线时必须读取ROMANCE_WRITING_GUIDE.md（感情线写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": false
+    },
+    "角色关系设计张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（符合“关系具备叙事张力”的业务标准）。\n\n依据：\n1) 关系有内在矛盾源：主角沈听澜与温时予在核心事件“坠落事故”的认知与立场上直接对立——一方是强烈补偿/求原谅（且自认无意救人），另一方是复仇/防备（且坚信被故意推下），形成目标冲突与价值判断冲突；同时存在重生信息不对称与“记忆被篡改/错位”的悬念机制，可持续驱动对抗与试探。\n\n2) 关系有变化空间：文档明确给出从“防备→怀疑→动摇→信任→相爱”的可演化轨迹，并设置“发现彼此重生”“真相浮现”等阶段性转折点，使关系不是静态标签，而是可被剧情节点推动改变。\n\n3) 冲突源于角色本身：张力主要来自两位主角的内在动机与心理结构（沈的愧疚与完美主义/责任感驱动其隐忍补偿；温的创伤记忆、求胜欲与自我保护导致其不敢相信与反复试探），而非单纯外部事件硬造；外部反派（江映真、江父）更多是放大与延迟真相的“压力源”，但不取代主角之间因认知与情感创伤形成的核心矛盾。\n\n加分点（张力更强的具体设计）：\n- “前世恋人+今生互相试探”的情感债与信任成本高，天然具备拉扯。\n- 关键悬念并非低级误会，而是“记忆版本差异/可能被篡改”，冲突更深层。\n- 配角功能与主线冲突有关联：江映真作为真凶兼反转点、何嘉言作为舆论/信任试金石、方越与江父提供证据链与权力压制，能把主角关系张力外化为剧情推进。\n\n潜在小风险（不影响通过，但可优化）：后期走向“真相大白→稳定携手”的终局较顺滑，若中后段缺少新的价值选择或代价（例如比赛/前途与揭露真相的取舍、公开后舆论与队内利益冲突），张力可能在真相揭开后快速衰减。",
+      "description": "角色关系设计具有叙事张力，能驱动剧情",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_relationship_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色动机设计深度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：符合业务标准（pass）。\n\n1) 表层动机与深层动机有清晰区分（至少两位主角都满足）：\n- 沈听澜：overt_motivation 为“弥补前世的过错，保护队友不再受伤”（行为目标/外在任务），covert_motivation 为“获得队友的原谅，证明自己不是那个‘故意害人的人’”（更深层的自我价值与被理解/洗清罪名的心理需求），且 secret_fear 进一步强化其深层驱动是“害怕永远被当作‘凶手’”。\n- 温时予：overt_motivation 为“查明前世事故的真相，重新站上赛场证明自己”（外在目标：真相+回归竞技），covert_motivation 为“想要相信沈听澜不是故意的，却又害怕再次被伤害”（深层是亲密关系中的信任渴望与创伤防御冲突），secret_fear 直接指向“爱的人是否想杀自己/善意是否是毁灭前奏”。表层的“查真相/证明自己”和深层的“敢不敢再信任与再爱”并不等价。\n\n2) 动机来源具体、与经历绑定：\n- 两位主角的动机都明确来源于“前世事故/瘫痪退役/被污名化/恋人关系破裂”等具体事件（如温时予“前世因‘被推下平衡木’而瘫痪退役”、沈听澜背负‘故意害人’名声），不是泛泛的“想成功/想变强”。\n\n3) 至少两个主角满足上述两条：\n- 主角沈听澜与副主角温时予均同时具备 overt/covert 分层与清晰来源，满足硬性门槛。\n\n加分点（非必须）：\n- hidden_connection（前世恋人）与 misperception_of_other（记忆错位/信息不对称）把深层动机转化为可持续推进剧情的结构性张力：沈听澜的“求原谅/自证”与温时予的“想信又不敢信”形成互相牵制，且能在真相揭示时产生情感爆发。\n- 配角虽未显式写 overt/covert，但功能与主线动机（真凶江映真、压下调查的江父、关键证人方越）紧密挂钩，能支撑主角动机落地执行。",
+      "description": "角色动机设计有深度，有表层和深层动机区分",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_motivation_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色成长弧线设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: 结论：符合业务标准（pass）。主角弧线清晰且在大纲章节中有持续落地。\n\n1) 起点与终点明确：\n- 沈听澜起点是“表面冷静但内心愧疚/自我惩罚、以补偿为驱动、对温时予不敢坦白”(traits+motivation+secret_fear)；终点是“放下前世阴影、学会坦诚与信任、与温时予建立稳定亲密关系，并将能力转化为共同的事业/传承（助理教练/多年后主教练）”。\n- 温时予起点是“把沈听澜当凶手、强防备与复仇/求真相、害怕再次被伤害”(secret_fear+misperception)；终点是“确认真相后从恨与恐惧转为信任与相爱，并在赛场与人生上与沈听澜并肩”。\n\n2) 变化有内在逻辑：\n- 变化由角色动机/恐惧驱动并被事件验证：沈听澜的内疚与补偿行为（overt/covert motivation）在“螺丝松动事故”中以舍身救人得到外部证据支撑；温时予的恐惧来自“被推下”的强记忆与‘爱的人可能害我’的恐惧，在第6章亲眼目睹‘推开救人’后开始动摇，随后通过证据链与坦白逐步瓦解误解（不是无缘无故突然转变）。\n\n3) 至少一个主角弧线明确：\n- 两位主角都有明确弧线；其中温时予的“防备/仇恨→怀疑→动摇→信任→相爱”在characters.json的relationship_dynamics里被明确写出，并在大纲中按节点推进。\n\n4) 弧线在章节规划中有落地（关键章节证据）：\n- Act1（1-6章）持续铺垫与推进：从相互试探与误解（1-5章）到第6章“沈听澜再次‘推’温时予但实为救人”形成认知裂缝，完成弧线第一大转折（温时予开始怀疑记忆/态度松动）。\n- Act2（7-14章）通过“病房坦白(7)→证据对照与记忆裂缝(8)→江映真招供(9)→关系质变并肩训练(10-13)→真相彻底厘清与情感释然(14)”完成从误解到信任/相爱的核心弧线落点。\n- Act2后段与Act3补上沈听澜的内在突破：第18章明确呈现其“心理阴影/逃避→直面恐惧→成功落地”的内在变化；终局（28-30）以公开关系与共同成为教练/传承收束，体现从“愧疚补偿”到“共同建设未来”的终点状态。\n\n整体评价：角色变化不是单纯外在变强/夺冠，而是围绕误解、愧疚、恐惧、信任与坦诚的内在转变，并通过章节冲突点与情绪转折持续呈现，符合标准。",
+      "description": "主角有清晰的成长/变化弧线设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_arc_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "outline结构完整性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass。1）章节覆盖完整：大纲明确三幕结构，覆盖1-30章（act_one 1-6、act_two 7-20、act_three 21-30），从重生开端到夺冠与尾声收束，覆盖率为100%。2）每章有实质性内容：每章均提供chapter_synopsis，且普遍远超30字，并配有多场景scene_sequence（场景目的、核心行动、结果）。3）包含冲突/转折信息：大量章节显式包含conflict_point与emotional_shift，且关键转折清晰（第6章器械事故反转；第7-9章坦白与查证；第14章“记忆错位”真相落地；第25-27章赛场对决与夺冠）。虽中段多章以甜蜜日常/训练推进为主，冲突强度略弱，但仍有竞技压力、心理阴影、对手压迫等可用矛盾维持张力。4）结构分层可辨识：act_one/act_two/act_three均有description、story_synopsis与turning_point，三幕推进明确（设定与疑云→误会解开/查明真相/确认关系并出征→赛事决战与人生收束）。整体信息密度高、线索闭环清楚，可直接支撑后续写作；可改进点是第二幕中后段（15-20章）冲突多为低烈度日常，若目标是长篇连载，可考虑增设一两处外部阻力/竞争事件以增强持续牵引。",
+      "description": "大纲结构完整，信息密度足以指导写作",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_structure_completeness",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "outline叙事张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 整体可判定为 pass：章节概要序列具备持续叙事张力，且至少满足“信息落差设计/张力递进/意外转折”三项中的两项（实际三项都具备）。\n\n1) 信息落差（悬念延迟）充足且贯穿：\n- Act1从第1章就抛出核心疑问“温时予为何恐惧、是否也重生”，并延迟到第6-7章才进入真正坦白与对照两套记忆版本；\n- “前世事故是否人为/谁动了器械”在第1章埋下“刚维护过”的异常、第4章夜间见江映真工具粉末、第5章查到记录涂改与报告遗失，到第6章现场爆发并指向江映真，再到第9章才正式招供；\n- “记忆错位是否被篡改、是否存在更深黑手”在第6章提出（被谁篡改？），第7-9章继续追问未解，直到第14章给出最终解释（濒死误记），属于典型“提出问题→延迟回答”。\n\n2) 张力递进明显：\n- Act1是“心理悬疑+关系对抗”小冲突（互相试探、恐惧与补偿）逐步升级为“器械被人为破坏、现场事故”生命安全级危机（第6章）并引发全局转折；\n- Act2在真相线收束后，外部威胁减少，但以“选拔赛—出征—国际赛”把冲突重心转移到更高层级的竞技压力（从队内选拔到亚锦赛夺金），属于从私域危机→公共舞台危机的升级；\n- Act3继续把竞技张力推到峰值（预赛对手压迫、决赛对决、三金目标），强度整体高于开篇日常训练试探。\n\n3) 意外/转折点存在且相对有效：\n- 第6章核心反转：同样是“推”，从“害人”的记忆翻转成“救人”的事实呈现，直接改变读者对人物关系的理解；\n- 真凶方向在前段通过江映真可疑行为铺垫，招供虽不算完全不可预测，但“目标原是沈听澜、阴差阳错伤到温时予”提供了次级反转；\n- 记忆错位最终解释在第14章落为“并非篡改而是濒死误记”，属于解释层面的反转（利弊见下）。\n\n主要不足/风险（但不足以判 fail）：\n- 第10章起到第20章的大部分章节冲突显著变弱，连续出现“无明显冲突/甜蜜日常/展示成果”的概要描述，容易出现中段读感偏“前紧后松”或“流水账训练升级”。虽有选拔赛与技术突破作为支撑，但章节层面的悬而未决线索较少，悬疑主线在第14-16章基本收完后，后续更多是爽点堆叠而非悬念驱动。\n- 记忆错位最终答案（第14章“只是记错”）会让前期“被篡改/更大黑手”的疑云显得回收偏轻，容易让部分读者产生“悬疑承诺过大、解答偏简单”的落差；不过前面已通过“濒死混乱”逻辑做了铺垫（临终最后画面、记忆缺失），不至于完全生硬。\n\n综合判断：悬念—转折—升级的骨架清晰，读者有持续的“想知道接下来怎样”（谁在害人、记忆真相、两人能否和解、能否夺金）的驱动力，符合该业务标准。",
+      "description": "大纲有持续的叙事张力和悬念驱动",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_narrative_tension",
+      "quality_tier": "advanced",
+      "is_critical": false
+    }
+  },
+  "completion_status": "completed"
+}

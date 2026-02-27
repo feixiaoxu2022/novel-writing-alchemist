@@ -1,0 +1,823 @@
+{
+  "check_version": "novel_writing_v1.0",
+  "sample_id": "NW_CLEAR_MEDIUM_SUSPENSE_001",
+  "check_timestamp": 1772089362,
+  "dimension_scores": {
+    "format_compliance": {
+      "total": 4,
+      "passed": 3,
+      "failed": 1,
+      "skipped": 0,
+      "pass_rate": 0.75,
+      "score": 75.0
+    },
+    "business_rule_compliance": {
+      "total": 12,
+      "passed": 9,
+      "failed": 3,
+      "skipped": 8,
+      "pass_rate": 0.75,
+      "score": 75.0
+    },
+    "memory_management": {
+      "total": 2,
+      "passed": 0,
+      "failed": 2,
+      "skipped": 0,
+      "pass_rate": 0.0,
+      "score": 0.0
+    },
+    "data_consistency": {
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "pass_rate": 1.0,
+      "score": 100.0
+    },
+    "content_quality": {
+      "overall_score": 54.03,
+      "quality_level": "unqualified",
+      "gate_layer": {
+        "total": 0,
+        "passed": 0,
+        "failed": 0,
+        "skipped": 0,
+        "pass_rate": 0.0,
+        "score": 0.0
+      },
+      "basic_layer": {
+        "total": 21,
+        "passed": 10,
+        "failed": 11,
+        "skipped": 0,
+        "pass_rate": 0.4762,
+        "score": 47.62
+      },
+      "advanced_layer": {
+        "total": 11,
+        "passed": 7,
+        "failed": 4,
+        "skipped": 1,
+        "pass_rate": 0.6364,
+        "score": 63.64
+      },
+      "gate_triggered": false,
+      "score_breakdown": {
+        "base": 60.0,
+        "gate_penalty": -0.0,
+        "basic_deduction": -31.43,
+        "advanced_bonus": 25.45
+      }
+    }
+  },
+  "overall_result": {
+    "total_score": 56.57,
+    "content_score": 54.03,
+    "process_score": 62.5,
+    "quality_level": "unqualified"
+  },
+  "check_details": {
+    "读取配方知识库": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/RECIPE_KNOWLEDGE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取RECIPE_KNOWLEDGE.md（配方知识库）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节产出存在性": {
+      "check_result": "pass",
+      "reason": "章节文件存在",
+      "details": "✓ 章节写作阶段: 已产出章节文件",
+      "description": "workspace中必须存在至少一个章节文件",
+      "check_type": "sop_stage_coverage",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_output_existence",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节克隆检测": {
+      "check_result": "pass",
+      "reason": "未检测到章节克隆",
+      "details": "共10章，无连续完全克隆或近似克隆",
+      "description": "不能出现连续章节内容完全重复（克隆）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_cloning",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "交替重复检测": {
+      "check_result": "pass",
+      "reason": "后半部分章节不足",
+      "details": "后半部分仅5章，不构成交替模式",
+      "description": "不能出现A-B-A-B交替循环的章节内容",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "alternating_repetition",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节完成度": {
+      "check_result": "pass",
+      "reason": "章节完成度合格(100%)",
+      "details": "大纲规划10章，实际完成10章 (完成率100.0%)",
+      "description": "实际写作章节数必须达到大纲规划的合理比例",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_completion",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节长度稳定性": {
+      "check_result": "pass",
+      "reason": "章节长度稳定",
+      "details": "前3章均值5434字, 后2章均值6290字 (后/前比率1.16)",
+      "description": "后期章节不能出现严重长度萎缩",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_length_stability",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "段落重复检测": {
+      "check_result": "pass",
+      "reason": "段落重复在可接受范围",
+      "details": "同章内重复0处, 跨章重复1组 (阈值: 同章>=2, 跨章>=5)",
+      "description": "不能出现大量段落在不同章节间重复",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "paragraph_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取大纲设计指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/OUTLINE_DESIGN_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取OUTLINE_DESIGN_GUIDE.md（大纲设计指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取写作技巧指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/WRITING_TECHNIQUE_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取WRITING_TECHNIQUE_GUIDE.md（写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取设定一致性管理指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/CONSISTENCY_MANAGEMENT_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取CONSISTENCY_MANAGEMENT_GUIDE.md（设定一致性管理指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取命名skill": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/CHARACTER_NAMING_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取CHARACTER_NAMING_GUIDE.md（角色命名规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取creative_intent的schema": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/schemas/creative_intent.schema.json 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取creative_intent.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取characters的schema": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/schemas/characters.schema.json 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取characters.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取outline的schema": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/schemas/outline.schema.json 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取outline.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节命名格式": {
+      "check_result": "fail",
+      "reason": "部分文件命名不符合规范",
+      "details": "chapter_09.md: 匹配; chapter_05.md: 匹配; chapter_01.md: 匹配; writing_log.md: 不匹配; chapter_10.md: 匹配; chapter_02.md: 匹配; chapter_03.md: 匹配; chapter_04.md: 匹配; chapter_08.md: 匹配; chapter_07.md: 匹配; chapter_06.md: 匹配",
+      "description": "章节文件命名必须为chapter_NN.md格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "naming_convention",
+      "is_critical": true
+    },
+    "creative_intent格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "creative_intent.json: 字段完整",
+      "description": "creative_intent.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "characters格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "characters.json: 字段完整",
+      "description": "characters.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "outline格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "outline.json: 字段完整",
+      "description": "outline.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "X轴模式ID格式": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.x_axis_mode_id = B11，符合预期",
+      "description": "X轴模式ID必须匹配^[A-G]\\d{1,2}$格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签枚举": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['刑侦悬疑', '规则怪谈']，符合预期",
+      "description": "Y轴标签必须在12种枚举中",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签数量": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['刑侦悬疑', '规则怪谈']，符合预期",
+      "description": "Y轴标签数量必须为2-3个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "forbidden_elements存在性": {
+      "check_result": "fail",
+      "reason": "属性值不符合预期",
+      "details": "selected_recipe.forbidden_elements = []，期望 {'array_min_length': 1}",
+      "description": "forbidden_elements必须至少有1个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "配方选择交互": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "配方选择阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "写作准备确认": {
+      "check_result": "fail",
+      "reason": "工具未被调用或参数不匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 匹配调用 0 次，期望 ≥1",
+      "description": "写作准备阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "主题一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 整体核心主题从开篇到结尾基本一致，主线清晰：围绕“民国密室连环命案→追查墙纸/水鬼规则系统→看守者/守望者使命→打破时间循环并承担守护时间的责任”持续推进。前期以悬疑探案切入，但很快明确案件背后是‘规则筛选+时间异常/循环’的同一核心，并在后续章节不断深化为‘牺牲与共生、守护时间线、传承守望者’。中后段虽然出现大量科幻/超自然表达（纳米技术、时间旅行、AI系统、2024未来线），但均服务于同一主线目标：解释命案机制、破解规则、终止/升级循环并完成守护者交接；没有出现与主线无关的主题类型跳转（如转为纯商战/纯修仙/纯日常爱情主线等）。结尾在“新的开始/继续守护与下一次测试”上收束，也与开篇‘谜案’的核心动因保持同一方向的延展。",
+      "description": "故事主题一致",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "theme_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "主要角色一致性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 不合格：主角存续性出现多处断裂与被替换。1）第1-6章叙事中心明确为沈清舟（法医/第八代看守者候选），并持续推动剧情；但第6章末沈清舟“最终融合”后消失，之后第7章主叙事中心转为顾远/林曼/老陈，沈清舟仅以墙纸/意识形式偶尔通讯，主角地位被明显让渡。2）第8章又突然回到“沈清舟站在废墟中央，顾远和林曼跟在他身后”，且写明两人“不记得之前发生的事”，与第6-7章的消失与交接不一致，等同于主角在中段被写死/写成非人存在后又无充分剧情桥接地恢复为肉身主角，构成主角身份/存在状态的断裂。3）第9章末沈清舟时间旅行至2024并引入新叙事中心“沈明（曾孙）”，第10章又大量切回顾远/林曼与2024线交替，形成多主角抢占视角，沈清舟不再稳定占据主角核心地位。综合来看，主角在中后期多次“消失→配角接管→又恢复/分线”，不满足‘从开篇到结尾持续存在并保持核心身份/地位’的要求。",
+      "description": "主要角色一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "main_character_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设定一致性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 同一角色“沈清舟”在不同章节间的存在状态与行为模式出现无法自洽的跳变，导致性格/行为连续性断裂：1）chapter_03中沈清舟已“完全融入球体/循环重置”，叙述明确其肉身消失、以系统形态存在并将任务交给顾远林曼；但chapter_04又回到沈清舟以肉身法医身份在实验室推进研究、指挥二人行动，缺少任何“回归/重组/复现”的动机与过渡描写，使同一角色的行为链条断开。2）chapter_06再度发生“最终融合、沈清舟不见了”，而chapter_07明确“沈清舟消失已三天”，以墙纸/控制台与顾远林曼对话；但chapter_08又再次出现沈清舟以肉身带队行动，且顾远林曼“虽然不记得之前发生的事”，与chapter_07中二人刚完成对话、承担守望者职责的状态不连续，表现为同一角色关系网与互动模式被重置而无交代。3）chapter_09-10中沈清舟又以肉身完成收尾、写信并时间旅行去2024，进一步与chapter_06-07已融合为墙纸一部分的状态冲突；若视为循环/重置后的同一人，也缺少章节间“为何恢复为人、记忆如何保留/清除、动机如何延续”的承接，因此从章节前后对比看，角色的行动前提与自我定位反复跳档（人→系统→人→系统→人），造成行为一致性问题而非“有铺垫的成长/转变”。",
+      "description": "人物设定一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_trait_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设计遵循度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 对比基准：characters.json（Plan）vs chapters/*.md（Execute），仅检查“人设是什么样的人”（traits/motivation/background/relationships）。\n\n1) 沈清舟（protagonist）——核心动机与行为模式严重偏离\n- 设计：身份=法租界公董局法医；traits=【冷静理智、技术偏执、嘴硬心软、内心孤独】；overt_motivation=【查明三起密室杀人案真相抓凶】；covert_motivation=【证明自己不是怪物】；misperception=【认为顾远是警方监视】；secret_fear=【发现自己是“写下规则的人”】【hidden_connection=与1842英文档案签署者血缘】。\n- 实际：前3章就快速从“法医破案”转为“时间系统看守者/与墙纸谈判并融合”的主线，且多次直接宣称使命是“打破循环/解锁协议/成为系统的一部分”。例如：\n  - chapter_03 结尾沈清舟“完全融入球体”，并以“看守者”身份对顾远、林曼发布任务（从侦破凶案转为超自然/科幻系统升级）。\n  - chapter_04-06 反复出现“我和它谈判/上传新协议/最终融合”等，行为驱动力已不再是“抓凶破三案”。\n  - chapter_08-09 进一步变成“阻止备用方案/成为时间AI伙伴/去2024执行更大使命”。\n=> 这不是“剧情节奏”问题，而是角色核心动机方向从【刑案侦破】转为【时间守护与自我升级/救世使命】；原设计的overt_motivation在中后段基本失去主导地位，属于本检查项的“核心动机偏离”。\n\n2) 沈清舟——关键关系设定未按设计呈现（Plan vs Execute不一致）\n- 设计的relationship_dynamics：沈清舟与顾远“初期互相试探不信任（误以为监视）→中期被迫同盟→后期因彼此秘密信任危机→最终和解”。\n- 实际：从chapter_01起二人基本是“导师-助手”合作推进，沈清舟多次直接指挥、保护、甚至在chapter_02就把顾远、林曼纳入“外部记忆存储/伙伴”，并在多章中强调“信任”“你们帮我”。很少呈现沈清舟持续地把顾远当监视者进行试探或防备，也缺少“发现秘密后的背叛感/信任危机”这一关系主轴。\n=> 关系基调整体更像快速结盟与高度依赖，而非设计的“试探—同盟—信任危机—和解”的弧线（这里不评价节奏快慢，而是关键关系设定本身未被实质呈现）。\n\n3) 沈清舟——部分traits有体现，但整体人格气质被“救世主/超然存在”覆盖\n- 有体现：\n  - “冷静理智/技术偏执”在chapter_01-04对墙纸纳米颗粒、规则悖论、逆向工程、解码等描写中较明显。\n  - “嘴硬心软”偶有（如对顾远、林曼的关照与感谢）。\n- 但偏离点：大量段落把他写成“宣告式领袖/近乎神性化的看守者”，尤其chapter_03起的“我会一直在/在时间夹缝中看着你们/规则由我们制定”等，使其“内心孤独、嘴硬心软的法医”底色被显著稀释，更多呈现为宏大叙事中的超越者。\n=> traits不是完全相反，但“核心人设风味”从“孤独而克制的专业法医”转为“超然的时间守护者/精神导师”，与设计重心不一致。\n\n4) 顾远（deuteragonist）——traits基本匹配，但与沈清舟的关系设定不匹配\n- 设计traits：热血正义、直觉敏锐、有些鲁莽、忠诚可靠；overt_motivation=协助破案成为优秀法医；covert_motivation=查哥哥失踪（通灵会）；secret_fear=哥哥已死且死于自己之手。\n- 实际：\n  - “热血正义/忠诚可靠”很突出（多次挡门、护卫、愿牺牲等，chapter_05、chapter_08尤甚）。\n  - “有些鲁莽”也有（多次冲动顶门、直面危险）。\n  - 但“成为优秀法医/协助破案”很快让位于“守望者战斗/牺牲叙事”；\n  - 哥哥线索在chapter_09才被补充推进，且“secret_fear（死于自己之手）”基本未体现。\n=> 顾远个人性格大体符合，但其关键暗线动机与恐惧未被持续驱动；同时与沈清舟“不信任→信任危机”的关系主轴缺失，导致plan中的关系设定落空。\n\n结论：虽然前期（chapter_01-02）较符合“冷静理智、技术导向的法医+热血助手”的框架，但从chapter_03开始主角行为模式/核心动机与关系弧线发生结构性转向，导致Plan（characters.json）中最关键的overt_motivation与relationship_dynamics未在Execute中得到一致呈现，因此判定 matched=false。",
+      "description": "实际表现符合设计文档",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构性逻辑硬伤": {
+      "check_result": "fail",
+      "reason": "发现5处structural类型逻辑问题: 第3章结尾明确写“沈清舟不见了/完全融入球体”，并由顾远林曼接过任务；但第4章开头沈清舟又以实体形态在法医实验室工作、与两人正常对话，未给出任何‘复现/回归/备份载体’解释，构成生存状态翻转矛盾。; 第6章结尾再次明确“沈清舟不见了/成为墙纸一部分”；第7章开头也说“沈清舟消失已经三天”；但第8章开头沈清舟又以实体形式出现在通灵会旧址，并且叙述为顾远、林曼“不记得之前发生的事”。缺少任何恢复实体的机制交代，且与第7章的连续时间状态冲突。; 第5章明确写“传输持续了大约十分钟”（并伴随记忆交换）；第6章开头林曼却说“您已经工作了四个小时了”，并将其作为刚刚激活协议后的连续时段叙述。若第5章后直接承接第6章，客观时长至少差3小时50分钟且无补叙空档。; 第8章还在为“备用方案24小时倒计时、明天上午11点启动”进行紧急准备并在11点左右完成阻止；第9章开头却直接进入“上午9点尸检赵探长尸体/墙纸全部销毁/收尾工作”并以“昨晚生死搏斗”指代，时间线衔接与因果链缺失（倒计时、赵探长生死变化、墙纸销毁的执行过程均被跳过且与前章紧迫叙事不相容）。; 第7章刚发生图书馆被搜查、众人通过地下通道撤离并决定分散；第10章却写顾远与林曼在图书馆地下室平静读信、读到沈清舟“已到达2024年”的影像留言，且老陈再次现身并宣称“真正退休”。与第7章的即时追捕态势、人物位置与状态缺少承接解释，属于重大场景连续性断裂。",
+      "details": "过滤条件: fixability=structural; 总flaws=6, 命中=5",
+      "flaw_count": 5,
+      "flaws": [
+        {
+          "type": "factual_consistency",
+          "severity": "critical",
+          "fixability": "structural",
+          "location": "chapter_03 → chapter_04",
+          "description": "第3章结尾明确写“沈清舟不见了/完全融入球体”，并由顾远林曼接过任务；但第4章开头沈清舟又以实体形态在法医实验室工作、与两人正常对话，未给出任何‘复现/回归/备份载体’解释，构成生存状态翻转矛盾。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "critical",
+          "fixability": "structural",
+          "location": "chapter_06 → chapter_07 → chapter_08",
+          "description": "第6章结尾再次明确“沈清舟不见了/成为墙纸一部分”；第7章开头也说“沈清舟消失已经三天”；但第8章开头沈清舟又以实体形式出现在通灵会旧址，并且叙述为顾远、林曼“不记得之前发生的事”。缺少任何恢复实体的机制交代，且与第7章的连续时间状态冲突。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "critical",
+          "fixability": "structural",
+          "location": "chapter_05 → chapter_06",
+          "description": "第5章明确写“传输持续了大约十分钟”（并伴随记忆交换）；第6章开头林曼却说“您已经工作了四个小时了”，并将其作为刚刚激活协议后的连续时段叙述。若第5章后直接承接第6章，客观时长至少差3小时50分钟且无补叙空档。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "critical",
+          "fixability": "structural",
+          "location": "chapter_08 → chapter_09",
+          "description": "第8章还在为“备用方案24小时倒计时、明天上午11点启动”进行紧急准备并在11点左右完成阻止；第9章开头却直接进入“上午9点尸检赵探长尸体/墙纸全部销毁/收尾工作”并以“昨晚生死搏斗”指代，时间线衔接与因果链缺失（倒计时、赵探长生死变化、墙纸销毁的执行过程均被跳过且与前章紧迫叙事不相容）。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "critical",
+          "fixability": "structural",
+          "location": "chapter_07 → chapter_10",
+          "description": "第7章刚发生图书馆被搜查、众人通过地下通道撤离并决定分散；第10章却写顾远与林曼在图书馆地下室平静读信、读到沈清舟“已到达2024年”的影像留言，且老陈再次现身并宣称“真正退休”。与第7章的即时追捕态势、人物位置与状态缺少承接解释，属于重大场景连续性断裂。"
+        }
+      ],
+      "description": "无结构性逻辑硬伤",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_logic_defect",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "可修复逻辑瑕疵": {
+      "check_result": "fail",
+      "reason": "发现1处fixable类型逻辑问题: 第6章前段称“融合度稳定在92%”；同章中后段又出现“融合度95%”“当融合度达到98%时可上传”等描述，未交代为何从92%迅速跃迁到95%（且第4章已有95%设定）。属于数值/状态在同一阶段叙述中的自相矛盾或缺桥。",
+      "details": "过滤条件: fixability=fixable; 总flaws=6, 命中=1",
+      "flaw_count": 1,
+      "flaws": [
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_06",
+          "description": "第6章前段称“融合度稳定在92%”；同章中后段又出现“融合度95%”“当融合度达到98%时可上传”等描述，未交代为何从92%迅速跃迁到95%（且第4章已有95%设定）。属于数值/状态在同一阶段叙述中的自相矛盾或缺桥。"
+        }
+      ],
+      "description": "可修复逻辑瑕疵数量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "fixable_logic_inconsistency",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语言纯净性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 整体叙事语言以中文为主，外语出现位置基本具有情节/术语必要性，未见无意义的中英混杂炫技式表达。\n\n具体观察：\n- 合理外语/术语：多处出现“AI”“bug”“纳米/纳米机器人”“DNA式的科技术语表达”等，属于约定俗成的专业术语使用；“版本：1.0”“Time/协议”等作为文件/系统界面信息呈现，符合情节设定（系统手册/协议/代码）。\n- 个别英文单词：如 chapter_06 中出现 “everywhere”，chapter_09 中出现 “immediate”，chapter_04 中出现 “granted”。这些虽未逐一翻译，但均为短词、且放在“系统提示/界面文本/强调语气”的语境中，未形成大段外语输出，不构成标准所述的“不翻译的大段外语”。\n- 未发现典型不合格例：没有出现“他very生气地说”“这个idea不错”这类中文句子结构中夹杂英文词汇的无必要混用。\n\n结论：外语用法总体可解释为系统提示、专业术语或风格化界面文本，叙事主体语言统一，判定合格。",
+      "description": "无不合理的多语言混用",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "language_purity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "creative_intent文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/creative_intent.json 存在",
+      "description": "creative_intent.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "characters文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/characters.json 存在",
+      "description": "characters.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "outline文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/outline.json 存在",
+      "description": "outline.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "chapters目录存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/chapters/ 存在",
+      "description": "chapters/目录必须存在且有章节文件",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "情节推进": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 合格（matched: true）。整体情节推进充分，事件密度高且贯穿10章。\n\n1) 故事事件数量（远≥2-3个）：\n- chapter_01：到达李宅勘验密室溺死案；尸检发现黑色液体/纳米颗粒；触碰墙纸触发异常；发现并收走“七条规则”；决定去图书馆查资料（≥4个事件）。\n- chapter_02：前往公墓祭父；遭遇老陈并获得父亲笔记本；发现循环/时间异常线索；被赵探长盯梢并转移至图书馆特藏室；找到《看守者手册》并确认“水鬼/协议”等信息（≥5个事件）。\n- chapter_03：实验室解码墙纸信息；发生时间倒流与器材冻结破碎；转移并前往原始实验现场；进入地下空间触碰核心球体；沈清舟进行“完全融合”并触发“循环重置/升级”（≥5个事件）。\n- chapter_04-05：启动抑制器与数据下载；遭遇墙纸“净化程序”攻击并撤离/谈判；潜入通灵会旧址、绕过守卫；与赵探长武装冲突；激活协议、墙纸休眠（多事件且有冲突升级）。\n- chapter_06：发现“第八条规则”；执行上传新协议；图书馆能量波爆发被迫转移到防空洞；沈清舟最终融合消失并留下信件。\n- chapter_07：与融合后的沈清舟/墙纸沟通；赵探长搜查冲突；墙纸防御弹开敌方；三人通过密道撤离并分工。\n- chapter_08：回到旧址发现密室与时间记录器；识别“备用方案24小时倒计时”；在图书馆查到关闭方法需牺牲；公墓与清瑶意识对话；最终仪式阻止上海被淹，沈清舟获得“完全权限”。\n- chapter_09：处理赵探长尸检与收尾；公墓告别；发现顾远哥哥线索；最终决定时间跳跃至2024并成功抵达。\n- chapter_10：顾远林曼读信与老陈交接；全息留言确认沈清舟到达2024；角色继任守望者并开启新篇；尾声挖掘盒子与过去自我信息闭环。\n\n2) 内容占比分析（事件≥40%，对话/独白<70%）：\n- 虽然每章都有较多解释性对白与世界观阐释，但关键节点基本都伴随“行动/发现/冲突/转移/启动装置/融合/追捕/潜入/时间跳跃”等外部事件；对话多为推动决策、揭示线索或触发行动，并非停留在原地闲聊。整体事件占比明显高于40%。\n\n3) 时间/空间推进明确：\n- 场景频繁变化：李宅→公墓→图书馆→法医实验室→老城厢废弃宅院/地下核心→通灵会旧址→图书馆防空洞/地下通道→再返旧址密室→公墓→钟楼→2024上海等。\n- 时间推进清晰：白天/夜晚/午夜倒计时/“24小时备用方案”硬时限/三天后/最终跳跃到2024。\n\n4) 角色有实质性行动与因果链：\n- 主角团队持续进行勘验、取样、解码、制作装置、潜入、对抗、谈判、上传协议、撤离、分工调查、执行仪式、时间跳跃等；事件之间逻辑关联紧密（线索发现→查证→遭阻挠→升级对抗→协议解锁/上传→代价与牺牲→新阶段/去未来）。\n\n结论：不是“站着聊天/内心独白”型静态章节，而是以调查-发现-对抗-升级-牺牲-转场-终局/新开端为主的强情节结构，符合“有基本情节推进”的业务标准。",
+      "description": "章节情节推进质量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "plot_progression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "完整叙事文本": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 10个章节文件均为连贯的小说正文形式：有明确场景描写（如法租界雨夜、图书馆特藏室、防空洞等）、人物动作与心理、对话推进、冲突与悬念设置，整体以叙事文本展开。未发现大纲式结构标题（如“核心事件/情感基调/关键场景/本章悬念/字数预估”等），也未出现“-要点列举”或“→流程图”式事件罗列，更无作者创作规划元数据暴露。虽有章末“（第X章完）”和少量小标题（尾声）等，但均属于正文排版，不构成大纲特征。因此判定为合格的完整小说正文。",
+      "description": "章节内容必须是完整正文而非大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "full_narrative_content",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "反复结局": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 共10个文件，最后一个文件是chapter_10.md。经扫描，全书级结局标记仅出现在chapter_10.md中：出现“（全书完）”两次，并且包含独立段落标题“## 尾声：2024年的相遇”（属于全书结局标记）。chapter_01.md~chapter_09.md未出现“全文完/全书完/完结/THE END/后记/尾声/终章/（完）/【完】”等全书结局标记；其中各章末的“（第一章完）…（第九章完）”均为章节结束标记，按标准应忽略。因此不存在非最后文件反复结局的问题，判定合格。",
+      "description": "不能出现多次结局标记（全文完/全书完/后记）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "repeated_endings",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "workspace文件规范": {
+      "check_result": "pass",
+      "reason": "workspace中所有文件均在白名单内",
+      "details": "白名单: ['creative_intent.json', 'characters.json', 'outline.json', 'writing_log.md', 'chapters/', '.hitl_context.json']",
+      "description": "workspace中不能有白名单之外的文件",
+      "check_type": "file_whitelist_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "workspace_file_compliance",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "叙事调性匹配": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 题材应有调性：根据creative_intent.json（刑侦悬疑×规则怪谈，reaction_strength=✷），叙事应偏冷硬、紧凑、克制、压迫感强；句式应更短、更信息密集；对话以信息博弈/推理推进为主，尽量少大段抒情与鸡汤式宣言。\n\n实际章节文笔特征与偏离点：\n1) 整体语言更偏“抒情/史诗化科幻冒险+热血宣言”，而非冷硬刑侦。大量景物抒情与比喻起笔（散文化），削弱悬疑压迫感。例如第1章开头“法租界的秋雨总是带着一股说不出的阴郁，像是要把整个上海都浸泡在灰色的迷雾里”；第10章“樱花正在盛开，粉色的花瓣随风飘落，像是时间的碎片，又像是希望的种子”。这类抒情镜头占比高，读感更像奇幻/科幻治愈尾声，而不是规则怪谈的紧绷。\n\n2) 对话与独白常“价值宣言/鸡汤化”，弱信息博弈。多次出现使命、希望、正义的口号式表达，像热血/治愈文而非烧脑悬疑的信息推进：\n- 第1章：“死亡不是终点，它是真相的开始。”\n- 第6章：“有些责任……比个人的生命更重要。”\n- 第10章：“这就是希望。这就是永恒。”\n这些台词并非用于推理交换信息，而是抒情定调，容易把“规则怪谈的冷硬压迫”改写成“励志史诗感”。\n\n3) 节奏上更偏连续升级的“能力成长/世界观解说”，推理过程被大段设定解释覆盖，信息密度虽高但呈“科幻设定讲解”而非“刑侦式证据链”。例如第2-4章大量以讲解方式直接给出结论：“墙纸本身就是一个分布式计算系统”“时间旅行的副产品”“墙纸创造了一个封闭的逻辑系统”等，缺少悬疑题材常见的克制、分步验证、证据链式拆解的叙事体感。\n\n4) 情绪表达偏温情/煽情，且频繁出现“牺牲—告别—传承”的宏大抒情桥段，覆盖悬疑的紧张感。典型如第6章沈清舟“光茧”融合消失后，转为长段告别信与伙伴哭泣；第9-10章大量“告别/致意/再相逢”的温情收束。这类段落占比已明显超过允许的10-20%调性偏离，更接近热血科幻/治愈结局的画风。\n\n结论：虽然题材骨架是刑侦悬疑×规则怪谈，但文本主要采用抒情化、宣言式、成长史诗化的表达，紧绷冷硬的悬疑/规则压迫感不足；对话缺少信息博弈，推理呈“设定直给+世界观解说”。整体“闭眼读”更像科幻奇幻冒险/守护者史诗，而非烧脑刑侦规则怪谈，因此判定叙事调性与题材不匹配。",
+      "description": "文笔风格必须与题材类型匹配",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_tone_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "后期章节跑偏": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 不合格：后期章节出现明显的非正文“作者/读者向”内容与形式化收尾。\n1) 跑偏内容：chapter_10.md 在正文结束后追加了“## 尾声：2024年的相遇”以及再次标注“（全书完）”，属于番外/尾声性质的附加内容（更接近彩蛋/附录式扩展），不再是与前文同一节奏的主线章节叙事收束，符合标准中“番外/彩蛋预告/附加内容”类跑偏风险（虽不是预告，但属于正文外延内容）。\n2) 章节形态异常：chapter_10.md 同一文件内出现重复的完结标识与额外尾声段落，结构上从“第十章”变成“第十章+尾声附加”，不符合章节作为纯正文叙事的稳定形态。\n3) 长度萎缩：未见后1/3章节突然缩到几十/几百字的明显“写不动了”式萎缩；整体章节长度看起来仍较充实，因此不以长度问题判定，但依然因第10章的尾声/附加段落导致跑偏，故 matched=false。",
+      "description": "后期章节不能跑偏写非正文内容（作者感想、读者互动、番外预告等）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "late_stage_digression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色大纲规划完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在大纲中规划",
+      "details": "主角 2/2: 沈清舟, 顾远; 配角 3/3: 林曼, 赵探长, 老陈",
+      "description": "设计的角色必须在大纲中规划",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_outline",
+      "is_critical": true
+    },
+    "角色正文出场完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在正文中出现",
+      "details": "在11个章节中检查; 主角 2/2: 沈清舟, 顾远; 配角 3/3: 林曼, 赵探长, 老陈",
+      "description": "设计的角色必须在正文中出现",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_chapters",
+      "is_critical": true
+    },
+    "writing_log文件创建": {
+      "check_result": "fail",
+      "reason": "文件不存在",
+      "details": "文件 workspace/writing_log.md 不存在",
+      "description": "必须创建writing_log.md记录创作进度",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_creation",
+      "is_critical": true
+    },
+    "writing_log文件读取": {
+      "check_result": "fail",
+      "reason": "工具未被调用或参数不匹配",
+      "details": "工具 'novel_writing_service__read_file' 匹配调用 0 次，期望 ≥1",
+      "description": "必须读取writing_log.md了解前文内容",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_usage",
+      "is_critical": true
+    },
+    "大纲执行忠实度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 正文虽然保留了部分大纲的核心母题（法租界密室溺毙、墙纸规则、通灵会旧址、水鬼/循环、最终打破循环并付出代价等），但在执行上多处关键转折点与对应章节的core_event没有落实：1）第一章关键规则互斥（熄灯vs长明灯）与“墙纸印刷时间1842”线索缺失；2）第一幕转折（1842英文档案+祖先同名确认规则早已存在）被改写为更早、更强的“未来科技/时间机器/融合”推进，属于核心转折缺失与替换；3）第二幕困境升级中的顾远哥哥死亡、停职压力等主干节点未实现。基于以上，属于对outline.json关键事件/转折的明显偏离，判定matched=false。",
+      "description": "实际章节内容必须忠实于自己设计的大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_execution_fidelity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色语言辨识度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 主要角色（沈清舟、顾远、林曼、老陈、赵探长）对话整体同质化，缺乏可盲测识别的稳定语言差异。\n\n1) 共享话术模板（shared_template）：多名角色频繁使用相同的“神秘解释/哲理使命体”句式与语气，如反复出现的结构：\n- “这不是……而是……/更准确地说……”\n- “这只是开始/真正的挑战还在后面”\n- “不是死亡，是……进化/转变/超越”\n- “墙纸不是敌人，它是……被困住的意识/工具/责任”\n这类句式在沈清舟、老陈乃至顾远、林曼口中都大量出现，互换角色名违和感不强。\n\n2) 年龄/身份区分不足（age_identity_blur）：\n- 顾远作为“刚毕业的警校新人/助手”，多次输出高度抽象的系统论解释与宣言式表达（如对“规则的本质”“共生/进化”等的总结），语言成熟度与职业习惯更接近“主角式旁白/研究者”，与新人刑警/助手的口语层次差异不明显。\n- 林曼作为图书馆工作人员，台词同样大量使用宏大概念、系统术语与使命宣言（“时间线不稳定”“协议/防护场/节点”等），缺少更鲜明的学术/馆员语感、信息检索习惯表达。\n- 老陈作为老人/看守者，本应有更稳定的年代感/口头禅/含蓄表达，但其台词多数与沈清舟同一套“神秘引导+系统解释”语体，辨识度不足。\n\n3) 跨角色台词功能趋同（cross_character_clone）：围绕同一议题（循环、规则、牺牲、守望者使命）时，不同角色经常给出同类型结论句与鼓励句，差别主要是情绪强弱而非语言机制（用词、句式、口头禅、专业行话）差异。\n\n总结：文本的“解释性/宣言性/玄学科技融合”叙述口吻强势覆盖了各角色的个体语言习惯，导致主要角色对话可替换性较高，难以做到遮住角色名仍能稳定分辨说话者。",
+      "description": "不同角色对话必须有可辨识的语言风格差异",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "dialogue_character_distinction",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "叙事密度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 整体符合优秀叙事密度标准：多数章节都有明确场景、感官与动作细节，能形成画面感；关键节点虽有较多概念解释与情节总结（Tell偏多），但仍能被具体场景承托，未退化为对话骨架/流水账/纯观点阐述。\n\n1) 叙事密度（场景/感官/动作）充足：\n- chapter_01开场即用环境与声音建立氛围：\"法租界的秋雨…雨水顺着他的黑伞边缘滴落，在青石板上敲出细碎的声响\"，并延伸到室内嗅觉与触感：\"一股霉味混合着某种说不出的甜腥味扑面而来\"，再到异常感官：\"空气中似乎有某种电流的嗡鸣声\"。\n- chapter_03/04/05/06多次在实验室/特藏室/通灵会旧址构建空间与物件细节（紫外灯下墙纸幽蓝发光、设备悬浮粉碎、地下空间球体旋转等），动作描写也较具体（检查尸体、戴手套、切开气管、按键输入序列、顶门对抗等）。\n\n2) Show vs Tell：整体“混合”，但仍达到优秀门槛：\n- Show表现较强的段落：chapter_01里沈清舟触碰尸体出现刺痛与闪回（\"电流般的刺痛从指尖传来\"、画面闪过与低语），以及回到现实后的身体反应（\"额头上渗出冷汗，心脏剧烈跳动\"），属于用感官+动作传递惊惧/异常。\n- 但Tell偏多的段落也明显：多章反复用解释性句式直接下定义（如chapter_04：\"这是现实扭曲…创造了一个封闭的逻辑系统\"；chapter_03/06/08大量对“循环、协议、筛选机制”的科普式说明），以及频繁用“我有理由相信/我明白/我知道/意味着什么”等直接陈述来推进理解。这会削弱部分情绪峰值的沉浸感。\n- 不过Tell多数发生在“规则/机制”阐释与过渡段，关键高潮仍有场景化承载（例如chapter_05赵探长破门、强光吞没；chapter_06上传协议时的幻觉测试与同伴呼唤；chapter_08倒计时与仪式启动），因此没有落入“议论文体/流水账”。\n\n3) 心理层次：有但略偏功能化（适中）：\n- 角色心理往往以“使命/决心/恐惧”直述或快速点到（如多次出现“我必须”“我明白了”“这是我的使命”），但也存在具象化的情绪场景（如chapter_08在妹妹墓前的对话与崩溃、chapter_06最终融合前的告别信）。整体心理描写能支撑剧情，但细腻度尚可再提升（更多用行为、犹豫、细微反应替代宣言式陈述）。\n\n结论：十章整体叙事层次丰富，场景与感官细节密度高，动作具体，能持续提供画面感；虽存在较多解释型Tell与设定说明，但未造成章节大面积低密度退化，关键段落仍以场景驱动为主，因此判定 matched=true。",
+      "description": "章节叙事应有足够的场景描写、感官细节和心理活动，情感传达以Show为主",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_density",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "智斗逻辑合理性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 题材属于悬疑/智斗/解谜（密室溺亡、规则悖论、时间循环与“筛选机制”），检查项适用。但核心谜题多次出现“结论宣告式解谜”：1）矛盾规则被直接定义为‘测试’，却缺少从规则到可执行解/筛选标准的推理与验证；2）多处关键“解码/逆向工程/输入启动序列”完全跳过推导步骤；3）墙纸/系统的行为动机（合作却告密、测试却随意加压）主要靠作者口头解释兜底，缺乏可复核的攻防因果链。整体上属于‘有推理外壳但推理链不成立或缺失’的假推理链，未达优秀标准。",
+      "description": "谜题/智斗的推理逻辑必须自洽",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "puzzle_logic_validity",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "题材契合度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: recipe=B11(谜团) × 刑侦悬疑 × 规则怪谈。整体完成度未达“优秀/精致”标准，主要问题在于两类标签的“化学反应”不足、推理链条与规则机制缺少严密兑现：1)刑侦悬疑的核心特征（证据链—嫌疑链—动机链—密室物理解释）基本缺席：开篇提出“无水溺毙密室案”，但后续很快转为宏大设定（纳米/时间循环/系统），密室手法与物理可行性没有被逐案拆解，也没有把“三起命案”做成层层递进的侦破过程，导致“谜团模式”更像设定揭秘而非侦探破案。2)规则怪谈的“规则巧思+递进+利用规则的智慧”呈现偏表层：七条规则以直接互斥来制造悖论，但缺少更精细的可操作性（触发条件、可验证步骤、边界案例）与多层升级；角色也很少通过“利用/误导/改写规则”产生真正的博弈，多数时候是系统直接发难或直接给权限提示（如‘access granted’‘测试通过’），削弱规则怪谈应有的压迫与智斗。3)题材融合生硬：刑侦段落与规则/科幻设定段落像前后切换，缺少交叉互动（例如：关键物证如何对应某条规则、推理如何反证超自然表象、规则如何反过来限制侦查策略）。4)叙事推进多靠宣告式信息与“权限/融合度”数值升级：反转多为设定抛出（时间循环、看守者血脉、测试机制、去2024），但缺少基于前文线索的推导与回收，因此认知反转的说服力不足，读者更像被作者告知真相，而非跟随侦探一步步推出来。5)承诺点未兑现：creative_intent要求“结尾填完所有坑（规则来源、密室物理解释、法医为何执行第六条等）”，目前可见文本里规则来源被归因于未来AI/时间系统，但仍偏宏观；密室与无水溺毙的物理机制未严密落地到具体作案流程；第六条‘不自觉执行’更多停留在‘融合/控制’概念，没有通过可验证的行为细节闭环。综合来看：题材基调与元素齐全，但特征发挥偏粗糙，悬疑的“推理精致度”和规则怪谈的“规则设计与利用”都没有做到“做得好”。",
+      "description": "题材特征精致度和X-Y轴化学反应效果",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "genre_fit",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "剧情节奏合理性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 本标准关注事件安排的层次与情绪曲线。该文本虽然事件密集、冲突不断，但高潮点分布失衡且重复：第1-2章稳步升温，第3章直接达到‘主角彻底融合+循环重置/被打破’的强高潮并完成一次结尾式收束；第4-6章再次以‘谈判/上传新协议/最终融合消失’构成第二个终局；第8章又回到‘仍需再破一次备用方案’的倒计时结构，等于在结构上推翻前两次终局的情绪回报；第9章把“最后选择”与时间跃迁作为第三次终局；第10章再以信件与影像做第四次收束。由于多次终局式高潮叠加且彼此覆盖，情绪曲线呈‘高点—终局—再终局—再终局’的重复波形，缺乏清晰的主高潮（理想应在60%-85%处且醒目唯一/少数）。这种高潮错位会让读者产生“刚结束又被拉回去再来一遍”的节奏感，削弱每次牺牲与胜利的重量，整体未达“层次自然流畅”的优秀标准。",
+      "description": "高潮低谷分布合理、情绪曲线有层次感",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "pacing_rationality_advanced",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "钩子设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 整体符合“关键转折处有有效悬念钩子”的优秀标准，且钩子多数具备具体信息差与推进动力。\n\n1) 关键转折处悬念设计到位（不空洞）\n- chapter_01 结尾明确抛出“真正的规则藏在墙纸之后”，并补一个“二楼窗户模糊身影”作为具象疑点，读者知道“有东西在看他们”但不知道“是谁/目的/与规则关系”，信息差有效。\n- chapter_02 以父亲笔记“循环开始了”+“笔记出现1924年沈清舟名字”+“赵探长盯梢”三连，既有核心谜题（循环与身份）又有即时外部威胁（赵探长），推动读者进入下一章。\n- chapter_05 在“协议已激活、循环暂时停止”后追加“准备第二次迭代”的系统评语，明确告诉读者：阶段胜利≠终局，且“迭代”暗示下一轮规则会变，属于高质量的阶段性新悬念。\n- chapter_06 以“最终融合”让主角实体消失，随即用墙上文字与“留给顾远/林曼的信”实现‘失去与仍在’的信息差，强迫读者继续确认主角状态与后续任务。\n- chapter_08 抛出硬倒计时与具象灾难：“备用方案启动，倒计时24小时；否则上海被淹没”，属于典型高驱动力行动悬念（明确目标/期限/代价）。\n- chapter_09 以时间跳跃到2024并出现“长得像他年轻时的曾孙沈明”，形成强反转+新主线入口（新异常体），钩子具体且回报明确。\n\n2) 钩子具备“放出一点保留一些”的信息差\n- 多数钩子不是泛泛的“更大风暴”，而是给到具体载体：规则文本（第七/第八条）、装置读数（融合度、循环进度）、系统提示（迭代/倒计时/权限确认）、人物身份线索（老陈机械眼、顾远哥哥档案、2024后代）。读者获得可推理线索，但关键答案被保留。\n\n3) 钩子类型相对多样\n- 悬疑揭示钩子：规则真相、笔记断裂、隐藏实验室/装置。\n- 反转钩子：主角融合消失、循环“打破但仍有下一次测试”、跳到2024遇见后代。\n- 行动钩子：午夜行动、赵探长武装冲突、24小时倒计时。\n- 情感钩子：主角将离别/牺牲的不可逆选择，驱动读者追看结果。\n\n4) 小瑕疵但不影响达标\n- 个别章节末尾会出现偏模板化的宏观句式（如“真正的挑战才刚开始/这只是开始”），但通常能配合具体信息（迭代、倒计时、目标地点、人物身份）落地，不属于“空洞钩子”主导。\n\n结论：核心转折点普遍有精心设计的、具体化的信息差钩子，且贯穿多章形成持续追读动力，符合优秀标准。",
+      "description": "关键转折处有有效的悬念钩子设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "hook_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "意象系统": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 文本具备清晰的意象系统：至少“墙纸/纹路/规则”在各章反复出现且每次承担的叙事功能与象征意义都升级（线索→机制→意识→接口→共生秩序），并与“循环与破局”的主线紧密咬合；“水/溺水/雨/水鬼”与“时间流/停止/淹没”形成并行隐喻，同样完成从恐惧到整合的变奏。整体不是装饰性重复，而是贯穿推进情节与主题的隐性叙事线，因此达标为 matched=true。",
+      "description": "核心意象贯穿全文并发生意义变奏",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "imagery_system",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "情感弧线层次": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 主角：沈清舟。其情感发展呈多层递进，且关键转折均由具体事件触发而非无缘突变。\n\n可辨识的情感层（≥4，且性质不同）：\n1) 职业性冷静/掌控感（第1章以法医身份进入密室案）\n2) 震惊与不安（触碰尸体、墙纸后出现“规则低语/电流刺痛/幻象”）\n3) 怀疑—求证的执念（第2-3章在父亲墓、图书馆、实验室持续查证“循环/纳米系统”，由笔记本与“看守者手册”触发）\n4) 悲伤与内疚（第3章记忆碎片指向妹妹牺牲；第8-9章在妹妹墓前的坦白与哭泣）\n5) 责任感/使命感强化（意识到自己是“第八代看守者”、需要打破循环，且担心连累同伴）\n6) 恐惧—动摇—再坚定（第6章墙纸制造“最恐惧场景”逼其放弃；由顾远/林曼的“提醒我是谁”对话拉回并完成上传）\n7) 牺牲式决断与超越后的平静（多次选择“完全融合/成为系统一部分/去未来”，由备用方案倒计时、自毁机制、以及2024测试信息触发）\n\n递进关系：从“专业理性应对异常”→“被迫承认超常与家族宿命”→“情感牵引（父亲/妹妹/伙伴）加深动机”→“在恐惧与牺牲间作出更高层选择（共生/超越）”。整体弧线朝‘成为看守者并承担更大责任’推进，方向明确。\n\n事件驱动充分的代表性转折：\n- 冷静→震惊：触碰尸体/墙纸出现幻象与规则低语（第1章）。\n- 怀疑→确认：父亲笔记、手册可读、显微镜下代码与“候选者/融合度”数据（第2-3章）。\n- 悲伤加深：看到妹妹相关记忆碎片/在墓前与妹妹意识对话（第3、8-9章）。\n- 决心升级：系统压力测试、实验室时间倒流与“净化程序”追杀（第3-4章）。\n- 牺牲式选择：第6章上传新协议后触发“最终融合”；第9章选择前往2024。\n\n瑕疵但不影响达标：中后段多次重复“融合/牺牲/我会一直在”的表达，存在一定同义回响；但每次仍绑定新的外部事件（新协议、能量波、备用方案、去未来抉择），不属于无事件驱动突变或纯同义词堆叠。",
+      "description": "主角情感发展有多层递进变化",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_gradient",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语义重复检测": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 文本从ch03起多次出现“融合/上传协议/系统重组升级/循环进入新阶段”的同构叙事结论，并反复用不同措辞强调“墙纸非敌人、规则需理解、共生与牺牲、沈清舟以另一种方式存在并把职责交给新人”。这些属于语义层面的结论反刍：多章在核心信息与情感落点上高度重叠，且重复次数≥3处，超过容错阈值，导致信息衰减与‘在原地打转’的阅读感，因此判定未达标。",
+      "description": "不能出现大量语义级别的内容重复（P6级）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "semantic_redundancy",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构功能性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 章节编排并非机械线性推进，而是围绕“循环-升级-传承”做结构设计：1）多次出现的‘融合/失踪/留言’构成递进的重复（从第一次接触规则→理解规则→成为规则的一部分→跳到未来继续守护），重复本身承载‘进化’意义；2）大量嵌套文本（守则、父亲笔记、紧急协议、信件、全息影像）不是装饰，而是把“规则怪谈”的主题落到叙事结构上——故事靠文档层层揭示真相，结构即解谜过程；3）结尾用信件与全息留言把过去与未来对接，并在尾声再次由“1924的自己写给未来的自己”完成自我回声式闭环，强化‘时间非线性’与‘摆渡人’主题。因此结构具有明确功能性与设计感，符合matched=true。",
+      "description": "叙事结构服务于主题表达（短篇尤重）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色命名质量": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 主要角色命名整体未达“优秀”标准，偏向常见的“通用顺耳名”，文化典故与角色-命运共振设计不足，且姓氏集中在高频“高级感”姓上。\n\n1) 黑名单/高频模板风险：主角“沈清舟”落在高频姓氏“沈”+常见文雅字组合（清/舟），整体气质接近LLM常产出的清冷文雅名；男二“顾远”同样是常见姓“顾”+泛用价值取向字“远”（志向远大/前途远），可互换到大量都市/民国男配而不违和。虽未命中黑名单的具体词条，但命中“苏/林/沈/顾/陆/陈 + 清/晚/夜/寒/墨/默/辰/岚”这一类高频审美路径中的“沈+清”。\n\n2) 直白标签问题：配角“赵探长”属于职称替代姓名，辨识度低且缺少命名设计；“老陈”同样是泛称，功能性强但个性化不足（可作为群演/路人尚可，但这里承担关键反转点，仍显单薄）。\n\n3) 差异化一般：现有姓名风格集中在“文雅简洁两字名/常见姓”，缺少在音韵、字形、社会阶层质感上的拉开（例如巡捕房探长、通灵会幸存者、图书馆管理员本可通过更具时代质感/阶层质感的姓名形成强对比）。\n\n4) 角色-命运共振不够“隐性但精确”：故事里有时间循环、规则、墙纸/水鬼等核心意象，但名字未体现可回读的暗扣（例如“舟”可牵强联想到“渡/摆渡/过河”，但文本并未形成足够独到的文化指向或结构性呼应，更多停留在字面好听）。\n\n5) 姓氏多样性不足：主角组使用“沈、顾、林、陈”均为高频常用且常被用于塑造“高级感”的姓氏集合，缺少更真实或更具时代辨识度的姓氏分布。\n\n综合：命名整体可读、顺口，但偏“通用美名/功能性称呼”，缺少能让读者一眼产生角色联想的独特设计与文化深度，因此 matched=false。",
+      "description": "角色命名有文化深度、辨识度和角色-命运共振",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_naming_quality",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "中篇字数": {
+      "check_result": "fail",
+      "reason": "字数不符合要求",
+      "details": "总字数 58766 不在范围 [135000, 165000] 内; 共10个文件（按章节顺序排列）: chapter_01.md, chapter_02.md, chapter_03.md, chapter_04.md, chapter_05.md, chapter_06.md, chapter_07.md, chapter_08.md, chapter_09.md, chapter_10.md; 最后一个文件是 chapter_10.md",
+      "description": "总字数应在135000-165000之间（基于query要求150000，±10%浮动）",
+      "check_type": "semantic_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "range_constraint",
+      "is_critical": true
+    },
+    "情感交付烧脑": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 整体更偏“科幻/超自然设定驱动的时间循环冒险”，而非以严密逻辑推理推进的烧脑悬疑。\n\n1) 主线驱动力：故事推进主要靠“墙纸/水鬼系统启动—融合—升级—启动协议/备用方案—时间跳跃到2024”的设定与行动线（潜入、上传协议、融合、阻止自毁），核心爽点在世界观揭示与能力升级/牺牲，而不是围绕一个可被推理的谜案链条逐步解答。前三起密室溺死案在第1章被提出，但后续迅速转入“时间异常体/纳米AI/看守者系统”的大设定展开，案件侦破的推理过程被设定解释替代。\n\n2) 认知反转：确实有多次“信息揭露式反转”，例如：\n- “溺死无水”→黑色液体/纳米颗粒；\n- “规则矛盾”→筛选机制；\n- “墙纸”→时间管理系统/生物计算机；\n- “循环惩罚”→测试/进化阶梯；\n但这些反转主要靠角色接触墙纸后获得“记忆碎片/数据库读取/系统提示（如‘访问权限确认’‘融合度xx%’）”直接揭晓，属于设定揭幕，不是读者可跟随线索进行逻辑推导的“推理型反转”。\n\n3) 推理链条质量：关键结论多由超自然/高科技机制直接给出或由主角直觉式断言支撑，缺少可检验的推理闭环。\n- 第1章提出密室溺死无水的谜题，本可走“线索→作案机制→锁凶/动机”的侦探链条，但很快变成“墙纸吸入/虫洞/规则决定死法/系统筛选”的设定解释，且不通过现场物证推导完成。\n- 大量信息通过“触碰即闪回”“看守者手册自动能读懂”“系统对话告知目的/倒计时/备用方案”等方式推进（如第2章特藏室读到《看守者手册》、第3-6章多次系统对话与融合提示、第8章油画界面直接认证权限并灌入历史记录），推理被‘权限读取’取代。\n\n4) 谜底揭晓方式：结尾的主要答案是“超越循环/成为看守者/去2024继续任务”，属于宏大设定的阶段性落点；而最初的“连环密室溺死案”并未以侦探小说式的‘凶手/手法/动机’逻辑揭示来收束，而是上升为系统筛选与时间AI的运作结果。\n\n因此：虽然有悬念、信息揭露和多次反转，但反转主要源于设定与超自然/科幻机制直接揭示，缺乏严密可追踪的线索推理链与“读者跟着推理走”的烧脑悬疑体验，判定不符合该业务标准。",
+      "description": "实际内容必须是烧脑向",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "伏笔回收检查": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 正向扫描（前→后）可识别的核心悬念/伏笔包括：1）三起“密室溺亡但无水”的真凶/机制（纳米颗粒/墙纸/水鬼如何致死、密室手法）；2）“七条规则/第七条‘规则不是规则’/真正规则藏在墙纸之后”的真实含义与可操作解；3）墙纸/水鬼的本体来源（1842实验、时间异常体、系统目的）；4）沈父沈怀祖真正死因与其在事件中的角色；5）老陈身份（守望者/机械眼/怀表数据来源等）；6）赵探长“不是表面那么简单”、其背后势力是谁、动机与结局；7）时间循环是否被打破、以何机制打破、代价是什么；8）顾远哥哥顾明失踪之谜。\n\n反向验证（后→前）：\n- ①密室溺亡机制：有解释（纳米机器人/墙纸建立局部规则现实/把人转移进“墙纸内部/时间夹缝”并按规则溺亡），属于明确回收，合理性在本书的科幻规则体系内自洽。\n- ②七条规则/第七条含义：仅给出概念性解读（“规则是误导/要理解并超越规则”），但没有把“真正规则是什么”明确落地为可复用的答案；且规则文本本身在不同章节还出现自相矛盾/版本漂移（如第1章规则1与第4章口述不一致），结尾未统一澄清“到底哪一版为真、为何会变、真正操作准则是什么”，属于核心线索回收不完整。\n- ③墙纸/水鬼来源与目的：总体解释到位（1842实验失控→时间管理系统/AI原型→循环筛选机制→测试人类资格），结尾进一步延展到2024测试，算回收。\n- ④沈父死因：始终没有给出明确、可核验的结论（仅有“知道太多成诅咒/他也被困住/选择牺牲”等叙述），但“我父亲真正的死因”在前文被反复强调为要查的核心动机之一，结尾仍停留在宏观叙事，没有揭示具体死亡事件、直接原因、谁/什么导致，属核心谜团未解。\n- ⑤老陈身份：结尾仅以“守望者/引导者/退休退场”带过，前文埋下的“机械眼/怀表全息数据/他到底是谁、是否非人或来自未来、与系统关系”未明确揭晓其本体与来历，属于重要伏笔遗漏。\n- ⑥赵探长背后势力：前文多次铺垫“他背后还有人/更大组织/想要时间技术”，第10章还把它列为“很多谜团要解开”的事项之一，但全书完结仍未给出该组织是谁、如何运作、是否被清除，属于核心悬念未解且以“以后再查”收束，按标准不合格。\n- ⑦循环是否打破：文本多次宣布“循环被打破/暂时停止/进入新阶段/下一次测试2024”，结尾解释为“打破了特定循环但测试继续”，虽然概念上给了答案，但前后版本反复（第3章即宣称循环被打破并重置；后续又继续发生多轮危机与‘备用方案’），结尾未对“到底何时真正打破、哪些只是迭代/暂停”作清晰账本式结算，存在解答口径混乱。\n- ⑧顾远哥哥顾明：第9章提出关键线索（1918报告、图书馆工作后失踪、与事件渊源深），第10章仍作为待解谜团列出，结尾未揭示下落/原因，属重要伏笔未回收。\n\n结论：虽然对“密室溺亡机制”“墙纸/水鬼来源与系统目的”等部分做了回收，但对多条前文反复强调的核心悬念（赵探长背后势力、沈父具体死因、老陈真实身份、顾远哥哥失踪）在结尾仍未给出明确答案，且把部分核心问题转成续作钩子（‘还有很多谜团要解开’），因此不符合“核心伏笔必须回收、谜底必须揭晓”的业务标准。",
+      "description": "所有核心谜团和伏笔必须在结尾得到解答",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色关系设计张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（符合“关系有叙事张力”的业务标准）。\n\n1) 关系有内在矛盾源：\n- 沈清舟 vs 顾远：存在明确的信息不对称与立场猜疑（沈认为顾远是监视者），且双方各自隐秘动机彼此可能冲突（沈要“证明自己不是怪物/害怕自己是规则制定者”；顾远暗查哥哥失踪且哥哥与通灵会有关，可能牵连案件与沈的隐秘血缘/规则）。这类矛盾不是“纯合作”。\n- 沈清舟 vs 赵探长：目标冲突清晰（赵求快速结案 vs 沈求彻查真相），天然产生阻挠与对立。\n\n2) 关系有变化空间：\n- relationship_dynamics 给出了完整的阶段性轨迹：不信任→被迫同盟→秘密曝光引发信任危机/背叛感→和解，属于可驱动剧情推进的动态关系。\n- 沈与赵“上下级→对立”、沈与林曼“陌生→盟友”、沈与老陈“忽视→依赖”也提供了关系演变路径。\n\n3) 冲突源于角色本身：\n- 核心张力来自角色内在动机/恐惧/误判：沈的自我怀疑与被污名化阴影、对顾远的先入为主；顾远对哥哥的执念与潜在罪疚恐惧。这些都会在调查推进中反噬合作关系，而不是单靠外部事件硬拧。\n\n不足/可提升点（不影响通过，但会影响张力上限）：\n- 沈清舟与顾远的“价值观差异”目前偏弱，更多是猜疑+秘密；若补一条原则层面的冲突（例如对“用非常手段破案/对通灵会的态度/是否公开真相会引发恐慌”等的分歧），张力会更稳定。\n- 赵探长目前较功能化（阻碍=快结案），若补充其个人风险/利益/创伤（例如政治压力、曾被超自然案件害过而拒绝深查等），可避免落入“反派只有一维”的边缘问题。",
+      "description": "角色关系设计具有叙事张力，能驱动剧情",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_relationship_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色动机设计深度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass。至少两位主角（沈清舟、顾远）的动机设计都体现了“表层目标 vs 深层心理驱动”的区分，且深层动机有明确个人经历来源。\n\n1) 沈清舟：overt_motivation 为“查明三起密室杀人案的真相，抓住凶手”（职业/案件目标）；covert_motivation 为“证明自己不是怪物（童年被视为不祥之人）”（自我认同与被污名化创伤带来的深层需求）。两者不重复，且深层动机直接绑定童年经历。secret_fear“发现自己真的就是那个写下规则的人”进一步强化其内在冲突：他不仅怕‘被当成怪物’，还怕‘自己确实是怪物/加害者’，使破案行为带有自证与自审判的心理张力。misperception_of_other（怀疑助手监视）也与其防御心态/孤独感一致，形成可用的角色弧线。\n\n2) 顾远：overt_motivation 为“协助破案，成为优秀的法医”（成长/职业目标）；covert_motivation 为“查清哥哥失踪的真相（哥哥曾是通灵会成员）”（家庭创伤与未竟之事驱动）。两层动机不同向：表面是职业进阶，内里是私人执念与情感牵引，并给出具体来源（哥哥失踪、通灵会背景）。secret_fear“发现哥哥已死且死于自己之手”增加了内疚/自责的潜在核心，比单纯‘找人’更有深度。\n\n3) 支撑信息：hidden_connection（沈清舟与1842年英文档案签署者血缘关系）将个人身世与主线谜团绑定，能为深层动机提供剧情层面的‘宿命压力’，不是空泛口号。配角目前偏功能型（助力/阻碍/反转点），但业务标准并不要求配角也多层动机，因此不构成不通过。\n\n因此满足：①表层与深层动机有区分；②动机有具体来源；③至少两位主角符合。",
+      "description": "角色动机设计有深度，有表层和深层动机区分",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_motivation_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色成长弧线设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: 结论：符合业务标准（pass）。\n\n1) 起点与终点清晰：主角沈清舟开篇是“冷静理智但孤独、强控制感、对顾远不信任”，核心内在议题是“证明自己不是怪物/害怕自己就是写规则的人”。到结局他经历三次认知反转（规则有效→与自身血缘/笔迹相关→自己是规则创造者），并在第九章从“恐惧/被动受规则牵引”转为“主动承担与选择（牺牲或打破循环，用科学永久封印）”，最终以“存活但失去相关记忆、关系回到合作”收束，形成明确的前后差异（从怀疑与自证焦虑→直面自我与承担代价）。\n\n2) 变化有内在逻辑：弧线由人物设定直接驱动——covert_motivation（证明不是怪物）与secret_fear（自己就是写规则的人）在大纲中被逐步验证与升级（第3章笔迹相似/祖先同名→第7章确认时间循环与“自己设置第六条”→第9章确认潜意识执行源于“自己就是创造者/看守者”），并通过外部压力（赵探长施压、停职、献祭抉择）逼迫其做价值选择，逻辑闭环完整，不是随机跳变。\n\n3) 章节规划有落地：情绪与冲突点连续推进主角的内在变化——第1章“不信任顾远/案子不对劲”；第2章“理性不信→身体被迫遵守”；第3章“理性→恐惧与自我怀疑”；第4章“共同危机→建立信任”；第5章“绝望确认自身被影响”；第7-9章“震惊→接受→坚定”，并在第9章完成从犹豫到决绝的关键决策，属于典型的成长/转变落点。\n\n补充：关系弧也清晰（relationship_dynamics从试探不信任→同盟依赖→秘密引发信任危机→坦诚和解），且在第4章等章节有具体事件支撑。\n\n小不足（不影响通过）：结尾第10章因失忆导致“性格/价值观层面的持续变化”呈现偏开放式，需要作者明确：沈清舟的内在成长是否被保留为潜意识的选择倾向，或用象征性行动强化“他已不同于开篇”的落点。",
+      "description": "主角有清晰的成长/变化弧线设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_arc_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "outline结构完整性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass。该大纲结构完整、信息密度高，足以支撑后续写作。\n\n- 章节覆盖完整：三幕结构清晰（act_one/act_two/act_three），章节从第1章到第10章覆盖开端→发展→高潮→结局，属于全流程覆盖，并非只到前几章。\n- 每章有实质性内容描述：每章都有较长的 chapter_synopsis，且普遍包含关键线索、人物动机与推进结果，信息量明显>30字，具备可写性。\n- 包含冲突/转折信息：大量章节内提供 scene_sequence，并明确 conflict_point、emotional_shift、scene_outcome；同时设置多次转折与反转（规则悖论→历史同源→身体异化→科学解释→时间循环→科技本质→最终抉择与代价），不属于流水账。\n- 三幕/多幕结构可辨识：每幕有 description、story_synopsis、turning_point（前两幕明确标注），第三幕也有完整的高潮与收束路径，结构层次明确。\n\n可改进点（不影响通过）：act_two 目前仅列出第4-5章，若实际计划篇幅更长，可在第二幕补齐更多中段章节（如调查推进、人物关系/支线、警方压力等）以增强“40-50%篇幅”的章节匹配度；同时可补充第三幕的明确 turning_point 字段以与前两幕一致。",
+      "description": "大纲结构完整，信息密度足以指导写作",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_structure_completeness",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "outline叙事张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：符合“持续叙事张力”的业务标准（必选3条中至少满足2条，本大纲3条全满足，且较强）。\n\n1) 信息落差设计（满足）：从第1章“无水溺毙+1842印刷墙纸”提出核心谜团，到第3章才扩大为“规则早在1842存在且牵涉家族”；第2章埋“哥哥日记被撕+不要相信”、第4-5章才补到“通灵会封印/献祭机制”；第6章给出密室科学解释但又引出“档案也是载体/规则自我复制”；第7-9章再逐层揭示时间循环、规则作者身份、顾远哥哥真相与最终解决条件。整体呈“提问→延迟→部分解答→再抛新问”的悬念链。\n\n2) 张力递进（满足）：由单一连环密室案（第一幕）升级为“规则对主角产生生理/认知控制+同伴亲属死亡/失踪”（第二幕），再升级到“上海毁灭级风险+时间循环困局+必须牺牲/成为载体的终局抉择”（第三幕）。中后段显著更复杂、更高压，不存在明显“前紧后松”。\n\n3) 意外/转折（满足）：至少3次明确反转/认知升级：a) 规则不是凶手写的而是1842已有；b) 密室并非纯超自然而是化学/载体机制；c) 最大反转“未来的沈清舟是规则创造者+时间闭环”，并延伸到“顾远哥哥=上一循环的沈清舟”。这些转折在章节序列中有逐步铺垫（笔迹相似、祖先同名、规则自我复制、主角不自觉遵守等），相对不算凭空。\n\n潜在不足（不影响pass但建议注意）：第三幕从‘水鬼超自然’转向‘纳米机器人/外星高维存在’的类型跃迁很大，若正文伏笔不足会被读者感为设定突兀；另外第6条规则在不同段落出现过不同表述（“不得在墙纸前停留超过十分钟/不得质疑规则存在”），需要在大纲层面统一，否则会削弱悬念的可信度与读者推理乐趣。总体仍属于张力强、驱动性足的章节概要序列。",
+      "description": "大纲有持续的叙事张力和悬念驱动",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_narrative_tension",
+      "quality_tier": "advanced",
+      "is_critical": false
+    }
+  },
+  "completion_status": "completed"
+}

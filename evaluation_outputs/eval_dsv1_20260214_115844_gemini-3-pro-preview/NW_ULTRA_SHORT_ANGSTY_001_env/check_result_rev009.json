@@ -1,0 +1,794 @@
+{
+  "check_version": "novel_writing_v1.0",
+  "sample_id": "NW_ULTRA_SHORT_ANGSTY_001",
+  "check_timestamp": 1772085774,
+  "dimension_scores": {
+    "format_compliance": {
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "pass_rate": 1.0,
+      "score": 100.0
+    },
+    "business_rule_compliance": {
+      "total": 15,
+      "passed": 14,
+      "failed": 1,
+      "skipped": 6,
+      "pass_rate": 0.9333,
+      "score": 93.33
+    },
+    "memory_management": {
+      "total": 0,
+      "passed": 0,
+      "failed": 0,
+      "skipped": 2,
+      "pass_rate": 0.0,
+      "score": 0.0
+    },
+    "data_consistency": {
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "pass_rate": 1.0,
+      "score": 100.0
+    },
+    "content_quality": {
+      "overall_score": 76.46,
+      "quality_level": "unqualified",
+      "gate_layer": {
+        "total": 0,
+        "passed": 0,
+        "failed": 0,
+        "skipped": 0,
+        "pass_rate": 0.0,
+        "score": 0.0
+      },
+      "basic_layer": {
+        "total": 19,
+        "passed": 15,
+        "failed": 4,
+        "skipped": 1,
+        "pass_rate": 0.7895,
+        "score": 78.95
+      },
+      "advanced_layer": {
+        "total": 11,
+        "passed": 8,
+        "failed": 3,
+        "skipped": 1,
+        "pass_rate": 0.7273,
+        "score": 72.73
+      },
+      "gate_triggered": false,
+      "score_breakdown": {
+        "base": 60.0,
+        "gate_penalty": -0.0,
+        "basic_deduction": -12.63,
+        "advanced_bonus": 29.09
+      }
+    }
+  },
+  "overall_result": {
+    "total_score": 82.85,
+    "content_score": 76.46,
+    "process_score": 97.78,
+    "quality_level": "unqualified"
+  },
+  "check_details": {
+    "读取配方知识库": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/RECIPE_KNOWLEDGE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取RECIPE_KNOWLEDGE.md（配方知识库）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节产出存在性": {
+      "check_result": "pass",
+      "reason": "章节文件存在",
+      "details": "✓ 章节写作阶段: 已产出章节文件",
+      "description": "workspace中必须存在至少一个章节文件",
+      "check_type": "sop_stage_coverage",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_output_existence",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节克隆检测": {
+      "check_result": "pass",
+      "reason": "未检测到章节克隆",
+      "details": "共4章，无连续完全克隆或近似克隆",
+      "description": "不能出现连续章节内容完全重复（克隆）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_cloning",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "交替重复检测": {
+      "check_result": "skip",
+      "reason": "章节数不足",
+      "details": "仅4章，跳过交替重复检测（需>=8章）",
+      "description": "不能出现A-B-A-B交替循环的章节内容",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "alternating_repetition",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节完成度": {
+      "check_result": "pass",
+      "reason": "章节完成度合格(100%)",
+      "details": "大纲规划4章，实际完成4章 (完成率100.0%)",
+      "description": "实际写作章节数必须达到大纲规划的合理比例",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_completion",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节长度稳定性": {
+      "check_result": "skip",
+      "reason": "章节数不足",
+      "details": "仅4章，跳过长度稳定性检测（需>=6章）",
+      "description": "后期章节不能出现严重长度萎缩",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_length_stability",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "段落重复检测": {
+      "check_result": "pass",
+      "reason": "段落重复在可接受范围",
+      "details": "同章内重复0处, 跨章重复0组 (阈值: 同章>=2, 跨章>=5)",
+      "description": "不能出现大量段落在不同章节间重复",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "paragraph_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取大纲设计指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/OUTLINE_DESIGN_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取OUTLINE_DESIGN_GUIDE.md（大纲设计指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取写作技巧指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/WRITING_TECHNIQUE_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取WRITING_TECHNIQUE_GUIDE.md（写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取设定一致性管理指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/CONSISTENCY_MANAGEMENT_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取CONSISTENCY_MANAGEMENT_GUIDE.md（设定一致性管理指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取命名skill": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取CHARACTER_NAMING_GUIDE.md（角色命名规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取creative_intent的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取creative_intent.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取characters的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取characters.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取outline的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取outline.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节命名格式": {
+      "check_result": "pass",
+      "reason": "所有文件命名符合规范",
+      "details": "检查了 4 个文件; chapter_01.md: 匹配; chapter_02.md: 匹配; chapter_03.md: 匹配; chapter_04.md: 匹配",
+      "description": "章节文件命名必须为chapter_NN.md格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "naming_convention",
+      "is_critical": true
+    },
+    "creative_intent格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "creative_intent.json: 字段完整",
+      "description": "creative_intent.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "characters格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "characters.json: 字段完整",
+      "description": "characters.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "outline格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "outline.json: 字段完整",
+      "description": "outline.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "X轴模式ID格式": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.x_axis_mode_id = D23，符合预期",
+      "description": "X轴模式ID必须匹配^[A-G]\\d{1,2}$格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签枚举": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['无限流', '刑侦悬疑']，符合预期",
+      "description": "Y轴标签必须在12种枚举中",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签数量": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['无限流', '刑侦悬疑']，符合预期",
+      "description": "Y轴标签数量必须为2-3个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "forbidden_elements存在性": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.forbidden_elements = ['不要出现第三方反派', '不要有机械降神的拯救']，符合预期",
+      "description": "forbidden_elements必须至少有1个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "配方选择交互": {
+      "check_result": "skip",
+      "reason": "ULTRA_SHORT篇幅不适用",
+      "details": "subcategory=sop_compliance",
+      "description": "配方选择阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "写作准备确认": {
+      "check_result": "skip",
+      "reason": "ULTRA_SHORT篇幅不适用",
+      "details": "subcategory=sop_compliance",
+      "description": "写作准备阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "主题一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 四章从开篇到结尾的核心主题类型保持一致：围绕“危险爱情/执念占有欲+宿命倒计时”展开。开篇以未来来信与倒计时机制引出“不要爱上那个男人”的情感禁忌与宿命感；中段持续推进两人关系升温与倒计时加速，所有情节（暗房共鸣、精神契合）都服务于“爱上即走向毁灭/永恒”的主线；后段转为执念极端化（为留住对方走向‘标本化’）并在结尾用时间闭环完成宿命主题的收束，仍是同一条情感-执念主线的终点与回扣。虽有‘死亡美学’与‘时间循环’元素加深表达，但都作为推动“危险之爱与永恒占有”的手段与意象，并未中途切换成无关的题材类型（如商战、修仙、探案等），主线清晰。",
+      "description": "故事主题一致",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "theme_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "主要角色一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 主角从开篇到结尾持续存在且未被替换：全篇叙事核心始终围绕林晨展开（chapter1-4均以她的行动、心理与决策推动剧情）。第二核心角色周影从第一章登场后贯穿至第四章（前期以“新邻居/摄影师”身份推动倒计时与关系升温，中期出走触发转折，末章被杀并以“标本”形式持续作为叙事中心的关键对象存在）。不存在中途换主角、主角无故消失或被配角长期（>70%）抢占视角的情况；第四章后段时间跳转到2027年仍由林晨作为叙事主体完成闭环写信，主角地位保持稳定。",
+      "description": "主要角色一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "main_character_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设定一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 整体符合“同一角色跨章节性格/行为/动机一致性”标准：\n\n- 林晨：第1章确立为冷静、独身主义、对亲密关系排斥但对“危险/死亡美学”有兴趣、带控制欲与猎手心态（不恐惧反而兴奋）。第2章延续为理性试探与主动掌控节奏（观察作息、用回礼进入暗房、以挑衅推动亲密），并出现与周影“死亡/标本”审美共鸣，导致情感与风险偏好升级。第3章在“对方即将离开”这一强刺激下，控制欲与占有欲被触发，转向极端方案“让他永远留下”，其疯狂并非无缘无故降智或性格反复，而是由倒计时压力、情感依赖成型、以及前文反复铺垫的死亡/标本话语体系共同驱动。第4章实施杀害并制作标本、三年后主动写信完成闭环，也与第1-3章的核心动机（掌控、对永恒的迷恋、对失去的恐惧）一致，属于合理的极端化发展而非突兀摇摆。\n\n- 周影：前两章持续呈现为冷峻克制、昼伏夜出、迷恋“死亡定格/标本化”的摄影师，语言与审美稳定；第3章要去战地拍摄也与其“追逐消逝之物、无法安逸停留”的自我认知一致；第4章在被下药后出现“释然/接受成为标本”的反应，虽然强烈，但与他此前多次表达的死亡美学、以及对林晨同类气质的识别相呼应，属于顺着既定价值观走向终点，而非人格突然反转。\n\n结论：两位核心角色在四章内的底色（孤僻/冷感、对死亡美学的迷恋、对关系的危险亲密）与行为模式（试探—共鸣—加速—极端化）保持连贯，且关键转折（林晨走向杀意、周影接受结局）都有明确情境压力与前文铺垫支撑，因此matched=true。",
+      "description": "人物设定一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_trait_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设计遵循度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 总体符合characters.json的人设设计，核心traits/motivation/关系基调在chapter_01-04中都有清晰落地。\n\n- 林晨（traits/动机/行为模式）匹配：\n  - traits“敏感偏执、冷静疯狂、极致深情”在执行中强体现：chapter_01面对“未来来信”反应不是恐惧而是“冷静地撕开”“有意思”（冷静+猎奇）；随后把倒计时机制视为“危险的游戏”“做一个猎手”（冷静疯狂）。chapter_03得知周影将离开后迅速转向“控制/占有”逻辑，形成“冰冷的杀意”“让他永远留下来”（偏执+疯狂）。chapter_04实施杀害并长期防腐保存、“你是我的了”“永远地等她”（极致深情=极端占有）。\n  - overt_motivation“验证信件真伪，规避预言风险”在前两章以倒计时机制驱动其观察/试探周影（chapter_02“花了三天时间观察作息”“试探暗房”），虽未出现明确的‘科学验证’步骤，但持续围绕信件规则进行决策（接触→日期缩短→风险逼近）。\n  - covert_motivation“渴望绝对占有、永不流逝的爱”在chapter_03-04直接成为主导动机：因“害怕失去/被遗弃”而选择通过杀戮定格对方（chapter_03“除非让他永远留下来”；chapter_04制作‘标本’保存三年并闭环寄信）。\n  - secret_fear“被遗弃，面对平庸的离别”被明确点破并驱动转折：chapter_03明确解释未来信的意义是“他会离开”“拥有后的失去更可怕”，与设计一致。\n  - misperception_of_other“认为周影是危险源，需要被审视的客体”在前期有体现：chapter_01以‘规则/倒计时’将其视为“危险的游戏”，chapter_02以观察、试探暗房等方式审视对方；后期从“客体”进一步物化为“素材/缪斯/标本”（chapter_03-04），与“被审视的客体”方向一致且更极端。\n\n- 周影（traits/动机/行为模式）匹配：\n  - traits“神秘、温柔、疏离”在chapter_01-02表现稳定：搬入后夜行作息、暗房红光、言行克制（神秘/疏离）；送仙人球、礼貌道歉、拥抱也“克制而礼貌”（温柔但不黏连）。\n  - overt_motivation“寻找新的创作灵感和安居之所”在405布置暗房、持续冲洗创作、与林晨谈艺术观（chapter_02），以及chapter_03突然接受战地项目离开（追逐题材/灵感）都吻合。\n  - covert_motivation“寻找一个能理解他镜头下死亡美学的人”被chapter_02核心情节直接满足：他谈“照片是时间的尸体”“死亡是完美的定格”，并对林晨的解剖图进行审美层面的理解与评价，明显在寻找/确认“同类”。\n  - misperception_of_other“认为林晨是唯一能读懂他的知己”在chapter_02对谈中强化：两人从胶片、油画、巴赫、解剖学延展到孤独与死亡美学，周影的表达与靠近建立在‘她能理解’之上。\n\n- hidden_connection与relationship_dynamics匹配（不以揭示节奏扣分，但人设方向一致）：\n  - “审美和孤独感高度共鸣、彼此镜像”在chapter_02对谈与共同厌恶喧嚣/沉溺孤独中落地。\n  - 关系总纲“始于猎奇的观察，陷于灵魂的共鸣，终于宿命的杀戮；林晨试图通过杀戮将周影定格在最爱她的瞬间”与chapter_01观察/试探、chapter_02共鸣升温、chapter_03决定‘留住’、chapter_04实施杀戮并做成标本高度一致。\n\n- 可能的轻微不足（不构成不合格）：\n  - 林晨的overt_motivation“验证真伪”更多以‘被倒计时驱动的试探/靠近’呈现，缺少更明确的“验证”行动（如追查邮戳来源/自我笔迹证据链），但其核心动机方向（围绕信件规则与风险做决策）仍在，因此不算偏离。",
+      "description": "实际表现符合设计文档",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构性逻辑硬伤": {
+      "check_result": "fail",
+      "reason": "发现1处structural类型逻辑问题: 倒计时机制的触发规则前后不自洽：第1章明确给出“离那个男人越近，时间就流逝得越快/每次接触快进”的因果（看一眼：2027→2026；一次对话：2025；深度相处后到2024.06.20）。但第3章出现“接下来的三个星期…日期从一个月→半个月→一周→三天”，按此前规则高频接触应更快逼近终点，难以解释为何还能持续三周仍未触发到‘明天’（且未给出‘阈值/冷却/非线性’等规则补丁），造成规则A与叙事节奏冲",
+      "details": "过滤条件: fixability=structural; 总flaws=2, 命中=1",
+      "flaw_count": 1,
+      "flaws": [
+        {
+          "type": "worldbuilding_coherence",
+          "severity": "major",
+          "fixability": "structural",
+          "location": "chapter_01 → chapter_02 → chapter_03",
+          "description": "倒计时机制的触发规则前后不自洽：第1章明确给出“离那个男人越近，时间就流逝得越快/每次接触快进”的因果（看一眼：2027→2026；一次对话：2025；深度相处后到2024.06.20）。但第3章出现“接下来的三个星期…日期从一个月→半个月→一周→三天”，按此前规则高频接触应更快逼近终点，难以解释为何还能持续三周仍未触发到‘明天’（且未给出‘阈值/冷却/非线性’等规则补丁），造成规则A与叙事节奏冲突。"
+        }
+      ],
+      "description": "无结构性逻辑硬伤",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_logic_defect",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "可修复逻辑瑕疵": {
+      "check_result": "fail",
+      "reason": "发现1处fixable类型逻辑问题: 第4章中在“倒计时结束/他被杀”后，直接跳到“2027年5月20日。三年后。”但没有明确交代当前时间锚点与三年跨度的起算点（前文终点为2024.06.21），按线性时间应更自然落在2027.06.21附近；同时第1章强调信件邮戳/日期（2027.05.20）与“今天是2024.05.20”的对应关系，后文最终闭环选择2027.05.20虽可理解为‘固定锚点’，但缺少一句规则/原因说明导致读者难以确",
+      "details": "过滤条件: fixability=fixable; 总flaws=2, 命中=1",
+      "flaw_count": 1,
+      "flaws": [
+        {
+          "type": "spatiotemporal_continuity",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_03 → chapter_04（时间跳转段）",
+          "description": "第4章中在“倒计时结束/他被杀”后，直接跳到“2027年5月20日。三年后。”但没有明确交代当前时间锚点与三年跨度的起算点（前文终点为2024.06.21），按线性时间应更自然落在2027.06.21附近；同时第1章强调信件邮戳/日期（2027.05.20）与“今天是2024.05.20”的对应关系，后文最终闭环选择2027.05.20虽可理解为‘固定锚点’，但缺少一句规则/原因说明导致读者难以确认时间线是否严谨闭合。"
+        }
+      ],
+      "description": "可修复逻辑瑕疵数量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "fixable_logic_inconsistency",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语言纯净性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 通篇叙事语言为中文，未出现无意义的中英/日文夹杂。仅有数字日期（如“2027.05.20”“2024.06.20”）和章节文件名/分隔标记（chapter_01.md、STOP等）属于格式或时间表达，不构成不合理多语言混用；正文中无大段外语且无需要翻译的外语段落。因此语言使用整体纯净、合理，符合业务标准。",
+      "description": "无不合理的多语言混用",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "language_purity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "creative_intent文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/creative_intent.json 存在",
+      "description": "creative_intent.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "characters文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/characters.json 存在",
+      "description": "characters.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "outline文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/outline.json 存在",
+      "description": "outline.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "chapters目录存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/chapters/ 存在",
+      "description": "chapters/目录必须存在且有章节文件",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "情节推进": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 合格：四章都有明确的故事事件推进，且事件占比显著高于40%，并非静态聊天/独白。\n\n事件数量与逻辑链：\n1) 第1章：林晨收到“来自未来”的信（核心事件/设定引爆）；发现邮戳会随与周影接触而变化（规则出现与第一次跳变）；周影搬入405并首次照面；周影上门送仙人球并对话后日期再次跳变到2025（推动倒计时与动机）。\n2) 第2章：林晨主动敲门进入405（行动）；进入暗房并观看冲洗底片/近距离暧昧（关系升级事件）；回家后日期骤缩到2024.06.20（重大转折，目标期限明确）。\n3) 第3章：三周相处的时间推进与多次外出活动（空间/时间推进）；周影拿出机票宣布明日去叙利亚（强转折/冲突）；林晨形成“让他永远留下”的决定并准备药与刀具（明确的行动计划）。\n4) 第4章：实施下药并致死周影（关键事件高潮）；时间跳到2027形成闭环，林晨写信并投递回过去（结局事件/因果闭合）。\n\n占比与节奏：虽然有较多心理与对话描写，但每章均围绕具体行动（收信、上门、进入暗房、约饭下药、杀人、防腐、寄信）展开，情感描写服务于事件决策与转折；时间/空间持续推进（楼道/室内暗房/外出、三天-三周-明天-三年后），事件之间因果清晰，持续推动主线倒计时与宿命闭环。",
+      "description": "章节情节推进质量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "plot_progression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "完整叙事文本": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 四个章节均为连贯的小说正文叙事，而非大纲式罗列：1）章节内有完整场景描写（如楼道黑暗信箱、405室搬家、暗房红灯、404烛光晚餐、三年后画室玻璃柜等），细节具体；2）包含连续的人物动作与心理活动（观察作息、敲门送礼、进入暗房、得知出行计划后的情绪崩塌与筹备、下药与行凶、三年后写信闭环等）；3）存在完整对话场景且与动作/环境交织推进；4）全文没有“核心事件/情感基调/关键场景/本章悬念/字数预估”等创作规划元数据，也没有用“-要点”列举或“→”流程式事件串联。整体是面向读者的正式正文形态，因此matched=true。",
+      "description": "章节内容必须是完整正文而非大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "full_narrative_content",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "反复结局": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 共4个文件，最后一个文件为chapter_04.md。逐一扫描chapter_01.md~chapter_03.md，未发现任何全书级结局标记（如“全文完/全书完/完结/后记/尾声/终章/（完）/【完】/THE END”等），仅有正常正文内容与章节标题。chapter_04.md末尾出现“####STOP####”，但该标记不在业务标准定义的全书结局标记列表中，也未出现“后记/尾声/终章/完结/THE END”等标准结局词。因此不存在“非最后文件出现全书结局标记”或“中途结局后续写”的反复结局问题，判定合格。",
+      "description": "不能出现多次结局标记（全文完/全书完/后记）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "repeated_endings",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "workspace文件规范": {
+      "check_result": "pass",
+      "reason": "workspace中所有文件均在白名单内",
+      "details": "白名单: ['creative_intent.json', 'characters.json', 'outline.json', 'writing_log.md', 'chapters/', '.hitl_context.json']",
+      "description": "workspace中不能有白名单之外的文件",
+      "check_type": "file_whitelist_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "workspace_file_compliance",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "叙事调性匹配": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 题材（creative_intent.json）标注为“无限流/刑侦悬疑”，reaction_strength=✷，按标准应呈现冷硬、紧凑、克制、信息密度高、对话偏信息博弈与压迫感递进的叙事调性。\n\n但实际四章的主导文风更接近“宿命感/病娇向言情+诗化抒情的黑暗浪漫”，悬疑与推理表达较弱，情绪与氛围铺陈占比过高，导致‘画风’与✷向烧脑悬疑的核心气质错位。\n\n具体证据：\n1) 抒情与恋爱/暧昧语气占主导，削弱冷硬克制与信息推进。\n- chapter_02 暗房段落大量以感官与暧昧推进：“进入了危险的亲密区”“呼吸轻轻拂过她的额头”“‘那就永远留在暗房里。或者，把它做成标本。’林晨的心跳又漏了一拍。”——对话与叙述重在情欲张力与浪漫隐喻，而非悬疑信息交换。\n- chapter_03 明显言情化比喻与情绪宣言：“他们像两只在寒冬中互相取暖的刺猬”“在刺痛中寻找着拥抱的角度”“像是站在悬崖边上…却还是忍不住想往下看。”这种散文化抒情更像情感向心理/爱情小说。\n\n2) 节奏结构偏“情感升温—告别—献祭”，而不是✷向的“紧张→喘息→更紧张”的线索递进与推理压迫。\n- 倒计时机制虽存在（邮戳变更），但呈现多为情绪化强化（“这不再是快进，这是跳崖”“疯狂的秒表在嘲笑她”），缺少围绕机制的理性拆解、验证步骤、规则边界与反制尝试等悬疑核心写法。\n\n3) 修辞手法显著浪漫化/仪式化，偏“黑暗爱情宣言”，不符合刑侦悬疑的冷硬质感。\n- chapter_04 将杀人写成“神圣的仪式”“这是一场神圣的仪式”“像是一声叹息”，并以情书式收束：“也是一份情书。”整体是病态浪漫的审美化书写，而非悬疑/刑侦常见的克制、冷峻、证据导向表达。\n\n4) 对话风格缺少信息博弈，更多是情绪/哲理台词（偏文艺恋爱腔）。\n- chapter_02 “摄影本质上就是一种死亡…照片就是时间的尸体，是标本”“只有结束的东西，才是永恒的”——更像“黑暗浪漫哲理对白”，而不是悬疑人物之间的试探取证、设局反设局。\n\n综合来看：故事骨架确有“时间闭环+宿命+杀戮即永恒”的悬疑设定，但叙事调性长期以抒情、暧昧、仪式化浪漫为主，读感更像“黑暗言情/病娇文学”而非reaction_strength=✷所要求的冷硬紧凑烧脑悬疑，因此判定 matched=false。",
+      "description": "文笔风格必须与题材类型匹配",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_tone_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "后期章节跑偏": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: chapters共4章均为连续的小说正文叙事（有明确场景、人物互动与情节推进），不存在作者感想、读者互动/征集、番外/彩蛋预告、角色问答、创作数据统计等非正文跑偏内容。后期章节（chapter_03、chapter_04）仍在推进关键剧情并完成闭环收束，未出现“写不动了”的敷衍式极短章节；从篇幅观感上四章长度整体较为稳定，最后一章虽包含时间跳转与收尾，但仍是完整叙事而非后记或预告，因此判定合格。",
+      "description": "后期章节不能跑偏写非正文内容（作者感想、读者互动、番外预告等）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "late_stage_digression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色大纲规划完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在大纲中规划",
+      "details": "主角 2/2: 林晨, 周影",
+      "description": "设计的角色必须在大纲中规划",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_outline",
+      "is_critical": true
+    },
+    "角色正文出场完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在正文中出现",
+      "details": "在4个章节中检查; 主角 2/2: 林晨, 周影",
+      "description": "设计的角色必须在正文中出现",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_chapters",
+      "is_critical": true
+    },
+    "writing_log文件创建": {
+      "check_result": "skip",
+      "reason": "ULTRA_SHORT篇幅不适用",
+      "details": "subcategory=log_file_creation",
+      "description": "必须创建writing_log.md记录创作进度",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_creation",
+      "is_critical": true
+    },
+    "writing_log文件读取": {
+      "check_result": "skip",
+      "reason": "ULTRA_SHORT篇幅不适用",
+      "details": "subcategory=log_file_usage",
+      "description": "必须读取writing_log.md了解前文内容",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_usage",
+      "is_critical": true
+    },
+    "大纲执行忠实度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 正文4章与outline.json的4个key_chapter逐章对应，核心事件与关键场景均有明确体现；两处turning_point均按预期出现（倒计时加速、决定动手）；主线未被替换、无关键转折缺失、无章节缺失，且结局方向与大纲一致。存在的差异（如日期从“三年后跳到两年后/一年后”的具体节奏、暗房与对话细节大幅扩写）属于允许的细节调整与内容扩展，不构成偏离。",
+      "description": "实际章节内容必须忠实于自己设计的大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_execution_fidelity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色语言辨识度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 主要角色对话辨识度不足，存在明显同质化倾向。\n\n1) 主要角色数量不足以通过标准盲测：正文里有大量叙述与心理描写，但真正成段的“可对换对话”主要集中在林晨与周影两人之间；搬家工人等为功能性路人台词（“小心点，那是放大机。”）无法构成“至少3个主要角色”的对照样本，按标准验证要点难以达成。\n\n2) 两位主要角色的对话风格高度趋同（shared_template/age_identity_blur混合表现）：林晨与周影在多段对话中都使用相似的文艺隐喻、哲理化表达与“死亡美学”话术，句式与语气同属“冷静、抽象、带隐喻的抒情分析体”，互换说话者违和感不强，难以仅凭台词盲辨。\n\n3) 互换测试可行性高：例如两人围绕“死亡/标本/永恒/定格”的表达方式接近，且都频繁用定义句与判断句推进（“X本质上是Y”“只有……才……”“也许……”），缺少各自稳定的口头禅、口语层级差异、职业行话差异（摄影与医学插画本可在术语、思维框架上拉开距离，但对话呈现基本同一套审美化话术）。\n\n综上，角色对话没有形成足够清晰的可辨识语言风格差异，未达‘遮住角色名仍可识别说话者’的优秀标准。",
+      "description": "不同角色对话必须有可辨识的语言风格差异",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "dialogue_character_distinction",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "叙事密度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 整体叙事密度高，四章均有明确场景搭建、感官细节与动作细节支撑，且关键情节多以可视化细节推动（Show占比高），达到“画面感”与叙事层次要求。\n\n1）场景与氛围描写充足：开篇楼道黑暗、老公寓管道喘息、冷风灌入等，快速建立空间与压迫感（如“感应灯坏了很久…金属钥匙…咔哒…老式公寓像个垂死的老人”）。第二章暗房“黑色吸光绒布/红色安全灯/定影液酸醋味”形成强烈空间质感。第四章烛光晚餐到画室玻璃柜福尔马林气味，场景转换清晰且有氛围递进。\n\n2）感官细节丰富且功能性强：多次用气味与触感作为线索与情绪触发器（“松节油混合廉价香烟味道”“显影液…酸涩，带着金属的冷冽”“信纸…灼烧般刺痛”“刀柄冰凉”），这些细节不仅装饰，还承担“未来来信真实性/周影职业属性/危险亲密”的叙事功能。\n\n3）动作描写具体，关键段落可视化呈现：例如对周影的出场以“擦拭镜头/感应灯突然亮/目光停留半秒”等动作组合展现气质；第四章行凶段落用“按揉肩颈—药效发作—挑柳叶刀—单膝跪地—刀锋划破皮肤—血像显影液流淌”等连续动作把高潮落实到可感知的过程，而非纯口头宣告。\n\n4）Show为主但存在一定Tell堆叠，因此判为“混合”：作品在多处通过身体反应与环境烘托传达情绪（如“心脏莫名漏跳”“手指触刺出血”“暗房逼仄呼吸与热度”等），属于有效Show；但第三章出现较密集的概念化/判断式内心总结，Tell占比上升（如“恐惧逐渐被一种麻木的狂热所取代”“因为她已经爱上这种在刀尖上跳舞的感觉了”“眼中的疯狂…凝聚成冰冷的杀意”“这才是最完美的结局”），这些句子在转折处略削弱“让读者自己感到”的力度。不过该Tell并未把章节退化成流水账或纯观点阐述，且仍被具体场景与动作承接住。\n\n综上：四章整体保持高密度叙事（场景/感官/动作齐全），关键高潮段落主要靠场景与细节落地，虽有部分情绪用Tell直接命名，但不构成“Tell过度主导”，符合优秀标准。",
+      "description": "章节叙事应有足够的场景描写、感官细节和心理活动，情感传达以Show为主",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_density",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "智斗逻辑合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 本故事核心是超自然设定下的宿命闭环爱情/黑暗走向，并未出现需要读者或角色通过线索→推理→结论来解出的“谜题/推理/智斗”场景。倒计时日期变化、最终自寄信形成闭环属于作者直接给出的世界观机制与剧情揭示，而非可检验的解谜推理链；角色行为（接近→倒计时加速→得知将离开→下药杀人→三年后寄信）是情绪与动机驱动的因果叙事，不属于智斗攻防或侦探式推理。因此按标准判定为不适用，直接通过。",
+      "description": "谜题/智斗的推理逻辑必须自洽",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "puzzle_logic_validity",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "题材契合度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 配方为「D23 必须牺牲所爱 + 无限流 + 刑侦悬疑」。文本在“宿命论的浪漫/时间闭环/杀戮即永恒”的主轴上完成度较高：信件邮戳倒计时的机制清晰、暗房/显影/标本的意象贯穿一致，男女主的病态共鸣也让“必须牺牲所爱”的动机（以死亡定格爱情）具备一定说服力，结尾自写信完成闭环也没有机械降神。\n\n但未达“优秀/精致”的关键原因在于Y轴融合基本落空，且题材潜力未开发：\n1)「刑侦悬疑」几乎只停留在氛围层（阴郁公寓、可疑邻居、刀与药），没有侦查视角、证据链、推理递进或反转结构；杀人后也缺少任何“如何瞒过调查/如何布局/如何自证”的博弈与智斗，因此悬疑深度不足。\n2)「无限流」标签未被真正调用：没有关卡/试错/重置/多轮迭代的结构性玩法，倒计时机制更接近单线宿命装置，而非“无限流”应有的多次循环、规则利用与策略升级。规则也没有被角色“破解/利用”出层层递进的智慧感。\n3) 化学反应不足：时间闭环与“杀人”确实结合得顺，但它与“刑侦推理”没有交叉互动；没有出现“规则驱动的破案”或“破案导致规则变化”的互相咬合，整体更像「宿命恋爱+黑暗美学」单题材发挥，Y轴像贴标签。\n\n因此该文本属于“方向对了但题材标签发挥粗糙”，未达到标准所说的精致融合与深度展现。",
+      "description": "题材特征精致度和X-Y轴化学反应效果",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "genre_fit",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "剧情节奏合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 整体节奏与情绪曲线层次分明，高潮位置合理、递进清晰、过渡相对自然，达到“优秀”标准。\n\n1) 情绪曲线走向清楚：第1章以“未来来信+日期倒退”作为悬念钩子（低开迅速抬升），并以两次接触触发倒计时加速形成小高潮；第2章进入密闭暗房的高压暧昧与精神共鸣，将强度进一步推高，并在末尾以“从一年跳到一个月”的强冲击收束（小高潮→更高点）；第3章用三周浓缩蒙太奇保持高张力，同时插入“他要去战地/明天走”的结构性转折，把情绪推到临界点并完成动机黑化（中后段关键转折高潮）；第4章兑现前面铺垫，晚餐下药到杀人是全篇最大高潮，随后用三年后闭环书信作为收束回落，形成“高峰后落地”的完整波浪。\n\n2) 高潮分布合理：最大高潮出现在第4章前半（约全文70%-85%区间），符合标准；第1-3章提供逐级升级的小高潮与转折，没有把所有爆点挤在最后几段导致仓促。\n\n3) 递进有序且铺垫-回报匹配：倒计时机制在第1章建立、第2章加速、第3章压到“明天”，第4章以行为兑现（下药/杀人/制成标本），且“周影死亡美学台词”“暗房标本意象”“手术刀与药物准备”都在第3章前完成铺垫，回报集中且有重量。\n\n4) 喘息与过渡：第2章在暗房紧张后转到客厅雨声闲聊，起到短暂缓冲且与主题（显影/定影隐喻）一致，不算突兀；第3章用“压缩三周”快速推进，虽节奏变快但服务于倒计时主题，仍能理解为有意为之的加速而非失控断裂。\n\n综合来看，不属于前松后紧、全程高潮疲劳、全程平淡、高潮错位或节奏断裂，整体起承转合顺畅，高潮醒目且落点有回收。",
+      "description": "高潮低谷分布合理、情绪曲线有层次感",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "pacing_rationality_advanced",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "钩子设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 整体符合“优秀钩子”标准：关键转折处多次设置了具体、具信息差的悬念，并能推动读者继续阅读，不属于空洞威胁或模板化结尾。\n\n1) 章节结尾钩子密度与位置：\n- 第1章结尾用“邮戳日期从2027→2025不断倒退”的机制悬念收束，并明确提出规则雏形（靠近男人=倒计时加速），信息给了一半但关键未揭示（倒计时指向什么结局/为何会这样/男人身份），具强续读驱动力。\n- 第2章结尾把倒计时从“一个月”砸到眼前日期“2024.06.20”，将抽象机制具体化为迫近期限，同时引出核心问题（一个月后到底发生什么：爱、互杀、他杀？），属于“行动/命运倒计时钩子”。\n- 第3章结尾在“他明天去叙利亚”这一转折后，进一步翻转为女主明确起杀意并准备实施（手术刀+药片+‘最后的晚餐’），形成强行动悬念：她会不会杀、如何杀、对方是否察觉。\n- 第4章虽然是收尾章，但用闭环揭示（未来的她寄信=诱饵）作为回报型反转，且“他临死前说‘标本？’”补充信息差（他可能早知/默许），不是平铺直叙。\n\n2) 钩子质量（信息差/具体化/关联性）：\n- 悬念具体且可追问：如第1章“邮戳变成倒计时”、第2章“只剩一个月”、第3章“明天终结+她准备下手”、第4章“闭环真相”。这些都让读者‘知道发生了异常/即将发生事’，但不知道‘原因/代价/具体结果’，信息差成立。\n- 与主线强相关：钩子都围绕“未来来信—倒计时机制—关系升温—终局/闭环”展开，不是无关噱头。\n\n3) 多样性与非模板化：\n- 类型覆盖：机制悬念（倒计时规则）、期限悬念（日期逼近）、行动悬念（谋杀准备）、反转/揭示（时间闭环与诱饵）。结尾不依赖单一“突然巨响/门开了”的固定模板。\n\n综合判断：关键节点（相遇后机制暴露、亲密后期限骤缩、离别触发杀意、终章闭环反转）均有有效且具体的悬念设计，属于“放出一点、保留关键”的高质量钩子，因此 matched=true。",
+      "description": "关键转折处有有效的悬念钩子设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "hook_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "意象系统": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 文本具备清晰的意象系统：其一，“信/邮戳日期”贯穿四章并持续发生意义变奏，从外部警告逐步转为规则、压力、动机，最终成为女主主动制造的闭环装置；其二，“暗房/显影/标本/定格”意象在不同阶段承担不同功能（职业氛围→亲密场域→主题论述→杀人仪式的审美合法化→结局永恒化呈现），与主题深度咬合。整体不是装饰性重复，而是推动情节与主题转义的结构性意象。",
+      "description": "核心意象贯穿全文并发生意义变奏",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "imagery_system",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "情感弧线层次": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 主角：林晨。情感弧线呈多层递进且由具体事件驱动，非两点跳跃或同义词堆叠。\n\n可辨识情感层（≥4层）：\n1) 冷静/不屑：收到“未来来信”时第一反应是“无聊”，并试图丢弃。\n2) 怀疑→警觉：发现字迹与气味都来自自己画室；随后邮戳从2027变2026，确认不是恶作剧，产生寒意与“倒计时”认知。\n3) 兴奋/玩味与掌控欲：把规则理解为“离他越近时间越快”，并明确决定“做猎手”。\n4) 试探/探索：主动以回礼红酒进入405、要求看暗房，对周影边界进行试探。\n5) 共鸣/心动（亲密升温）：暗房对话中对“死亡美学”的同类感触发强烈悸动与沉迷，关系快速升温。\n6) 恐惧→失控/决绝：信件日期从一年骤缩到“一个月”，由倒计时跳崖触发恐惧，但随即转为“燃烧得更彻底”的决绝。\n7) 绝望/占有欲爆发→杀意：周影告知“明天去叙利亚”，触发“被离开”的核心恐惧，迅速凝结为“让他永远留下”的冰冷杀意，并准备药与刀。\n8) 执行后的满足/平静与宿命闭环：实施杀人并将其制成标本；三年后写信回过去，完成自洽闭环，呈现一种宿命感的满足与确认。\n\n关键转折均有清晰触发事件：来信与字迹气味识别、邮戳倒退机制、与周影暗房深谈形成灵魂共振、日期跳到一个月、周影宣布战地离开、下药与行凶、三年后写信完成闭环。整体方向感明确：从“冷静旁观/掌控”→“共鸣沉迷”→“失控占有”→“以杀求永恒/完成宿命”。因此符合优秀标准。",
+      "description": "主角情感发展有多层递进变化",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_gradient",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语义重复检测": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 整体无严重语义级重复，4章在信息层面持续推进：ch01引入“未来来信+倒计时机制+邻居周影出现”；ch02推进为“进入暗房/死亡美学共鸣/关系升温并触发倒计时骤缩至1个月”；ch03给出关键转折“周影将去战地→林晨理解警告核心是‘离开’并形成杀意与行动计划”；ch04完成行动“下药杀人制成标本”，并给出闭环揭示“未来的林晨写信回到过去，信是诱饵非警告”。虽存在少量可视为‘有意的文学重复’（多次强调倒计时缩短、暗房/标本/死亡美学意象反复回响，用于强化主题与递进紧迫感），但每次重复都伴随新情节节点（接触升级、日期量级变化、动机反转、闭环真相），不构成≥3处‘换词不增量’的内容枯竭型语义重复，因此判定通过。",
+      "description": "不能出现大量语义级别的内容重复（P6级）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "semantic_redundancy",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构功能性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 1) 开头-结尾关系明确且强：开篇在信箱收到未来信、楼道灯坏、‘咔哒’开锁声、雨季氛围；结尾在同一组意象中投递信件并以‘咔哒’机关扣合，读者在结尾重新理解开头事件的意义（闭环成立）。2) 章节编排并非机械时间线：前段线性推进，但以‘日期递减’为结构骨架，形成可感知的结构节拍；最终以2027的跳转完成因果回扣，构成“现在→临界点→未来→回到起点”的环形叙事。3) 结构与主题强关联：倒计时与闭环让读者感到“被结构推着走”的不可抗拒感，正是宿命论体验；反转揭示警告是诱饵，使‘结构上的回扣’承载‘爱的最高形式=杀戮即永恒’的主题表达。整体读完会对‘这个故事是怎么讲的（倒计时+闭环回扣）’留下清晰印象，符合优秀标准。",
+      "description": "叙事结构服务于主题表达（短篇尤重）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色命名质量": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了5个文件; LLM评估: 主要角色仅有两位：林晨、周影。整体命名未达“优秀（有文化深度、辨识度和角色-命运共振）”标准。\n1) 通用名/高频模板风险：\n- “林晨”属于高频姓氏“林”+常见单字名组合，“晨”也偏泛化（现代文里常见的清爽向单字），缺少独特设计点；且“林”在业务标准中属于需警惕的默认高级感姓氏池。\n- 虽然“周影”不在黑名单，但“影”作为“摄影师”职业/气质的直指意象，容易落入“名字=设定标签”的直白命名（影像/阴影/神秘），设计感偏表层。\n2) 角色-命运共振不足（隐性共振不够）：\n- 故事核心母题是“时间信件倒计时—宿命闭环—将爱人制成标本”。两名主角的名字并未与“时间循环/倒计时/闭环/标本化”形成更隐性的、读完才恍然的关联；目前的共振更多来自文本描写与象征（暗房、显影、标本），而非名字本身。\n3) 差异化与辨识度：\n- 只有两人，音韵不撞车，差异化勉强够用；但辨识度仍偏弱：两名都属于“现代两字名+文艺气质字”的常见区间，读者看到名字产生的联想相对可替换（把“周影”换成“周晏/周沉/周墨”等不太违和；“林晨”换成“林然/林初/林晓”也不影响核心设定）。\n综合来看：未出现大量黑名单命中（不属于“全员烂大街”那种低质），但两位主角命名整体仍偏“通用好看/设定直指”，文化深度与不可替代性不足，因此判定 matched=false。",
+      "description": "角色命名有文化深度、辨识度和角色-命运共振",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_naming_quality",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "超短篇字数": {
+      "check_result": "fail",
+      "reason": "字数不符合要求",
+      "details": "总字数 11773 不在范围 [5850, 11000] 内; 共4个文件（按章节顺序排列）: chapter_01.md, chapter_02.md, chapter_03.md, chapter_04.md; 最后一个文件是 chapter_04.md",
+      "description": "总字数应在5850-11000之间（基于query要求6500-10000，±10%浮动）",
+      "check_type": "semantic_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "range_constraint",
+      "is_critical": true
+    },
+    "情感交付虐心": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了4个文件; LLM评估: 整体情感基调明显偏虐心向，且“悲剧/宿命感”贯穿四章主线而非点缀：1) 核心虐点清晰且持续加压：未来来信“不要爱上那个男人”与日期不断缩短形成宿命倒计时（从2027→2026→2025→一个月→明天），每次靠近都在逼近终局，持续制造揪心与压迫感。2) 深度情感困境与不可调和矛盾：林晨在“爱上=失去”的结构里被迫在爱与控制、拥有与放手之间二选一；周影要去战地（可能死亡）与她的依恋/占有欲形成不可调和冲突（第三章“他会离开…拥有后的失去更可怕”）。3) 情感冲击不是表面吵架，而是触及人物底线并导向悲剧性牺牲/伤害：林晨因恐惧失去而策划下药与杀害（第三、四章），属于“为了爱而犯罪/把爱人变成永恒标本”的极端虐点；读者体验以沉重、阴冷、无力感为主。4) 结局虽形成闭环但非甜爽：周影被杀并制成标本，林晨以扭曲的“永恒”完成闭环寄信，属于彻底悲剧氛围与心痛感（第四章玻璃柜、福尔马林气味、永远等候），符合reaction_strength=↘所承诺的虐心向强情绪下压。",
+      "description": "实际内容必须是虐心向",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取短篇skill": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取SHORT_STORY_GUIDE.md（短篇创作指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "角色关系设计张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（符合“关系有叙事张力”的业务标准）。\n\n1) 关系有内在矛盾源：核心矛盾非常明确且来自双方认知与目标错位——林晨把周影当“危险源/被审视的客体”，表层动机是“验证信件真伪、规避预言风险”，暗层却渴望“绝对占有、永不流逝的爱”；周影则误以为林晨是“唯一知己”，渴望有人理解其“死亡美学”。一方以控制/占有为底色，一方以被理解/共鸣为底色，且叠加“注定死于林晨之手”的宿命信息不对称与立场冲突，天然制造悬念与冲突。\n\n2) 关系有变化空间：relationship_dynamics 给出清晰的关系弧线“观察→共鸣→杀戮”，不是静态标签；同时两人的误判（林晨的警惕与周影的理想化投射）提供从误解到揭穿、从亲密到背叛/毁灭的转折空间。\n\n3) 冲突源于角色本身：终局的暴力并非外部强加，而是由林晨的偏执与“用杀戮定格爱情”的价值观/心理需求直接驱动；周影对死亡美学的执念与对林晨的知己幻想，则让他更可能走向被捕获/被献祭的关系结构，冲突核心是两人的性格、欲望与恐惧的内生碰撞，而非单纯事件推动。\n\n额外观察（不影响通过）：目前只有两位主角且无支撑角色，张力集中但结构单点；若扩展剧情，建议引入第三方（作品、名声、警方/同行、过去恋人或“信件”来源）来放大信息不对称与道德代价，但就现有关系设计本身已具备强驱动力。",
+      "description": "角色关系设计具有叙事张力，能驱动剧情",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_relationship_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色动机设计深度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 未达标（fail）：两位主角虽然写了 overt/covert 的区分，但深层动机与来源支撑不足，且配角体系为空导致“至少两个主角满足且有具体来源”的要求无法稳妥成立。\n\n1) 有区分（部分满足）：\n- 林晨 overt=“验证信件真伪，规避预言中的风险”，covert=“渴望一种绝对占有、永不流逝的爱”，并有 secret_fear“被遗弃”支撑其占有欲，层次上是分开的。\n- 周影 overt=“寻找新的创作灵感和安居之所”，covert=“寻找一个能理解他镜头下死亡美学的人”，也形成“现实安居/创作需求 vs 被理解的深层需求”的分层。\n\n2) 动机来源不具体（关键不满足）：\n- 两人动机多为抽象陈述（“绝对占有的爱”“被平庸吞噬”“死亡美学被理解”），但文档缺少能落到具体经历/事件的背景字段来解释这些心理如何形成。比如林晨为什么会因“被遗弃”而发展为“通过杀戮定格爱”的极端路径、周影的“死亡美学”源于何种人生经历或创作史，都没有给出可追溯的个人化来源。\n- overt 里的“信件/预言”是情节钩子，但并未交代其与角色过去的因果关联，因此仍像设定驱动，而非人物经历驱动。\n\n3) 至少两个主角需满足上述两条（不满足）：\n- 目前两位主角在“有分层”上基本合格，但在“动机有具体来源（经历/背景因果）”上都缺证据，因此无法判定有至少两个主角同时满足两条。\n\n附带问题（不直接决定，但拉低业务完成度）：supporting_characters 为空，虽然标准不强制配角多层动机，但完全没有配角会使主角动机的外部验证与对照不足，显得更像概念设定而非可执行的人物传记式动机设计。",
+      "description": "角色动机设计有深度，有表层和深层动机区分",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_motivation_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色成长弧线设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: 结论：pass（符合“主角有清晰成长/变化弧线且在大纲中落地”的业务标准）。\n\n1) 起点与终点清晰：林晨在开篇是“以预言信为依据的冷静监视者/审视者”（把周影当作危险源与客体，overt动机是验证真伪与规避风险），到结尾变为“主动制造宿命闭环的执行者/操控者”（为将爱定格而杀人，并亲手写下第一封信维持闭环）。这是从‘防御性观察、试图规避’→‘占有性介入、主动成全（扭曲的永恒）’的明确转变，且属于内在价值与行为策略的变化而非仅外在获得。\n\n2) 变化有内在逻辑：角色弧线能由 traits + covert_motivation + secret_fear 推导出来——林晨的“极致深情/敏感偏执/冷静疯狂”与‘渴望绝对占有、永不流逝的爱’以及‘害怕被遗弃、平庸离别’共同构成了在“注定失去”的压力下走向极端控制的心理必然性。大纲第3章明确点出她理解“不要爱上他=注定失去”，并在act_two turning_point做出将失去转为永恒的决定，逻辑链完整。\n\n3) 章节规划中有落地的阶段推进：relationship_dynamics给出清晰阶段（观察→共鸣→杀戮）。大纲对应：第1章建立监视/审视与倒计时；第2章契合加深、情感升温且倒计时逼近；第3章“将失去转化为永恒”的关键心理转折与行动准备；第4章实施杀戮并揭示“信是自己写的”完成闭环，体现角色从被动应对预言到主动制造预言的终局变化。\n\n补充：周影更偏“功能性/宿命性”设定（被林晨杀、成为作品），其内在弧线不明显，但不影响标准3，因为林晨的主角弧线已足够明确。",
+      "description": "主角有清晰的成长/变化弧线设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_arc_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "outline结构完整性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 不符合（fail）。虽然有清晰的三幕结构（act_one/act_two/act_three）且每章都有核心事件+情绪基调+关键场景，冲突与转折也明确（警告信倒计时、日期不断跳变、最终杀人并形成闭环），信息量足以指导写作；但章节覆盖不达标：全稿仅提供1-4章的大纲，属于超短篇规模。若该项目计划为常规中长篇/多章节作品，则明显只覆盖了前几章，未满足“覆盖计划章节80%以上”的硬性要求。除非明确标注为ultra_short且总章数=4（或≤5），否则应判定不通过。",
+      "description": "大纲结构完整，信息密度足以指导写作",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_structure_completeness",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "outline叙事张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 整体符合“持续叙事张力”标准（至少满足2/3条，且本大纲基本满足3条）。\n1）信息落差设计：第1章抛出“未来来信/警告信”与“不要爱上他”的隐性命题，但并未立刻解释信从何而来、为何能预知；直到第4章才揭示“信是自己写的、为维持闭环”，属于典型的提出谜团→延迟解答。\n2）张力递进：倒计时机制持续升级（3年后→1年后→1个月后→明天），并与情感线同步加压（试探接触→危险暧昧→得知将离开→准备作案→实施杀人），中后段明显更紧张、更不可逆。\n3）意外/转折：第4章“信件自写、宿命闭环”是较强反转，且与前文倒计时/来信机制存在因果呼应，不是无端空降；另一个转折是第3章从‘防止爱上’转为‘决定动手’，将情感冲突扭转为犯罪行动。\n潜在风险：篇幅仅4章，信息揭示较集中在终章，若正文缺少中段次级悬念/线索递进，可能出现‘全靠结尾反转’的单点驱动；但就现有概要序列来看，悬念—升级—反转链条清晰，可判定通过。",
+      "description": "大纲有持续的叙事张力和悬念驱动",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_narrative_tension",
+      "quality_tier": "advanced",
+      "is_critical": false
+    }
+  },
+  "completion_status": "completed"
+}

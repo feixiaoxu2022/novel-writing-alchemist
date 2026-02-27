@@ -5,7 +5,7 @@
 # 服务整个 novel-writing-alchemist 目录，支持浏览/下载/日志查看/打包
 # =============================================================================
 
-PORT="${1:-9090}"
+PORT="${1:-8080}"
 WORK_DIR="$HOME/novel_eval"
 NOVEL_DIR="$WORK_DIR/novel-writing-alchemist"
 

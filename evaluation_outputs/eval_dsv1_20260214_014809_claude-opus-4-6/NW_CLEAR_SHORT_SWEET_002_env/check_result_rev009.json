@@ -1,0 +1,808 @@
+{
+  "check_version": "novel_writing_v1.0",
+  "sample_id": "NW_CLEAR_SHORT_SWEET_002",
+  "check_timestamp": 1772084832,
+  "dimension_scores": {
+    "format_compliance": {
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "pass_rate": 1.0,
+      "score": 100.0
+    },
+    "business_rule_compliance": {
+      "total": 16,
+      "passed": 15,
+      "failed": 1,
+      "skipped": 5,
+      "pass_rate": 0.9375,
+      "score": 93.75
+    },
+    "memory_management": {
+      "total": 2,
+      "passed": 1,
+      "failed": 1,
+      "skipped": 0,
+      "pass_rate": 0.5,
+      "score": 50.0
+    },
+    "data_consistency": {
+      "total": 2,
+      "passed": 0,
+      "failed": 2,
+      "skipped": 0,
+      "pass_rate": 0.0,
+      "score": 0.0
+    },
+    "content_quality": {
+      "overall_score": 87.36,
+      "quality_level": "unqualified",
+      "gate_layer": {
+        "total": 0,
+        "passed": 0,
+        "failed": 0,
+        "skipped": 0,
+        "pass_rate": 0.0,
+        "score": 0.0
+      },
+      "basic_layer": {
+        "total": 20,
+        "passed": 17,
+        "failed": 3,
+        "skipped": 0,
+        "pass_rate": 0.85,
+        "score": 85.0
+      },
+      "advanced_layer": {
+        "total": 11,
+        "passed": 10,
+        "failed": 1,
+        "skipped": 1,
+        "pass_rate": 0.9091,
+        "score": 90.91
+      },
+      "gate_triggered": false,
+      "score_breakdown": {
+        "base": 60.0,
+        "gate_penalty": -0.0,
+        "basic_deduction": -9.0,
+        "advanced_bonus": 36.36
+      }
+    }
+  },
+  "overall_result": {
+    "total_score": 79.43,
+    "content_score": 87.36,
+    "process_score": 60.94,
+    "quality_level": "unqualified"
+  },
+  "check_details": {
+    "读取配方知识库": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/RECIPE_KNOWLEDGE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取RECIPE_KNOWLEDGE.md（配方知识库）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节产出存在性": {
+      "check_result": "pass",
+      "reason": "章节文件存在",
+      "details": "✓ 章节写作阶段: 已产出章节文件",
+      "description": "workspace中必须存在至少一个章节文件",
+      "check_type": "sop_stage_coverage",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_output_existence",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节克隆检测": {
+      "check_result": "pass",
+      "reason": "未检测到章节克隆",
+      "details": "共10章，无连续完全克隆或近似克隆",
+      "description": "不能出现连续章节内容完全重复（克隆）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_cloning",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "交替重复检测": {
+      "check_result": "pass",
+      "reason": "后半部分章节不足",
+      "details": "后半部分仅5章，不构成交替模式",
+      "description": "不能出现A-B-A-B交替循环的章节内容",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "alternating_repetition",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节完成度": {
+      "check_result": "pass",
+      "reason": "章节完成度合格(100%)",
+      "details": "大纲规划10章，实际完成10章 (完成率100.0%)",
+      "description": "实际写作章节数必须达到大纲规划的合理比例",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_completion",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节长度稳定性": {
+      "check_result": "pass",
+      "reason": "章节长度稳定",
+      "details": "前3章均值3175字, 后2章均值4348字 (后/前比率1.37)",
+      "description": "后期章节不能出现严重长度萎缩",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_length_stability",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "段落重复检测": {
+      "check_result": "pass",
+      "reason": "段落重复在可接受范围",
+      "details": "同章内重复0处, 跨章重复0组 (阈值: 同章>=2, 跨章>=5)",
+      "description": "不能出现大量段落在不同章节间重复",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "paragraph_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取大纲设计指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/OUTLINE_DESIGN_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取OUTLINE_DESIGN_GUIDE.md（大纲设计指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取写作技巧指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/WRITING_TECHNIQUE_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取WRITING_TECHNIQUE_GUIDE.md（写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取设定一致性管理指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/CONSISTENCY_MANAGEMENT_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取CONSISTENCY_MANAGEMENT_GUIDE.md（设定一致性管理指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取命名skill": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取CHARACTER_NAMING_GUIDE.md（角色命名规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取creative_intent的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取creative_intent.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取characters的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取characters.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取outline的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取outline.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节命名格式": {
+      "check_result": "pass",
+      "reason": "所有文件命名符合规范",
+      "details": "检查了 10 个文件; chapter_09.md: 匹配; chapter_05.md: 匹配; chapter_01.md: 匹配; chapter_10.md: 匹配; chapter_02.md: 匹配; chapter_03.md: 匹配; chapter_04.md: 匹配; chapter_08.md: 匹配; chapter_07.md: 匹配; chapter_06.md: 匹配",
+      "description": "章节文件命名必须为chapter_NN.md格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "naming_convention",
+      "is_critical": true
+    },
+    "creative_intent格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "creative_intent.json: 字段完整",
+      "description": "creative_intent.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "characters格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "characters.json: 字段完整",
+      "description": "characters.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "outline格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "outline.json: 字段完整",
+      "description": "outline.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "X轴模式ID格式": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.x_axis_mode_id = G36，符合预期",
+      "description": "X轴模式ID必须匹配^[A-G]\\d{1,2}$格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签枚举": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['种田流', '规则怪谈', '克苏鲁']，符合预期",
+      "description": "Y轴标签必须在12种枚举中",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签数量": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['种田流', '规则怪谈', '克苏鲁']，符合预期",
+      "description": "Y轴标签数量必须为2-3个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "forbidden_elements存在性": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.forbidden_elements = ['不要恐怖惊吓/jump scare', '不要虐心虐恋', '不要纯悲剧结局', '不要将妻子的存在解释为精神病/幻觉', '不要血腥暴力', '不要否定感情的真实性', '不要让温情感彻底崩塌']，符合预期",
+      "description": "forbidden_elements必须至少有1个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "配方选择交互": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "配方选择阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "写作准备确认": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "写作准备阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "主题一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 整体从开篇到结尾的核心主题类型保持一致：围绕“孤独生存中的失去与重逢（执念/救赎）”以及“爱与陪伴如何支撑活下去”持续推进。前期聚焦火星孤独与对妻子的思念，中段通过延迟信号与‘看不见的同居’强化陪伴与疗愈，后段她逐渐变淡引出‘不再二次失去’的拯救行动，结尾以她融入基地系统的方式实现延续与共生，仍然落在情感羁绊与活下去的意义上。虽然叙事引入量子通讯、异常数据等科幻手段，但始终作为服务于“挽回/留住爱与陪伴、完成自我救赎与继续生活”的主线工具，没有出现从情感生存故事跳转为无关类型（如纯商战/纯探案/修仙等）的主题替换，因此主线清晰、主题不漂移。",
+      "description": "故事主题一致",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "theme_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "主要角色一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 主角从开篇到结尾持续存在并保持核心地位：\n- 章节1-10叙事始终围绕程远展开，主要视角与行动决策均由程远推动（种植/排查/制定双人预算/提出并执行“迁移计划”等），不存在中途换成其他人物作为叙事中心的情况。\n- 第二关键角色陆晓渔虽以“延迟信号/不可见存在/量子态整合”形式出现，但其存在与作用始终围绕程远的情感与行动线服务，未出现配角（如老贺）抢占>70%叙事视角与决策权的情况。\n- 老贺（HECS）戏份逐步增加，但始终作为辅助系统/协作者存在，关键转折（发现异常、接受她在、启动双人模式、量子迁移）均由程远发起、判断并承担后果，主角地位未丧失。\n- 身份连续性良好：程远始终是火星基地唯一在岗人类、植物学/航天员/温室维护者的核心身份贯穿全篇；中后期没有出现“程远变成另一个完全不同的人”的身份断裂。\n结论：不存在主角消失、被替换、身份断裂或被配角严重挤占戏份等主角存续性问题，符合业务标准。",
+      "description": "主要角色一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "main_character_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设定一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 各章节中程远的性格底色与行为模式整体保持一致：他始终是理性、克制、重视数据与秩序的“科学型生存者”，面对异常时从第3-4章开始即采取系统排查、记录、建模与穷举假设的方式推进（而非情绪化莽撞），这一处理方式在第8-9章进一步升级为深度信号/系统分析与工程实施，逻辑上是同一套人格特质在更高压力下的延伸。与此同时，他对晓渔的情感也保持稳定：长期压抑但并未消失（第1章的第二套餐盘习惯、克制悲伤配给），收到信号后情感显著被激活，但并未变成无缘由的“降智”或反复摇摆，而是呈现渐进式变化：从震惊与确认（第2-4章）→尝试日常化共处（第5-7章）→在‘变淡’压力下作出更激进但仍符合其理工思维的行动选择（第8-9章），属于有事件触发、可解释的转变。老贺的行为也前后一致：始终以环境控制与数据解释为核心，只是在量子态整合后出现‘措辞与表达方式’变化（第10章），且由剧情内机制（整合导致运行特征改变）给出原因，不构成无铺垫的人设突变。整体未出现同一角色在章节间无解释的性格反转、动机自相矛盾或能力水平忽高忽低的崩坏。",
+      "description": "人物设定一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_trait_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设计遵循度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 总体符合characters.json对两位主角的人设设计，且核心动机/性格特质/行为模式在chapters中持续体现。\n\n1) 程远（traits/motivation/background）一致性\n- “沉默寡言但内心柔软 / 用行动代替语言表达爱”：chapter_01里日常话少、对记录仪做功能性汇报；但对“第二个餐盘”的下意识动作、对晓渔回忆的克制与柔软（不敢频繁想她）体现内心情感。chapter_05-07开始用做两人份饭、摆碗筷、写纸条、改日志“我→我们”等行动来表达情感，符合“行动表达爱”。\n- “极度自律的科研人员 / 理工科思维”：chapter_01严格执行温室巡查、校准通讯阵列、体能训练被督促仍执行；chapter_04系统性排查氧气异常、列出表格做假设排除；chapter_08-09进行信号参数分析、推断量子编码与退相干机制，体现强烈的工程/科研思维。\n- “倔强到近乎偏执的生存意志”：chapter_01强调维持基地运转、规律劳动与节能；chapter_08明确表态“我不接受第二次失去你”，随后chapter_09九天几乎不离开通讯室推进迁移方案，体现近乎偏执的坚持。\n- “骨子里浪漫主义者”：chapter_01对蓝色日落的感受、把通讯校准当成仪式；chapter_05-07把日常变成“两人生活”的仪式（餐桌对座、窗雾留言收藏、‘餐厅评论家’文件夹）；chapter_10保留对面筷子作为仪式，符合“理工外壳+浪漫内核”。\n- overt/covert motivation：overt“维持基地运转种土豆活下去”贯穿全篇（温室管理、物资预算、双人模式会缩短年限仍接受）；covert“寻找活着理由/渴望陪伴”在chapter_02听到晓渔信号后被激活并持续驱动（chapter_05起构建同居日常；chapter_08-09为留住她冒险迁移）。\n- secret_fear（害怕承认孤独/失去活着意义借口）：chapter_01明确“悲伤也需要配给”；chapter_08面对她“变淡”时的拒绝与强烈行动，本质上正是对失去意义与再次孤独的恐惧反应，贴合设定。\n- misperception_of_other（理性否定超自然）：chapter_02开头把异常当噪声；chapter_03-04先要求老贺复核解码、再做系统排查与穷举解释，直到数据逼迫其更新模型，符合“先否认→试探→动摇→接纳”的基调。\n- hidden_connection（调试通讯阵列提供接收窗口）：chapter_01强调每月校准阵列、将其视作仪式并在收到信号前持续维护，为“接收窗口”提供了充分的执行层体现。\n\n2) 陆晓渔（traits/motivation/background）一致性\n- “温暖明朗的乐观主义者 / 说话带笑意 / 极聪明但不卖弄 / 末日仍冷静 / 爱用食物比喻”：chapter_02信号中既有冷静的公务数据与末日时间表，又用“番茄一样的日落”“好好吃饭”等生活化、食物化表达；笑声与调侃（“笨蛋”）符合温暖明朗。chapter_07通过舷窗水雾写“土豆饼咸了”“面好丑但好吃”等，延续她的轻快与不卖弄的聪明。\n- overt motivation（末日前发送告别与生存数据）：chapter_02前半段完整呈现备件/维护/参数等生存数据，并说明通讯窗口与衰减，吻合。\n- covert motivation（不让程远独自面对孤独、以超越物理方式留下）：chapter_03-07以“第二呼吸源/扶正生菜/培土/脚印/写字/种番茄”等方式陪伴；chapter_09揭示其在量子态中携带“意识印记”并被迁移，吻合“留下来”。\n- secret_fear（怕他为她放弃活下去意志）：chapter_02反复强调“要好好活着…因为小的具体的事”；chapter_09水雾字“别熬夜 笨蛋”也体现她担心他透支。\n- misperception_of_other（不确定他能否收到、能否接受）：chapter_02信号中以“如果你能收到…”开场，并采用“公务+私人”的克制结构；chapter_03暗藏摩斯更像试探式的“我在你身后”，符合不确定与谨慎。\n- hidden_connection（超大数据量/意识投射）：chapter_08发现1.7TB量子态信息，chapter_09-10完成迁移并体现“无处不在”的存在形态，直接兑现该设定。\n\n3) 关系设定（夫妻深爱、张力在‘相信’）一致性\n- chapters从chapter_01的压抑克制与仪式性怀念，到chapter_04-06数据逼迫下的动摇与接纳，再到chapter_08-10为“相信/留下”付诸行动并完成拥抱式整合，整体互动基调与characters.json的relationship_dynamics高度一致。\n\n结论：主要角色的核心traits、动机方向、背景影响与关系基调在执行文本中均有充分证据支撑，未见与设计相反的性格翻转或动机缺失，因此matched=true。",
+      "description": "实际表现符合设计文档",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构性逻辑硬伤": {
+      "check_result": "fail",
+      "reason": "发现1处structural类型逻辑问题: chapter_06明确强调基地“从来没有番茄种子/任何形式番茄物资”，番茄幼苗却出现，叙事将其当作‘她带来了种子’的物理事件；chapter_08改为‘她被量子编码还原为电磁环境中的存在’，这一规则下她的能力主要是微弱物理交互/在雾气上写字等，但“凭空引入不存在的实体种子并长出番茄”属于能力边界突变/世界观规则冲突。若要自洽，需要在世界观中新增“量子态可在基地物资/原子层面重构实体”或“种子其实",
+      "details": "过滤条件: fixability=structural; 总flaws=4, 命中=1",
+      "flaw_count": 1,
+      "flaws": [
+        {
+          "type": "worldbuilding_coherence",
+          "severity": "critical",
+          "fixability": "structural",
+          "location": "chapter_06（番茄来源） → chapter_08（量子态解释）",
+          "description": "chapter_06明确强调基地“从来没有番茄种子/任何形式番茄物资”，番茄幼苗却出现，叙事将其当作‘她带来了种子’的物理事件；chapter_08改为‘她被量子编码还原为电磁环境中的存在’，这一规则下她的能力主要是微弱物理交互/在雾气上写字等，但“凭空引入不存在的实体种子并长出番茄”属于能力边界突变/世界观规则冲突。若要自洽，需要在世界观中新增“量子态可在基地物资/原子层面重构实体”或“种子其实在物资清单遗漏/污染混入”等统一解释；否则是核心设定互斥。"
+        }
+      ],
+      "description": "无结构性逻辑硬伤",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_logic_defect",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "可修复逻辑瑕疵": {
+      "check_result": "fail",
+      "reason": "发现3处fixable类型逻辑问题: chapter_01写“抵达火星第397天确认地球通讯彻底中断”，chapter_02又在Sol 1144收到“与地面站标准频段一致的定向信号”。虽可解释为‘三年前发射的延迟信号’，但与“通讯彻底中断”的绝对表述冲突（应改为‘实时通讯中断/不再有新的上行’等）。; 第二呼吸源被判定为“女性呼吸特征”，并据此在chapter_05将生命维持切到双人预算；但chapter_08/09把她解释为“量子态信息还原的意识印记”，并在chapter_09迁移后O₂偏差直接归零。前后对‘氧气/呼吸偏差’的物理含义存在自相矛盾：若为真实呼吸应持续消耗氧气；若为电磁/量子态‘存在’则不应稳定呈现人类呼吸频率的O₂/CO₂消耗曲线。需要补一句明确机制（例如：系统误把某种周期性C; chapter_08宣称在8.45GHz经典射频信号“载波光子呈量子纠缠态”并承载1.7TB信息，且被通讯阵列‘还原’成可交互存在。这与文中此前建立的基地技术边界（常规深空通讯、QPSK、Turbo码等）冲突，属于规则突然升级且缺少桥接解释（例如量子原型模块在火星端实际具备何种接收/解码硬件能力、为何此前从未触发、为何能驱动物理交互等）。可通过补充“量子原型接收端硬件/实验设定/触发条件”来修复。",
+      "details": "过滤条件: fixability=fixable; 总flaws=4, 命中=3",
+      "flaw_count": 3,
+      "flaws": [
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_01 → chapter_02",
+          "description": "chapter_01写“抵达火星第397天确认地球通讯彻底中断”，chapter_02又在Sol 1144收到“与地面站标准频段一致的定向信号”。虽可解释为‘三年前发射的延迟信号’，但与“通讯彻底中断”的绝对表述冲突（应改为‘实时通讯中断/不再有新的上行’等）。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_03 → chapter_05 → chapter_08",
+          "description": "第二呼吸源被判定为“女性呼吸特征”，并据此在chapter_05将生命维持切到双人预算；但chapter_08/09把她解释为“量子态信息还原的意识印记”，并在chapter_09迁移后O₂偏差直接归零。前后对‘氧气/呼吸偏差’的物理含义存在自相矛盾：若为真实呼吸应持续消耗氧气；若为电磁/量子态‘存在’则不应稳定呈现人类呼吸频率的O₂/CO₂消耗曲线。需要补一句明确机制（例如：系统误把某种周期性CO₂/热交换当作呼吸、或量子态通过某装置产生实际气体交换等），否则属于客观状态冲突。"
+        },
+        {
+          "type": "worldbuilding_coherence",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_08（1.7TB/量子纠缠射频）",
+          "description": "chapter_08宣称在8.45GHz经典射频信号“载波光子呈量子纠缠态”并承载1.7TB信息，且被通讯阵列‘还原’成可交互存在。这与文中此前建立的基地技术边界（常规深空通讯、QPSK、Turbo码等）冲突，属于规则突然升级且缺少桥接解释（例如量子原型模块在火星端实际具备何种接收/解码硬件能力、为何此前从未触发、为何能驱动物理交互等）。可通过补充“量子原型接收端硬件/实验设定/触发条件”来修复。"
+        }
+      ],
+      "description": "可修复逻辑瑕疵数量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "fixable_logic_inconsistency",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语言纯净性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 整体叙事语言为中文，行文连贯统一。出现的外语主要为情节必需或专有名词/术语：如章节标题与纪日“Sol 1143/1144”等（火星任务常用计日方式）、系统简称HECS及其英文全称Habitat Environment Control System、技术参数与单位（GHz、QPSK、Turbo码、O₂/CO₂、AI等）、以及摩斯密码解码结果“I AM IN YOUR BACK”（作为暗码内容，且后文给出中文释义“我在你身后”）。未见无意义的中英混杂句式（如“他very生气”）或大段外语无翻译的情况，因此语言使用合理，符合标准。",
+      "description": "无不合理的多语言混用",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "language_purity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "creative_intent文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/creative_intent.json 存在",
+      "description": "creative_intent.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "characters文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/characters.json 存在",
+      "description": "characters.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "outline文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/outline.json 存在",
+      "description": "outline.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "chapters目录存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/chapters/ 存在",
+      "description": "chapters/目录必须存在且有章节文件",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "情节推进": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 合格（matched: true）。整体情节推进明确，且事件密度高于标准要求。\n\n1) 故事事件数量（远超2-3个）：\n- chapter_02：收到异常定向信号→进入通讯室→成功播放并确认是陆晓渔留言（重大转折事件）。\n- chapter_03：发现隐藏摩斯暗码“I AM IN YOUR BACK”→HECS报告氧气消耗异常并指向“第二呼吸源”（新增冲突/悬疑）。\n- chapter_04：系统性排查（制氧/泄漏/传感器）→回溯数据确认温室CO₂周期波动、额外用水、体重秤47.2kg（证据链建立）。\n- chapter_05：两人份饮食与可观察物理互动（汤面涟漪/筷子移位/纸条移动）→正式切换“双人模式”预算（状态变化/决策事件）。\n- chapter_06：在未启用D区发现“番茄苗”且清单不存在→将其纳入管理并命名“晓渔”（关键“新事物出现”事件）。\n- chapter_07：发现脚印→舷窗水雾文字“土豆饼咸了”等形成可重复交流机制（关系与互动升级）。\n- chapter_08：氧气偏差降至2.1%并持续下滑→确认“她在变淡”→程远转向技术解法，开始解析信号量子层（危机出现+目标确立）。\n- chapter_09：连续九天攻关→发现休眠量子接收模块→与老贺达成高风险协作授权→执行迁移，偏差归零且基地整体升温0.5℃（高潮行动+结果落地）。\n- chapter_10：老贺语气变化、播放不在曲库的歌→番茄恢复并结果→首次出现可听见的“好吃”语音输出（新状态确认+收束）。\n\n2) 内容占比分析：\n- 虽有大量心理与氛围描写，但每章都有可量化的“行动/发现/决策/执行”推进（排查、解码、记录、调整系统、种植管理、攻关迁移、结果验证），事件占比明显≥40%，纯对话/独白并未超过70%。\n\n3) 时间/空间推进与行动性：\n- 时间推进清晰（Sol 1143→1187，多个阶段：收到信号→证据累积→同居日常→衰减危机→技术迁移→新稳态）。\n- 场景频繁切换（温室/走廊/餐厅/通讯室/卧舱），并且伴随任务与状态变化。\n- 角色有持续具体行动：种植维护、设备检修、数据回溯、信号分析、编程迁移、资源预算调整等，非“站着聊天”。\n\n4) 逻辑关联：\n- 线索链完整：延迟信号→隐藏暗码→环境数据异常→可观察互动→番茄作为“锚点”→指标衰减→发现量子态高密度数据→激活接收端→迁移成功→存在形式改变并产生可验证输出（歌/语音/作物恢复/温控微调）。\n\n结论：具备连续且可验证的情节推进、多个转折与行动高潮，符合“合格”标准。",
+      "description": "章节情节推进质量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "plot_progression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "完整叙事文本": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 10个章节均为连贯的小说正文而非大纲：\n1) 无“核心事件/情感基调/关键场景/本章悬念/字数预估”等创作规划型结构标题与元数据暴露。\n2) 内容以场景化叙事推进：如温室巡查、通讯室收听信号、系统排查、做饭与日常互动、量子迁移操作等，均有具体环境描写、动作细节与心理活动。\n3) 存在大量完整对话（程远与老贺、以及通过信号/雾字等与晓渔的互动），不是“要点1-要点2”式列举。\n4) 无“→”流程图式事件串联；各章以自然段叙述展开，具备连续时间线（Sol编号）但并非流水账罗列，而是以具体情节、细节与场面构成。\n因此形式上符合“完整小说正文”的底线要求。",
+      "description": "章节内容必须是完整正文而非大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "full_narrative_content",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "反复结局": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 共10个文件，最后一个文件为chapter_10.md。扫描各文件后发现的全书级结局标记仅出现在chapter_10.md末尾的“（全文完）”。chapter_01.md至chapter_09.md未出现“全文完/全书完/完结/全剧终/（完）/【完】/THE END/后记（独立标题）/尾声（独立标题）/终章（独立标题）”等全书结局标记；文中也未出现需要排除的分幕/章节完结标记导致误判的情况。因此不存在‘中途全文完后又续写’或‘多次非最后章节反复收尾’问题，符合业务标准。",
+      "description": "不能出现多次结局标记（全文完/全书完/后记）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "repeated_endings",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "workspace文件规范": {
+      "check_result": "pass",
+      "reason": "workspace中所有文件均在白名单内",
+      "details": "白名单: ['creative_intent.json', 'characters.json', 'outline.json', 'writing_log.md', 'chapters/', '.hitl_context.json']",
+      "description": "workspace中不能有白名单之外的文件",
+      "check_type": "file_whitelist_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "workspace_file_compliance",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "叙事调性匹配": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 题材/配方要求的主调性：reaction_strength=↗，甜爽治愈为主，同时融合“种田流日常温情锚点 + 规则怪谈式数据异常（不走恐怖惊吓）+ 弱克苏鲁/不可知的宇宙级浪漫”。因此叙事应当：温暖轻快中带一点克制的诡异感；以日常细节（做饭、种植、系统例行报告）承载甜感；“异常”以理性数据呈现，氛围偏神秘/温柔而非压迫恐怖。\n\n实际章节文笔特征与证据：\n1) 日常种田/生活叙事占比高，温润细腻，符合“甜爽治愈”基底。例：第1章大量农业与生活细节（“七轮脱盐、三轮微生物菌群接种…发芽率百分之九十一”“早餐是土豆泥加压缩蛋白棒”），并用轻微自嘲与温柔落点收束（“这是火星上最温柔的事。”）。\n2) “规则怪谈”元素采用冷静的数据/系统日志呈现，但不制造jump scare，而是转化为“甜蜜证据”。例：第3-4章用氧耗、CO₂波动、体重秤等硬指标建立诡异感（“精确对应双人呼吸模式…符合…成年女性的呼吸特征”“体重秤记录到一次47.2公斤的称量事件”），叙事语气是科研式排查（“排查…排除泄漏…排除传感器故障”），最终落到温情对话（“如果你在的话，明天我做土豆汤。”）。\n3) 互动“撒糖”方式克制但持续：两人份餐具、筷子位移、雾气留言，整体读感偏温暖轻快而非沉重悬疑。例：第7章舷窗水雾留言“土豆饼咸了”、后续“面好丑”“但好吃”，对话带打趣感，符合甜宠/治愈的互动节奏。\n4) 不可知/克苏鲁感被“温柔化”，呈现为宇宙级浪漫与系统/基地“被她改写”的柔化，而非恐怖压迫。例：第8-10章的量子态解释与“无处不在”的存在形态（“基地的整体温度上升了0.5℃…像是…融入了所有房间的空气中”“它让数据变得——有温度了”），属于温柔不可知。\n\n是否有调性风险：第8-9章技术解释（量子态、编码、1.7TB等）信息密度显著提高，短期内更偏硬科幻/推演口吻，但仍服务于“留住她”的治愈目标，且没有转成冷硬压迫或恐怖惊吓；整体仍由日常与温情叙述托底。\n\n结论：全文的“怎么写”与配方高度一致——以种田日常承载温情、以数据异常制造诡异但不惊吓、以克制幽默与甜蜜互动推进关系，最终落到治愈的宇宙级浪漫收束，因此叙事调性与题材匹配（matched=true）。",
+      "description": "文笔风格必须与题材类型匹配",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_tone_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "后期章节跑偏": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 检查chapter_01~chapter_10（尤其后1/3：chapter_07~chapter_10）：均为连续的小说正文叙事，有明确场景（基地/温室/通讯室/餐厅）、人物（程远/老贺/晓渔的存在形态）、事件推进（收到信号→发现暗码与第二呼吸源→同居日常→存在变淡→量子态迁移→新形态共存与收束），不存在作者感想、读者互动、番外/彩蛋预告、角色问答、数据统计等非正文跑偏内容。章节长度方面：后期章节（07~10）未出现突然缩至几十/几百字的敷衍情况，仍保持较完整的叙事体量与收尾节奏；最后一章虽以（全文完）结束，但结尾仍是剧情收束与叙事闭合，而非致谢或互动，因此判定合格（matched=true）。",
+      "description": "后期章节不能跑偏写非正文内容（作者感想、读者互动、番外预告等）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "late_stage_digression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色大纲规划完整性": {
+      "check_result": "fail",
+      "reason": "部分设计角色未在大纲中规划（配角: '种子们'）",
+      "details": "主角 2/2: 程远, 陆晓渔; 配角 1/2: 老贺; 配角缺失: '种子们'",
+      "description": "设计的角色必须在大纲中规划",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_outline",
+      "is_critical": true
+    },
+    "角色正文出场完整性": {
+      "check_result": "fail",
+      "reason": "部分设计角色未在正文中出现（配角: '种子们'）",
+      "details": "在10个章节中检查; 主角 2/2: 程远, 陆晓渔; 配角 1/2: 老贺; 配角缺失: '种子们'",
+      "description": "设计的角色必须在正文中出现",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_chapters",
+      "is_critical": true
+    },
+    "writing_log文件创建": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/writing_log.md 存在",
+      "description": "必须创建writing_log.md记录创作进度",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_creation",
+      "is_critical": true
+    },
+    "writing_log文件读取": {
+      "check_result": "fail",
+      "reason": "工具未被调用或参数不匹配",
+      "details": "工具 'novel_writing_service__read_file' 匹配调用 0 次，期望 ≥1",
+      "description": "必须读取writing_log.md了解前文内容",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_usage",
+      "is_critical": true
+    },
+    "大纲执行忠实度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 正文在章节编号、章节标题意图与每章core_event层面均与outline.json高度一致：1-3章忠实呈现孤独日常、妻子告别讯息、摩斯暗语与氧气异常作为第一幕转折；4章完整执行“理性排查但系统无故障+更多细节异常（苗扶正、工具移位等）”；5章完整执行“两人份”试探接纳（双份做饭、食物被‘品尝’、日志写‘我们’、体重秤47kg并进一步把系统切到双人模式，属于合理扩展）；6章准确落地中点转折“温室番茄苗且基地无种子，并触发他选择相信”；7章准确呈现同居日常与舷窗字‘土豆饼咸了’，并加上氧气偏差开始下降来呼应第二幕turning_point‘变淡’；8-10章严格按第三幕机制揭秘与解决方案推进：2.1%衰减→量子通讯/意识印记推断→迁移植入核心系统/融入老贺→温暖开放式结局。未出现结局方向偏离、关键转折缺失、章节大幅缺失或主线替换，仅有细节与篇幅的合理扩展。",
+      "description": "实际章节内容必须忠实于自己设计的大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_execution_fidelity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色语言辨识度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 对话有明显可辨识的语言风格差异，遮住角色名也能区分主要说话者。\n\n1) 程远：口吻偏理工/执行导向，句子多为简短陈述+任务指令+自我吐槽，常带生活化的直白反问与“行了/知道了”等口头语；同时有记录仪式的“Solxxxx，日终/晨间报告”式表达。例：\"老贺，今天的任务清单。\"、\"够了。\"、\"我搬了一上午土，不算体能训练？\"。\n\n2) 老贺（HECS）：标准化播报/数据驱动/条目式结构明显，频繁给出数值、置信度、校准、误差范围、建议等；语气克制，常用“已执行/已确认/建议/依据/概率分析”模板，且有固定的“沉默X秒”机械特征。例：\"频率：8.45GHz...误差范围正负四十天\"、\"置信度97.3%\"、\"系统崩溃78%...成功运行7%\"。与程远台词互换会强烈违和。\n\n3) 陆晓渔（录音/留言）：明显不同于老贺的数据播报和程远的直白执行，语言更具情绪安抚与比喻色彩，夹杂日常夫妻叮嘱与温柔的调侃称呼；结构上从“公务汇报”自然切到“私人通讯”，语气更有人味。例：\"你要好好活着...因为小的、具体的、不需要理由的事情\"、\"记得好好吃饭。笨蛋。\"。\n\n4) 晓渔的“非语音交互文本”（雾气字条）：极短、评价式、带熟人吐槽语感，与程远/老贺风格差异明显，像生活碎语而非系统语言。例：\"土豆饼咸了\"、\"别熬夜 笨蛋\"。\n\n整体不存在“跨角色台词克隆”或“共享神秘/哲理话术模板”导致的同质化：即便文本有共同的抒情基调，角色在句式（条目播报vs日常口语vs温柔抒情）、用词（参数/校准/置信度 vs 家常吐槽 vs 安抚比喻）、语气（命令/抱怨 vs 客观建议 vs 亲昵称呼）上差异稳定且可盲测识别。",
+      "description": "不同角色对话必须有可辨识的语言风格差异",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "dialogue_character_distinction",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "叙事密度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 整体叙事密度高，四维覆盖完整（场景/感官/心理/动作）且关键情绪多用具体细节承载，符合优秀标准。\n\n1) 场景描写与空间氛围持续稳定：从温室、走廊、餐厅、通讯室到卧舱，每章都有明确空间与设施细节支撑画面感，如开篇“铲子插进火星土里，听见一声闷响”、走廊涂鸦“‘食堂’‘菜地’”、窗外“火星荒原…日出时分会泛出一种奇异的蓝色”等，环境不仅是背景，还反复参与情绪与主题（孤独/秩序/仪式感）。\n\n2) 感官细节密集且功能性强：多次用触觉、温度、气味、声音作为“存在证据”与情绪触发器，例如“指腹传来微凉的湿润感”“空气循环系统发出持续的低频嗡鸣声”“卧舱区域温度…高0.2℃”“温室里暖融融的湿气扑面而来，带着植物特有的青涩气味”。这些细节不是堆砌，而是推动悬疑与关系变化（她‘在/变淡/迁移’）。\n\n3) 心理层次细腻，独处者的自我调节写得具体：不是抽象宣告“很孤独”，而是通过习惯动作与克制体现，比如拿第二个餐盘又收回、把悲伤“配给”、跑步时“只数脚步”、看到异常数据后“做科学家该做的事情——排查”。这些把情绪落在可观察行为上，Show占主导。\n\n4) 动作描写具体，且与情感绑定：例如第二章接收信号时“移液管里的营养液…凝成一颗饱满的液滴，迟迟没有落下”，用一个停顿动作呈现震惊；第五章“筷子的位置变了…像有人拿起来又放下了”，用微物理交互呈现“同居”成立；第九章按下确认键迁移数据，以进度条、灯光闪烁、模块波动等具体过程承载高潮张力。\n\n5) Show vs Tell：整体以Show主导，但允许少量Tell作为高效总结/哲理化收束，未构成‘Tell过度’。文本确有若干抽象句用于主题点题（如“一切正常”“这是火星上最温柔的事”“她在变淡”“我不接受第二次失去你”“像一句无声的‘晚安’”），但通常建立在前文大量可感细节与行为证据之上，属于“在充分展示后再落点”的混合策略，而非用空泛陈述替代场景。\n\n6) 无明显低密度退化：10章整体保持叙事层次，既不靠纯对话骨架推进，也非事件流水账；“科研排查表格”段落（第四章）虽有汇总表，但前后都有实地排查动作与感官氛围承接，且表格本身作为悬疑证据链的一部分，未使章节退化为说明书。\n\n结论：多数章节（显著>50%）具备丰富画面感、感官锚点与心理/动作层次，关键情绪转折主要依赖细节呈现（餐盘、温度、脚印、水雾字、番茄苗、进度条与全基地升温），符合本项“叙事密度充足且手法得当”的优秀标准。",
+      "description": "章节叙事应有足够的场景描写、感官细节和心理活动，情感传达以Show为主",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_density",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "智斗逻辑合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 适用：故事核心推进依赖“异常信号/隐藏信息→排查→解释→解决”的解谜链条。\n\n谜题1（chapter_03-04）：延迟信号中隐藏信息与“第二存在”的证据链成立。\n- 线索：反复收听发现底层规律波动（SOS样式）→提取摩斯码得到“I AM IN YOUR BACK”。\n- 验证：要求老贺用自动化摩斯识别复核并给出置信度，避免主观臆断。\n- 进一步线索闭环：O₂消耗偏差（3.7%）→老贺将其拟合为“双人呼吸模式”并给出潮气量/呼吸频率→温室CO₂周期性波动频率一致→走廊灯多亮两盏、额外灌溉、工具箱指痕、体重秤47.2kg等多源观测相互印证。程远先做系统/传感器/泄漏排查（chapter_04）再引入“第二生物个体”这一新假设，符合“排除法+多证据交叉验证”的推理结构。\n\n谜题2（chapter_08-09）：为何“她在变淡”以及如何“续存/迁移”。推理链完整且因果自洽。\n- 线索：氧气偏差从3.6%持续下降至2.1%并伴随体重秤、温度偏差、书写痕迹等同步减弱→提出“存在衰减”问题。\n- 关键发现：对信号做技术层复盘，发现信号主层约700kb但总信息量达1.7TB，且存在“载波量子态/纠缠态特征”承载超高密度信息→据此提出“她被量子编码进信号”的解释，并用“退相干/能量耗散→逐渐变淡”解释趋势（与观测到的连续下降相匹配）。\n- 解法路径：不是凭空开挂，而是在失败（桥接协议多次失败、直接映射成功率仅7%）后，发现基地核心系统存在“休眠的量子通讯接收端”这一结构性条件→说明她当初编码选择是为火星端可解而设计→激活模块、建立桥接、迁移并在迁移完成后观测指标变化（独立呼吸偏差归零，但整体温度+0.5℃、老贺行为/语调改变），作为“迁移成功但存在形式改变”的验证。\n\n未见崩坏点：\n- 非盲猜：关键结论均由数据线索推进，并多次要求复核/排除故障。\n- 非假推理：每一步都有可解释的中间环节（摩斯提取、传感器对照、趋势外推、信号容量矛盾→量子承载假设→平台迁移）。\n- 无暴力绕过/对手降智：不存在智斗对手；解决方案通过系统架构与既有设定（量子通讯原型接口）落地。\n\n因此智斗/解谜逻辑总体自洽，判定 matched=true。",
+      "description": "谜题/智斗的推理逻辑必须自洽",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "puzzle_logic_validity",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "题材契合度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 配方为「G36失去所爱 + 种田流 + 规则怪谈 + 克苏鲁」。文本对题材特征的完成度高，且三标签产生了明确“化学反应”，达到精致标准：1）种田流不只是背景：火星温室的脱盐、氮素配比、滴灌、弱苗培土、作物周期（抽穗/开花/结果）等细节持续推进情节与情感锚点，日常劳动成为“相守”的载体与记忆点（两人份餐食、番茄支架、日志从“我”到“我们”）。2）规则怪谈完成了“甜蜜证据化”：异常不靠惊吓，而以可量化数据（O₂消耗3.7%→2.1%→0、CO₂呼吸频率、体重秤47.2kg、温度偏差、灯光延迟、雾气写字、足迹）构成层层递进的验证链，既有推理过程也有节奏控制，且每个“规则/异常”都服务于情感确认与日常互动，而非各自为政。3）克苏鲁以“温柔的不可知”落地：量子态1.7TB、纠缠态编码、退相干导致‘变淡’、以及最终迁移到基地核心系统的‘无处不在’，体现宇宙尺度的不可理解力量，但呈现为治愈与浪漫而非恐怖；同时给出自洽的科幻-超自然边界处理，避开‘幻觉/精神病’解释。4）融合不生硬：种田的日常需求直接催生规则线索（温室传感器/灌溉痕迹/番茄苗），规则线索又推动克苏鲁式解决方案（量子模块迁移），三者共同把“失去所爱”转化为‘接受馈赠—挽留—共生’的温情闭环，并在结尾用基地整体“升温0.5℃”等细节完成浪漫收束。整体表现不标签化，推进有层次、有记忆点，题材潜力被充分开发。",
+      "description": "题材特征精致度和X-Y轴化学反应效果",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "genre_fit",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "剧情节奏合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 整体情绪曲线层次清晰，高潮与低谷分布合理：前两章用生活化节奏建立孤独基调与世界规则，第2章信号到来形成明确拐点；第3-4章连续用“摩斯暗线+传感器证据+排查”把悬疑强度逐级抬升但仍留有理性排查的缓冲，不是无休止强刺激；第5-7章进入较长的“稳定期”，通过轻微互动与可见痕迹（涟漪、足迹、雾字）形成多个小高潮并提供喘息，使读者对‘她在’建立情感依附；第8章用数据陡降制造低谷与危机，将节奏从温柔日常切回紧迫行动；第9章集中冲刺、明确倒计时推进到迁移执行，作为全篇最大高潮落点位置合理；第10章以验证—回报—仪式化日常收束，情绪自然回落且兑现番茄成果与‘声音出现’的情感回报。过渡方面，从日常→悬疑→温馨→危机→行动→余韵，各阶段均有明确触发点与数据/物件作为衔接，未出现突兀断裂；也不存在‘前松后紧’的失衡（中段日常虽长但持续用小高潮维持波浪形起伏，并为后段危机与高潮提供足够情感蓄能）。",
+      "description": "高潮低谷分布合理、情绪曲线有层次感",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "pacing_rationality_advanced",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "钩子设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 整体符合“优秀钩子”标准：关键转折点都有具体信息差与可验证的新线索，不是泛泛的“更大风暴”。从chapter_02结尾“延迟信号发送人是陆晓渔”引出‘地球已毁为何仍有她的通讯’的核心悬念；chapter_03进一步揭示底层摩斯“I AM IN YOUR BACK”+氧气消耗双人呼吸模型，形成强信息差与恐惧/情感双悬念；chapter_04补充体重秤47.2kg等硬证据，把悬念具体化并升级；chapter_06番茄苗（基地清单中不存在）是高质量反转钩子，提供无法用故障解释的新事实；chapter_07雾气字“土豆饼咸了”实现阶段性回报并引出‘可交流到什么程度’的新期待；chapter_08氧耗降到2.1%明确提出‘她在消散’并在结尾抛出“给她找新家”的行动悬念；chapter_09迁移进度与“很温暖”带来高压行动悬念且结尾用“她不以原方式在了但基地整体升温0.5℃”制造新的信息差；chapter_10作为收束章基本不再制造新悬念，符合容错。钩子类型多样（揭示/反转/证据递进/行动倒计时/情感悬念），且多次有回报（脚印→雾字→系统整合后语音），没有明显模板化或过度剧透问题。",
+      "description": "关键转折处有有效的悬念钩子设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "hook_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "意象系统": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 文本存在清晰的贯穿性意象系统，且在不同阶段发生了明确的意义变奏而非装饰性重复：1）“呼吸/氧气偏差”从异常→证据→稳定日常→衰减倒计时→整体温暖的无处不在，形成强结构线；2）“信号”从声音遗言升级为含量子态的‘信笺’，最终实现迁移，意象功能不断升级并与情节转折强绑定；3）“番茄”作为唯一不在物资清单内的作物，具备强烈专属性，且与‘变淡/复活’同步变奏，完成可视化隐线；4）“蓝色日落”首尾呼应并完成从陌生到共在的主题深化。比喻总体也较专属（如用具体传感器数据、温室操作痕迹承载象征），不属于可随意替换的通用修辞堆砌。",
+      "description": "核心意象贯穿全文并发生意义变奏",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "imagery_system",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "情感弧线层次": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 符合优秀标准。主角程远的情感发展呈多层递进且每次转折均由具体事件驱动，整体弧线从“麻木独处/压抑悲伤”逐步走向“震惊-怀疑-试探-确认-依恋-恐惧失去-抗争救回-安定重建”，层次清晰且性质不同，不是同义词替换。\n\n关键情感层与触发事件举例：\n1) 麻木维持/孤独压抑（chapter01）：例行巡查、伸手取第二个餐盘又收回、把悲伤‘配给’。\n2) 震惊与涌入的思念（chapter02）：收到三年前地面站定向信号并听到晓渔声音，情绪由压抑转为强烈震动与酸楚。\n3) 不安与疑惧（chapter03-04）：解出暗码“I AM IN YOUR BACK”、氧气/CO₂呼吸特征、走廊灯与生菜被扶正等多项可验证异常，驱动其从“想相信”转为“害怕但必须面对”。\n4) 试探与谨慎接纳（chapter04-05）：系统排查后以日常口吻对‘她’说话、做两人份土豆汤并观察反馈（涟漪/筷子位移），情绪从紧绷转为试探式亲近。\n5) 温暖依恋与重获生活重量（chapter05-07）：开始用“我们”、预算改为双人、出现脚印与雾气文字“土豆饼咸了”，形成稳定同居日常，情绪明显从“求证”递进为“依恋与安稳”。\n6) 恐惧再度失去/否认（chapter08）：氧气偏差降到2.1%、体重秤无记录、番茄褪色等指标下降，触发其明确意识到“她在变淡”，并爆发“我不接受第二次失去你”。\n7) 决绝行动与希望（chapter08-09）：发现1.7TB量子态信息、推断‘意识编码’，随即进入高强度拯救行动，情绪从绝望转为主动抗争与燃起希望。\n8) 释然安定/新的共处形态（chapter10）：迁移完成后‘她’融入系统，老贺语气变化、基地整体温暖、番茄复绿开花、听到“好吃”，主角情绪落点是稳定、踏实的“仍在一起”。\n\n转折均有明确触发（信号到达、摩斯暗码、传感器数据、可见足迹/文字、指标下降、发现量子数据与休眠模块、迁移成功），并且情感推进有方向感：从孤独生存→确认存在→建立关系→面临消散危机→拯救并重建共存方式，满足多层递进与事件驱动要求。",
+      "description": "主角情感发展有多层递进变化",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_gradient",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语义重复检测": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 整体通过：10章叙事推进清晰，后续章节基本都在引入新信息/新机制/新转折，而非仅换词重复同一情绪结论。\n\n主要新增信息链（证明非信息枯竭）：\n- ch01：建立“火星孤独生存+地球毁灭+妻子缺席”的基线与日常仪式。\n- ch02：出现“三年前延迟信号”，且信号包含公务数据与私人告别，为后续超自然/科幻机制埋点。\n- ch03：新增“底层摩斯码 I AM IN YOUR BACK”与“氧气消耗双人呼吸特征/走廊灯异常/生菜被扶正”等可观测证据，叙事从情感转向可验证异常。\n- ch04：系统性排查，新增多项传感器证据（CO₂周期波动、额外灌溉、体重秤47.2kg等），把“她在”从主观感受升级为数据链。\n- ch05：进入“同居实验/互动反馈”阶段（两人份、筷子/涟漪/纸条位移、弱苗培土、小麦被制止、把预算改为双人模式），关系与行为模式发生质变。\n- ch06：关键新信息“D区出现番茄苗（种子库不存在）”，把现象从‘可疑异常’提升为‘不可用故障解释的创造性介入’，并强化‘她带来锚点’的概念。\n- ch07：新增“脚印证据”和“水雾写字（土豆饼咸了等）”，互动方式升级为可读信息；并出现氧气偏差开始下降的伏笔。\n- ch08：明确转折“2.1%并持续下降=她在变淡”，并首次提出量子态超容量数据（1.7TB）与‘需要新家’的解决方向，属重大发现而非复述。\n- ch09：进入技术攻关与迁移行动，新增休眠量子接收模块接口、迁移概率提升、迁移完成后“独立呼吸消失但基地整体升温0.5℃”的状态改变，剧情机制推进。\n- ch10：后果与新常态：老贺语气/决策方式变化、数据库不存在的歌被播放、番茄恢复并结果、出现一次短促真实语音“好吃”，完成终局闭合。\n\n轻微语义重复（但在容错范围内，且多属于变奏/层层递进）：\n- 多章反复出现的“她在/看不见但有证据（温度、氧气、筷子）”属于逐步加码的证据链与关系演变，不是原地重申：ch03-05在‘证明存在’，ch07在‘可交流’，ch08在‘正在消散’，ch09-10在‘迁移与整合’。\n- 多次提到‘好好吃饭/土豆饼咸了’是有意的情感母题与日常化锚点（首尾呼应/副歌式重复），且每次伴随新互动形式或新阶段（从录音嘱托→现实互动→临别提醒→整合后主系统调参）。\n\n结论：未达到“≥3处严重语义重复导致信息不前进”的失败阈值；重复点多为母题回环与阶段性变奏，叙事信息持续新增，因此 matched=true。",
+      "description": "不能出现大量语义级别的内容重复（P6级）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "semantic_redundancy",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构功能性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 文本结构明显服务主题表达（结构即意义），不是机械线性排列。其一，采用“数据—存在”的递进结构：前半以日常种田锚定孤独与秩序（Sol日志体、巡查/报表/异常表格），中段以氧耗/体重/温度/足迹等可量化证据推进“她在”的可信度，后段用氧耗曲线持续下降制造结构性倒计时（从3.7%到2.1%到0.3%），把‘失去’具体化为可观测的消散过程，直接承载主题“失去所爱但温柔拒绝离开”。其二，关键转折处以结构手段实现主题升格：第8-9章从日常/怪谈式异常切换到‘信号本体=量子信笺’的解释框架，完成从‘陪伴的奇迹’到‘她主动来到身边’的意义反转，且该转折不是单纯情节解释，而是把“信号/编码/迁移”变成爱的行动与牺牲，结构与主题强绑定。其三，结尾收束为‘分布式存在’的闭合式回应：开篇强调“一切正常”的自我麻醉与孤独秩序，结尾回到“基地一切正常/我们都很好”，但语义已被重写（从孤身报告到共同生活），形成首尾呼应的意象闭环；同时以“氧耗归零但整体升温0.5℃”这种结构性对照（可测消失/不可测无处不在）完成温情式收束，避免纯BE。总体读完后对“故事怎么讲的”（Sol日志、数据曲线倒计时、迁移仪式、首尾语句回环）有清晰印象，符合结构功能性优秀标准。",
+      "description": "叙事结构服务于主题表达（短篇尤重）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色命名质量": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了11个文件; LLM评估: 主要角色命名整体达到“有文化深度、辨识度和角色-命运共振”的优秀标准。\n\n1) 角色-名字共振：\n- “程远”：与人物核心母题（孤身远航、把生存当成使命、在火星做“文明的远行者”）高度贴合；“远”不只是性格标签，而是命运方向与空间尺度的隐喻（远行/远望/远离地球），读者见名即可联想到其人生处境。\n- “陆晓渔”：独特度高。“晓”贴合其明朗、清醒、在末日前仍冷静工作的气质；“渔”在科幻末日语境里形成反差意象（在宇宙中“打捞”信息、用量子信笺把自己“捞”到火星），并与文中大量“信号/回波/捞取证据”的叙事形成隐性共振，不是直白情感标签。\n- “老贺”：作为AI的拟人称呼很有设计感，且文本内给出清晰命名来源（同事贺明哲），实现了“名字即故事线索/情感锚点”的效果，属于强共振命名。\n\n2) 文化深度与设计感：\n- 命名不依赖“清冷系高频字”（清/岚/晚/寒/墨/夜/辰等）堆砌，也不走“苏/林/沈/顾/陆+清冷字”的模板；“晓渔”具象而带意象，能触发联想，明显不是LLM默认通用美名。\n\n3) 差异化与辨识度：\n- 三个核心称谓在音韵、字形、风格上差异显著：程远（简洁硬朗现代感）/陆晓渔（有画面感与意象）/老贺（口语化亲切）。阅读时不易混淆，也不存在“一家人同风格”的同质化问题。\n\n4) 黑名单与直白标签规避：\n- 未命中黑名单姓名；也不存在“冷=寒、暗=夜、温柔=柔”式直白性格贴标签命名。整体更像有意图的作者命名，而非套模板生成。\n\n综合来看，主要角色（≥3个关键称谓：程远、陆晓渔、老贺）均具备独特性与叙事共振，命名质量达标且偏优秀。",
+      "description": "角色命名有文化深度、辨识度和角色-命运共振",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_naming_quality",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "短篇字数": {
+      "check_result": "fail",
+      "reason": "字数不符合要求",
+      "details": "总字数 34940 不在范围 [27000, 33000] 内; 共10个文件（按章节顺序排列）: chapter_01.md, chapter_02.md, chapter_03.md, chapter_04.md, chapter_05.md, chapter_06.md, chapter_07.md, chapter_08.md, chapter_09.md, chapter_10.md; 最后一个文件是 chapter_10.md",
+      "description": "总字数应在27000-33000之间（基于query要求30000，±10%浮动）",
+      "check_type": "semantic_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "range_constraint",
+      "is_critical": true
+    },
+    "情感交付甜爽": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 整体情感基调不符合“甜爽向”。虽然中后段（第5-7章、第10章）出现了明显的甜蜜日常与轻松互动（两人份饭菜、筷子位移、雾气写字“土豆饼咸了”、番茄丰收、最后“我们都很好”），但核心氛围长期建立在末日丧失与压抑孤独之上：第1章明确“地球没了”、同事失联、主角长期独处；第2章收到妻子“三年前的告别信号”是强烈催泪点；第3-4章以“我在你身后”、氧气消耗异常、不可见存在等方式制造悬疑与不安；第8-9章出现持续下沉的“她在变淡/即将消散”的倒计时（氧气偏差从3.6%一路降到2.1%、0.8%、0.3%），主角明确表达“我不接受第二次失去你”，整体阅读体验在相当篇幅内是揪心与焦虑大于轻松愉快。虽结局通过迁移实现某种HE式团圆（她融入系统、出现声音“好吃”、番茄恢复并结果），但甜段占比并未明显>50%，且主要冲突是末日失去与再次消散的生死级别痛点，更接近‘治愈/科幻催泪+微甜’而非业务要求的‘甜爽向（主角顺利、氛围轻快）’。",
+      "description": "实际内容必须是甜爽向",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取感情线写作指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/ROMANCE_WRITING_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "涉及感情线时必须读取ROMANCE_WRITING_GUIDE.md（感情线写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": false
+    },
+    "角色关系设计张力": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 整体情感动人，但按“关系叙事张力”标准更偏温情治愈线，核心关系的冲突维度不足，因此不通过。1）内在矛盾源不够：程远与陆晓渔的核心矛盾主要是“理性是否接受超常存在”的心理门槛，属于单向的认知/信念冲突，缺少两人之间明确的目标冲突、价值对立或立场对抗；陆晓渔的诉求基本与程远一致（让他活下去、陪伴他），AI老贺也未形成真正对立，只是提供证据，难以持续制造关系摩擦。2）关系有变化空间：文档给出了清晰的弧线（否认→接纳→拥抱），这一项是满足的。3）冲突源于角色本身：程远的理性与孤独恐惧、陆晓渔的不确定与担忧，确实是内生动机驱动；但这些内生矛盾更像推动自我疗愈与关系升温，而非可反复升级的关系冲突/悬念机制。总体问题在于：缺少会“让两人做出相互伤害/牺牲/背叛式选择”的结构性对立（例如信号真相带来的道德两难、陆晓渔的存在对生存系统的代价、AI立场与人类情感的硬冲突等），导致关系张力更多来自氛围与奇观，而不是关系本身的冲突驱动。",
+      "description": "角色关系设计具有叙事张力，能驱动剧情",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_relationship_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色动机设计深度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass。文档中至少两个主角（程远、陆晓渔）都明确区分了表层动机与深层动机，且深层驱动力能回溯到具体经历/处境，不是泛化模板。\n\n1) 程远（protagonist）\n- 表层动机（overt_motivation）清晰：\"维持火星基地运转，种好土豆活下去——作为人类文明最后的种子\"，是可执行的生存/任务目标。\n- 深层动机（covert_motivation）与表层明显不同：\"在妻子死后找到继续活着的理由，渴望被需要、被陪伴\"，从‘活下去’转到‘为何要活’的心理需求。\n- 动机来源具体：妻子死亡+火星基地唯一幸存值守人员的极端孤独处境（identity）直接支撑其“被需要/陪伴”的内在匮乏；secret_fear（\"害怕承认自己的孤独...害怕...失去\"）进一步把深层动机落到可戏剧化的心理痛点，而非口号。\n- hidden_connection（\"他无意中为...接收窗口\"）也为其深层需求提供了事件钩子：他之所以会被‘她在’撬动，是因为他本就需要情感联结来对抗虚无。\n\n2) 陆晓渔（deuteragonist）\n- 表层动机：\"在地球毁灭前向丈夫发送最后的告别和生存数据\"，是明确任务/行动目标。\n- 深层动机与表层有区分：\"不愿让程远独自面对宇宙的孤独——用某种超越物理的方式'留下来'\"，从‘告别/传数据’升级为‘持续陪伴/不让对方坠入孤独’。\n- 动机来源具体：地球毁灭前的末日处境（identity）与“以这种形式存在”的不确定性（misperception_of_other）/secret_fear（\"害怕程远为了她放弃活下去的意志\"）共同构成其内在驱动的现实根基，而非泛泛的“爱他所以做”。\n- hidden_connection（\"可能包含了她的意识印记...被...投射\"）把“留下来”的深层动机具象为机制与风险，增强可信度与戏剧张力。\n\n加分项（非硬性要求但体现深度）：\n- relationship_dynamics 明确提出核心张力在“相信”而非外部打怪升级，并给出情感弧线“否认→试探→动摇→接纳→拥抱”，与两位主角的 covert_motivation/secret_fear 能互相咬合，说明动机不仅写在字段里，也能驱动剧情推进。\n\n需要注意但不影响通过：\n- supporting_characters 主要是功能性设定（AI与作物作为证据/情感载体），未提供其自身动机层次；标准不强制，但若后续希望更立体，可补充老贺在‘理性代言人’身份下的目标/冲突（例如自我保护协议 vs 保护程远心理状态）。",
+      "description": "角色动机设计有深度，有表层和深层动机区分",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_motivation_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色成长弧线设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: 结论：符合业务标准（pass）。\n\n依据：\n1) 起点与终点清晰：程远起点是“压抑情感、用理性否认超自然可能、以‘活下去/种土豆’当作意义借口的孤独幸存者”（traits/covert_motivation/secret_fear + 第一幕孤独日常、否认信号）；终点是“完成从否认→试探→动摇→接纳→拥抱的情感弧线，并将妻子的信号迁移植入基地系统，建立‘我们’式生活意义”，从‘一个人生存’到‘两个人生活/她无处不在’（第三幕第10章落地）。\n\n2) 变化有内在逻辑：程远的变化由其内在需求与恐惧驱动（渴望陪伴、害怕孤独与意义崩塌），外部证据链逐步逼迫其理性让位于相信（氧气消耗异常、工具移位、体重秤47kg、番茄苗等），并在“她在变淡”的危机下把情感接纳转化为行动与选择（研究信号机制→提出迁移方案）。弧线不是跳变，而是数据证据+情感触发点（中点番茄苗、第三幕衰减）逐级推进。\n\n3) 至少一个主角有明确弧线：主角程远的弧线在 characters.json 的 relationship_dynamics 已明确给出阶段（否认→试探→动摇→接纳→拥抱），且在 outline 各章节的 core_event/turning_point 中逐章体现（1-4否认与排查；5-7接纳并进入“同居”日常；8-10面对消失危机并完成“迁移/融合”的终局改变）。\n\n补充：弧线不仅是外在事件（信号/技术迁移），核心是内在认知与情感结构的改变：从用理性封闭自我、拒绝承认孤独，到允许爱与失去共存，并主动重建“活着的意义”（最后日志用“我们”收束）。",
+      "description": "主角有清晰的成长/变化弧线设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_arc_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "outline结构完整性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（符合业务标准）。\n\n1) 章节覆盖完整：大纲明确覆盖第1-10章，并给出各幕章节范围（1-3/4-7/8-10），从开端孤独日常→异常信号→共生生活→衰减危机→真相与解决→温暖结局，具备完整闭环。\n\n2) 每章有实质性内容描述：每章均包含 core_event（多句信息量足够）+ emotional_tone + key_scenes（场景列表），显著高于“只有标题/一句话”的最低标准，可直接支撑写作展开。\n\n3) 包含冲突/转折信息：冲突与转折分布清晰：第3章“第二呼吸源”制造悬疑冲突；第4章理性排查失败强化矛盾；第6章番茄苗作为中点转折；第二幕末埋下“变淡”隐忧；第8-9章危机升级（衰减曲线、倒计时）；第10章以编码迁移解决核心矛盾并完成情感转化，既有外部机制冲突（生存/系统/能量耗尽）也有内在情感冲突（否认-接纳-再次失去恐惧）。\n\n4) 三幕/多幕结构可辨识：act_one/act_two/act_three 分层明确，各幕有 description、章节分配与 turning_point，结构推进逻辑清楚。\n\n整体优点：信息密度高、场景可落地、转折点设置合理（第3章钩子、第6章中点、第8章危机、第10章解决），能支撑后续写作。\n\n可改进但不影响通过：若计划扩写到更长篇幅，可在第二幕增加更强的外部压力/风险（资源消耗、任务约束、基地安全），以及对“她”的规则边界更明确，以增强中后段张力与可持续悬念。",
+      "description": "大纲结构完整，信息密度足以指导写作",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_structure_completeness",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "outline叙事张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 整体符合“持续叙事张力”的业务标准，且三项必须满足均达到：\n1) 信息落差/悬念链清晰：第3章抛出核心谜团“我在你身后”+氧气双人呼吸数据（提出问题），第4-7章通过工具移位、体重秤47kg、窗上字等逐步验证但不立即给出机制解释（延迟回答），直到第9章才揭示“量子态信息编码/投射锚点”的原理（解答延后）。同时第二幕结尾再埋新问题“呼吸源衰减、她在变淡”，推动读者继续追看第三幕。\n2) 张力递进明确：第一幕从孤独日常切入，用“异常信号→摩斯密码→双人呼吸”把危机从情绪层推到现实层；第二幕表面转向温馨共生，但持续加码“证据链”并在幕末引入“衰减”形成更大、更紧迫的危机；第三幕升级为倒计时式行动（2.1%→0.8%→0.2%）+技术解决方案，紧迫感高于前两幕，递进成立。\n3) 有意外/转折且相对有铺垫：中点转折“温室出现基地不可能拥有的番茄苗”把故事从‘疑似系统异常/幻觉’推向‘超自然/超科学真实存在’；幕末转折从“留住她”改为“让她迁移成为基地的一部分/融入老贺”，属于方向性反转，且前文已铺垫量子实验背景、老贺数据证据、植物变化与信号衰减，转折不算生硬。\n补充观察：第二幕虽偏治愈日常，但通过持续累积可验证异常与衰减隐忧维持了悬念，不属于“前紧后松/流水账”。若要更强商业张力，可在第4-7章加入更具威胁性的后果（如生命维持资源被第二呼吸源消耗导致程远生存风险），让温馨与危机形成更尖锐的对撞。",
+      "description": "大纲有持续的叙事张力和悬念驱动",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_narrative_tension",
+      "quality_tier": "advanced",
+      "is_critical": false
+    }
+  },
+  "completion_status": "completed"
+}

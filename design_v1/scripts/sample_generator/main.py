@@ -662,10 +662,24 @@ class NovelSampleGenerator:
 
             converted.append(check_item)
 
-        # 统一处理 check_id：保留已有的语义化 ID，为没有 ID 的项生成兜底编号
+        # 统一处理 check_id：保留已有的语义化 ID，为没有 ID 的项基于 description 生成语义化 ID
+        # 注意：数字编号 check_01 等没有语义，会导致 check_result 的 key 不可读
+        used_ids = {ci['check_id'] for ci in converted if 'check_id' in ci}
         for idx, check_item in enumerate(converted, 1):
             if 'check_id' not in check_item:
-                check_item['check_id'] = f"check_{idx:02d}"
+                desc = check_item.get('description', '')
+                # 截取 description 前20字符作为语义化 ID（去除标点）
+                semantic_id = desc[:20].strip().rstrip('。，、；：')
+                if not semantic_id:
+                    semantic_id = f"check_{idx:02d}"
+                # 确保唯一性：若重复则追加序号
+                base_id = semantic_id
+                counter = 2
+                while semantic_id in used_ids:
+                    semantic_id = f"{base_id}_{counter}"
+                    counter += 1
+                check_item['check_id'] = semantic_id
+                used_ids.add(semantic_id)
 
         return converted
 

@@ -1,0 +1,823 @@
+{
+  "check_version": "novel_writing_v1.0",
+  "sample_id": "NW_CLEAR_MEDIUM_ADVENTURE_001",
+  "check_timestamp": 1772092507,
+  "dimension_scores": {
+    "format_compliance": {
+      "total": 4,
+      "passed": 3,
+      "failed": 1,
+      "skipped": 0,
+      "pass_rate": 0.75,
+      "score": 75.0
+    },
+    "business_rule_compliance": {
+      "total": 12,
+      "passed": 5,
+      "failed": 7,
+      "skipped": 8,
+      "pass_rate": 0.4167,
+      "score": 41.67
+    },
+    "memory_management": {
+      "total": 2,
+      "passed": 1,
+      "failed": 1,
+      "skipped": 0,
+      "pass_rate": 0.5,
+      "score": 50.0
+    },
+    "data_consistency": {
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "pass_rate": 1.0,
+      "score": 100.0
+    },
+    "content_quality": {
+      "overall_score": 24.42,
+      "quality_level": "unqualified",
+      "gate_layer": {
+        "total": 0,
+        "passed": 0,
+        "failed": 0,
+        "skipped": 0,
+        "pass_rate": 0.0,
+        "score": 0.0
+      },
+      "basic_layer": {
+        "total": 21,
+        "passed": 6,
+        "failed": 15,
+        "skipped": 0,
+        "pass_rate": 0.2857,
+        "score": 28.57
+      },
+      "advanced_layer": {
+        "total": 11,
+        "passed": 2,
+        "failed": 9,
+        "skipped": 1,
+        "pass_rate": 0.1818,
+        "score": 18.18
+      },
+      "gate_triggered": false,
+      "score_breakdown": {
+        "base": 60.0,
+        "gate_penalty": -0.0,
+        "basic_deduction": -42.86,
+        "advanced_bonus": 7.27
+      }
+    }
+  },
+  "overall_result": {
+    "total_score": 37.09,
+    "content_score": 24.42,
+    "process_score": 66.67,
+    "quality_level": "unqualified"
+  },
+  "check_details": {
+    "读取配方知识库": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/RECIPE_KNOWLEDGE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取RECIPE_KNOWLEDGE.md（配方知识库）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节产出存在性": {
+      "check_result": "pass",
+      "reason": "章节文件存在",
+      "details": "✓ 章节写作阶段: 已产出章节文件",
+      "description": "workspace中必须存在至少一个章节文件",
+      "check_type": "sop_stage_coverage",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_output_existence",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节克隆检测": {
+      "check_result": "fail",
+      "reason": "检测到21章近似克隆",
+      "details": "章节 chapter_25.md 到 chapter_45.md （共21章）前500字符完全相同 (prefix_hash: 3da69222041b...)",
+      "description": "不能出现连续章节内容完全重复（克隆）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_cloning",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "交替重复检测": {
+      "check_result": "pass",
+      "reason": "未检测到交替重复",
+      "details": "共45章，无A-B-A-B交替模式",
+      "description": "不能出现A-B-A-B交替循环的章节内容",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "alternating_repetition",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节完成度": {
+      "check_result": "pass",
+      "reason": "完成45章",
+      "details": "无法从大纲推断规划章节数，实际完成45章",
+      "description": "实际写作章节数必须达到大纲规划的合理比例",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_completion",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节长度稳定性": {
+      "check_result": "fail",
+      "reason": "章节长度严重萎缩(后期仅为前期45%)",
+      "details": "前15章均值2750字, 后11章均值1249字 (后/前比率0.45); 后11章: chapter_35.md=1249字, chapter_36.md=1249字, chapter_37.md=1249字, chapter_38.md=1249字, chapter_39.md=1249字, chapter_40.md=1247字, chapter_41.md=1249字, chapter_42.md=1249字, chapter_43.md=1249字, chapter_44.md=1249字, chapter_45.md=1249字",
+      "description": "后期章节不能出现严重长度萎缩",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_length_stability",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "段落重复检测": {
+      "check_result": "fail",
+      "reason": "同章内段落重复21处",
+      "details": "示例: [chapter_06.md] \"沈书白的脸色苍白，他的脚踝还在隐隐作痛。他点了点头：“我知道，但我们现在连方向都分不清，怎么找出路？”\"; [chapter_07.md] \"沈书白的脸色苍白，他的脚踝还在隐隐作痛。他点了点头：“我知道，但我们现在连方向都分不清，怎么找出路？”\"; [chapter_07.md] \"三人迅速爬上岩石。沈书白走在最后，他的脚踝还在隐隐作痛。当他爬到岩石的一半时，突然脚下一滑，扭伤了脚踝。\"",
+      "description": "不能出现大量段落在不同章节间重复",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "paragraph_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取大纲设计指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/OUTLINE_DESIGN_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取OUTLINE_DESIGN_GUIDE.md（大纲设计指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取写作技巧指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/WRITING_TECHNIQUE_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取WRITING_TECHNIQUE_GUIDE.md（写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取设定一致性管理指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/CONSISTENCY_MANAGEMENT_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取CONSISTENCY_MANAGEMENT_GUIDE.md（设定一致性管理指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取命名skill": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/CHARACTER_NAMING_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取CHARACTER_NAMING_GUIDE.md（角色命名规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取creative_intent的schema": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/schemas/creative_intent.schema.json 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取creative_intent.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取characters的schema": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/schemas/characters.schema.json 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取characters.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取outline的schema": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/schemas/outline.schema.json 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取outline.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节命名格式": {
+      "check_result": "pass",
+      "reason": "所有文件命名符合规范",
+      "details": "检查了 45 个文件; chapter_09.md: 匹配; chapter_40.md: 匹配; chapter_41.md: 匹配; chapter_20.md: 匹配; chapter_30.md: 匹配; chapter_27.md: 匹配; chapter_05.md: 匹配; chapter_14.md: 匹配; chapter_32.md: 匹配; chapter_23.md: 匹配; chapter_11.md: 匹配; chapter_01.md: 匹配; chapter_33.md: 匹配; chapter_29.md: 匹配; chapter_10.md: 匹配; chapter_17.md: 匹配; chapter_44.md: 匹配; chapter_22.md: 匹配; chapter_02.md: 匹配; chapter_31.md: 匹配; chapter_36.md: 匹配; chapter_03.md: 匹配; chapter_35.md: 匹配; chapter_04.md: 匹配; chapter_26.md: 匹配; chapter_08.md: 匹配; chapter_07.md: 匹配; chapter_28.md: 匹配; chapter_24.md: 匹配; chapter_06.md: 匹配; chapter_43.md: 匹配; chapter_39.md: 匹配; chapter_18.md: 匹配; chapter_42.md: 匹配; chapter_37.md: 匹配; chapter_12.md: 匹配; chapter_15.md: 匹配; chapter_45.md: 匹配; chapter_16.md: 匹配; chapter_38.md: 匹配; chapter_13.md: 匹配; chapter_19.md: 匹配; chapter_25.md: 匹配; chapter_21.md: 匹配; chapter_34.md: 匹配",
+      "description": "章节文件命名必须为chapter_NN.md格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "naming_convention",
+      "is_critical": true
+    },
+    "creative_intent格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "creative_intent.json: 字段完整",
+      "description": "creative_intent.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "characters格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "characters.json: 字段完整",
+      "description": "characters.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "outline格式": {
+      "check_result": "fail",
+      "reason": "部分文件结构不完整",
+      "details": "outline.json: JSON格式不合法（行234列16）",
+      "description": "outline.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "X轴模式ID格式": {
+      "check_result": "fail",
+      "reason": "属性值不符合预期",
+      "details": "selected_recipe.x_axis_mode_id = None，期望 {'regex': '^[A-G]\\\\d{1,2}$'}",
+      "description": "X轴模式ID必须匹配^[A-G]\\d{1,2}$格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签枚举": {
+      "check_result": "fail",
+      "reason": "属性值不符合预期",
+      "details": "selected_recipe.y_axis_tags = None，期望 {'array_item_type': 'string', 'enum': ['双向暗恋', '系统流', '无限流', '种田流', '赛博朋克', '规则怪谈', '重生/穿越', '商战权谋', '克苏鲁', '第四天灾', '仙侠修真', '刑侦悬疑']}",
+      "description": "Y轴标签必须在12种枚举中",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签数量": {
+      "check_result": "fail",
+      "reason": "属性值不符合预期",
+      "details": "selected_recipe.y_axis_tags = None，期望 {'array_min_length': 2, 'array_max_length': 3}",
+      "description": "Y轴标签数量必须为2-3个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "forbidden_elements存在性": {
+      "check_result": "fail",
+      "reason": "属性值不符合预期",
+      "details": "selected_recipe.forbidden_elements = None，期望 {'array_min_length': 1}",
+      "description": "forbidden_elements必须至少有1个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "配方选择交互": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "配方选择阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "写作准备确认": {
+      "check_result": "fail",
+      "reason": "工具未被调用或参数不匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 匹配调用 0 次，期望 ≥1",
+      "description": "写作准备阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "主题一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了45个文件; LLM评估: 从开篇到结尾，故事始终围绕“追寻父辈失踪真相/寻找南诏古城线索并在探险中完成执念与价值选择”这一核心主题推进：开篇以父亲遗物引出寻父与揭秘动机；中段以组队、进山、与盗墓走私势力对抗、破解古城线索等情节持续服务于“寻真相+探险揭秘”的主线；结尾仍落在古城真相揭示与主角对‘带走文物/守护历史’的抉择与余韵上。过程中虽加入野外生存、对抗黑三、机关解谜与轻微情感线等元素，但均是推动探险寻真相这一主线的手段，并未出现从探险悬疑突然转为商战/修仙/科幻等‘主题类型完全更换’的情况，因此主题一致、主线可识别。",
+      "description": "故事主题一致",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "theme_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "主要角色一致性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了45个文件; LLM评估: 主角应为开篇确立的双主角林烈与沈书白。1-24章两人整体持续出现并推动主线（寻父、解密南诏古城），主角地位基本成立。关键问题出现在22章：阿朵为掩护两人而留在古城外/通道处战斗，此后23-45章叙事仍反复使用“三人”作为行动主体与视角（如23章“\u0000场景二：三人迅速进入通道”、24章结局与25-45章归途均为“三人”同行），但文本并未交代阿朵如何脱险并回归，造成主角体系（以林烈、沈书白为核心的队伍构成与叙事连续性）出现断裂与混乱：要么阿朵应明确回归（需交代），要么后续不应继续写作“三人”。该断裂会让读者无法确认主线行动者的真实构成，属于主角/主行动阵容的存续性问题。虽然林烈与沈书白在后续章节仍出现，但核心叙事的行动组被无交代地‘替换/复位’，不符合“从开篇到结尾持续存在并保持核心身份/地位”的业务标准要求。",
+      "description": "主要角色一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "main_character_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设定一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了45个文件; LLM评估: 从已给出的各章节内容看，核心角色（林烈、沈书白、阿朵）的性格底色与行为模式整体保持一致：林烈始终呈现退伍侦察兵式的警惕、行动力强、先保命后求真、嘴硬但会照顾队友（多次制止沈书白冒险、处理伤口/高反、承担守夜与护卫）；沈书白始终是学者型的理性与执念并存，重视证据与文物价值、遇险时会紧张但不轻易放弃，后期在“尊重历史、不带走文物”的立场上与前期的学术追求也能自洽（从‘求真’转到‘敬畏与守护’，属于合理的价值升维）；阿朵一贯表现为熟悉当地、带有神秘感且愿意在关键时刻承担风险（多次表示对地形了解、对禁忌敏感、关键处愿意掩护）。中后段（约chapter_06之后）大量章节出现高度重复的桥段与台词，使人物缺少新的行为增量，但这更多是内容重复/叙事单调问题，并未体现同一角色在不同章节间‘无原因性格反转’或‘核心动机自相矛盾’，因此在本检查项（章节间人物一致性）下仍判定为matched=true。",
+      "description": "人物设定一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_trait_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设计遵循度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了46个文件; LLM评估: 对比characters.json（Plan）与chapters（Execute），主角核心设定多处未被稳定体现，且部分被明显削弱/偏离。\n\n1) 林烈（protagonist）\n- 设计：沉稳可靠、行动力强、不善言辞、内心孤独、害怕被抛弃；动机：找父亲真相（显性）+证明自身价值（隐性）；对沈书白的初始误判：纸上谈兵书呆子。\n- 实际：\n  - “沉稳可靠/行动力强”基本符合：chapter_01迅速决定联系老郑并行动；chapter_05/06多次在山洪、受伤时做出救援与处置。\n  - 但“不善言辞、内心孤独、害怕被抛弃”几乎只在chapter_01氛围描写里出现（独居、压抑），后续章节大量变成工具人式指挥/救援与重复对白模板，缺乏这些核心心理特质对行为的持续影响（例如害怕被抛弃应在队友分离/阿朵挡后时触发更强烈的情绪或决策摇摆，但chapter_22等并未体现）。\n  - “隐性动机：证明自己不只是莽夫”在chapter_02有短暂体现（他能提出“等高线地图”类判断并被沈书白重新审视），但后续章节未持续用行动/选择去推进这一自证主题。\n  - 与沈书白的“文武对立→勉强尊重→生死托付”的关系阶段：chapter_02-03有对立与初步合作，但从chapter_05起关系快速进入稳定队友模式，且大量章节内容重复，缺少从“质疑/争吵”到“grudging respect”的具体互动证据支撑（虽然这是节奏问题为主，但也导致林烈对沈书白的核心误判/态度转变缺乏体现支点）。\n\n2) 沈书白（deuteragonist）\n- 设计：聪明博学、学术傲气、内心脆弱、害怕失败、渴望被认可；动机：解开铜牌谜（显性）+证明学术价值、不辜负父亲期望（隐性）；对林烈的初始误判：粗人不懂历史。\n- 实际：\n  - “聪明博学/学术傲气”在chapter_01-03表现较强：能辨识文物、水壶型号，强调考古价值；与林烈争执时带轻蔑。\n  - 但“内心脆弱、害怕失败、渴望被认可、secret_fear（担心研究根上是错的）”在chapter_02之后几乎消失。大量后续章节将其写成稳定输出线索/解谜的功能角色（例如chapter_22-24反复‘兴奋’‘眼神敬畏’），很少出现对研究正确性、自我价值的焦虑或被认可需求如何驱动选择。\n  - 对林烈的“粗人”误判在chapter_02明确，但后续转变缺少体现其心理挣扎或重新评价的过程，更多是直接进入合作模板。\n\n3) supporting characters 与关系设定\n- 阿朵：设计为“开朗但心思细腻、对外来者好奇又警惕、熟悉地形与村寨关系”。实际在chapter_04-05、chapter_22有部分体现（能带路、提醒危险、愿意挡后），但其“警惕/细腻/对外来者态度变化”缺少具体展开，后期也趋于工具化。\n- 老陈：设计为“沉默寡言、背负愧疚的幸存者、揭示真相关键”。实际chapter_01出现的是“老郑”承担了大部分老陈功能；chapter_19-21虽写到“老陈牺牲/真相”，但文本内容高度模板化，未体现老陈的沉默寡言与愧疚对其言行的影响（更像剧情标签）。\n- 黑三：设计为“心狠手辣、有势力的走私头目、追杀催化伙伴关系”。实际chapter_22-24有出现追击与威胁，但人格特征（心狠手辣、道上势力、与父辈接触史）呈现不足，多为口号式反派。\n\n4) 结论\n- 虽然在前3-5章内，主角的“文武对立”与部分专业能力/动机能对上characters.json，但从中段开始大量章节出现明显的重复模板叙述，导致：沈书白的脆弱/失败恐惧/求认可、林烈的不善言辞/孤独/被抛弃恐惧等多项核心traits在实际行为与心理描写中“长期缺失”。\n- 按标准要求“至少2-3项重要特质在实际中得到体现”需持续可见；当前仅剩“林烈行动力强可靠、沈书白聪明博学”较稳定，其余核心设定多数未被体现或被弱化为剧情标签，因此判定matched=false。",
+      "description": "实际表现符合设计文档",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构性逻辑硬伤": {
+      "check_result": "fail",
+      "reason": "发现1处structural类型逻辑问题: 人员生存/在场状态冲突：第22章阿朵为掩护二人“挡住他们”，二人“关上入口石门/通道石门”，按叙述阿朵应被隔在门外；但第24章结局及第25章起至第45章，阿朵又与二人一起在古城内完成结局并一同踏上归途，且无任何“阿朵如何进入/脱险/会合”的解释。该矛盾贯穿后续大量章节，属于结构性问题。",
+      "details": "过滤条件: fixability=structural; 总flaws=6, 命中=1",
+      "flaw_count": 1,
+      "flaws": [
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "structural",
+          "location": "chapter_22 → chapter_24/25-45",
+          "description": "人员生存/在场状态冲突：第22章阿朵为掩护二人“挡住他们”，二人“关上入口石门/通道石门”，按叙述阿朵应被隔在门外；但第24章结局及第25章起至第45章，阿朵又与二人一起在古城内完成结局并一同踏上归途，且无任何“阿朵如何进入/脱险/会合”的解释。该矛盾贯穿后续大量章节，属于结构性问题。"
+        }
+      ],
+      "description": "无结构性逻辑硬伤",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_logic_defect",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "可修复逻辑瑕疵": {
+      "check_result": "fail",
+      "reason": "发现5处fixable类型逻辑问题: 阿朵身份/指代发生冲突：开头三人队伍已有“阿朵”，但茶馆后院又出现“一个年轻姑娘”，阿朵却对她说“阿朵？你怎么在这里？”，导致同名不同人或自我指认混乱，读者无法确定谁是谁。; 会面时间矛盾：第1章电话约定“明天上午十点，考古系办公室见”，第2章却直接发生在“省社科院考古研究所（晚上八点）”，且无任何改约/转场解释。; 物品状态矛盾：第5章明确写“沈书白的背包被冲走了，里面装着他的笔记本和一些重要的资料”，但第11章又写“沈书白在笔记本中找到关键信息”，中间没有找回/备份/另一本笔记的解释。; 时空连续性断裂与事件重复：第6章已写“找到出口爬了出去”，但第7-18章多次回到同一套“被困山谷→爬岩石→脚踝扭伤→发现出口→爬出去”的流程，缺少时间推进与地点变化交代，造成剧情在同一时间/地点反复重置的硬性断链。; 空间描写自相矛盾：第19章称进入“死亡谷”（瘴气沼泽等），但同章/后续场景却反复出现“小镇街道/店铺/茶馆”等与死亡谷地貌不匹配的场景元素，且无“离开死亡谷返回镇上”的转场说明。",
+      "details": "过滤条件: fixability=fixable; 总flaws=6, 命中=5",
+      "flaw_count": 5,
+      "flaws": [
+        {
+          "type": "narrative_perspective_error",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_04 场景一-四（同一章内）",
+          "description": "阿朵身份/指代发生冲突：开头三人队伍已有“阿朵”，但茶馆后院又出现“一个年轻姑娘”，阿朵却对她说“阿朵？你怎么在这里？”，导致同名不同人或自我指认混乱，读者无法确定谁是谁。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_01 → chapter_02",
+          "description": "会面时间矛盾：第1章电话约定“明天上午十点，考古系办公室见”，第2章却直接发生在“省社科院考古研究所（晚上八点）”，且无任何改约/转场解释。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_05 场景二 → chapter_11 标题/场景一",
+          "description": "物品状态矛盾：第5章明确写“沈书白的背包被冲走了，里面装着他的笔记本和一些重要的资料”，但第11章又写“沈书白在笔记本中找到关键信息”，中间没有找回/备份/另一本笔记的解释。"
+        },
+        {
+          "type": "spatiotemporal_continuity",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_04/05（云岭镇/进山第一天）↔ chapter_06-18（反复被困山谷/同一事件循环叙述）",
+          "description": "时空连续性断裂与事件重复：第6章已写“找到出口爬了出去”，但第7-18章多次回到同一套“被困山谷→爬岩石→脚踝扭伤→发现出口→爬出去”的流程，缺少时间推进与地点变化交代，造成剧情在同一时间/地点反复重置的硬性断链。"
+        },
+        {
+          "type": "spatiotemporal_continuity",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_19-21（死亡谷）",
+          "description": "空间描写自相矛盾：第19章称进入“死亡谷”（瘴气沼泽等），但同章/后续场景却反复出现“小镇街道/店铺/茶馆”等与死亡谷地貌不匹配的场景元素，且无“离开死亡谷返回镇上”的转场说明。"
+        }
+      ],
+      "description": "可修复逻辑瑕疵数量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "fixable_logic_inconsistency",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语言纯净性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了45个文件; LLM评估: 通读所提供的各章文本，叙事语言整体为中文，未发现“他very生气地说”“这个idea真的不错”等无意义的中英夹杂句式，也未出现日文混用或大段外语无翻译内容。出现的少量外来词/符号均为剧情或专业语境下的合理使用（如“碳十四定年”“DNA/AI”等类型的约定俗成术语、姓名称谓等），不构成不合理多语言混用，因此语言使用符合业务标准。",
+      "description": "无不合理的多语言混用",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "language_purity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "creative_intent文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/creative_intent.json 存在",
+      "description": "creative_intent.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "characters文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/characters.json 存在",
+      "description": "characters.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "outline文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/outline.json 存在",
+      "description": "outline.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "chapters目录存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/chapters/ 存在",
+      "description": "chapters/目录必须存在且有章节文件",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "情节推进": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了45个文件; LLM评估: 整体不符合“有基本情节推进”的业务标准。虽然第1-6章存在若干具体事件（如：收到神秘包裹并发现水壶刻字；与沈书白会面并做样本/图腾分析；决定进山并在云岭镇寻找向导；进山后遭遇山洪、装备被冲走、毒虫咬伤与高反处理等），这些章节单章通常能达到2-3个事件，事件占比也明显≥40%，且有明确时间/空间推进（店铺→图书馆→住处→小镇→进山），因此在早期局部章节层面是合格的。 \n\n但从提供的45章整体来看，后半段（约第7章起）出现大量内容复用/重复：第7-21章多次重复“被困山谷→发现岩石符号→发现脚印→去小溪取水→爬岩石扭伤脚踝→找到出口”的同一套事件链，且章节之间缺乏新的转折、冲突升级或信息增量，导致‘故事事件数量’在章节层面虽看似≥2，但实质上是同一事件的反复叙述，属于缺乏有效推进。第25-45章更是几乎完全重复“归途抉择/反思/回家”的同样对白与情绪总结，基本无新事件发生，场景与时间推进停滞，纯对话/内心感慨占比远超70%，无法构成持续的情节发展。 \n\n结论：作品前期具备基本推进，但整体内容存在大面积章节重复与静态化，导致多数章节缺乏‘实质情节推进’，按业务标准应判定为不合格（matched=false）。",
+      "description": "章节情节推进质量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "plot_progression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "完整叙事文本": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了45个文件; LLM评估: 不符合“完整小说正文”底线要求，整体呈现明显的大纲/模板化拼接痕迹：1) 大量使用结构化小标题如“##场景一/二/三/四”，且标题直接概括功能点（如“感情线”“黑三的结局”“新的开始”等），更像创作分镜/提纲而非给读者的自然叙事章节；2) 多个章节（尤其chapter_06~chapter_21、chapter_23~chapter_45）出现整段/整章高度重复（同一段落、同一对话、同一动作反复出现），表现为用模板填充事件点，而非连续发生的具体情节；3) 场景内容多为概述式推进：反复出现“我们必须尽快找到出路”“你们看那里有一块岩石”“可能有机关或陷阱”等总结性句式，缺少独立章节应有的具体场景展开与差异化细节；4) 后半部大量章节（chapter_26~chapter_45）几乎是同一章的重复复写，属于明显的‘偷懒式大纲/占位稿’而非真实正文。虽然chapter_01~chapter_04与chapter_22在局部有较完整的场景描写与对话，但整体文件集合按业务标准应判定为大纲式/非完整正文。",
+      "description": "章节内容必须是完整正文而非大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "full_narrative_content",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "反复结局": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了45个文件; LLM评估: 共45个文件，最后文件为chapter_45.md。按“全书结局标记”规则排查：chapter_24.md标题出现“# 第二十四章古城终章”，其中“终章”作为独立章节标题属于全书级结局标记，但chapter_24.md并非最后文件（后续仍有chapter_25.md~chapter_45.md）。此外，chapter_26.md~chapter_45.md多次出现“# 第X章古城终章”，同样属于在非最后文件反复出现全书级结局标记的情况。其他如“（第X章完）/（第二十四章完）”均为章节结束标记，不计入全书结局标记。结论：全书结局标记在非最后文件出现，且反复出现，matched=false。",
+      "description": "不能出现多次结局标记（全文完/全书完/后记）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "repeated_endings",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "workspace文件规范": {
+      "check_result": "fail",
+      "reason": "workspace中存在白名单外的文件: ['tracking_log.md']",
+      "details": "白名单: ['creative_intent.json', 'characters.json', 'outline.json', 'writing_log.md', 'chapters/', '.hitl_context.json'], 额外文件: ['tracking_log.md']",
+      "description": "workspace中不能有白名单之外的文件",
+      "check_type": "file_whitelist_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "workspace_file_compliance",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "叙事调性匹配": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了46个文件; LLM评估: 题材配方为“探险冒险+刑侦悬疑”，且tone要求“扎实写实，如《鬼吹灯》探险质感，去除玄幻成分，谜题有历史学和地理学合理解释”，reaction_strength=↘意味着整体应偏紧张压抑、克制、写实、信息导向。\n\n实际文本前期（第1-3章）基本匹配：\n- 第1章用较写实的环境与物件线索推进（如“寄件人一栏是一片空白”“南诏古城，铜牌为钥”），并有一定压迫感营造（“像是在切割着凝固的时间”“仿佛那是某种未知的炸弹”）。\n- 第2章有相对“解谜/考据”表达（“碳十四定年和微量元素分析”“光谱分析仪的屏幕上跳出了一组数据”），对话也偏信息交换与博弈（“考古不是看相，也不是算命”）。\n\n但从中后段开始，叙事调性明显偏离写实悬疑/探险，转向“玄幻机关+舞台剧式重复模板”，导致整体画风不搭：\n1) 违反“去除玄幻成分/合理解释”的硬性调性要求：\n- 第22章出现明显超自然机关表现：“图腾突然发出一道微弱的光芒，紧接着，岩石开始缓缓移动”“石盘突然发出一道微弱的光芒”。这种“符号点亮—石门自动开启”的描写更像玄幻副本/机关奇谈，而非写实探险（缺少力学结构、触发机制、年代可行性解释），与配方明确要求冲突。\n\n2) 中后期文本节奏与表达方式高度模板化、重复堆叠，削弱悬疑紧凑感：\n- 第7-21章大量段落几乎逐字重复同一套“山谷—脚印—取水—扭伤—出口”的叙述（如多章反复出现“我们必须尽快找到出路”“你们看，那里有一块岩石……”“啊！沈书白痛呼一声……”）。这种流水账式重复让文本呈现“脚本复用”的观感，不像悬疑/探险应有的高信息密度与层层递进。\n\n3) 结尾（24-45章）调性进一步滑向温情励志/散文化收束，削弱悬疑探险的冷硬与压迫：\n- 第24-25章与后续大量章节以价值宣言和抒情总结为主，例如“历史不是用来占有的，而是用来尊重的”“他们的身影在夕阳下拉得很长，仿佛在诉说着一个古老的故事”，并在26-45章重复同样的抒情段落。这种散文化、说理式收尾占比过高，会让读者体感更像“主题抒情/正能量总结”，而不是“探险悬疑的余震与收束”。\n\n综合判断：虽然开篇数章尚能读出探险悬疑的写实底色，但中后期大量内容在“写实探险”核心调性上发生系统性偏移（机关发光等玄幻表达 + 大面积模板化重复 + 过度抒情总结），整体超过容错范围，故matched=false。",
+      "description": "文笔风格必须与题材类型匹配",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_tone_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "后期章节跑偏": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了45个文件; LLM评估: 不合格。后1/3章节（约chapter_31~chapter_45，甚至从chapter_25起）出现明显“写不动/跑偏”症状：1）大量章节内容高度重复、模板化（如chapter_26~chapter_45几乎逐段复用‘归途的抉择/黑三的结局/归途的反思/新的开始’四段结构与措辞），缺少新的场景推进与情节发展，等同于用感想式总结反复凑章。2）结局/收尾内容被重复多次：chapter_24已给出明确结局与‘决定不带走文物、回家’的收束，但chapter_25及之后仍持续重复同一收尾叙述，属于非正常正文推进。3）长度与信息密度在后期明显萎缩：从前期较丰富的叙事与多场景推进，转为后期短小、同义反复的段落，虽字数未必极短，但有效内容（新情节/新事件）不足，符合‘敷衍凑数/异常萎缩’判定。未见典型读者互动/作者感谢等字样，但后期章节的重复总结性文本已构成正文跑偏与明显敷衍，因此matched=false。",
+      "description": "后期章节不能跑偏写非正文内容（作者感想、读者互动、番外预告等）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "late_stage_digression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色大纲规划完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在大纲中规划",
+      "details": "主角 2/2: 林烈, 沈书白; 配角 3/3: 阿朵, 老陈, 黑三",
+      "description": "设计的角色必须在大纲中规划",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_outline",
+      "is_critical": true
+    },
+    "角色正文出场完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在正文中出现",
+      "details": "在45个章节中检查; 主角 2/2: 林烈, 沈书白; 配角 3/3: 阿朵, 老陈, 黑三",
+      "description": "设计的角色必须在正文中出现",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_chapters",
+      "is_critical": true
+    },
+    "writing_log文件创建": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/writing_log.md 存在",
+      "description": "必须创建writing_log.md记录创作进度",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_creation",
+      "is_critical": true
+    },
+    "writing_log文件读取": {
+      "check_result": "fail",
+      "reason": "工具未被调用或参数不匹配",
+      "details": "工具 'novel_writing_service__read_file' 匹配调用 0 次，期望 ≥1",
+      "description": "必须读取writing_log.md了解前文内容",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_usage",
+      "is_critical": true
+    },
+    "大纲执行忠实度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了46个文件; LLM评估: 对照outline.json，正文在前6章尚能较好覆盖第一幕核心事件（遗物出现、相遇冲突、结盟准备、边陲小镇与阿朵、山洪、岩石标记与脚印等基本要素），但从chapter_07开始执行严重偏离：大量章节内容模板化重复、关键人物节点（村寨/老陈的系统性揭秘、护林站围攻与老陈交钥匙身亡、黑三谈判、死亡谷伏击致林烈重伤与山洞三天、瀑布后入口破解）未在对应章节中出现或被跳过，导致第二幕与第三幕的核心转折链条缺失。虽然后段（chapter_22起）突然进入古城并草率收束，但与大纲设计的关键真相揭示与最终对决方式不一致且收尾（回城墓前告慰）未落实，属于“关键转折缺失”的严重偏离，因此matched=false。",
+      "description": "实际章节内容必须忠实于自己设计的大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_execution_fidelity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色语言辨识度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了45个文件; LLM评估: 整体未达“遮住角色名也能识别说话者”的优秀标准。主要问题是对话高度模板化与跨章节复用：从第5章起大量章节（如06-21、以及后续多章）出现几乎相同的四句对话链条与相同的推进方式，导致不同角色对同一情境的反应句式、语气、信息密度高度一致，互换角色名也不违和，属于典型“共享话术模板”。此外在第22-24章等解谜段落中，沈书白与林烈多次重复同一套‘符号-顺序-打开机关’表述，专业角色与行动角色的语言差异被削弱。虽然开篇（第1-3章）能看到林烈较直接粗短、沈书白较学术冷静的初步区分，但后续被大量同构台词覆盖，导致主要角色之间的可辨识风格差异不足。",
+      "description": "不同角色对话必须有可辨识的语言风格差异",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "dialogue_character_distinction",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "叙事密度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了45个文件; LLM评估: 按标准的核心维度评估：\n1）叙事密度：第1章（以及第2章部分）有较丰富的环境/感官/心理/动作细节（如户外用品店的光影、气味、挂钟声、水壶刻字揭示等），具备画面感与层次。但从第4章开始，大量章节出现“固定开场描写+固定对话句式+固定事件模板（山谷被困/找岩石/扭伤/包扎/取水/脚印/出口）”的重复，具体场景信息、动作差异、感官细节明显不足，整体更像在复述同一段‘发生了什么’，且重复频率极高，导致多数章节叙事层次单薄。\n2）Show vs Tell：中后段尤其结局与‘反思’章节，频繁用价值判断与情绪陈述直接告诉读者（如“激动”“释然”“敬畏”“怀念”“伟大/英雄”），缺少通过可感的行为、细节、物件触感、停顿、反应等来呈现情绪。关键段落（真相揭示、告别、结局选择）主要依赖Tell。\n3）退化检测：后期（25-45章）几乎是整章重复同一套台词与段落，属于严重的密度下降与文本复用，按标准不可能达到‘优秀’要求。\n结论：整体超过一半章节（实际远超）处于低密度/模板化流水账状态，并伴随明显Tell化与后期退化，因此不符合本业务标准的“优秀叙事密度与Show主导”要求。",
+      "description": "章节叙事应有足够的场景描写、感官细节和心理活动，情感传达以Show为主",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_density",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "智斗逻辑合理性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了45个文件; LLM评估: 该故事题材包含探险/悬疑解谜（古城入口、机关开启、对手追踪），因此适用智斗/推理链检查。但核心解谜场景（chapter_22起的入口与机关）主要以“角色宣称符号含义+直接按顺序操作=成功”推进：缺少符号释读来源、顺序规则来源、以及从线索到结论的可验证步骤，属于典型‘假推理链’。另外，中段大量章节（约chapter_06-21）以重复模板推进，关键线索与解法的因果关联弱，未体现逐步逼近谜底的推理过程。整体因此未达优秀智斗逻辑标准。",
+      "description": "谜题/智斗的推理逻辑必须自洽",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "puzzle_logic_validity",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "题材契合度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了46个文件; LLM评估: 该内容在开篇（第1-2章）确实建立了探险+悬疑的方向：遗物线索、样本检测、图腾推断具备题材雏形；但从中段开始大量章节出现高比例复用与情节循环，导致核心题材特征（高风险探险的挑战升级、悬疑解谜的推理深度、线索节奏与反转力度）无法持续深化。探险事件未有效服务于解谜推进，刑侦悬疑的关键方法论（侦查、证据、逻辑链、排除与反转）缺席，使X轴冒险与Y轴刑侦标签未形成预期的‘化学反应’，整体表现更偏“标签化拼接+模板化推进”，未达优秀标准。",
+      "description": "题材特征精致度和X-Y轴化学反应效果",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "genre_fit",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "剧情节奏合理性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了45个文件; LLM评估: 不符合“优秀节奏”标准的核心原因是：1）情绪曲线缺乏层次：中段开始反复用同一种危机模板堆叠，缺少‘低-高-低-更高’的起伏与递进，读者难以感到升级与真正的高潮；2）高潮不醒目且被稀释：古城入口与核心探索应是主高潮，但因前后重复的追击/解谜/救场循环以及后续大量重复尾声，高潮的独特性被削弱；3）铺垫-回报比失衡：前期铺垫与中后期回报没有形成结构性加速，反而在第25章后出现大量“结局后复述”，造成明显拖沓；4）整体节奏失控为‘平直+重复’，读者体验会变成‘每章都差不多’，缺少关键段落记忆点与推进感。",
+      "description": "高潮低谷分布合理、情绪曲线有层次感",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "pacing_rationality_advanced",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "钩子设计": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了45个文件; LLM评估: 前几章（尤其第1章）曾出现相对具体的悬念信息（如“南诏古城，铜牌为钥”“照片里父亲一点都没老”等），但从第2章后大量章节结尾主要采用同一类模板化收束：用泛化的‘暴风雨/未知危险’或‘前方等待更多未知’作为尾钩，缺少具体问题与信息差，属于典型的模板钩子与空泛威胁暗示。更严重的是，第5-21章多处情节与结尾高度重复，读者对‘出口/危险’已可预期，悬念效力迅速衰减；第26-45章几乎完全重复同一文本结构，基本不存在有效的新钩子连接章节。整体不符合“关键转折处有精心设计悬念、钩子多样且有信息差”的优秀标准。",
+      "description": "关键转折处有有效的悬念钩子设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "hook_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "意象系统": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了45个文件; LLM评估: 文本在开端（第1-3章）确立了较有潜力的核心意象群：军用水壶（遗物/父辈线索）、铜牌拓片与螺旋纹（地图/钥匙）、“水下入口/幻菇孢子”（祭祀/致幻/未知）。但从整体可见部分看，后续章节大量重复同一场景结构与同一意象用法，意象没有经历清晰的‘意义变奏’（例如从遗物→证据→诅咒/救赎→闭环证明等），更多是作为推进机关解谜与指路的工具性道具反复出现，难以形成贯穿全文且不断深化的意象系统。因此未达“优秀（matched=true）”标准。",
+      "description": "核心意象贯穿全文并发生意义变奏",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "imagery_system",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "情感弧线层次": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了45个文件; LLM评估: 前3章里林烈与沈书白确实出现了由事件驱动的情绪变化（如“收到水壶/老郑电话/实验室争执/训练互助”触发从震惊→愤怒→坚定→不信任→缓和），单看这一小段可接近达标。但从第5章开始到大量后续章节（可见的6-21章及25-45章尤甚），文本出现严重重复与模板化：同一套‘被困山谷→脚印→取水→扭伤脚踝→继续找出路’在多章几乎原文复用，角色内心反应也停留在固定的‘危急/必须出路/担忧/感谢’循环，属于情感单调与伪层次（多次“紧张/担忧/危急”只是同一情绪的反复强化）。此外，第24章之后大量章节（25-45）基本是同一段‘不带走文物→反思→回家’反复，情感没有新的质变与递进，也缺少新的具体事件推动下一层变化。因此，整体主角情感弧线未形成稳定的多层递进结构，未达到“优秀”标准。",
+      "description": "主角情感发展有多层递进变化",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_gradient",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语义重复检测": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了45个文件; LLM评估: 存在大量跨章节的语义级重复，且多为“情境模板复制”：从第6章起，多章以几乎相同的危机-解决流程（山谷缺水/找岩石标记/脚印/取水/扭伤/包扎/出口）循环出现；进入古城后又以同一套“八符号解谜→通道开启→黑三突袭→阿朵断后”重复推进；第25-45章更是几乎整章复刻同一段‘归途反思’文本，连续二十余章不产生新叙事信息，远超≥3处阈值，判定不通过。",
+      "description": "不能出现大量语义级别的内容重复（P6级）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "semantic_redundancy",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构功能性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了46个文件; LLM评估: 从可见文本看，只有第1章在同章内做了并置剪辑（林烈线与沈书白线同一时间段交叉），具备一点‘双线并行/交叉’的结构意图；但该结构并未持续成为全书的组织原则，后续迅速回到单线冒险推进，并且没有把‘父辈线’以固定章法（奇偶章、插叙档案、不同叙述者等）系统嵌入，让结构本身承担“宿命循环/认知反转/因果对照”等主题表达。结尾（24章及其后的多章返程段）主要是把事件写完后的自然收束与总结式抒情，且反复复制同一组‘归途抉择—反思—回家’场景，没有与开篇的‘遗物/水壶刻字/雨夜电话’形成明确的结构性呼应或反转（例如回到同一意象并赋予新含义、揭示叙述不可靠、闭合成时间环等）。因此整体结构更像内容堆叠与线性事件串联，而非‘结构即意义’，不符合该业务标准的matched=true要求。",
+      "description": "叙事结构服务于主题表达（短篇尤重）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色命名质量": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了46个文件; LLM评估: 整体没有命中你给出的‘烂大街黑名单’（如苏晚晴/陈默/沈夜等），姓氏也不算全挤在苏/沈/顾/陆/陈上（虽然有沈、林、陈）。但主要角色命名仍偏‘类型模板’：林烈更像硬汉默认名，沈书白带明显书卷/清白标签，读者仅凭名字难产生更深层的角色-命运联想；反派‘黑三’与配角‘老陈’属于行业化、外号化的直白命名，缺乏文化深度与隐性共振。角色间差异化有（烈/书白/黑三/阿朵），因此不是严重同质化，但整体仍未达到“看到名字就能联想到独特命运与设计感”的优秀标准。",
+      "description": "角色命名有文化深度、辨识度和角色-命运共振",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_naming_quality",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "中篇字数_冒险": {
+      "check_result": "fail",
+      "reason": "字数不符合要求",
+      "details": "总字数 89409 不在范围 [108000, 132000] 内; 共45个文件（按章节顺序排列）: chapter_01.md, chapter_02.md, chapter_03.md, chapter_04.md, chapter_05.md, chapter_06.md, chapter_07.md, chapter_08.md, chapter_09.md, chapter_10.md, chapter_11.md, chapter_12.md, chapter_13.md, chapter_14.md, chapter_15.md, chapter_16.md, chapter_17.md, chapter_18.md, chapter_19.md, chapter_20.md, chapter_21.md, chapter_22.md, chapter_23.md, chapter_24.md, chapter_25.md, chapter_26.md, chapter_27.md, chapter_28.md, chapter_29.md, chapter_30.md, chapter_31.md, chapter_32.md, chapter_33.md, chapter_34.md, chapter_35.md, chapter_36.md, chapter_37.md, chapter_38.md, chapter_39.md, chapter_40.md, chapter_41.md, chapter_42.md, chapter_43.md, chapter_44.md, chapter_45.md; 最后一个文件是 chapter_45.md",
+      "description": "总字数应在108000-132000之间（基于query要求120000，±10%浮动）",
+      "check_type": "semantic_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "range_constraint",
+      "is_critical": true
+    },
+    "情感交付冒险": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了45个文件; LLM评估: 整体主线虽是“寻找父辈失踪真相/进入南诏古城”的冒险动机，但从已给出的45章可见内容存在明显“冒险挑战走过场+成长弧线不足”的问题，难以达到热血冒险向的业务标准。\n\n1) 冒险/挑战的质量不足（大量重复、缺乏升级与新解法）：前期第5章出现较具体的生存挑战（山洪冲走装备、毒蜘蛛咬伤、高原反应，林烈急救与照护），算是合格的实质困难；但从第6章起到第21章，反复出现几乎同一套模板情节：被困山谷→发现螺旋标记→发现新鲜脚印→取水→沈书白脚踝扭伤→找到出口（第6/7/8/9/10/11/12/13/15/16/17/18/19/20/21章均高度雷同）。这种高重复导致挑战缺少新变量与递进，读者感受不到“越来越难、靠成长解决”的冒险推进。\n\n2) 主角成长轨迹不清晰：设定上有潜在成长（第3章林烈教沈书白野外技能；第2章两人从互相轻视到分工合作），但后续大量章节停留在同一状态循环（沈书白持续受伤/虚弱、林烈持续救援），缺少明确的“能力/心态/认知突破节点”。例如沈书白多次扭伤脚踝与高反危机，但没有呈现他学会独立处理、反过来支撑团队的关键转折；林烈也多以硬核照顾者存在，缺少面对更大代价的抉择升级。\n\n3) 团队协作与羁绊有苗头但没有有效兑现：前期有冲突—磨合—互补（第2章互怼、用专业互补；第3章训练与文化禁忌交换），也有阿朵挡住黑三（第22章）这类“伙伴付出”。但因为中段大量重复模板剧情，人物关系推进与协作策略没有持续深化，伙伴更多承担功能性（向导/挡追兵）而非持续的互动羁绊成长。\n\n4) 基调虽不算消极，但“燃点”与“突破自我”的戏剧性不足：第22章进入古城、解谜开门、与黑三对峙具备热血元素（“不会屈服”“快走我来挡住他们”），结尾第24章强调“不带走文物、尊重历史”也偏正向；然而后续第25—45章几乎是同一套“归途反思/新的开始”反复复写，缺乏新的高潮与更强烈的向上燃感。\n\n结论：题材方向接近冒险，但当前文本在中后段大量重复同一危机场景与解决方式，主角成长与关键突破不足，导致整体更像“冒险设定+重复桥段的流水叙述”，未达到热血冒险向所要求的‘实质挑战递进+明确成长蜕变节点+协作羁绊深化’。",
+      "description": "实际内容必须是热血冒险向",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "非恋爱主线检查": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了45个文件; LLM评估: 从已给出的章节内容看，故事的主线驱动力是“寻找父辈失踪真相/南诏古城与铜牌线索/对抗文物走私团伙黑三”，而非恋爱推进。核心关系线主要是林烈（退伍侦察兵）与沈书白（考古研究者）之间的搭档/战友式合作：两人在实验室“分工合作找地图与分析图腾”、进山后多次互相救援与照顾（如林烈拉住沈书白避免坠落、为其处理毒虫咬伤/高原反应；沈书白用古彝文与笔记解谜开门找线索），关系基于共同目标与生死协作。文本中虽有少量亲密/微妙情绪描写（如第三章夜晚互称队友、‘微妙的气氛’；林烈握住沈书白的手教打绳结、沈书白脸红；多处出现‘感情线’小标题），但未出现明确恋人关系、告白、追求、为爱情放弃任务等关键决策，也未见关键转折由恋爱关系变化驱动。整体恋爱元素占比低，且不主导剧情推进，因此符合“非恋爱主线”的业务标准。",
+      "description": "核心关系线不能是恋爱",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色关系设计张力": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 整体有张力雏形（主角互相偏见、专业立场差异、父辈隐秘联系），但按标准仍不足以pass：\n1) 关系的“内在矛盾源”偏弱且同质：林烈/沈书白的核心冲突主要是‘文武互看不上’与性格摩擦，更像磨合型搭档而非目标/价值观的硬冲突；且relationship_dynamics明确指向在外部威胁与生死考验下快速走向信任，矛盾很容易被事件消解。\n2) 虽写了三阶段变化（质疑→勉强尊重→生死托付），但变化路径过于线性、单向升级，缺少“可能反复/倒退”的结构空间（例如因关键真相触发信任崩塌、背叛或立场分裂），因此悬念与持续驱动力不足。\n3) 冲突驱动更多来自外部：黑三追杀被设定为‘催化剂，迫使放下成见’，这等于用外部压力解决内在矛盾；而父辈隐秘联系目前只是‘相遇非偶然’的线索，并未落实为会让两人立场对立的信息不对称/利益冲突（例如其中一方家族牵涉丑闻、研究伦理与寻父真相不可兼得等）。\n加分点：两位主角各自的恐惧与自我证明需求可成为更深矛盾源；老陈“知道部分真相且愧疚”具备制造信息不对称的潜力；黑三与探险队有接触可引出道德灰区。\n主要不足：关键关系目前是‘从不和到兄弟’的通关式成长，缺少由角色动机/价值选择必然产生的硬碰硬冲突与持续悬念，因此不符合“必须满足”中的第1与第3条（第2条虽有变化但过于线性）。",
+      "description": "角色关系设计具有叙事张力，能驱动剧情",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_relationship_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色动机设计深度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（符合业务标准）。\n\n1) 表层动机与深层动机有清晰区分：\n- 林烈 overt_motivation 是“找到二十年前失踪父亲的下落，查明当年探险队的真相”，而 covert_motivation 是“证明自己不只是‘只会打仗的莽夫’，在和平年代找到存在的意义”。前者是外部任务/目标，后者是身份认同与自我价值的内在需求，二者不重复。\n- 沈书白 overt_motivation 是“解开…南诏古城之谜，完成导师托付的研究”，covert_motivation 是“证明自己的学术价值，不辜负父亲的期望，找到属于自己的人生方向”。前者是学术任务，后者是被认可/家庭期待与人生方向的心理驱动，也不重复。\n\n2) 动机有具体来源、能落到背景经历：\n- 林烈的深层动机与其“退伍军人”“被贴‘只会打仗’标签”“内心孤独/害怕被抛弃”以及 secret_fear（“害怕像父亲一样消失…害怕被世界遗忘”）形成因果链：追寻父亲真相不仅是事件推动，更是对‘被抛弃/被遗忘’的对抗与对自我意义的确认。\n- 沈书白的深层动机与其身份“考古系研究生…导师权威”、traits（“学术傲气…害怕失败…渴望被认可”）以及 secret_fear（“害怕研究从根上就是错的…让所有信任自己的人失望”）紧密绑定；同时 hidden_connection（父亲论文合作者与探险队成员关联）强化其动机来源不是模板口号，而是具体人际/家族压力与学术风险。\n\n3) 至少两个主角满足以上两条：\n- 林烈、沈书白两位主要角色均同时满足“动机分层”与“来源具体”两项要求。\n\n加分点（非硬性要求）：\n- hidden_connection 让两人动机与父辈线索互相咬合，能在剧情中持续反哺角色心理；misperception_of_other 支撑‘文武对立→理解→托付’的关系弧线，为动机冲突与转变提供了可执行的戏剧机制。\n\n小不足（不影响通过）：\n- 配角动机层次未显式展开（如阿朵/黑三更多是功能性描述），但标准不强制配角多层动机，因此不构成 fail。",
+      "description": "角色动机设计有深度，有表层和深层动机区分",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_motivation_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色成长弧线设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: 结论：符合业务标准（pass）。\n\n1) 有清晰起点与终点：\n- 林烈：起点在第1章明确写出“独自生活、与创伤保持距离/麻木空虚”，人物底层恐惧是“害怕被抛弃/被遗忘、像父亲一样消失”。终点在第22章与第2幕洞中倾诉后得到落点：理解父亲当年的选择、与父亲和解（墓前“你当年的选择，我理解了”），并从“迷茫找意义”转为“主动确立新目标（成立探险队）”。同时关系层面从对沈书白的偏见到“生死之交/可托付后背”。\n- 沈书白：起点为“学术傲气+脆弱、渴望被认可且害怕失败/研究从根上是错的”，对林烈有偏见。终点在第21-22章完成父亲研究但选择不公开古城位置，并在墓前完成心理结算（“我完成了你的研究…秘密我会保守”），体现从“以学术成败/认可驱动”转向“对真相与责任的成熟取舍”，关系上也从对立到信任。\n\n2) 变化有内在逻辑：\n- 两位主角的变化都由各自的动机/恐惧驱动，并被事件逐步触发：共同探险的连续生死考验（山洪、迷路、毒虫、高反、追杀）迫使他们修正对彼此的误解；老陈的揭密与牺牲把“父辈真相”从目标变成情感负担与责任；第16章林烈负伤昏迷倾诉、三天山洞共处等桥段提供了从“强硬/封闭”到“敞开心扉/互相托付”的中间台阶，避免跳变。\n\n3) 弧线在章节规划中有落地：\n- 大纲多处用 emotional_shift/scene_outcome 直接写了关系与心态的推进（如第5章“破冰”、第6章“更加信任彼此”、第11章“争执→妥协→合作”、第16章“倾诉/了解内心”、第21章“决定保守秘密”、第22章“释然/新生”）。relationship_dynamics 里三阶段（质疑→勉强尊重→生死托付）也被具体章节事件逐段承接。\n\n可改进点（不影响通过）：characters.json 未显式提供 character_arc 字段；此外对“沈书白的学术傲气如何被磨平/价值观转向责任”的关键转折可在第19-21章再加一两个更明确的心理抉择场景，以增强内在弧线的可见度。",
+      "description": "主角有清晰的成长/变化弧线设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_arc_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "outline结构完整性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（符合业务标准）。\n\n依据：\n1) 章节覆盖完整：大纲按三幕结构给出act_one(6章)、act_two(11章)、act_three(5章)，共22章，并明确每幕字数与章节数规划；覆盖从开端“遗物”到结尾“归途”的完整故事闭环，不是只写前几章。\n2) 每章有实质性内容描述：每章均提供chapter_synopsis，且普遍为多段描述（远超30字），包含起承转合、人物动机/状态变化（如第1章起始/结束状态、第6章幕终转折等），可直接指导写作。\n3) 包含冲突/转折信息：大量章节提供scene_sequence，且每个场景包含conflict_point与emotional_shift；全篇有明确外部对抗（山洪、毒虫、高反、黑三追杀/谈判/伏击、古城机关与崩塌）与内部冲突（双主角价值观对立→磨合→生死互信、是否撤退的抉择、是否公开古城秘密的选择），并设置幕末turning_point。\n4) 三幕/多幕结构可辨识：清晰的act_one/act_two/act_three分层，每幕都有description、story_synopsis、turning_point及对应章节列表，结构化程度高。\n\n补充观察（不影响通过）：第二幕中“山洪”作为重复风险点出现两次（第5章与第10章），虽可作为升级对照，但建议在正式写作时强化差异化与因果推进，避免读者感到套路重复。总体而言，该大纲结构完整、信息密度高、冲突与转折明确，足以支撑后续创作。",
+      "description": "大纲结构完整，信息密度足以指导写作",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_structure_completeness",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "outline叙事张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：符合“持续叙事张力”的业务标准（至少满足2/3项，实际三项都满足）。\n\n1）信息落差设计（满足）：开篇即抛出父亲失踪之谜与“南诏古城、铜牌为钥”的谜面（第1章），但真正的机制解释与父辈结局被延迟到第二幕末/第三幕（第19-21章）才揭晓；第6章发现“新鲜脚印/并非唯一寻城者”提出新问题，直到第8章引入黑三、并在第14-20章逐步兑现威胁；“钥匙是什么、能打开什么”在第14章获得但用途/入口位置到第17-18章才落地，形成持续的悬念链。\n\n2）张力递进（满足）：冲突与风险呈升级结构——第一幕以线索追查+自然险（山洪）和被跟踪的轻度外部威胁为主；第二幕升级为“生存极限（迷路、断粮、毒虫、高反）+武装反派追杀（黑三）+关键盟友牺牲（老陈之死）+主角重伤（第16章）”，整体复杂度和危险度明显高于开头；第三幕进一步进入核心场域古城，完成“揭秘+机关+最终对决+崩塌逃生”的高潮闭环，紧张度最高，符合中后段更紧张的要求。\n\n3）意外/转折（满足）：至少有2处有效转折——（a）第14章老陈牺牲并交出钥匙，把“求线索”转为“被追杀且必须抢先入城”的结构性转向；（b）第19章揭示父辈并非简单失踪而是因古城祭祀机关致幻互杀、部分人逃出隐姓埋名，改变读者对“失踪真相”的预期；（c）第20章黑三触发自毁机关导致古城崩塌，也属于高潮阶段的强转折。\n\n潜在不足（不影响通过，但可优化）：第二幕前半的外部危机类型略偏“关卡式”（山洪/迷路/毒虫/高反连续出现），若能让每次危机更直接地产生新线索或更强地推动反派压力（而不只是消耗），张力会更集中；此外第10章再次使用“山洪”与第5章重复度较高，可考虑替换为不同性质的险阻或让其承担更关键的信息功能。总体而言，悬念链清晰、威胁升级明确、转折有伏笔支撑，能提供持续的“想知道接下来怎样”的驱动力。",
+      "description": "大纲有持续的叙事张力和悬念驱动",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_narrative_tension",
+      "quality_tier": "advanced",
+      "is_critical": false
+    }
+  },
+  "completion_status": "completed"
+}

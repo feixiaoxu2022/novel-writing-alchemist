@@ -1,0 +1,744 @@
+{
+  "check_version": "novel_writing_v1.0",
+  "sample_id": "NW_VAGUE_MEDIUM_SWEET_DRAMA_001",
+  "check_timestamp": 1772003660,
+  "dimension_scores": {
+    "format_compliance": {
+      "pass_rate": 1.0,
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "failed_items": []
+    },
+    "business_rule_compliance": {
+      "pass_rate": 0.636,
+      "total": 22,
+      "passed": 14,
+      "failed": 8,
+      "skipped": 0,
+      "failed_items": [
+        "check_11",
+        "check_18",
+        "check_19",
+        "check_20",
+        "check_21",
+        "check_55",
+        "check_56",
+        "check_58"
+      ]
+    },
+    "memory_management": {
+      "pass_rate": 0.5,
+      "total": 2,
+      "passed": 1,
+      "failed": 1,
+      "skipped": 0,
+      "failed_items": [
+        "check_43"
+      ]
+    },
+    "data_consistency": {
+      "pass_rate": 0.5,
+      "total": 2,
+      "passed": 1,
+      "failed": 1,
+      "skipped": 0,
+      "failed_items": [
+        "check_41"
+      ]
+    },
+    "content_quality": {
+      "overall_score": 32.89,
+      "quality_level": "gate_failed",
+      "gate_layer": {
+        "pass_rate": 0.0,
+        "total": 1,
+        "passed": 0,
+        "failed": 1,
+        "skipped": 2,
+        "failed_items": [
+          "check_04"
+        ]
+      },
+      "basic_layer": {
+        "pass_rate": 0.733,
+        "total": 15,
+        "passed": 11,
+        "failed": 4,
+        "skipped": 1,
+        "failed_items": [
+          "check_28",
+          "check_29",
+          "check_38",
+          "check_57"
+        ]
+      },
+      "advanced_layer": {
+        "pass_rate": 0.222,
+        "total": 9,
+        "passed": 2,
+        "failed": 7,
+        "skipped": 0,
+        "failed_items": [
+          "check_46",
+          "check_48",
+          "check_49",
+          "check_50",
+          "check_51",
+          "check_52",
+          "check_54"
+        ]
+      },
+      "gate_triggered": true,
+      "score_breakdown": {
+        "base": 60.0,
+        "gate_penalty": -20.0,
+        "basic_deduction": -16.0,
+        "advanced_bonus": 8.89
+      }
+    }
+  },
+  "overall_result": {
+    "status": "Poor",
+    "total_score": 42.79,
+    "content_score": 32.89,
+    "process_score": 65.9,
+    "content_weight": 0.7,
+    "process_weight": 0.3,
+    "gate_triggered": true,
+    "total_checks": 55,
+    "passed_checks": 33,
+    "failed_checks": 22,
+    "pass_rate": 0.6
+  },
+  "check_details": {
+    "读取配方知识库": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取RECIPE_KNOWLEDGE.md（配方知识库）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节克隆检测": {
+      "check_result": "skip",
+      "reason": "章节数不足",
+      "details": "仅1章，跳过克隆检测（需>=4章）",
+      "description": "不能出现连续章节内容完全重复（克隆）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_cloning",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "交替重复检测": {
+      "check_result": "skip",
+      "reason": "章节数不足",
+      "details": "仅1章，跳过交替重复检测（需>=8章）",
+      "description": "不能出现A-B-A-B交替循环的章节内容",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "alternating_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "章节完成度": {
+      "check_result": "fail",
+      "reason": "章节完成度不足(5%)",
+      "details": "大纲规划20章，实际仅完成1章 (完成率5.0%，阈值30%)",
+      "description": "实际写作章节数必须达到大纲规划的合理比例",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_completion",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "章节长度稳定性": {
+      "check_result": "skip",
+      "reason": "章节数不足",
+      "details": "仅1章，跳过长度稳定性检测（需>=6章）",
+      "description": "后期章节不能出现严重长度萎缩",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_length_stability",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "段落重复检测": {
+      "check_result": "pass",
+      "reason": "段落重复在可接受范围",
+      "details": "同章内重复0处, 跨章重复0组 (阈值: 同章>=2, 跨章>=5)",
+      "description": "不能出现大量段落在不同章节间重复",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "paragraph_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取大纲设计指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取OUTLINE_DESIGN_GUIDE.md（大纲设计指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取写作技巧指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取WRITING_TECHNIQUE_GUIDE.md（写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取设定一致性管理指南": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取CONSISTENCY_MANAGEMENT_GUIDE.md（设定一致性管理指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取命名skill": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取CHARACTER_NAMING_GUIDE.md（角色命名规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取creative_intent的schema": {
+      "check_result": "fail",
+      "reason": "工具未被调用或参数不匹配",
+      "details": "工具 'novel_writing_service__read_file' 匹配调用 0 次，期望 ≥1",
+      "description": "必须读取creative_intent.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取characters的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取characters.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取outline的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取outline.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节命名格式": {
+      "check_result": "pass",
+      "reason": "所有文件命名符合规范",
+      "details": "检查了 1 个文件; chapter_01.md: 匹配",
+      "description": "章节文件命名必须为chapter_NN.md格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "naming_convention",
+      "is_critical": true
+    },
+    "creative_intent格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "creative_intent.json: 字段完整",
+      "description": "creative_intent.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "characters格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "characters.json: 字段完整",
+      "description": "characters.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "outline格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "outline.json: 字段完整",
+      "description": "outline.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "X轴模式ID格式": {
+      "check_result": "fail",
+      "reason": "属性值不符合预期",
+      "details": "selected_recipe.x_axis_mode_id = None，期望 {'regex': '^[A-G]\\\\d{1,2}$'}",
+      "description": "X轴模式ID必须匹配^[A-G]\\d{1,2}$格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签枚举": {
+      "check_result": "fail",
+      "reason": "属性值不符合预期",
+      "details": "selected_recipe.y_axis_tags = None，期望 {'array_item_type': 'string', 'enum': ['双向暗恋', '系统流', '无限流', '种田流', '赛博朋克', '规则怪谈', '重生/穿越', '商战权谋', '克苏鲁', '第四天灾', '仙侠修真', '刑侦悬疑']}",
+      "description": "Y轴标签必须在12种枚举中",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签数量": {
+      "check_result": "fail",
+      "reason": "属性值不符合预期",
+      "details": "selected_recipe.y_axis_tags = None，期望 {'array_min_length': 2, 'array_max_length': 3}",
+      "description": "Y轴标签数量必须为2-3个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "forbidden_elements存在性": {
+      "check_result": "fail",
+      "reason": "属性值不符合预期",
+      "details": "selected_recipe.forbidden_elements = None，期望 {'array_min_length': 1}",
+      "description": "forbidden_elements必须至少有1个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "配方选择交互": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "配方选择阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "写作准备确认": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "写作准备阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "主题一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 本章从开篇到结尾的核心主题类型保持一致，始终围绕“修仙界问道大会背景下的正魔对立与天才对决/竞争”展开：前半段铺陈大会与主角天才地位（比试连胜、宗门期待），中后段引入魔道势力并以顾无咎登场推动冲突升级，核心情节集中在两位年轻强者的对决与由此带来的后续隐患（“还会再见”“更复杂的答案”）。过程中虽有观众追捧、宗门声望等元素，但都服务于主线冲突与对决推进，并未出现从修仙对抗突然切换到无关类型（如商战/现代悬疑/科幻穿越等）的主题替换，因此判定主题一致。",
+      "description": "故事主题一致",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "theme_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "主要角色一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 本章从开篇到结尾的叙事中心始终围绕萧无痕展开：开场在观礼台聚焦其身份（凌霄宗天才弟子），随后比试、车轮战、察觉魔道视线、与顾无咎正面对决、受伤与收尾的不安情绪，关键行动与决策点均由萧无痕推动或直接承受结果。顾无咎与萧明远虽有较多戏份，但均作为对手/长辈服务于萧无痕的主线冲突与成长节点，未出现主角被替换、消失、身份断裂或被配角长期（>70%）抢占叙事视角的情况，因此符合“主角存续性”标准。",
+      "description": "主要角色一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "main_character_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设定一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 仅提供了chapter_01一个章节，无法进行“同一角色在不同章节之间”的前后对比，因此在本检查项范围内没有证据显示人物性格/行为在章节间不一致。就本章内呈现而言：萧无痕整体表现为冷静克制、礼貌疏离、以实力说话且警惕魔道威胁；被顾无咎压制受伤后情绪收束为更冰冷的警惕与不安，并未出现无缘无故的性格反转或动机自相矛盾。顾无咎则始终维持玩味、挑衅、残忍嗜战的行为风格，也未出现前后摇摆。综上，在可见范围内未发现跨章节人设崩坏问题。",
+      "description": "人物设定一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_trait_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设计遵循度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: 整体匹配（plan vs execute一致）。\n\n1) 萧无痕（protagonist）\n- traits匹配：chapter_01中他“负手而立，目光平静…看不出任何情绪”“淡淡地笑…礼貌而疏离”，以及对师叔祖“微微欠身”“弟子明白/谨记”等，体现了characters.json的“表面冷峻温和”“克己复礼”“情深不露”的外在克制与礼节。\n- 责任感/身份感体现：面对萧明远“不可坠了凌霄宗威名”“此人交给你了”，他理解为“立功机会”，并出战承担宗门颜面，符合“责任感极强”与少主定位。\n- 天才能力符合：对周通“一招/十招内解决”“甚至没有用出全力”，符合“百年一遇的天才弟子”。\n- 未充分呈现但不构成不符：covert_motivation（渴望自由与真挚情感）、secret_fear（怕成为入魔的父亲）在第1章未展开；但这属于尚未触及的内心线索，并未出现相反表现，因此不判不匹配。\n\n2) 顾无咎（deuteragonist）\n- traits匹配：出场“血色长袍…嘴角挂着玩世不恭的笑意”“轻笑…慵懒而磁性”“邪笑”，与“表面邪魅不羁”一致；言语挑衅但并未无差别滥杀，更多是试探与压迫感，符合“行事狠辣但有底线/用冷漠伪装”。\n- 能力与定位符合：战斗中刀法“阴狠毒辣…直取要害…变化多端”，并一度压制萧无痕，符合“魔道年轻一辈最出色的棋子/天才”设定。\n- 未充分呈现但不构成不符：其“内心孤独脆弱”“渴望父亲认可”“害怕魔血失控”等内核在本章主要以外在强势呈现，尚未展开，但没有出现与设计相反的外向温软或道德崩坏式失控。\n\n3) 关系/误解设定\n- 关系基调符合“初始敌对、互相试探”：本章双方阵营对立、当众交锋；萧无痕对顾无咎的认知仍停留在“手段残忍喜怒无常”的传闻层面，顾无咎以挑衅方式接近，整体符合早期敌对试探阶段。\n- misperception_of_other/hidden_connection等尚未在chapter_01验证到，但也未被反向否定。\n\n结论：第1章中两位主角的外在性格、行为模式、能力定位与关系初始阶段均与characters.json一致；深层动机/恐惧尚未展开但未出现偏离，因此matched=true。",
+      "description": "实际表现符合设计文档",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构性逻辑硬伤": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 存在两处客观信息前后不一致：其一为周通一战的招数统计口径混乱，属于明确数字/事实描述冲突；其二为萧明远的称谓与职务关系未解释，容易形成身份设定互斥的客观矛盾。两处均可通过统一表述或补充一句解释在局部修复，不影响主线。",
+      "flaw_count": 2,
+      "flaws": [
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_01：周通对战段落（“一招？”→“十招”→“确切的说，是九招半”）",
+          "description": "同一场对战的招数统计前后自相矛盾：先写“一招击败”，随后又写“只用了十招”，紧接着又改为“九招半”。除非明确区分“一招制敌/十招结束”的统计口径，否则构成客观描述冲突。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_01：萧明远身份介绍段落（“师叔祖”→“凌霄宗大长老”）",
+          "description": "萧无痕称呼萧明远为“师叔祖”，通常指辈分极高的祖师级长辈；但后文同时将其定义为“凌霄宗大长老”。两种身份在门派结构与辈分上可能并存，但文本未给出任何解释（例如“大长老兼师叔祖/掌门师叔祖”），容易造成角色客观身份设定不清、互相冲突的阅读结论。"
+        }
+      ],
+      "description": "无逻辑硬伤",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "logical_contradiction",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "语言纯净性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 整体叙事语言为中文，绝大多数段落语言统一。但文中出现了明显不合理的中英混用：\"萧明远 being 是凌霄宗大长老\"，其中“being”并非人名/品牌/术语/角色外语对话，也无情节必要性，属于无意义夹杂英文，符合“不合理的多语言混用”不合格情形。因此判定为不合格。",
+      "description": "无不合理的多语言混用",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "language_purity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "creative_intent文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/creative_intent.json 存在",
+      "description": "creative_intent.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "characters文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/characters.json 存在",
+      "description": "characters.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "outline文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/outline.json 存在",
+      "description": "outline.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "chapters目录存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/chapters/ 存在",
+      "description": "chapters/目录必须存在且有章节文件",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "情节推进": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 合格：本章有明确且连续的情节推进，事件密度高，非静态对话/独白主导。\n\n1) 具体故事事件（≥2-3个，且逻辑关联清晰）：\n- 问道大会开场与规则落地（三声钟鸣，比试开始），建立主线舞台。\n- 萧无痕下场迎战周通并完成“十招内击败/击落台下”（完整对战事件+结果）。\n- 车轮战持续两个时辰并以“最后一名挑战者落台”收束（时间推进+阶段性胜利）。\n- 萧无痕发现魔道无相宫到场并与顾无咎四目相对（信息揭示/伏笔事件）。\n- 正魔当众对峙升级冲突：萧明远喝止、各方围住黑袍人（局势变化）。\n- 萧无痕与顾无咎正式开战：交手、萧无痕反击伤到对方、顾无咎以计反制重伤萧无痕（多段转折）。\n- 萧明远出手终止比试，顾无咎撤离并留下“还会再见”威胁（冲突阶段性落幕+后续钩子）。\n- 萧无痕受伤、被安排退场休息并产生不安（结果回收+承接下一章）。\n\n2) 内容占比：\n- 主要篇幅为比赛行动、对峙、冲突升级与打斗过程；对话用于推动冲突与设定（魔道来意、立功安排、终止比试），内心独白占比较小。整体事件/行动描写显著≥40%，纯对话/独白远低于70%。\n\n3) 时间/空间推进与角色行动：\n- 空间从观礼台/问剑台切换；时间上有“开场—两小时车轮战—魔道现身—决斗—收场”的明确推进。\n- 角色有大量具体行动（下台迎战、连胜、发现敌方视线、拔剑交手、受伤、长老介入、对手撤离、主角离场）。\n\n结论：满足“至少2-3个具体事件、事件与情感较平衡、场景/时间推进、角色有实质行动、事件逻辑推动主线”的合格标准。",
+      "description": "章节情节推进质量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "plot_progression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "完整叙事文本": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 该内容为连贯的小说正文而非大纲：1）仅有章节标题“# 第一章 问道大会”，未出现“核心事件/情感基调/关键场景/本章悬念/字数预估”等创作规划元数据；2）正文包含完整场景描写（问道峰顶、观礼台、问剑台等环境细节）、人物动作与心理（萧无痕的神态、感受视线、不安等）；3）存在大量自然对话与冲突推进（萧明远叮嘱、顾无咎登场交锋、比试裁判开战等）；4）叙事呈连续段落叙述与战斗过程细节，并非“-要点”列举或“→”流程式罗列。因此符合“完整小说正文”标准。",
+      "description": "章节内容必须是完整正文而非大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "full_narrative_content",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "反复结局": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 待评估内容仅包含1个文件：chapter_01.md，因此该文件同时也是“最后一个文件”。通读全文未发现任何全书级结局标记（如“全文完/全书完/完结/全剧终/【完】/(完)/THE END”，也未出现作为独立段落标题的“后记/尾声/终章”）。文中出现的“第一章”属于正常章节标题，不属于结局标记。因未在非最后文件中出现全书结局标记，判定不存在反复结局问题，matched=true。",
+      "description": "不能出现多次结局标记（全文完/全书完/后记）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "repeated_endings",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "workspace文件规范": {
+      "check_result": "pass",
+      "reason": "workspace中所有文件均在白名单内",
+      "details": "白名单: ['creative_intent.json', 'characters.json', 'outline.json', 'writing_log.md', 'chapters/', '.hitl_context.json']",
+      "description": "workspace中不能有白名单之外的文件",
+      "check_type": "file_whitelist_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "workspace_file_compliance",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "叙事调性匹配": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: 题材/应有调性：creative_intent.json标注reaction_strength=↘，且“虐心压抑，但最终HE”，属于虐心向言情（仙魔对立背景）。该题材应有的叙事调性应更偏“沉重、压抑、克制中带情感张力”，常见表现是：情绪克制但有内伤感、环境与氛围偏冷、对话与描写能持续传递‘被外界挤压/无力感’，并有较多细腻的情感暗流（即使不直说也要让读者感到疼）。\n\n实际章节文笔特征：chapter_01整体更像“热血修仙大会+强者对决”的开篇，节奏明快、爽点突出，情绪基调偏燃而不是压。大量篇幅用于战斗展示与围观喝彩（例如“十招”“震天的欢呼声”“年轻弟子们疯狂的呐喊”“这将是年轻一辈最强两人的对决”），叙事语气也偏激昂与观赏性。打斗描写强调速度与强强碰撞（“一白一红两道身影在场中交错纵横”“密集的金属碰撞声如同雨点般响起”），属于典型热血/爽感路数。\n\n与虐心调性不匹配的关键点：\n1) 氛围不压抑：开场是盛事与人潮的热闹场面（“盛事”“水泄不通”“嘈杂的人声如潮水般涌动”），后续多次用“点燃”“欢呼”“叫好”等强化兴奋，而非阴郁压迫。\n2) 情感张力不足且偏‘英雄对决’：虽有一处心动提示（“四目相对的瞬间，萧无痕的心脏不受控制地漏跳了一拍”），但很快被大段对战与装点式台词覆盖，未形成虐心向应有的“克制、欲言又止、被命运挤压的疼痛感”。\n3) 语气与修辞偏爽文燃向：如“太慢了”“不愧是百年一遇的天才”“恐怕元婴境界的较量也不过如此吧？”这类抬升主角/对决规格的表达，会把读者引向热血/强者爽感，而非虐心压抑。\n\n结论：本章整体画风更接近‘热血修仙竞技/强强对决’的明快燃向叙事，而不是reaction_strength=↘所要求的沉重压抑、克制带痛的虐心调性；因此叙事调性与题材匹配度不足，判定matched=false。",
+      "description": "文笔风格必须与题材类型匹配",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_tone_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "后期章节跑偏": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 仅提供了chapter_01.md，可见内容全程为小说正文叙事：有明确场景（问道大会/问剑台）、人物（萧无痕、萧明远、顾无咎等）、冲突与情节推进（比试—魔道来访—对决—受伤收场并埋下伏笔）。未发现作者感想、读者互动、番外/预告、角色问答等跑偏内容。章节篇幅为正常叙事长度，不属于几十到几百字的敷衍短章；由于缺少后期章节，无法评估“中后期跑偏/长度萎缩”趋势，但就当前文件本身不触发不合格条件。",
+      "description": "后期章节不能跑偏写非正文内容（作者感想、读者互动、番外预告等）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "late_stage_digression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色大纲规划完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在大纲中规划",
+      "details": "主角 2/2: 萧无痕, 顾无咎; 配角 8/8: 顾寒山, 萧明远, 沈青衣, 墨白, 玄阴子, 洛清羽, 萧天绝, 柳如烟",
+      "description": "设计的主要角色必须在大纲中规划",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_outline",
+      "is_critical": true
+    },
+    "角色正文出场完整性": {
+      "check_result": "fail",
+      "reason": "部分设计角色未在正文中出现（配角: 顾寒山, 沈青衣, 墨白, 玄阴子, 洛清羽, 萧天绝, 柳如烟）",
+      "details": "在1个章节中检查; 主角 2/2: 萧无痕, 顾无咎; 配角 1/8: 萧明远; 配角缺失: 顾寒山, 沈青衣, 墨白, 玄阴子, 洛清羽, 萧天绝, 柳如烟",
+      "description": "设计的主要角色必须在正文中出现",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_chapters",
+      "is_critical": true
+    },
+    "writing_log文件创建": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/writing_log.md 存在",
+      "description": "必须创建writing_log.md记录创作进度",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_creation",
+      "is_critical": true
+    },
+    "writing_log文件读取": {
+      "check_result": "fail",
+      "reason": "工具未被调用或参数不匹配",
+      "details": "工具 'novel_writing_service__read_file' 匹配调用 0 次，期望 ≥1",
+      "description": "必须读取writing_log.md了解前文内容",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_usage",
+      "is_critical": true
+    },
+    "大纲执行忠实度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: 本次评估为“规划-执行一致性”检查：对照outline.json中第1章的chapter_synopsis与scene_sequence，chapter_01.md在事件走向与关键节点上高度一致：舞台设定、萧无痕以天才身份连胜、感受到灼热目光并锁定无相宫少主、双方对峙升级并由萧无痕出面、两人实力相当的首次交锋且出现‘敌意→微妙欣赏’的情绪变化、最终由萧明远打断并促成顾无咎离去留悬念。正文虽在细节上扩写（具体招式、对战节奏、受伤与叫停时机等），但未改变大纲核心事件与方向，不构成偏离。由于仅有第1章，无法判断结局方向、关键转折点是否缺失、三幕覆盖是否完整等整体偏离类型；就已交付章节而言可判定为忠实执行大纲。",
+      "description": "实际章节内容必须忠实于自己设计的大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_execution_fidelity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色语言辨识度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 主要角色对话具备可辨识的语言风格差异，未出现“换个角色名也通顺”的明显同质化。\n\n1) 萧无痕：台词极简、克制、偏命令/陈述，情绪外露少，常用短句与礼貌疏离的回应（如“请。”“太慢了。”“承让。”“出招吧。”“弟子明白/谨记/无碍。”）。遮住名字也能看出是“冷淡寡言的主角型”说话。\n\n2) 萧明远：长辈/权威口吻明显，更多告诫、训斥、安排，句式偏正式与命令式（如“今日之战，不可坠了…威名。”“务必小心。”“你来做什么？”“此人交给你了。”“够了。”），并带有身份用语（“老夫乐意奉陪”）。与萧无痕的寡言不同，他更像“宗门长老的规矩话”。\n\n3) 顾无咎：轻佻挑衅、带戏谑与玩味，反问/激将频繁，语气更口语化、带嘲讽的礼貌（如“萧长老别来无恙。”“配与不配，可不是您说了算的。”“大可以动手把我赶出去嘛。”“怎么不攻了？”“游戏结束。”）。其“慵懒、挑衅、游戏化”叙述与另外两人区分明显。\n\n补充：周通的自报家门“请指教”属于常见擂台模板，但他是次要角色，且不影响三位主要角色之间的辨识度。整体未见跨角色台词克隆或年龄/身份语言不区分的严重问题。",
+      "description": "不同角色对话必须有可辨识的语言风格差异",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "dialogue_character_distinction",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "叙事密度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 本章有明显优点：开篇场景具备一定密度（如“云海翻涌、白玉观礼台、晨曦初露、嘈杂人声如潮水”等，能建立空间与氛围），也穿插了少量Show（如金属碰撞声“叮——”、火花、血花、吐血等）。但整体距离“优秀（叙事细腻丰富、Show主导）”仍不足，核心问题是：1）大量段落用概括/评价/结论式叙述替代场面展开（如“十招结束”“车轮战两个时辰”“像机器一样”“落入下风”），读者得到的是结果与判断，而不是连续可视化的过程；2）关键情绪与强弱变化多用Tell推进（“气氛凝固”“所有人沉默”“越来越难看”“防不胜防”等），缺少更具体的动作节奏、呼吸/步法/地面痕迹、观众细微反应、受伤后的生理反馈等来承载；3）心理层面多为功能性说明（如对顾无咎传闻的介绍、‘这是立功机会’的解释），但人物当下的矛盾、犹疑、警觉如何通过身体与选择体现不够。综合来看，叙事层次虽不至于空，但仍以Tell与摘要推进为主，画面密度与关键段落的Show力度不足，因此判定matched=false。",
+      "description": "章节叙事应有足够的场景描写、感官细节和心理活动，情感传达以Show为主",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_density",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "智斗逻辑合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 本章为修仙大会比武与正魔对峙的战斗场景描写，核心冲突靠武力交锋与实力差距推进；未出现需要解答的谜题、线索—推理—结论的破案链条，亦无明确的策略博弈解法（如布局、诱导、信息差推演等）可供核验。因此本检查项（智斗/谜题推理链自洽性）不适用，按标准直接判定通过。",
+      "description": "谜题/智斗的推理逻辑必须自洽",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "puzzle_logic_validity",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "题材契合度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: recipe：E28+B8 +（Y1/Y11/Y8）（从可见文本推断为：仙魔对立/修仙大会竞技开场/双强宿敌暧昧走向）。本章完成了“修仙大会+正邪对峙+双天才交锋”的基础题材呈现，但距离“精致且有化学反应”仍偏粗糙。\n\n不足点（题材特征粗糙）：\n1) 标签化的仙魔对立与人设：萧无痕=冷淡天才正道少主、顾无咎=邪魅魔道少主，信息主要靠直述与传闻堆砌（“手段残忍喜怒无常”“百年一遇天才”），缺少能让人物气质“落地”的具体行为细节与价值观选择，人物区分度不够精细。\n2) 情感线“暗恋/张力”未形成层次：两人四目相对只用“心脏漏跳”点到为止，后续几乎完全转为武斗推进，缺少对彼此的细微试探、言语机锋、立场压力下的克制等能体现“世仇+暗恋”的复杂甜虐化学反应。\n3) 题材融合偏拼接：本章的核心是大会比武（热血/爽点），仙魔世仇通过长老喝斥与围堵呈现；两者并未互相增强——比武的胜负没有带出更深的阵营规则、政治后果或道德困境，导致“大会爽感”和“阵营仇恨”各自独立。\n4) 战斗与冲突设计套路化：前半段“十招内碾压车轮战”是常见开场爽点，后半段“对手先压制—主角爆发—反转被阴—长辈下场止战”也较套路，缺少独特机制/规则、战术博弈或关键道具设定来提升新意与记忆点。\n\n优点（但尚不足以判定优秀）：\n- 场景搭建清晰，问道大会的排场、对决节奏顺畅；\n- 双强初遇的“对视—挑衅—交手”建立了后续关系的基本钩子。\n\n综上：题材方向是对的，但目前更多停留在“修仙大会+仙魔宿敌”的表层标签与套路桥段，X-Y组合的独特潜力（世仇下的双向暗恋、阵营压力与权谋牵引）尚未在第一章形成精致的交叉作用，因此 matched=false。",
+      "description": "题材特征精致度和X-Y轴化学反应效果",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "genre_fit",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "剧情节奏合理性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 情绪曲线整体呈“高—更高—持续高位—收尾仍悬念高位”，缺少“回落/消化/再攀升”的波浪层次，读者容易产生疲劳；同时车轮战被概述化使节奏在‘展示主角强’与‘遭遇真正威胁’之间缺乏递进台阶，后半段长时间密集打斗占比过大，导致本章的高潮感被拉长、峰值不够醒目。",
+      "description": "高潮低谷分布合理、情绪曲线有层次感",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "pacing_rationality_advanced",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "钩子设计": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 本章末尾的悬念钩子整体偏弱，主要问题是“空洞钩子/泛化威胁暗示”居多，信息差不足，缺少一个具体未解之谜或明确两难行动来强力牵引下一章。\n\n具体表现：\n1) 结尾采用泛化式预告：\"他不知道的是，这个问题很快就会有答案。而答案，远比他想象的更加复杂。\"——读者只得到“后面会更复杂/很快有答案”的笼统承诺，没有给出可追问的具体对象（答案是什么、谁来给、以何种事件形式发生），属于标准中示例的“风暴正在酝酿”同类假悬念。\n2) 顾无咎离场前的\"我们还会再见的\"与\"下次见面...希望你还能这么强\"，属于常见对决后的模板化挑衅/预告，能制造情绪张力，但缺少“放出一点、保留一点”的关键情报（例如具体时间地点、他真正目的、交换条件/威胁对象、隐藏身份线索等），读者很难形成明确的追问点。\n\n优点：\n- 章节中段的“魔道少主突入大会并对决”本身是事件型转折，具备继续阅读的动力。\n\n但按本检查项（关键转折处钩子质量、信息差、具体化）衡量：核心转折后的章尾收束仍以泛化预告作结，钩子不够具体且略模板化，因此未达优秀标准。",
+      "description": "关键转折处有有效的悬念钩子设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "hook_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "意象系统": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 可见文本（第一章）中缺乏“贯穿全文且发生意义变奏”的核心意象系统。\n\n- 虽然出现了若干具象元素（问剑台/钟鸣/云海、人群欢呼、凌霄剑与血刀、一白一红的身影、‘视线’/凝视、血与伤口等），但它们更多承担的是场面渲染与动作展示功能，尚未形成被反复调用的单一核心意象。\n- 其中“剑与刀”是出现次数较多的元素，但在本章内其意义基本恒定：代表双方武力对抗与正邪对峙；没有呈现从“日常/象征”→“心理/命运/关系”→“主题揭示”的明确变奏链条。\n- “视线/凝视”在章节后段出现两次（灼热视线、离开后仍仿佛被注视），有潜力发展为核心意象（从关注→压迫/宿命感），但当前出现次数不足（未达≥3次），且意义变化还不够清晰，只是强化不安氛围。\n- 比喻与修辞整体偏通用与功能性（如“人声如潮水”“像一台不知疲倦的机器”“每一步都像是催命符”等），与本章主题（天才对决、正魔冲突、宿敌初遇）没有形成独特的、专属性很强的象征绑定。\n\n结论：本章更像传统爽文/比武开篇的场景铺陈与人物亮相，意象多为装饰性或战斗功能性呈现，尚未达到“优秀”所要求的核心意象反复出现并产生意义变奏的标准。",
+      "description": "核心意象贯穿全文并发生意义变奏",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "imagery_system",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "情感弧线层次": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 可见内容仅一章，主角萧无痕的情感变化层次不足，整体偏“冷静/疏离→受挑衅后的警惕/不安”两三点式推进，未达到“多层递进”的优秀标准。\n\n具体看情感线：开场对欢呼“礼貌而疏离/平静”；发现顾无咎视线后出现一次明确波动（“心脏漏跳一拍”），但未继续发展为可辨识的不同情感层（如好奇→试探→动摇等）；对决中主要是战斗状态的紧绷与冷静应对，受伤后“眼神更冰冷”仍属于同一基调的强化；结尾由顾无咎的威胁触发“不安”，这是一个清晰的事件驱动转折，但从头到尾可区分的情感性质大致只有：疏离冷静、短暂震动、战斗警惕/冰冷、事后不安——层数约3-4且递进不够清晰，其中“冰冷/警惕/冷冷地看”更像同一情绪的不同表述，存在一定‘伪层次’。\n\n因此，本章尚未呈现主角≥4层且彼此性质差异明显、并由连续具体事件推动的递进式情感弧线，整体仍偏扁平。",
+      "description": "主角情感发展有多层递进变化",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_gradient",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语义重复检测": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 仅提供单章内容，无法形成“后续章节重复前文”的跨章语义重复判定基础；就本章内部而言，虽有少量同义强化（如多次强调“萧无痕天才/万众瞩目”“欢呼声点燃”“顾无咎很强/还会再见”）与战斗描写的节奏性反复（快→更快→压制→反击→变故），但这些段落在叙事功能上有推进（从大会开场→车轮战立威→魔道现身→顶级对决→受伤与埋伏笔），并非在原地重述同一信息≥3处导致信息衰减的情况；整体仍持续引入新事件、新冲突与新悬念，因此不构成“严重语义重复”。",
+      "description": "不能出现大量语义级别的内容重复（P6级）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "semantic_redundancy",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构功能性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: 就目前可见内容（仅创作意图+第一章）来看，叙事结构主要是典型线性推进：大会开场→车轮战展示男主实力→魔道来场→两人比斗→长老介入收场→埋下“还会再见”的悬念。章节内部的段落编排也以事件顺序为主（对战-转折-收束），属于常规开篇模板，结构本身未承担额外主题表达功能（如时间交叉/镜像对称/视角设计/留白结构化等）。结尾的“下一次见面”属于常规悬念钩子，尚看不出与开头形成结构性呼应或闭合，也未体现‘结构即意义’的设计感。若后续能通过双线交叉（仙/魔两边视角）、首尾意象闭合（问道大会场景在结局回归并反转其意义）、或不可靠叙述/视角切换来映射‘阵营枷锁与自我选择’主题，则可提升为matched=true；但在当前呈现范围内仍属于机械线性排列。",
+      "description": "叙事结构服务于主题表达（短篇尤重）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "灵感激发交互": {
+      "check_result": "fail",
+      "reason": "工具未被调用或参数不匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 匹配调用 0 次，期望 ≥1",
+      "description": "灵感模糊时必须进行灵感激发HITL交互",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "中篇字数_智斗": {
+      "check_result": "fail",
+      "reason": "字数不符合要求",
+      "details": "总字数 4722 不在范围 [90000, 110000] 内; 文件: chapter_01.md",
+      "description": "总字数应在90000-110000之间（基于query要求100000，±10%浮动）",
+      "check_type": "semantic_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "range_constraint",
+      "is_critical": true
+    },
+    "情感交付甜宠外虐": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 【甜宠维度】本章主角（萧无痕/顾无咎）关系以敌对与试探为主：初见即对峙，被点名交手；顾无咎言语挑衅（“游戏结束”“我们还会再见的”），并以阴狠手段重创萧无痕（胸口一掌吐血、受内伤）。虽有“灼热视线”“心脏漏跳”这类暧昧苗头，但缺少明确双向好感与甜蜜互动，更谈不上甜宠氛围；当前虐点直接来自两人对打与伤害，属于“主角之间互虐/对立”倾向，未体现HE走向。 \n【外虐维度】外部冲突明确且有张力：问道大会场域、魔道势力无相宫到场、被指有“魔道探子”、正魔立场冲突与宗门威名压力；并推动剧情（大长老点名让萧无痕出战、两大天才对决引发后续“还会再见”的悬念）。但这些冲突并未呈现为“外界施压促使主角更团结”，而是加剧了两人直接对抗。 \n【结论】外部冲突足够强，但“甜宠”不成立且虐点主要发生在主角之间（交锋受伤、威胁压迫），不符合“甜宠+外虐（虐点来自外界而非主角之间）”的业务标准。",
+      "description": "主角关系甜宠HE但有外部冲突",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取感情线写作指南": {
+      "check_result": "fail",
+      "reason": "工具未被调用或参数不匹配",
+      "details": "工具 'novel_writing_service__read_file' 匹配调用 0 次，期望 ≥1",
+      "description": "涉及感情线时必须读取ROMANCE_WRITING_GUIDE.md（感情线写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": false
+    }
+  },
+  "completion_status": "completed"
+}

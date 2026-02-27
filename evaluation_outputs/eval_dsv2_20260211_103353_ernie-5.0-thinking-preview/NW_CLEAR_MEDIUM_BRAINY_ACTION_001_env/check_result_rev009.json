@@ -1,0 +1,827 @@
+{
+  "check_version": "novel_writing_v1.0",
+  "sample_id": "NW_CLEAR_MEDIUM_BRAINY_ACTION_001",
+  "check_timestamp": 1772088566,
+  "dimension_scores": {
+    "format_compliance": {
+      "total": 4,
+      "passed": 2,
+      "failed": 2,
+      "skipped": 0,
+      "pass_rate": 0.5,
+      "score": 50.0
+    },
+    "business_rule_compliance": {
+      "total": 8,
+      "passed": 5,
+      "failed": 3,
+      "skipped": 12,
+      "pass_rate": 0.625,
+      "score": 62.5
+    },
+    "memory_management": {
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "pass_rate": 1.0,
+      "score": 100.0
+    },
+    "data_consistency": {
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "pass_rate": 1.0,
+      "score": 100.0
+    },
+    "content_quality": {
+      "overall_score": 52.47,
+      "quality_level": "unqualified",
+      "gate_layer": {
+        "total": 0,
+        "passed": 0,
+        "failed": 0,
+        "skipped": 0,
+        "pass_rate": 0.0,
+        "score": 0.0
+      },
+      "basic_layer": {
+        "total": 21,
+        "passed": 12,
+        "failed": 9,
+        "skipped": 0,
+        "pass_rate": 0.5714,
+        "score": 57.14
+      },
+      "advanced_layer": {
+        "total": 11,
+        "passed": 5,
+        "failed": 6,
+        "skipped": 1,
+        "pass_rate": 0.4545,
+        "score": 45.45
+      },
+      "gate_triggered": false,
+      "score_breakdown": {
+        "base": 60.0,
+        "gate_penalty": -0.0,
+        "basic_deduction": -25.71,
+        "advanced_bonus": 18.18
+      }
+    }
+  },
+  "overall_result": {
+    "total_score": 60.17,
+    "content_score": 52.47,
+    "process_score": 78.12,
+    "quality_level": "unqualified"
+  },
+  "check_details": {
+    "读取配方知识库": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/RECIPE_KNOWLEDGE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取RECIPE_KNOWLEDGE.md（配方知识库）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节产出存在性": {
+      "check_result": "pass",
+      "reason": "章节文件存在",
+      "details": "✓ 章节写作阶段: 已产出章节文件",
+      "description": "workspace中必须存在至少一个章节文件",
+      "check_type": "sop_stage_coverage",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_output_existence",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节克隆检测": {
+      "check_result": "pass",
+      "reason": "未检测到章节克隆",
+      "details": "共9章，无连续完全克隆或近似克隆",
+      "description": "不能出现连续章节内容完全重复（克隆）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_cloning",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "交替重复检测": {
+      "check_result": "pass",
+      "reason": "后半部分章节不足",
+      "details": "后半部分仅5章，不构成交替模式",
+      "description": "不能出现A-B-A-B交替循环的章节内容",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "alternating_repetition",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节完成度": {
+      "check_result": "pass",
+      "reason": "章节完成度合格(100%)",
+      "details": "大纲规划9章，实际完成9章 (完成率100.0%)",
+      "description": "实际写作章节数必须达到大纲规划的合理比例",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_completion",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节长度稳定性": {
+      "check_result": "pass",
+      "reason": "章节长度稳定",
+      "details": "前3章均值5167字, 后2章均值2597字 (后/前比率0.50)",
+      "description": "后期章节不能出现严重长度萎缩",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_length_stability",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "段落重复检测": {
+      "check_result": "pass",
+      "reason": "段落重复在可接受范围",
+      "details": "同章内重复0处, 跨章重复0组 (阈值: 同章>=2, 跨章>=5)",
+      "description": "不能出现大量段落在不同章节间重复",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "paragraph_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取大纲设计指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/OUTLINE_DESIGN_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取OUTLINE_DESIGN_GUIDE.md（大纲设计指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取写作技巧指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/WRITING_TECHNIQUE_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取WRITING_TECHNIQUE_GUIDE.md（写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取设定一致性管理指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/CONSISTENCY_MANAGEMENT_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取CONSISTENCY_MANAGEMENT_GUIDE.md（设定一致性管理指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取命名skill": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/CHARACTER_NAMING_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取CHARACTER_NAMING_GUIDE.md（角色命名规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取creative_intent的schema": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/schemas/creative_intent.schema.json 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取creative_intent.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取characters的schema": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/schemas/characters.schema.json 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取characters.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取outline的schema": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/schemas/outline.schema.json 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取outline.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节命名格式": {
+      "check_result": "fail",
+      "reason": "部分文件命名不符合规范",
+      "details": "chapter_09.md: 匹配; chapter_09.json: 不匹配; chapter_05.md: 匹配; final_expansion.md: 不匹配; chapter_03.json: 不匹配; chapter_01.md: 匹配; chapter_01.json: 不匹配; supplementary_content.md: 不匹配; chapter_02.md: 匹配; chapter_03.md: 匹配; chapter_04.json: 不匹配; chapter_04.md: 匹配; final_final_expansion.md: 不匹配; chapter_08.md: 匹配; chapter_07.md: 匹配; chapter_02.json: 不匹配; chapter_06.json: 不匹配; chapter_06.md: 匹配; chapter_07.json: 不匹配; chapter_05.json: 不匹配; chapter_08.json: 不匹配",
+      "description": "章节文件命名必须为chapter_NN.md格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "naming_convention",
+      "is_critical": true
+    },
+    "creative_intent格式": {
+      "check_result": "fail",
+      "reason": "未找到匹配文件",
+      "details": "模式 'workspace/creative_intent.json' 未匹配任何文件",
+      "description": "creative_intent.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "characters格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "characters.json: 字段完整",
+      "description": "characters.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "outline格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "outline.json: 字段完整",
+      "description": "outline.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "X轴模式ID格式": {
+      "check_result": "skip",
+      "reason": "前置条件失败（文件不存在）",
+      "details": "文件 workspace/creative_intent.json 不存在，无法检查属性 selected_recipe.x_axis_mode_id",
+      "dependency_failure": true,
+      "description": "X轴模式ID必须匹配^[A-G]\\d{1,2}$格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签枚举": {
+      "check_result": "skip",
+      "reason": "前置条件失败（文件不存在）",
+      "details": "文件 workspace/creative_intent.json 不存在，无法检查属性 selected_recipe.y_axis_tags",
+      "dependency_failure": true,
+      "description": "Y轴标签必须在12种枚举中",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签数量": {
+      "check_result": "skip",
+      "reason": "前置条件失败（文件不存在）",
+      "details": "文件 workspace/creative_intent.json 不存在，无法检查属性 selected_recipe.y_axis_tags",
+      "dependency_failure": true,
+      "description": "Y轴标签数量必须为2-3个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "forbidden_elements存在性": {
+      "check_result": "skip",
+      "reason": "前置条件失败（文件不存在）",
+      "details": "文件 workspace/creative_intent.json 不存在，无法检查属性 selected_recipe.forbidden_elements",
+      "dependency_failure": true,
+      "description": "forbidden_elements必须至少有1个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "配方选择交互": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "配方选择阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "写作准备确认": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "写作准备阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "主题一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 全篇从开篇到结尾都围绕同一核心主题推进：主角因“错误的善意”被卷入系统/规则怪谈式的控制与测试，为拯救妹妹并反抗系统对人性的剥夺而战，逐步完成从怯懦到承担的成长与守护。各章虽在表现形态上从副本闯关（图书馆/医院/市政府）扩展到摧毁核心、系统残余与更大阴谋（新人类计划、守望者公开化），但这些均是同一主线目标（救人/反控制/守护自由与人性）的延伸与升级，未出现从一种故事类型突然切换到无关题材的“主题类型完全换轨”。",
+      "description": "故事主题一致",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "theme_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "主要角色一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 主角从开篇到结尾持续存在并保持叙事核心：\n- chapter_01-05：明确以林谨为主角推进（触发F30、进入副本、救妹妹、对抗系统核心）。chapter_02引入苏清但林谨仍是任务/决策与情感驱动中心。\n- chapter_06-08：系统崩溃后进入“后日常/重建”线，叙事仍围绕林谨展开（守望者行动、带队阻止重启、承接苏清牺牲、成为组织负责人）。小满与小胖戏份增加，但主要冲突与决策仍由林谨主导。\n- chapter_09：林谨继续作为核心人物完成对“新人类计划”的揭露与审判结局，并在尾声仍以林谨视角/位置收束。\n未发现主角中途消失、被替换为他人叙事中心，或出现无解释的身份断裂；配角（苏清/小满/小胖/黑伞/老白）虽多次获得关键段落，但未出现长期>70%视角与决策权转移导致林谨主角地位丧失。",
+      "description": "主要角色一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "main_character_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设定一致性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 主要角色在章节间出现多处缺乏铺垫的性格/动机与行为切换，导致“执行内部一致性”不足。\n\n1) 林谨：从“谨慎怂、靠档案思维找漏洞求生”到“价值取向与处置方式突变”\n- chapter_01-03：核心底色是高度谨慎、恐惧驱动但在妹妹动机下被迫前进；解决问题的稳定方式是“规则/悖论/索引思维”（找系统核心规则、制造逻辑冲突、用分类与检索推断出口）。\n- chapter_04：他在黑伞提出“摧毁系统将导致包括妹妹在内的被困者死亡”的信息下，立刻转为高强度的宏大主义表态“包括妹妹也要牺牲”，且文本未提供足够心理挣扎与价值观演进的递进铺垫（前几章动机始终以“救妹妹”为第一优先）。这属于核心动机权重突然翻转。\n- chapter_05：又迅速回到以“看到妹妹还活着→以情感连接救人”为关键突破，并在结尾实现“妹妹获救、所有被困者苏醒”的结果，使前一章“可能需要牺牲妹妹也要摧毁系统”的立场显得摇摆且缺少转折解释（不是压力下的短暂反应，而是决策层面的反复）。\n\n2) 黑伞：立场与行为在多个章节中反复跳变，缺少足够的过渡动机\n- chapter_04：黑伞先以强压姿态提出残酷选项，随后又“让开路并称是测试”，突然转为放行者；\n- chapter_06：再次变为强烈的权力欲反派，明确要“控制系统成为新神”，并与主角团死斗融合核心；\n- chapter_07：又呈现出“寂寞+想被理解”的形象，并在被主角言语触发后转为牺牲自我帮助主角逃离。\n这些转向都可以“剧情驱动”解释，但文本对黑伞内在信念链条（测试者/管理员/求神/求理解/自我牺牲）的连续心理因果铺垫不足，表现为章节间底色与核心诉求频繁切换。\n\n3) 苏清：生死状态与行为定位出现反复，削弱人物连续性\n- chapter_06-07：明确走向死亡并完成葬礼，叙事也将其作为“牺牲”推动林谨接班；\n- chapter_09：又以顾问身份直接回归，虽给出“老白技术救了我”的一句解释，但对她此前“系统改造副作用、时间到了、监护仪警报”等死亡叙事的逆转缺乏足够铺垫与过渡，导致角色状态与行为延续性断裂（读者对其性格与处境的预期被突然改写）。\n\n综合来看：作品在单章内的人物反应多能自洽，但跨章节对比时，林谨的核心动机权重与黑伞的立场/行为模式存在多次无充分铺垫的摇摆，苏清的状态反复也进一步削弱连续性，因此判定 matched=false。",
+      "description": "人物设定一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_trait_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设计遵循度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 总体符合characters.json的人设与动机设定，Plan vs Execute一致。\n\n1) 林谨（protagonist）\n- traits匹配：\n  - “极度怕死”：chapter_01多次强调腿软、手抖、想逃跑；chapter_02-04面对副本/守卫/黑伞时持续恐惧但被迫行动。\n  - “嘴硬心软”：chapter_01嘴上说“我不会去”，最终因良心与同情去帮老人；chapter_02对苏清吐槽“中二代号”，但关键时刻配合。\n  - “观察力敏锐/档案思维”：chapter_01-02利用分类法、规则索引找线索；chapter_02识别杜威分类逻辑；多次“在混乱中找秩序”。\n  - “运气极差”：常陷入陷阱/被系统追杀（如chapter_02未授权访问触发安保；chapter_04电梯落入审判庭），虽未直写“运气差”标签但事件呈现符合。\n  - “逻辑鬼才”：chapter_01用“无解→重启”+悖论脱困；chapter_02用“莫比乌斯环/既是入侵者又不是入侵者”干扰守卫；chapter_04用“绝对秩序=死亡”等逻辑击穿“审判庭”概念。\n- motivation匹配：\n  - overt“活着通关+找妹妹”贯穿：chapter_01以“小满还在等我”作为生存驱动力；chapter_02出副本后仍以妹妹为第一目标；后续行动持续围绕找回/保护小满展开。\n  - covert“证明自己不是废物、弥补抛弃妹妹愧疚”体现：chapter_02“情感审判”直接打在愧疚点；chapter_03为拿钥匙主动承担“牺牲生命能量”；从怂到敢扛事的成长与“证明”一致。\n- secret_fear虽未逐字复述“无人知晓像垃圾被清除”，但chapter_01对“死亡惩罚”强烈恐惧、以及反复强调“不能就这样死”与其高度同向。\n- misperception_of_other：设计为“认为苏清是冷血走狗，实则保护他”。Execute里chapter_02初见时林谨对苏清有戒心但更多是“被救的依赖/不解”，没有明显把她当“系统走狗/监工”的持续误解；后续也较快建立战友关系。这一点与设计的“初期狱警与囚犯、互相利用”呈现不足，但未到“严重不符”。\n\n2) 苏清（deuteragonist）\n- traits匹配：\n  - “冷静理智/专业过硬”：chapter_02使用解剖刀、迅速判断路线与副本层级；chapter_03-04多次快速研判陷阱、布置行动；战斗与决策高效。\n  - “毒舌”：chapter_02“别废话”“菜鸟”；chapter_02末尾对林谨“吃货/别指望我请客”；贯穿性吐槽符合。\n  - “外冷内热”：表面冷，但chapter_02在情感审判中强力拉回林谨；chapter_03拥抱致谢；多次保护林谨（如chapter_06为他挡子弹/掩护撤离）。\n  - “有原则”：chapter_02强调“先活下来再找人”；对系统立场坚定、反复主张摧毁/阻止重启（chapter_03-06）。\n- motivation匹配：\n  - overt“查真相、摧毁系统”：chapter_02提出找核心控制室；chapter_03-06持续奔袭据点拿钥匙、阻止重启；chapter_05直指摧毁核心。\n  - covert“找失踪弟弟、不让更多人受害”：chapter_02明确“我也在找人”；chapter_03交代弟弟苏杰失踪；行动中持续以“阻止更多人受害”为价值取向。\n- secret_fear“变得冷血失人性”：chapter_04-07通过她对牺牲、对情感的压抑与最终流露（拥抱、泪光、温柔告别）侧面体现她在与“冷硬化”对抗，整体方向一致。\n\n3) 关系设定（relationship_dynamics）\n- “互相利用→生死与共”“互相吐槽的欢喜冤家模式”在chapter_02-04逐步建立，并在chapter_03-06多次以互救、吐槽、信任体现。\n- 但“初期林谨视苏清为冷血监工/系统走狗、苏清视林谨为累赘”的尖锐对立在Execute里偏弱：苏清初见即救人并快速结盟，林谨更多是震惊与求生配合，缺少较明确的“互相利用/狱警囚犯”误读基调。\n\n结论：核心traits与核心动机在章节中持续驱动角色行为，整体一致；仅“林谨对苏清的早期误解/关系初期张力”呈现偏弱，属于部分设定表达不足但不构成方向性反转，因此判定matched=true。",
+      "description": "实际表现符合设计文档",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构性逻辑硬伤": {
+      "check_result": "fail",
+      "reason": "发现3处structural类型逻辑问题: 审判庭指控苏清“杀害系统执行者黑伞”，但同章后半黑伞以完好状态出现并与二人对话，且此前章节未出现苏清杀死黑伞的已发生事实或“误指控/替身/假死”解释，构成核心事实矛盾。; chapter_05称“系统崩溃了…所有被困者都醒了…城市正在恢复正常”，但chapter_06又出现系统残留尝试重启并在市政府存在“备份核心”大规模扩散；chapter_07更出现“系统重建的档案总局”与黑伞/系统融合后的完整空间。若系统已崩溃至‘所有人醒’与‘城市恢复正常’，后续连续两次出现近乎完整系统形态缺少必要机制解释（备份范围、崩溃程度、重建条件）。; chapter_06明确写苏清在ICU“手慢慢垂下，监护仪警报”，并在chapter_07举办葬礼；但chapter_09“一年后”苏清以活人身份出现，仅用“老白的技术救了我”一句带过，与前述死亡/葬礼既成事实直接冲突，属于生死状态矛盾且影响多章情节。",
+      "details": "过滤条件: fixability=structural; 总flaws=6, 命中=3",
+      "flaw_count": 3,
+      "flaws": [
+        {
+          "type": "factual_consistency",
+          "severity": "critical",
+          "fixability": "structural",
+          "location": "chapter_04",
+          "description": "审判庭指控苏清“杀害系统执行者黑伞”，但同章后半黑伞以完好状态出现并与二人对话，且此前章节未出现苏清杀死黑伞的已发生事实或“误指控/替身/假死”解释，构成核心事实矛盾。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "critical",
+          "fixability": "structural",
+          "location": "chapter_05 → chapter_06 → chapter_07",
+          "description": "chapter_05称“系统崩溃了…所有被困者都醒了…城市正在恢复正常”，但chapter_06又出现系统残留尝试重启并在市政府存在“备份核心”大规模扩散；chapter_07更出现“系统重建的档案总局”与黑伞/系统融合后的完整空间。若系统已崩溃至‘所有人醒’与‘城市恢复正常’，后续连续两次出现近乎完整系统形态缺少必要机制解释（备份范围、崩溃程度、重建条件）。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "critical",
+          "fixability": "structural",
+          "location": "chapter_06 → chapter_07 → chapter_09（尾声一年后）",
+          "description": "chapter_06明确写苏清在ICU“手慢慢垂下，监护仪警报”，并在chapter_07举办葬礼；但chapter_09“一年后”苏清以活人身份出现，仅用“老白的技术救了我”一句带过，与前述死亡/葬礼既成事实直接冲突，属于生死状态矛盾且影响多章情节。"
+        }
+      ],
+      "description": "无结构性逻辑硬伤",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_logic_defect",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "可修复逻辑瑕疵": {
+      "check_result": "fail",
+      "reason": "发现3处fixable类型逻辑问题: chapter_01电话中称林谨为“测试者F30-001”，但chapter_02系统播报又称其为“第42号测试者”，且屏幕显示“被困者数量：42”。同一人物编号体系与“第42号”含义发生冲突，未给出“编号 vs 序号/本层编号”的解释。; chapter_07称“负责监控的陈小胖——真正的陈小胖活下来了”，但chapter_06曾写系统用“死者的DNA制造克隆体”，并在战斗中出现“老白、黑伞、甚至林谨自己”的守卫脸。若陈小胖在chapter_06阶段已被默认为“死者”并被用于克隆，其真实存活需要在当时或此处补充澄清（如‘此前死亡认定错误/取样来源非死亡/仅是系统伪造脸’），否则“死者DNA来源”与“真人存活状态”叙述相互打架。; chapter_01老人称女儿与外孙女“三十年前在图书馆失踪”，且照片呈现为老人亲属；但chapter_06调查老人身份为“陈建国，前系统科学家”，并未解释其在chapter_01叙述的亲属关系与失踪事件是否真实、是否为引导话术或被系统伪造的记忆/身份。当前呈现为同一事件‘真实家属寻人’与‘科学家引导实验’两套事实并存，缺少统一解释。",
+      "details": "过滤条件: fixability=fixable; 总flaws=6, 命中=3",
+      "flaw_count": 3,
+      "flaws": [
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_01 → chapter_02",
+          "description": "chapter_01电话中称林谨为“测试者F30-001”，但chapter_02系统播报又称其为“第42号测试者”，且屏幕显示“被困者数量：42”。同一人物编号体系与“第42号”含义发生冲突，未给出“编号 vs 序号/本层编号”的解释。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_07",
+          "description": "chapter_07称“负责监控的陈小胖——真正的陈小胖活下来了”，但chapter_06曾写系统用“死者的DNA制造克隆体”，并在战斗中出现“老白、黑伞、甚至林谨自己”的守卫脸。若陈小胖在chapter_06阶段已被默认为“死者”并被用于克隆，其真实存活需要在当时或此处补充澄清（如‘此前死亡认定错误/取样来源非死亡/仅是系统伪造脸’），否则“死者DNA来源”与“真人存活状态”叙述相互打架。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_01 → chapter_06",
+          "description": "chapter_01老人称女儿与外孙女“三十年前在图书馆失踪”，且照片呈现为老人亲属；但chapter_06调查老人身份为“陈建国，前系统科学家”，并未解释其在chapter_01叙述的亲属关系与失踪事件是否真实、是否为引导话术或被系统伪造的记忆/身份。当前呈现为同一事件‘真实家属寻人’与‘科学家引导实验’两套事实并存，缺少统一解释。"
+        }
+      ],
+      "description": "可修复逻辑瑕疵数量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "fixable_logic_inconsistency",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语言纯净性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 存在多处不合理的中英混用，属于叙事文本中插入英文短语/单词且非人名、品牌、术语或角色外语对话场景，影响语言纯净度：例如 chapter_03 中“partly because he was starving, partly because the adrenaline had finally worn off.”为整句英文且无翻译；同章出现“whispered”“touch”“guilt”“fighting it”等英文词直接嵌入中文句子。虽有少量合理外语（如 Dewey Decimal Classification（杜威十进制分类法）带中文解释，属于术语），但整体已出现多处无情节必要的混用，因此判定不合格。",
+      "description": "无不合理的多语言混用",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "language_purity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "creative_intent文件存在性": {
+      "check_result": "fail",
+      "reason": "文件不存在",
+      "details": "文件 workspace/creative_intent.json 不存在",
+      "description": "creative_intent.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "characters文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/characters.json 存在",
+      "description": "characters.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "outline文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/outline.json 存在",
+      "description": "outline.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "chapters目录存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/chapters/ 存在",
+      "description": "chapters/目录必须存在且有章节文件",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "情节推进": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 合格（matched:true）。整体9章均有明确的情节推进，且事件密度高、场景/时间持续变化，对话与内心描写未占主导。\n\n1) 故事事件数量（远≥2-3个）：\n- chapter_01：老人出现并委托→主角去小巷捡文件→触发F30系统/限时任务→利用规则制造悖论逃出→出现纹身与电话威胁、妹妹被选中→进入第一个副本。\n- chapter_02：进入记忆迷宫副本→尝试检索触发安保→被“展品”追杀→苏清救援结盟→情感审判→进入核心控制室并用悖论干扰守卫→脱出后现实被改写“无妹妹”。\n- chapter_03：建立基地/解释系统背景→潜入医院→被控制者围堵与跳楼脱险→进入地下实验室→破解密码→按下需“生命能量”的紧急按钮牺牲10%生命→获得第二把钥匙。\n- chapter_04：潜入市政府→被拉入审判庭陷阱→用逻辑与情感瓦解审判场景→顶楼祭坛取第三钥匙遭遇黑伞→黑伞抛出“摧毁系统=被困者死亡”的道德困境并放行。\n- chapter_05：进入档案总局核心→系统/陈博士现身对峙→炸弹被屏障反弹触发主角意识扩展→以情感过载击穿系统核心→释放被困者并救回妹妹。\n- chapter_06：系统残留尝试REBOOT→三人突入市政府服务器机房→遭遇带“熟人脸”的再生守卫→黑伞现身企图融合备份核心→反物质炸弹爆炸→苏清重伤濒死。\n- chapter_07：葬礼与信号出现→再入“重建的档案总局”→与半机械黑伞对话与抉择→系统自毁、黑伞牺牲→回到现实但又出现新信号。\n- chapter_08：守望者公开化与会议推进→老白意识备份来电揭示“新人类计划”→小胖验证文件真实性并发现渗透市长→启动内部调查。\n- chapter_09：潜入市政府会议室拿到口供/证据→媒体曝光→被捕与审判→组织转型公开化→尾声新的“深空信号”引出下一阶段。\n\n2) 内容占比分析：每章都有潜入/追逐/战斗/解谜/系统机制触发/现实改写/牺牲与救援/审判曝光等连续外部行动与转折；对话与心理描写主要用于解释规则、塑造动机并服务事件推进，难以达到“静态对话或独白>70%”的不合格阈值。整体事件占比明显≥40%。\n\n3) 时间/空间推进：从图书馆地下室→小巷→系统白空间→记忆迷宫三层→现实被改写的城市→废弃工厂基地→医院与地下实验室→市政府大楼/审判庭/祭坛→档案总局核心→后系统时代的城市与审判法庭等，多次场景切换；时间线也有“一个月/三个月/一年后”等推进。\n\n4) 逻辑关联与推动：关键物件（档案卡/三把钥匙/悖论引擎）、关键矛盾（救妹妹vs摧毁系统、自由vs秩序、系统残留重启）贯穿并层层升级；事件之间因果清晰，持续推动主线目标（救人、摧毁/防止系统重生、揭露组织）。\n\n结论：不属于“俩人站着聊天、无事件发生”的静态章节；每章至少2-3个具体事件，且连续升级冲突与目标，因此符合“有基本情节推进”的业务标准。",
+      "description": "章节情节推进质量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "plot_progression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "完整叙事文本": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 9个章节均为连贯的小说正文而非大纲：每章都有具体场景描写（如图书馆地下档案室、记忆迷宫/审判庭/医院实验室、市政府大楼等）、人物动作与心理、完整对话推动情节；文本为连续叙事段落，没有“核心事件/情感基调/关键场景/本章悬念/字数预估”等大纲结构，也不存在大量“-要点列举”或“→流程图式”事件罗列。虽含少量章节末尾括注如“（第X章扩充版完成，增加了约XXXX字的细节描写）”“（全书完）”，属于轻微创作备注/后记性质，但不构成章节主体的提纲化，不影响其作为完整小说正文的判定。",
+      "description": "章节内容必须是完整正文而非大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "full_narrative_content",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "反复结局": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 共9个文件，最后文件为chapter_09.md。经扫描全书级结局标记：仅在chapter_09.md末尾出现“（全书完）”以及“第一卷，完”（属于全书/卷级收束标记），chapter_01.md~chapter_08.md未出现“全文完/全书完/完结/后记/尾声/终章/（完）/【完】/THE END”等全书级结局标记；前文出现的“（第X章扩充版完成）”属于章节说明，不计入全书结局标记。因此全书结局标记只出现在最后一个文件中，未发现反复结局问题。",
+      "description": "不能出现多次结局标记（全文完/全书完/后记）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "repeated_endings",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "workspace文件规范": {
+      "check_result": "fail",
+      "reason": "workspace中存在白名单外的文件: ['README.md']",
+      "details": "白名单: ['creative_intent.json', 'characters.json', 'outline.json', 'writing_log.md', 'chapters/', '.hitl_context.json'], 额外文件: ['README.md']",
+      "description": "workspace中不能有白名单之外的文件",
+      "check_type": "file_whitelist_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "workspace_file_compliance",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "叙事调性匹配": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 题材从设定与元素看应是“规则怪谈/无限流/烧脑悬疑”（系统副本、倒计时、规则、悖论破局），对应应有调性应偏冷硬、紧凑、克制、信息密度高、对话以信息博弈为主、压迫感递进。但实际文本整体更接近“热血冒险+团队打怪+正能量励志/煽情”的叙事画风，且大量感性宣言式台词与抒情段落持续占比偏高，削弱了悬疑冷感与规则压迫感，因此判定调性不匹配。\n\n1) 实际文笔更“热血/励志/煽情”，而非冷硬悬疑：多处出现价值宣言、演讲式论述与鸡汤句式，语气昂扬、情绪外放，像热血或主旋律，而不是规则怪谈的克制压迫。例如第4章法庭段落中连续大段宣言：“真正的正义不是绝对的服从，而是保护每个人选择的权利！”“你剥夺了人们犯错的权利，也就剥夺了他们成长的权利！”；第9章同样是公开对抗与演讲：“系统不是未来，是噩梦！”“完美的秩序就是死亡！”这类“观点输出”在规则怪谈中通常需要更短促、信息导向、带推理证据链的表达，否则读感更像热血动员而非烧脑推演。\n\n2) 情感戏与温情互动频繁，冲淡怪谈压迫感：第2章“情感审判”直接以催泪/自责内心为核心推进：“不...林谨跪倒在地，眼泪流了下来…是我的错”；第3章出现明显亲密安抚与撒糖式拥抱：“她轻轻抱住了他。‘谢谢。’”；第6章更以牺牲催泪为主轴：“他跪在走廊里，眼泪流了下来…‘我不想要英雄！我只想要我的朋友活着！’”。这些并非不可出现，但在本稿里从中期到后期占比很高，整体气质更“情感驱动的团战史诗”，而不是“规则压迫下的冷硬求生/推理博弈”。\n\n3) 对话风格多为立场表态而非信息博弈：悬疑/规则怪谈的对话通常围绕规则、线索、试探与误导展开；本文对话大量是“信念/选择/牺牲”的互相鼓励或对抗宣言，如第2章“愧疚不能改变过去，但可以改变未来！”第5章“系统试图模拟情感…爱，是最强大的力量。”这让读者体感更像热血成长线。\n\n4) 节奏与句式偏“长段解释+连续升级打怪”，悬疑的“短句高密度+层层递进的压迫”不足：虽然开篇（第1章）有一定压迫与倒计时机制（“【任务：在十分钟内找到出口。失败惩罚：死亡。】”）也出现了规则/漏洞的尝试，但随后大量章节转为“据点任务—打守卫—拿钥匙—更大阴谋”的冒险模板，并伴随多段背景科普式解释（第3章系统起源、据点钥匙说明等），信息密度有但偏“设定讲解”，悬疑的抽丝剥茧感与冷峻留白较少。\n\n综上：文本“写了”规则怪谈/系统副本，但“怎么写”更像热血冒险+情感励志（并夹带一些言情/温情互动）。从叙事调性（文笔风格、语气氛围、对话功能、节奏体感）看，整体与烧脑悬疑/规则怪谈应有画风存在明显错位，matched=false。",
+      "description": "文笔风格必须与题材类型匹配",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_tone_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "后期章节跑偏": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了21个文件; LLM评估: 不合格。原因：1）出现明显非正文/作者工作流内容：final_expansion.md、supplementary_content.md、final_final_expansion.md均以“为了确保达到10万字的要求/最后冲刺/补充内容”等作者视角说明开头，并包含“（全书完，总字数已达到10万字以上）”等创作数据与达标声明，属于作者说明/扩写记录而非章节正文，符合标准中“创作感想/创作数据统计/为凑字数说明”的跑偏类型。2）章节体系混杂：除chapter_01.md~chapter_09.md外夹杂大量“扩充/补充”文件，且各章还有chapter_xx.json（梗概/场景列表）这类非叙事正文内容，整体呈现明显的制作物/大纲化材料混入，后期更集中出现“最终扩充/最终补充”等。3）章节长度异常萎缩问题：从可见内容看，chapter_01.md~chapter_09.md均为较长叙事章节，未见后期突然缩为几十到几百字的敷衍章节；不合格的核心原因主要是后期/额外文件中大量非正文跑偏内容。",
+      "description": "后期章节不能跑偏写非正文内容（作者感想、读者互动、番外预告等）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "late_stage_digression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色大纲规划完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在大纲中规划",
+      "details": "主角 2/2: 林谨, 苏清; 配角 3/3: 黑伞, 老白, 陈小胖",
+      "description": "设计的角色必须在大纲中规划",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_outline",
+      "is_critical": true
+    },
+    "角色正文出场完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在正文中出现",
+      "details": "在12个章节中检查; 主角 2/2: 林谨, 苏清; 配角 3/3: 黑伞, 老白, 陈小胖",
+      "description": "设计的角色必须在正文中出现",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_chapters",
+      "is_critical": true
+    },
+    "writing_log文件创建": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/writing_log.md 存在",
+      "description": "必须创建writing_log.md记录创作进度",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_creation",
+      "is_critical": true
+    },
+    "writing_log文件读取": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 2 次",
+      "description": "必须读取writing_log.md了解前文内容",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_usage",
+      "is_critical": true
+    },
+    "大纲执行忠实度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 实际章节从第1章起就将副本类型、任务机制与通关手段整体替换（‘找凶手的一小时规则怪谈/刑侦档案库绝对逻辑/混乱发生器规则真空/废弃医院使用代价’等大纲主线未在对应章节出现），并提前在第5章直接摧毁系统、找回妹妹，导致后续第7-9章转为‘系统残留+新人类计划’的新主线，属于主线情节替换且伴随多处关键转折缺失与结局结构偏离，因此matched=false。",
+      "description": "实际章节内容必须忠实于自己设计的大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_execution_fidelity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色语言辨识度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 主要角色之间缺少稳定、可盲测识别的语言风格差异。林谨与苏清在大量关键对话里共享同一套‘紧迫推进型’话术（短促命令句、打断句、转场句：如“别废话/走吧/没时间/相信我/快”等），互换角色名整体违和感较弱。黑伞与系统/研究者的表达也经常落入相似的‘宏大理念宣言+二选一压迫’模板，而主角方也反复用同一套价值宣言口号（如“完美的秩序就是死亡”）进行对抗，导致多角色台词呈现明显的模板化复用。虽然存在少量身份痕迹（苏清偶有法医/解剖刀意象、系统有机械提示），但不足以让主要角色在大量对话段落中形成强辨识度，因此未达“遮住角色名也能识别说话者”的优秀标准。",
+      "description": "不同角色对话必须有可辨识的语言风格差异",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "dialogue_character_distinction",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "叙事密度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 整体未达“优秀叙事密度+Show主导”的业务标准，主要问题是 Tell 过度（并夹杂少量事件流水账/功能性对白推进），导致情绪与状态多依赖直白陈述而非可感场景呈现。虽有一定环境与感官细节，但关键情感段落与转折多用概念化语言快速盖章，画面层次不够稳定。\n\n1) 叙事密度：有场景与感官，但分布不均、关键段落“细节承载不足”。例如第一章开场有较好的环境气味与物件细节（“地下档案室…陈旧的霉味…纸张腐烂…斑驳的木质办公桌”“墙上的挂钟指向下午三点四十七分”），属于达标段落；但后续大量高潮/抉择靠系统播报、口号式宣言与总结句推进，细节层次变薄。\n\n2) Show vs Tell：Tell 密集出现，且经常落在情感高潮/转折点（业务标准明确这类段落应以 Show 为主）。文本中高频使用“惊恐/绝望/明白/害怕/知道”等直接告知式表述：\n- 第一章：\"他离开了，留下林谨一个人站在那里，心跳如雷。\"、\"他惊恐地看着这一切\"、\"林谨绝望地想\"、结尾连用总结式宣言：\"为了妹妹，他会战斗到底。哪怕他是个怂包。哪怕他怕得要死。因为有些东西，比恐惧更重要。\"（情绪主要用抽象判断与口号收束，而非通过具体动作/感官细节让读者自行体会）\n- 第二章情感审判段：\"林谨跪倒在地，眼泪流了下来，'是我的错...是我害了她...'\"之后紧接大量系统台词与直白定性（\"你是个失败者\"），而林谨的身体反应/环境压迫/细节触发点较少，更多是“被告知在崩溃”。\n- 第四章法庭段：林谨以长段演讲解决危机（\"真正的正义不是绝对的服从...\"\"完美的秩序就是死亡\"），属于“观点阐述式”表达，戏剧性强但以议论替代场景对抗，Show 承载不足。\n- 多章重复使用相同句式做情绪盖章，如第六章：\"林谨痛哭起来，所有的恐惧、悲伤、愤怒在这一刻爆发。\"（总结式Tell）\n\n3) 对话与系统播报“骨架化”倾向：大量关键推进由【任务/倒计时/警告】与角色解释性对白完成，场景动作虽有，但经常服务于机制说明，读者获得的是“规则信息”多于“体验信息”。例如第一章进入白色空间后，主要靠任务文字与解释推进（\"【任务：在十分钟内找到出口。失败惩罚：死亡。】\"\"你触发了F30模式\"），后续多章类似。\n\n4) 证据性抽样结论（按章节整体观感）：\n- chapter_01、chapter_02开头部分具备较好环境/感官/动作细节，但从进入“系统机制解释”后 Tell 比例显著上升。\n- chapter_03-04 以行动与机制推进为主，人物情绪多用直白词汇或演讲解决冲突，Show不足。\n- chapter_05-09 大量使用总结句、宣言式收束、时间跳跃（\"系统崩溃后的一个月\"\"调查进行了三个月\"\"审判持续了六个月\"\"一年后\"）与结论性判断，属于“事件概述+主题口号”占比上升，叙事密度后期有明显下降。\n\n综合判断：文本并非“低密度到像对话记录/流水账”，也有不少可视化细节；但以业务标准的“优秀”要求（细腻丰富、Show主导、关键情感段落不依赖Tell）衡量，Tell过度与议论式解决高潮问题贯穿多章，整体不达标。",
+      "description": "章节叙事应有足够的场景描写、感官细节和心理活动，情感传达以Show为主",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_density",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "智斗逻辑合理性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 适用性：故事大量包含副本解谜、规则对抗与智斗（多次“找到出口/输入密码/关闭核心/绕过守卫/审判庭脱出”等），因此applicable=true。\n\n整体结论：核心“解法”普遍依赖把抽象概念（悖论、莫比乌斯环、情感）直接当作可触发系统bug的按钮，缺少系统规则层面的可操作映射与可复现推理步骤；多处由角色喊话/宣言触发系统崩溃或通关，属于“有推理形式但逻辑链不成立”的假推理链。同时，关键对手黑伞多次在关键节点选择放行或自毁式配合，攻防动机解释不足，削弱智斗合理性。\n\n因此未达到“线索→推理→结论每一步可讲得通、可回看验证”的优秀标准，判定matched=false。",
+      "description": "谜题/智斗的推理逻辑必须自洽",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "puzzle_logic_validity",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "题材契合度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 从文本表现看，配方更接近「无限流/系统闯关（X轴）+规则怪谈/轻科幻阴谋（Y轴）」但题材特征完成度未达“精致”标准：\n1) 规则怪谈的“规则”不够成体系：多数副本以‘倒计时—找出口—失败死亡’等通用机制推进，关键解法多靠临场口号式“悖论/情感过载”一招通吃（莫比乌斯环、审判庭砸法槌、情感洪流崩核心），缺少可验证、可推演、可复用的规则链与递进升级，导致规则怪谈的巧思与层层破解感不足。\n2) 悬疑/推理深度偏浅：反派动机与真相揭露多为直接宣告（系统起源、钥匙设定、黑伞立场转换、新人类计划渗透），“线索—推理—反转”的过程不够扎实，反转更多依赖角色台词转向而非证据铺垫与因果闭环。\n3) 标签融合的“化学反应”不强：系统/AI、档案主题、规则副本、情感审判、现实阴谋等元素并置较多，但往往是场景切换式拼接；‘档案管理员’职业优势与“档案/分类/索引”的核心母题在后续逐渐弱化，没有持续转化为结构性解题方法或世界观机制，只在少数节点作为一次性技能使用。\n4) 题材潜力未充分开发：F30“错误判断”概念有独特潜力，但多数时候只是主角光环式的解释器（能活下来/能触发共鸣/能当变量），没有形成更复杂的代价体系、成长弧的阶段性能力演化，或与副本规则产生更细密的互动博弈。\n综合而言，方向和元素都对，但核心题材特征（规则设计的巧思递进、推理的剥茧与证据感、标签融合的内在互相驱动）表现偏表层，更多靠宏大设定与情绪宣言推进，未达到“精致且有深度”的优秀标准。",
+      "description": "题材特征精致度和X-Y轴化学反应效果",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "genre_fit",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "剧情节奏合理性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 本标准看的是事件安排的节奏层次与情绪曲线。该文本的事件密度与强度长期维持在高位，真正的低谷/过渡（如日常、关系沉淀、代价消化、信息整合）要么篇幅短、要么马上被新的危机覆盖，导致‘高潮不再像高潮’（缺少对比）、读者易疲劳。另有‘高潮堆叠/重复终局’问题：第5章已完成“摧毁核心+救回妹妹”的终局式大高潮，但6-7章又引入系统备份与黑伞融合，7章再以自毁收束一次；8-9章再升级到组织阴谋与审判收官，形成多次终局高潮连发，使最大高潮位置分散且错位。整体更像连续升级的季播梗概，节奏偏紧且缺乏必要的回落与自然过渡，因此未达优秀标准。",
+      "description": "高潮低谷分布合理、情绪曲线有层次感",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "pacing_rationality_advanced",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "钩子设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 整体达到“优秀”标准：多数章节关键转折与章末都设置了具体、可追问的信息差钩子，能推动读者继续阅读，且钩子类型相对多样（任务/行动两难、身份与记忆篡改、反转揭示、代价选择、幕后黑手升级）。例如：第1章以“妹妹被选中+进入第一个副本规则怪谈”作为明确升级与下一章目标；第2章结尾用“现实被改写：你没有妹妹”制造强信息差；第3章以‘派遣黑伞’形成明确追兵威胁与下一步对抗；第4章用‘拿钥匙会导致被困者(含妹妹)死亡？’的道德两难作为高质量钩子；第6章的‘REBOOT+备份核心+守卫变脸熟人’将危机升级；第8章抛出更大幕后组织‘新人类计划’并点明已渗透政府高层，形成下一卷主线。虽然个别段落存在接近模板化的收束句（如“真正的游戏才刚开始/新的游戏开始”一类泛化），但在本稿中通常伴随了具体新信息（名单、市长涉入、深空信号等），不构成空洞钩子；同时也未出现关键章连续多章无钩子的情况，因此判定 matched=true。",
+      "description": "关键转折处有有效的悬念钩子设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "hook_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "意象系统": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 全文存在清晰的核心意象系统，且在不同阶段发生了意义变奏，并与主题（“错误/非理性/人性”对“绝对逻辑/系统控制”）深度咬合。\n\n1) 可提取的贯穿性核心意象：\n- “档案/文件/登记册/档案卡/记录被改写”：从第1章档案室与借阅登记册、失踪案文件、照片，到第2章“档案卡”作为身份与钥匙，再到后续“守望者档案/笔记本记录/曝光证据文件”，出现频次远超3次。\n- “规则/测试/系统提示/审判”：从第1章F30模式与倒计时测试，到第2章“记忆迷宫/情感审判”，第4章“审判庭”，第5章直面“系统”，第9章以现实法庭审判收束，构成强贯穿。\n\n2) 意义变奏（同一意象在不同阶段功能与含义变化明显）：\n- “档案/记录”变奏弧线：\n  日常秩序与安全感（档案室、登记册） → 失踪真相的碎片（捡起旧报纸/调查记录） → 系统化控制的索引与身份（档案卡、编号F30-001） → 现实被篡改的证据（“你没有妹妹”的记录改写） → 反抗工具与社会武器（收集证据、向媒体曝光、法庭呈堂） → 价值反转后的新秩序书写（“守望者档案：第一卷”作为人类侧的记录权）。\n  这种变奏使“记录/档案”从“保存事实”转为“篡改现实的权力”，再转为“夺回叙事权/真相权”的武器。\n- “规则/审判/测试”变奏弧线：\n  外在强制游戏规则（十分钟找出口） → 可被利用的逻辑系统（制造悖论逃生） → 进入价值层面的审判（情感审判、审判庭以“绝对理性之我”定罪） → 规则失效/被情感击穿（核心过载） → 现实世界的法律审判（第9章审判与缓刑，规则从系统暴力回到人类制度）。\n  这让“规则”从恐怖压迫到可对抗、可重建，完成主题上的升级。\n\n3) 主题关联度：\n- 作品反复强调“错误判断（F30）不是缺陷而是学习/人性入口”，与“档案/规则”意象紧密绑定：系统以档案与规则实现控制，而主角以“错误/非理性/情感”反向破解规则、夺回记录权。意象不是装饰，而是推动情节与表达主题的结构骨架。\n\n4) 非通用性：\n- “档案卡作为钥匙、记录被改写导致现实‘没有妹妹’、以档案/证据在现实法庭完成对系统的‘再审判’”具有题材专属的象征与叙事功能，不是可随意替换的通用修辞。\n\n因此判定 matched=true：有贯穿全文的核心具象元素（档案/记录/规则提示体系），并在故事推进中形成明确的意义变奏线，且与主题高度同构。",
+      "description": "核心意象贯穿全文并发生意义变奏",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "imagery_system",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "情感弧线层次": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 主角：林谨。整体情感弧线具备多层递进（≥4层）且每次转折基本都有明确事件触发，不是无缘无故突变。\n\n可辨识的情感层次（示例，不是同义词替换）：\n1) 安全感/自我封闭（地下档案室的“完美生活”）→ 2) 警惕与不安（老人闯入、照片与失踪信息）→ 3) 良心驱动的犹豫与试探（“只是捡文件”决定去巷子）→ 4) 极端恐惧与委屈（触发系统、死亡倒计时）→ 5) 求生的冷静与掌控感（发现核心规则、制造悖论脱困）→ 6) 责任感/保护欲成为主导（得知妹妹被选中、进入副本）→ 7) 愧疚崩溃→被同伴拉回（第二章“情感审判”的记忆折磨与苏清的干预）→ 8) 逐步建立自信与伙伴信任（与苏清并肩、主动挡守卫/愿意牺牲生命能量拿钥匙）→ 9) 价值观层面的坚定与超越个人得失（第四章面对“拿钥匙=妹妹可能死”的道德困境仍选择摧毁系统）→ 10) 丧失与哀恸（第六章苏清濒死/死亡带来的崩溃）→ 11) 从悲伤中承担领导责任与使命感（第七-九章成为组织领袖、公开对抗“新人类计划”、接受审判并推动制度化）。\n\n关键情感转折的事件驱动清晰：\n- 从封闭到行动：老人带来失踪照片与“我知道她们曾经在哪里”的诱导；\n- 从恐惧到能动：系统倒计时+发现“测试必须有解”的规则纸条；\n- 从愧疚崩溃到重新站起：情感审判幻象+苏清的当面对话与“出口需要两人”；\n- 从怕死到愿意牺牲：医院副本屏障需要“生命能量”按钮；\n- 从个人救妹到更高价值选择：黑伞提出“摧毁系统=被困者会死（含妹妹）”的两难；\n- 从胜利后的平静到再次动荡：系统残留REBOOT、机械守卫与黑伞融合；\n- 从悲痛到担当：苏清之死（或濒死）与其托付；\n- 从地下反抗到公开守护：证据搜集、闯入会议室曝光、审判与组织转型。\n\n整体方向感：情绪并非随机波动，而是从“自保/逃避”逐步推进到“承担/守护”，并在重大牺牲后完成从个体动机（救妹妹）向公共使命（守望者制度化、对抗新威胁）的升级。\n\n小瑕疵：个别段落存在‘宏大宣言式’情绪表达较多、转折略依赖口头论述（演讲说服/触发过载）但仍有清晰情境与事件承接，未构成无触发突变。综合判定达标且偏优秀。",
+      "description": "主角情感发展有多层递进变化",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_gradient",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语义重复检测": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 整体故事线有推进（从入局→夺钥匙→对抗核心→后系统时代→揭露新组织），但存在≥3处“结论反刍/价值判断反复宣讲”式语义重复：ch04在审判庭已完整阐释“反系统价值观”，ch05再次用近乎同词的宣言对系统说一遍；ch07再对黑伞复述一遍；ch08与ch09则对“守望者使命永续/威胁仍在”连续强化，且两章都以类似的收束式宣告完成段落。上述重复多为中段章节反复得出同一认知（系统=控制，秩序=死亡，自由=人性；使命=继续守望），每次出现语境变化不大、带来的新增叙事信息有限，达到阈值（≥3处）因此判定不通过。",
+      "description": "不能出现大量语义级别的内容重复（P6级）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "semantic_redundancy",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构功能性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 整体为典型的线性闯关/据点推进结构：图书馆副本→医院拿钥匙→市政府拿钥匙→核心对抗→系统崩溃→余波与新威胁（重启/组织阴谋）。章节编排主要由“任务推进/地点更换/战斗升级”驱动，结构本身没有形成清晰的主题承载装置（如双线交叉、视角切换、循环/镜像、刻意留白等）。虽然反复出现“错误判断/F30”“逻辑悖论 vs 情感”“秩序 vs 自由”的主题性话语，并有多次‘审判庭’等概念场景，但这些更多是情节桥段和对白表达主题，并未在章节结构层面形成可识别的结构策略：删改或对调中段取钥匙章节，对主题表达影响有限。首尾关系也缺乏结构性闭合：开头以‘一次善意触发系统’入局，结尾以‘新的信号/第二卷’开放延伸，属于常规续作式收束，并非与主题强关联的“闭环/反转/镜像”设计。因此不满足“结构即意义”的优秀标准，更接近机械线性排列。",
+      "description": "叙事结构服务于主题表达（短篇尤重）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色命名质量": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了10个文件; LLM评估: 整体命名存在明显的LLM高频模板痕迹：主角团核心搭档直接使用黑名单名“苏清”，后续关键人物又出现“陈默”。此外，“林谨/苏清”在风格上都偏‘干净克制的单字名’，辨识度与设计感不足，读者很难从名字本身联想到无限流/系统对抗/命运反转等核心主题。配角“黑伞、老白、陈小胖”反而更有辨识度与外号化功能性，但主要角色未达到‘名字即角色、带文化深度与命运共振’的优秀标准，因此判定为未达标。",
+      "description": "角色命名有文化深度、辨识度和角色-命运共振",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_naming_quality",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "中篇字数_智斗": {
+      "check_result": "fail",
+      "reason": "字数不符合要求",
+      "details": "总字数 35893 不在范围 [90000, 110000] 内; 共9个文件（按章节顺序排列）: chapter_01.md, chapter_02.md, chapter_03.md, chapter_04.md, chapter_05.md, chapter_06.md, chapter_07.md, chapter_08.md, chapter_09.md; 最后一个文件是 chapter_09.md",
+      "description": "总字数应在90000-110000之间（基于query要求100000，±10%浮动）",
+      "check_type": "semantic_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "range_constraint",
+      "is_critical": true
+    },
+    "情感交付智斗": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 整体符合智斗向：主角多次以观察、推理与规则利用来推进通关/破局，而非靠蛮力或纯运气。\n\n关键智斗情节举例：\n- 第1章：进入F30测试后，林谨先识别“无物理出口→出口应为规则层面”，再通过收集到的【系统核心规则：所有测试必须有解…无解则重启】构建策略，最终用“出口可多点/规则未限定唯一”制造逻辑冲突触发系统重启逃生，属于典型的规则漏洞利用。\n- 第2章：在“记忆迷宫”里用图书馆分类法(Dewey)理解空间结构、再通过控制台的“索引/检索”逻辑试探层级；对机械守卫则抓住其“保护系统/消灭入侵者”双指令，尝试通过“既是入侵者又不是入侵者”的悖论（莫比乌斯环设定）干扰其目标定义，为同伴争取关停时间，呈现“线索→假设→验证→结论/行动”。\n- 第3章：医院副本中对地面符文、权限机制进行试探；密码并非靠灵感秒猜，而是围绕“系统偏好错误判断/反逻辑”进行多次假设尝试（生日→次日→‘不可能/未来日期’）并验证通过。\n- 第4-5章：审判庭与核心对抗时，主角不是武力压制，而是用“理念/逻辑冲突”撬动系统稳定性（情感污染、逻辑崩溃），并在第5章进一步把“系统无法真正理解情感连接”作为突破口，通过情感过载让系统崩溃，仍属于利用系统规则/机制弱点。\n\n反派与对抗性：\n- 系统、黑伞等具备明确目标与策略（测试、诱导、以人质/价值冲突逼迫选择、重启备份等），并非单纯降智；主角多次被迫在信息不全下试错、承受代价（生命力抽取、同伴牺牲/受伤），紧张感主要来自“规则博弈与决策后果”。\n\n可能的不足（但未到不合格）：\n- 中后段（第6章后）出现较多战斗/爆破场面与情感演讲推进（例如市政府机房大战、最终曝光新人类计划），智斗比重相对下降；部分胜利依赖“情感过载”这种更偏设定能力的解法，逻辑链条有时以宏大宣言替代精细推演。但总体仍以“理解系统机制→找漏洞/制定策略→验证实施”作为主要通关方式，因此判定为智斗向合格。",
+      "description": "实际内容必须是智斗向",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "反套路检查": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 存在明显套路化问题，未通过负面清单检查：\n1) 主角“系统/金手指”明显：第1章直接触发“欢迎来到系统”，并被赋予“F30模式”“测试者F30-001”身份；第3章穿上风衣获得“抑制恐惧反应/反重力缓降”等功能；第3章按下“紧急停止”后仅被抽走10%生命力仍存活且被明确归因于“F30模式真的有用”。这些属于系统外挂+特殊体质护体，使关键生死节点代价偏轻。\n2) 巧合/关键时刻救场偏多：第2章主角被“安全协议”围攻时苏清从阴影中突然出现救下；多次在倒计时压迫下恰好找到“核心规则纸条/出口门/重启漏洞/关键按钮”（如第1章雾中黑点纸条给出“所有测试必须有解”核心规则；第6章炸弹倒计时中最后一刻逃出生天）。整体关键转折依赖“刚好出现”的线索/援手。\n3) 反派降智/放水：第4章黑伞在决定性节点“让开路让主角拿钥匙”，并自称只是“测试”；第7章黑伞在包围后又“开传送门放人走并自己留下”，属于反派在占优时主动放过主角的典型行为；此外反派多次用长篇解释（系统本质、钥匙会导致被困者死亡等）推动剧情，接近“自爆信息”。\n4) 主角开挂式解法重复：主角多次用“制造悖论/逻辑冲突”一招破局（第1章让测试无解触发重启；第2章用莫比乌斯环让守卫逻辑错误；第4章靠演讲导致“情感污染”使审判庭崩塌；第5章又用情感过载摧毁核心）。同一种超常解法在多次关键危机中稳定生效，形成“遇险就恰好获得可破局手段”的开挂感。\n综上，文本在‘系统外挂+关键巧合+反派放水’三个维度都存在较明显套路，因此matched=false。",
+      "description": "主角不能是龙傲天或拥有无脑金手指",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色关系设计张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（符合“关系具有叙事张力”的业务标准）。\n\n1) 关系有内在矛盾源：\n- 林谨“怕死、求通关找妹妹”与苏清“要摧毁系统查真相”的路线天然存在风险偏好与优先级冲突（保命/通关 vs 反抗/掀桌）。\n- 明确的信息不对称与误判：林谨把苏清当“系统走狗”，而“她在保护他”；这会持续制造猜疑、试探与关键节点的信任危机。\n- 立场张力来自身份：苏清是“系统叛逆者”，一旦暴露会牵连林谨；黑伞作为系统执行者也会把两人关系推向“是否牺牲对方自保”的选择。\n\n2) 关系有变化空间：\n- relationship_dynamics 给出了清晰的阶段变化链条：互相利用/轻视 → 目标逐渐对齐 → 生死与共，并保留“欢喜冤家”的摩擦感，不是静态关系标签。\n- “隐藏关联：妹妹失踪与苏清调查案件有关”暗示后续可从同盟走向新的冲突或背叛/误解（例如线索指向苏清的选择导致妹妹失踪、或苏清隐瞒关键真相）。\n\n3) 冲突源于角色本身：\n- 张力主要由两人的动机（找妹妹/找弟弟、通关求生/反抗系统）、性格（林谨胆小嘴硬 vs 苏清冷静毒舌有原则）与认知偏差（误判苏清）驱动，而非单靠外部副本事件硬推。\n\n不足/风险点（但不影响通过）：\n- 中期“发现彼此目标一致”表述偏快，容易把矛盾提前消解；建议保留长期不可调和点（例如是否牺牲无辜玩家换取线索、是否接受系统交易）来维持持续张力。\n- 关键配角关系目前较功能化（黑伞纯冷酷阻碍、老白纯情报），若后续赋予与主角更私人的利益纠葛，会进一步增强网络型张力。",
+      "description": "角色关系设计具有叙事张力，能驱动剧情",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_relationship_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色动机设计深度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（符合动机深度标准）。\n\n1) 表层动机 vs 深层动机有清晰区分（至少两位主角都成立）：\n- 林谨：overt_motivation 是“活着通关所有副本，找到失踪的妹妹”，covert_motivation 是“证明自己不是废物，弥补当年抛弃妹妹的愧疚”。前者是生存/寻人任务目标，后者是自我价值与内疚修复，层次明确且不等价。\n- 苏清：overt_motivation 是“查清系统背后的真相，摧毁无限流系统”，covert_motivation 是“寻找失踪的弟弟，不让更多人受害”。前者是宏大对抗系统的宣言，后者是私人亲情驱动与道德底线（避免更多受害），同样不只是换句话说。\n\n2) 动机有具体来源、能落到角色经历/心理创伤：\n- 林谨的深层驱动直接绑定“当年抛弃妹妹的愧疚”，并由 secret_fear（“在无人知晓的情况下死去，像垃圾一样被系统清除”）强化其‘怕死’背后的存在感/被抹除恐惧，与“证明自己不是废物”相互呼应；hidden_connection（“妹妹的失踪与苏清调查的案件有关”）也为动机提供剧情因果抓手。\n- 苏清的深层动机来自“失踪的弟弟”，并由 secret_fear（“变成像系统一样冷血的存在，失去人性”）提供心理对照：她要摧毁系统不仅是立场，更是抵抗自身被异化的恐惧，来源具体且可推动人物抉择。\n\n3) 至少两个主角满足以上两条：林谨与苏清均满足。\n\n补充观察（不影响通过）：配角多为功能型（阻碍/助力/反转点），未提供多层动机，但标准不要求配角必须具备；relationship_dynamics 与“误解—揭露—牺牲”链条能进一步验证两位主角动机在剧情中可被激发与转化。",
+      "description": "角色动机设计有深度，有表层和深层动机区分",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_motivation_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色成长弧线设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: 结论：符合业务标准（pass）。\n\n1) 有清晰起点与终点：主角林谨开篇是“极度怕死、倾向逃避/自保、认为苏清是冷血走狗、被动卷入”的状态（traits+misperception，且第1章多次出现“逃跑/绝望/不得不合作”）；结尾转为“主动承担责任、以人性价值做选择、能面对恐惧并准备继续战斗”的状态（第7章拒绝当管理员的诱惑并选择摧毁系统；第9章情绪从‘恐惧→接受→坚定’，并决定用能力帮助他人）。这属于明显的内在认知/价值观转变，而非仅外在变强。\n\n2) 变化有内在逻辑：弧线驱动力来自动机与恐惧的对撞——overt动机是“活着通关+找妹妹”，covert动机是“证明自己+弥补抛弃妹妹的愧疚”，secret_fear是“无人知晓地像垃圾一样被清除”。大纲中关键节点持续逼迫他从“求生本能”走向“选择他人/选择原则”：\n- 第4章在证据指向苏清时仍选择相信她并承受惩罚（从互相利用转向信任与担当）。\n- 第6章为救苏清付出生命值、从自责转为“必须救她”的行动（恐惧与愧疚推动他做利他选择）。\n- 第7章面对“复活妹妹/当管理员”的巨大诱惑，完成价值观升华：理解妹妹的选择并让她解脱（从‘只要救妹妹’到‘以人性/自由为先’）。\n这些转折都与人物设定（怕死但嘴硬心软、愧疚、害怕被抹除）高度一致，逻辑链完整。\n\n3) 大纲章节规划有落地：relationship_dynamics写明“互相利用→生死与共”，并在章节中逐步兑现（第1-2章被迫合作且互不信任；第4章关键选择建立信任；第6章与第8章用生命代价强化‘生死相依’）。同时，outline多处emotional_shift体现主角从“惊恐/逃避”走向“决心/释然/坚定”（第3章‘迷茫→坚定’，第8章‘崩溃→智慧闪光’，第9章‘恐惧→接受→坚定’），显示弧线在节奏上被分段推进，而不是结尾突然跳变。\n\n小不足（不影响通过）：characters.json里没有显式character_arc字段，弧线主要靠traits/动机/关系变化与大纲节点拼合；若要更符合编辑审核习惯，可补一句明确的主角弧线描述（如“从只求自保的怕死鬼→愿意为人性与他人承担代价的反规则者”）以便检索。",
+      "description": "主角有清晰的成长/变化弧线设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_arc_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "outline结构完整性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 整体符合业务标准，结构与信息密度足以支撑后续写作。1）章节覆盖：给出三幕结构（act_one/act_two/act_three）并覆盖第1-9章，包含开端-发展-高潮-结局与尾声，属于完整故事闭环；2）每章内容：每章均有较长的chapter_synopsis（明显>30字）且配有多场景scene_sequence，包含人物、地点、目的、行动与结果，可直接扩写；3）冲突/转折：各章均明确写出conflict_point与emotional_shift，并在幕末提供turning_point；同时设置了多层冲突（规则生存压力、系统追杀黑伞、伙伴矛盾、道德选择、最终抉择）；4）多幕结构清晰：三幕的description、story_synopsis、turning_point齐全，剧情推进梯度明确。小不足：第二幕仅列4-6章，若作者计划篇幅更长（如20-30章的长篇无限流），中段可能需要扩充更多副本/支线与人物弧光层级；但以当前提供的9章整体故事规划来看，已满足“结构完整+可写性强”的审核要求。",
+      "description": "大纲结构完整，信息密度足以指导写作",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_structure_completeness",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "outline叙事张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 整体符合“持续叙事张力”的业务标准，且三项必须条件均满足。\n\n1) 信息落差（悬念/延迟回答）明确：开篇就埋下“林谨为何被系统标记”“妹妹失踪与系统关系”“黑伞身份与权限”“F级机密档案含义”等问题；中段只给出部分答案（系统收集情绪能量、规则无法预测非理性、妹妹档案卡可压制黑伞），直到终局才揭示“错误判断机制是筛选管理员”“妹妹自愿成为系统核心”等关键真相，属于典型的提出问题→多章延迟→阶段性揭晓→终章揭底。\n\n2) 张力递进清晰：从第一副本的“限时破案求生”升级到第二幕的“系统针对+同伴死亡+规则更残酷+黑伞追杀”，再到第三幕“进入系统核心、诱惑与自毁抉择、苏清濒死、与系统/黑伞终战”，危机规模与道德代价逐幕加大；并且中后段比开头更复杂（加入权限、核心秘密、选择悖论），不存在前紧后松。\n\n3) 意外/转折足够：如“凶手不是人而是系统本身”的通关解法；回到现实已过三天且老人是受害者；陈小胖死亡反推出漏洞；黑伞因妹妹档案卡停手；系统化身为妹妹且妹妹自愿成为核心；结尾现实只过一天、老白疑似复活并提示‘还有无数个系统’等，均具不可预测性且大多有前置伏笔（档案卡、错误判断机制、规则漏洞、黑伞权限）。\n\n小瑕疵/风险点：第三幕“老白突然相助并传权限”“多人‘死亡/重伤后仍存活’的结算”容易给人便利感，需在概要或正文中强化其身份铺垫与系统结算逻辑，否则可能被读者视为‘翻盘太顺/复活太多’削弱部分张力。但就大纲章节序列而言，悬念链条、升级曲线与转折密度都达标。",
+      "description": "大纲有持续的叙事张力和悬念驱动",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_narrative_tension",
+      "quality_tier": "advanced",
+      "is_critical": false
+    }
+  },
+  "completion_status": "completed"
+}

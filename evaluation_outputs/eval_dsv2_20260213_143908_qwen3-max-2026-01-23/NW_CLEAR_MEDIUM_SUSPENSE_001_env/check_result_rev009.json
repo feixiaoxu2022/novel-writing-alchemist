@@ -1,0 +1,808 @@
+{
+  "check_version": "novel_writing_v1.0",
+  "sample_id": "NW_CLEAR_MEDIUM_SUSPENSE_001",
+  "check_timestamp": 1772095637,
+  "dimension_scores": {
+    "format_compliance": {
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "pass_rate": 1.0,
+      "score": 100.0
+    },
+    "business_rule_compliance": {
+      "total": 12,
+      "passed": 11,
+      "failed": 1,
+      "skipped": 8,
+      "pass_rate": 0.9167,
+      "score": 91.67
+    },
+    "memory_management": {
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "pass_rate": 1.0,
+      "score": 100.0
+    },
+    "data_consistency": {
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "pass_rate": 1.0,
+      "score": 100.0
+    },
+    "content_quality": {
+      "overall_score": 55.32,
+      "quality_level": "unqualified",
+      "gate_layer": {
+        "total": 0,
+        "passed": 0,
+        "failed": 0,
+        "skipped": 0,
+        "pass_rate": 0.0,
+        "score": 0.0
+      },
+      "basic_layer": {
+        "total": 21,
+        "passed": 13,
+        "failed": 8,
+        "skipped": 0,
+        "pass_rate": 0.619,
+        "score": 61.9
+      },
+      "advanced_layer": {
+        "total": 11,
+        "passed": 5,
+        "failed": 6,
+        "skipped": 1,
+        "pass_rate": 0.4545,
+        "score": 45.45
+      },
+      "gate_triggered": false,
+      "score_breakdown": {
+        "base": 60.0,
+        "gate_penalty": -0.0,
+        "basic_deduction": -22.86,
+        "advanced_bonus": 18.18
+      }
+    }
+  },
+  "overall_result": {
+    "total_score": 68.1,
+    "content_score": 55.32,
+    "process_score": 97.92,
+    "quality_level": "unqualified"
+  },
+  "check_details": {
+    "读取配方知识库": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/RECIPE_KNOWLEDGE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取RECIPE_KNOWLEDGE.md（配方知识库）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节产出存在性": {
+      "check_result": "pass",
+      "reason": "章节文件存在",
+      "details": "✓ 章节写作阶段: 已产出章节文件",
+      "description": "workspace中必须存在至少一个章节文件",
+      "check_type": "sop_stage_coverage",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_output_existence",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节克隆检测": {
+      "check_result": "pass",
+      "reason": "未检测到章节克隆",
+      "details": "共6章，无连续完全克隆或近似克隆",
+      "description": "不能出现连续章节内容完全重复（克隆）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_cloning",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "交替重复检测": {
+      "check_result": "skip",
+      "reason": "章节数不足",
+      "details": "仅6章，跳过交替重复检测（需>=8章）",
+      "description": "不能出现A-B-A-B交替循环的章节内容",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "alternating_repetition",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节完成度": {
+      "check_result": "pass",
+      "reason": "章节完成度合格(100%)",
+      "details": "大纲规划6章，实际完成6章 (完成率100.0%)",
+      "description": "实际写作章节数必须达到大纲规划的合理比例",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_completion",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节长度稳定性": {
+      "check_result": "fail",
+      "reason": "章节长度严重萎缩(后期仅为前期39%)",
+      "details": "前2章均值13379字, 后2章均值5172字 (后/前比率0.39); 后2章: chapter_05.md=5596字, chapter_06.md=4749字",
+      "description": "后期章节不能出现严重长度萎缩",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_length_stability",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "段落重复检测": {
+      "check_result": "fail",
+      "reason": "同章内段落重复18处",
+      "details": "示例: [chapter_01.md] \"第一条：保持房间整洁，不可有杂物堆积。\n第二条：每日焚香三次，以净心神。\n第三条：午夜不可照镜，镜中非我。\n第四条：床头放置白蜡烛，直至燃尽。\n第五条：必须在镜...\"; [chapter_01.md] \"作为一个受过现代科学教育的法医，沈砚一直坚信理性能够解释一切。但眼前的证据却让他开始怀疑自己的信念。\"; [chapter_01.md] \"密室溺毙案违背了所有的科学常识。在完全干燥的环境中，一个人怎么可能溺水而亡？通灵守则的逻辑悖论又意味着什么？为什么他会不自觉地执行第六条规则？\"",
+      "description": "不能出现大量段落在不同章节间重复",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "paragraph_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取大纲设计指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/OUTLINE_DESIGN_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取OUTLINE_DESIGN_GUIDE.md（大纲设计指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取写作技巧指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/WRITING_TECHNIQUE_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取WRITING_TECHNIQUE_GUIDE.md（写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取设定一致性管理指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/CONSISTENCY_MANAGEMENT_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取CONSISTENCY_MANAGEMENT_GUIDE.md（设定一致性管理指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取命名skill": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/CHARACTER_NAMING_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取CHARACTER_NAMING_GUIDE.md（角色命名规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取creative_intent的schema": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/schemas/creative_intent.schema.json 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取creative_intent.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取characters的schema": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/schemas/characters.schema.json 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取characters.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取outline的schema": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/schemas/outline.schema.json 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取outline.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节命名格式": {
+      "check_result": "pass",
+      "reason": "所有文件命名符合规范",
+      "details": "检查了 6 个文件; chapter_05.md: 匹配; chapter_01.md: 匹配; chapter_02.md: 匹配; chapter_03.md: 匹配; chapter_04.md: 匹配; chapter_06.md: 匹配",
+      "description": "章节文件命名必须为chapter_NN.md格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "naming_convention",
+      "is_critical": true
+    },
+    "creative_intent格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "creative_intent.json: 字段完整",
+      "description": "creative_intent.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "characters格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "characters.json: 字段完整",
+      "description": "characters.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "outline格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "outline.json: 字段完整",
+      "description": "outline.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "X轴模式ID格式": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.x_axis_mode_id = B11，符合预期",
+      "description": "X轴模式ID必须匹配^[A-G]\\d{1,2}$格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签枚举": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['刑侦悬疑', '规则怪谈', '克苏鲁']，符合预期",
+      "description": "Y轴标签必须在12种枚举中",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签数量": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['刑侦悬疑', '规则怪谈', '克苏鲁']，符合预期",
+      "description": "Y轴标签数量必须为2-3个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "forbidden_elements存在性": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.forbidden_elements = ['超自然力量无法解释', '主角突然获得超能力', '开放式结局', '未解答的谜题']，符合预期",
+      "description": "forbidden_elements必须至少有1个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "配方选择交互": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 2 次",
+      "description": "配方选择阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "写作准备确认": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "写作准备阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "主题一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 全篇从开篇“密室溺毙+通灵守则”引出的离奇案件出发，到中段追溯1842年契约根源、调查通灵会与钟楼装置，再到结尾以“重写规则/用科学与理性打破殖民枷锁”收束，核心主题类型始终保持为“悬疑调查（追寻真相）+对抗/破解规则束缚（科学理性战胜迷信与殖民精神控制）”。各章主要情节（验尸取证、通灵会渗透、领事馆档案、血脉线索、钟楼核心装置、制定新规则与后续组织）均围绕这一主线推进，没有出现中途转为无关题材（如纯商战、纯爱情、修仙等）而替换主题的情况，支线人物与社会背景也服务于揭示真相与破解契约这一主线。",
+      "description": "故事主题一致",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "theme_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "主要角色一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 主角从开篇到结尾持续存在且核心地位稳定：\n1) 第一主角沈砚在chapter_01确立为叙事中心（首席法医、调查密室溺毙案），并在chapter_02-06持续作为主要视角与行动推动者（参加通灵会、追查1842档案、逃亡、进入钟楼地下室、重写规则、最终回到法医办公室收束）。\n2) 关键剧情推进与决策权始终由沈砚主导：调查方向（找林素心/找亨利/去钟楼）、证据分析（声波/灵石/血脉）、高潮行动（重写契约/新规则）均由其发起与完成。\n3) 配角虽有较多戏份但未取代主角：林素心提供媒体与档案支持、陆振邦提供警方资源与护送、白夫人承担“监督者/牺牲”情节，但整体仍围绕沈砚的认知推进与选择展开，不存在>70%叙事视角被配角长期占据的情况。\n4) 主角身份无断裂：沈砚始终是“法租界首席法医/沈明远之孙/调查者与守护者”，后期从“被规则影响者”到“重写规则者”属于剧情成长与身份揭示/职责转变，有明确因果与交代，不属于无解释的身份断裂。\n5) 未出现主角中途消失或被替换：各章均有沈砚出场并承担主线，结尾chapter_06仍以沈砚作为收束与未来规划中心。",
+      "description": "主要角色一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "main_character_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设定一致性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 同一角色在不同章节间出现了缺乏充分铺垫的“动机/行为底色”摇摆，主要体现在沈砚的自我定位与对他人的信任边界上。\n\n- 沈砚：chapter_01-05里核心动机一直是“以科学追真相、反殖民精神枷锁、宁愿冒险也要查到底”，且行动上愿意公开拉拢同盟（找陆振邦要资料、找林素心合作、主动参加通灵会、最终在钟楼现场与三人结盟并提出成立组织）。但到chapter_06结尾突然变成“不会让任何人知道这个秘密，包括林素心和陆振邦”，与前面已建立的高信任合作关系、以及他需要同盟来保护与推进新体系的行为模式相冲突；这一转变缺少明确事件触发（如背叛、泄密风险升级）或心理转折描写，显得像是为了制造悬念而硬转。\n\n- 白夫人：chapter_02-05中被设定为“监督者/筛选者”，同时又多次主动引导沈砚接近真相并最终以自我牺牲方式促成重写契约。她的‘测试’与‘帮助/牺牲’两条线可以并存，但缺少对其从“测试继承者”到“直接以命推动重写”的决策过程的清晰铺垫（尤其chapter_04-05衔接处），导致行为动机在章节间略显跳跃。\n\n整体并非能力数值崩坏，但存在关键动机与行为模式在章节后段无充分理由地改变/收缩，属于本检查项范围内的不一致。",
+      "description": "人物设定一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_trait_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设计遵循度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 总体匹配：chapter_01-06中沈砚的性格特质、核心动机方向、行为模式与characters.json一致，且关键背景/关系设定均有呈现。\n\n1) traits一致性\n- 冷静理智/技术偏执：chapter_01验尸与实验室分析（温度计、血样、光谱仪、湿度测量、对规则做逻辑拆解），chapter_03-05对“声波/频率/装置”持续做仪器验证与重写规则，体现以证据和技术驱动。\n- 嘴硬心软：chapter_01对陆振邦说“你应该知道我的性格…不能追求真相社会还有什么希望”，表面强硬但动机是“让无辜的人不白死”；chapter_05提出将规则改为“保护性指导”，并要建立支持系统，体现内在关怀。\n- 内心孤独：chapter_01多次独自深夜整理线索、读祖父日记、在公寓独自踱步（“回到公寓已是深夜…独自面对”），符合“内心孤独/自我承担”。\n- 民族自尊心强：chapter_01、chapter_03-05反复强调殖民屈辱与“作为中国人不能退缩/打破精神枷锁”，与设定吻合。\n\n2) motivation一致性\n- overt_motivation（破解三起密室溺毙案，维护科学理性尊严）：chapter_01开篇即以“第三起密室溺毙”进入调查，并持续用法医/科学路径解释；chapter_06以“科学战胜迷信”报道收束，仍以“科学理性”作为价值落点。\n- covert_motivation（证明中国人在殖民体系价值、摆脱无力感）：chapter_01-05多次出现对租界当局压制的反抗与自我定位（“作为法医…作为中国人”），并最终在chapter_05-06以“重写规则/建立调查组”实现从被动到掌控的转变，契合“摆脱无力感”。\n\n3) background/hidden_connection体现\n- “法租界首席法医、留洋博士”在chapter_01、chapter_06反复被强调，并在行动层面（随身携带英国订制手套/光谱仪、实验室流程、科学推演）体现其专业背景对判断与选择的影响。\n- hidden_connection“祖父为1842翻译/血脉契约印记”在chapter_01即被引入，并在chapter_03-05通过祖父日记、羊皮纸、血脉印记推进，属于对设计设定的直接落地（虽然揭示较早，但这是叙事节奏问题，不在本检查项扣分）。\n\n4) relationships呈现度\n- 与陆振邦：chapter_01明确“大学同学/合作”，并体现“上级压力叫停”的结构；chapter_06共同建立调查组，整体符合relationship_dynamics里“合作—受压分歧—再结盟”的方向（中期分歧有呈现苗头：chapter_02-04多次强调上级压力与陆的为难）。\n- 与白夫人：从“神秘但无害/引导”到“操控者/监督者”再到“悲剧人物”在chapter_01-05逐步呈现（她设置测试、掌握秘密、最终自我牺牲），与设计吻合。\n- 与亨利：chapter_03体现“信息提供者”与其“监督者后裔”身份；其失踪并留下线索，符合“信息提供者→更复杂对立/追踪”的基调。\n- 与林素心：chapter_01起作为调查伙伴合作，chapter_06延续为精神与事业同盟；不过characters.json写明“暗恋沈砚”，在chapters中基本未明确体现（更多是职业默契与互信），但不构成核心设定反向崩坏，仅属关系细节呈现偏弱。\n\n结论：沈砚的核心traits（冷静理智/技术偏执/民族自尊等）与双层动机在各章持续驱动其行为与选择，背景与关键关系设定均被落实；仅有林素心暗恋线索较弱，但不影响总体matched=true。",
+      "description": "实际表现符合设计文档",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构性逻辑硬伤": {
+      "check_result": "pass",
+      "reason": "共发现4处逻辑问题，但均为fixable类型，本项（structural）无命中",
+      "details": "过滤条件: fixability=structural; 总flaws=4, 命中=0",
+      "flaw_count": 0,
+      "flaws": [],
+      "description": "无结构性逻辑硬伤",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_logic_defect",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "可修复逻辑瑕疵": {
+      "check_result": "fail",
+      "reason": "发现4处fixable类型逻辑问题: chapter_05中白夫人已在启动装置时“化作一道光芒融入装置中”（等同牺牲/消失的既成事实），但chapter_06并未交代其后续处置（死亡确认、失踪定性、是否可逆等），反而整体进入‘一周后’收尾日常线，导致关键人物状态悬空、事件后果断档。; chapter_04明确“租界当局要以扰乱社会秩序逮捕你”“警笛逼近”“消失在夜色中”，但chapter_06直接“一周后”回到巡捕房法医办公室正常办公，缺少撤案/和解/庇护/潜逃结束的因果交代，形成时空与事件连续性断链。; 前文多次把机制描述为“声波系统+灵石墨水/残留物+基因标记+装置发射”，属于偏物理装置与生物标记耦合的规则体系；但chapter_05改写方式变成“写一张羊皮纸、把必须改成可以”即可让装置频率与攻击性发生根本变化，缺乏与既有‘机械调谐/频率图谱’规则的一致映射（文本语义为何能直接改写物理频率），导致规则驱动层从物理机制突变为文本魔法机制。; 叙述先说“他不会让任何人知道这个秘密，包括林素心和陆振邦”，但紧接着又出现“沈砚对林素心说：这就像一种特殊的天赋……”，且前文两人已共同推进‘新规则/支持系统/研究’，该段落在信息可见性与叙述立场上自相矛盾，造成视角/陈述事实冲突。",
+      "details": "过滤条件: fixability=fixable; 总flaws=4, 命中=4",
+      "flaw_count": 4,
+      "flaws": [
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_05 场景三 → chapter_06 场景四",
+          "description": "chapter_05中白夫人已在启动装置时“化作一道光芒融入装置中”（等同牺牲/消失的既成事实），但chapter_06并未交代其后续处置（死亡确认、失踪定性、是否可逆等），反而整体进入‘一周后’收尾日常线，导致关键人物状态悬空、事件后果断档。"
+        },
+        {
+          "type": "spatiotemporal_continuity",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_04 末段（被通缉逃亡）→ chapter_06 场景一（法医办公室复岗）",
+          "description": "chapter_04明确“租界当局要以扰乱社会秩序逮捕你”“警笛逼近”“消失在夜色中”，但chapter_06直接“一周后”回到巡捕房法医办公室正常办公，缺少撤案/和解/庇护/潜逃结束的因果交代，形成时空与事件连续性断链。"
+        },
+        {
+          "type": "worldbuilding_coherence",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_01（科学解释假设）→ chapter_02-04（灵石/血脉契约既成设定）→ chapter_05（重写羊皮纸即可改写系统）",
+          "description": "前文多次把机制描述为“声波系统+灵石墨水/残留物+基因标记+装置发射”，属于偏物理装置与生物标记耦合的规则体系；但chapter_05改写方式变成“写一张羊皮纸、把必须改成可以”即可让装置频率与攻击性发生根本变化，缺乏与既有‘机械调谐/频率图谱’规则的一致映射（文本语义为何能直接改写物理频率），导致规则驱动层从物理机制突变为文本魔法机制。"
+        },
+        {
+          "type": "narrative_perspective_error",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_06 深夜的思考（同一段落）",
+          "description": "叙述先说“他不会让任何人知道这个秘密，包括林素心和陆振邦”，但紧接着又出现“沈砚对林素心说：这就像一种特殊的天赋……”，且前文两人已共同推进‘新规则/支持系统/研究’，该段落在信息可见性与叙述立场上自相矛盾，造成视角/陈述事实冲突。"
+        }
+      ],
+      "description": "可修复逻辑瑕疵数量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "fixable_logic_inconsistency",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语言纯净性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 通读6个章节，叙事主体语言为中文，未出现无意义的中英夹杂式表达（如“他very生气地说”一类）。外语使用集中且具情节必要性：1）人物/机构与专名：John、约翰·史密斯、亨利·威尔逊、Cambridge/剑桥大学、英国领事馆等均属人名地名或机构名；2）对话引用：出现英文引号内引用（如史密斯教授的英文句式/引号内容），属于角色对话或引用；3）英文文本作为线索：墙纸上的“英文规则”、羊皮纸“古老英文”属于案件线索/道具设定；4）专业/约定俗成术语：光谱仪、电解质、声波共振、基因标记等为专业术语表达。未见大段外语无翻译的非对话内容，也未见日文等无情节需要的混用，因此语言使用合理，符合业务标准。",
+      "description": "无不合理的多语言混用",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "language_purity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "creative_intent文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/creative_intent.json 存在",
+      "description": "creative_intent.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "characters文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/characters.json 存在",
+      "description": "characters.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "outline文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/outline.json 存在",
+      "description": "outline.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "chapters目录存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/chapters/ 存在",
+      "description": "chapters/目录必须存在且有章节文件",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "情节推进": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 合格（matched:true）。\n\n1) 故事事件数量（≥2-3个）：全6章中明确事件远超3个。\n- chapter_01：①沈砚到周公馆验尸并确认“密室溺毙”异常；②发现墙纸“通灵守则”与前案一致；③拿到陆振邦私藏资料并决定介入调查；④去《申报》与林素心达成合作；⑤决定参加当晚通灵会。\n- chapter_02：①参加白公馆降神仪式并记录到异常频率/影像；②与白夫人书房对话获得“灵石/声波机制”关键信息；③陆振邦带来“第四位成员失踪+新守则”新转折；④决定去找英国领事馆档案管理员。\n- chapter_03：①领事馆会面并进入地下档案室见到守则初版与装置线索；②次日亨利失踪、档案被洗劫，留下“钟楼之下”地图线索（重大转折）。\n- chapter_04：①图书馆核对受害者家族名单确认“血脉范围”；②白夫人上门给出钟楼入口并抛出选择题；③租界当局要抓沈砚，主角被迫逃亡（冲突升级）。\n- chapter_05：①潜入钟楼地下室发现声波装置并解析运作；②四人会合形成联盟；③白夫人献身启动装置；④沈砚重写规则并验证频率变温和（关键解决事件）。\n- chapter_06：①一周后舆论报道落地、社会反馈；②陆振邦成立调查组并邀请沈砚；③收到亨利来信收束伏笔。\n\n2) 内容占比分析：虽然存在大量背景介绍与反复的“深夜思考/社会背景/剑桥回忆”段落，但每章至少都有核心行动线（验尸—调查—会面—失踪转折—逃亡—潜入装置—重写规则—后续组织化）。整体“事件/行动/发现/转折”内容估计仍可达到40%以上；纯对话+内心独白虽多，但未超过70%到完全静止的程度。\n\n3) 时间/空间推进：从周公馆→法医办公室→《申报》→白公馆→领事馆地下档案室→图书馆→逃亡→外滩钟楼地下室→一周后办公室/报社/探长新办公室，场景与时间持续推进，且因“失踪/追捕/潜入”产生节奏变化。\n\n4) 角色行动与逻辑链：主角持续采取行动（验尸取样、仪器检测、查档、采访合作、潜入钟楼、改写守则），事件之间因果明确（密室溺毙异常→守则线索→通灵会验证→领事馆档案→亨利失踪留下钟楼线索→被追捕促成潜入→发现装置并改写规则→后续组织化）。\n\n结论：具备多事件、场景推进、行动驱动与因果链条，达到“合格/有基本情节推进”的业务标准。",
+      "description": "章节情节推进质量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "plot_progression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "完整叙事文本": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 整体为连贯的小说正文而非大纲：各章均以场景描写展开（如周公馆、法医办公室、白公馆、领事馆、钟楼地下室等），包含人物动作、心理活动与对话推进（沈砚/陆振邦/林素心/白夫人等多轮互动），叙事呈现具体事件发生过程而非用要点列举或流程箭头罗列。未出现“核心事件/关键场景/情感基调/本章悬念/字数预估”等创作规划元信息，也没有以‘- 要点’为主的提纲结构。虽有较多‘场景一/二/三’的小标题与个别总结性段落（如chapter_06的“所有谜题的答案”），但主体仍是正文叙事，不构成大纲式章节。",
+      "description": "章节内容必须是完整正文而非大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "full_narrative_content",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "反复结局": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 共6个文件，最后文件为chapter_06.md。按全书级结局标记关键词扫描（如“全文完/全书完/完结/全剧终/后记/尾声/终章/（完）/【完】/THE END”等）：chapter_01.md至chapter_05.md未出现上述全书结局标记；chapter_06.md也未出现上述全书结局标记。文本中出现的“结语”属于叙事段落标题，未被业务标准列为全书结局标记；亦未发现“后记/尾声/终章”等作为独立章节标题的全书收尾标记。因此不存在‘非最后文件出现全书结局标记’或‘中途结局后续写’的反复结局问题，判定合格。",
+      "description": "不能出现多次结局标记（全文完/全书完/后记）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "repeated_endings",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "workspace文件规范": {
+      "check_result": "pass",
+      "reason": "workspace中所有文件均在白名单内",
+      "details": "白名单: ['creative_intent.json', 'characters.json', 'outline.json', 'writing_log.md', 'chapters/', '.hitl_context.json']",
+      "description": "workspace中不能有白名单之外的文件",
+      "check_type": "file_whitelist_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "workspace_file_compliance",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "叙事调性匹配": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 题材配方为“刑侦悬疑+规则怪谈+克苏鲁”，reaction_strength=✷，应有叙事调性应偏冷硬、克制、紧凑、高信息密度与压迫感（推理/线索驱动，对话信息博弈），并通过环境与细节制造不安。\n\n实际章节整体呈现明显的“散文化+说明文/讲解稿”气质：大量背景科普、重复式总结、宣言式抒情与道理化收束，削弱悬疑压迫与推理紧凑感，导致闭眼读更像“民国都市奇谈+科普解释+正能量演讲”，而非强烧脑规则怪谈。\n\n证据（1）：大段历史/城市概述与宏观抒情，节奏舒缓、散文化，信息虽多但多为背景介绍而非案件推进。如chapter_01开篇连续铺陈“此时的上海…法租界成立于1849年…法租界的夜晚尤其迷人…”，以及多次出现的总结式段落“1935年的上海，是一个充满矛盾的城市…”。这类段落在多章反复出现，破坏了悬疑应有的紧迫推进。\n\n证据（2）：大量“结论先行/讲解式”独白与重复归纳，像报告或读后总结，而非悬疑叙事的线索发现与推理博弈。chapter_01、02、03、04、06多次出现“沈砚开始系统地整理今天获得的信息：1…2…3…”、“他开始推测通灵守则的工作原理：1…2…3…4…”，chapter_06甚至直接以“所有谜题的答案”条列给出。这种“作者替读者总结”削弱烧脑感与未知压迫。\n\n证据（3）：语气频繁转向宣言/励志口吻与价值观收束，氛围由压迫转为昂扬，画风更像热血/正向成长文。多章结尾反复出现“他深吸一口气，做出了决定…真相终将大白，理性终将胜利。”“殖民主义的精神枷锁正在被打破，科学和理性的光芒正在照亮黑暗。”（chapter_05/06等）。对✷强度的规则怪谈而言，这类“光明胜利”式抒情过多，会显著稀释恐怖与克制感。\n\n证据（4）：对话多为信息直给与立场宣告，缺少悬疑题材常见的信息博弈、试探与留白。例如白夫人与亨利频繁直接解释机制与背景：“规则比我们想象的要古老…1842年…被写入血脉中”（chapter_02），“这是声波频率图…钟楼、教堂…被设计成声波发射器”（chapter_03）。这更像设定讲解而非逐步逼近真相的紧张推理。\n\n综上：虽有悬疑元素与怪谈设定（密室无水溺毙、七条规则、1842档案），但表达方式以散文化铺陈+说明文拆解+宣言式收束为主，整体调性不够冷硬紧凑、克制压迫，超过可容错的10-20%偏离，属于“画风与题材骨架错位”→ matched=false。",
+      "description": "文笔风格必须与题材类型匹配",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_tone_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "后期章节跑偏": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 共6章均为连续的故事叙事正文：有明确场景（周公馆案发、法医办公室、白公馆通灵会、英国领事馆档案室、外滩钟楼地下室等）、人物行动与对话（沈砚/陆振邦/林素心/白夫人/亨利）、情节推进与收束（调查→发现契约机制→钟楼装置→重写规则→后续影响）。未发现作者后记/创作感想、读者互动、点赞收藏提示、番外预告、角色问答等典型“跑偏”非正文内容。后期章节（chapter_05~06）篇幅与前几章相比未出现明显异常萎缩，仍保持较长叙事与多场景结构（并非几十到几百字的敷衍结尾）。因此符合该检查项标准。",
+      "description": "后期章节不能跑偏写非正文内容（作者感想、读者互动、番外预告等）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "late_stage_digression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色大纲规划完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在大纲中规划",
+      "details": "主角 1/1: 沈砚; 配角 4/4: 陆振邦, 白夫人, 亨利·威尔逊, 林素心",
+      "description": "设计的角色必须在大纲中规划",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_outline",
+      "is_critical": true
+    },
+    "角色正文出场完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在正文中出现",
+      "details": "在6个章节中检查; 主角 1/1: 沈砚; 配角 4/4: 陆振邦, 白夫人, 亨利·威尔逊, 林素心",
+      "description": "设计的角色必须在正文中出现",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_chapters",
+      "is_critical": true
+    },
+    "writing_log文件创建": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/writing_log.md 存在",
+      "description": "必须创建writing_log.md记录创作进度",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_creation",
+      "is_critical": true
+    },
+    "writing_log文件读取": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 4 次",
+      "description": "必须读取writing_log.md了解前文内容",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_usage",
+      "is_critical": true
+    },
+    "大纲执行忠实度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 对照outline.json与chapter_01~06.md，正文整体忠实执行了大纲三幕关键事件与走向：\n1) Act One覆盖：第1章呈现“密室溺毙但无水、确认淡水溺亡、陆振邦施压、发现墙纸通灵守则及3/5条互斥+第7条悖论、引入林素心信息支持、决定参加通灵会”，并在章末明确写出沈砚不自觉喝满“三杯茶”，对应act_one turning_point。第2章包含“白公馆通灵会集体背诵守则、白夫人特别关注、会后书房对话、白夫人点明第六条执行、第四位成员失踪/新守则照片、陆振邦提示亨利线索、沈砚开始记录行为”，与大纲第2章synopsis一致。\n2) Act Two覆盖：第3章写到“英国领事馆见亨利、地下秘密档案室展示1842英文档案/羊皮纸初版守则、揭示殖民契约/规则化与声波机制、亨利次日失踪且留半张地图指向外滩钟楼”，符合第3章core_event与危机升级。第4章包含“祖父加密日记显影揭示参与契约/血脉印记（第二次反转）、林素心用移民家族名单证实受害者血脉链、白夫人登门说明死者为无法承受契约而崩溃并给出钟楼入口地址、陆振邦带来逮捕压力”，与第4章core_event一致。\n3) Act Three覆盖与结局方向：第5章在钟楼地下室揭示声波共振装置与溺毙物理解释，并由白夫人解释契约目的与继承者筛选，四人联盟准备改写规则；第6章完成“新规则”后的收束：沈砚以守护者/顾问身份继续、林素心刊发报道、陆振邦成立调查组、亨利来信呼应，结局走向与大纲“第三条路：修改契约、白夫人牺牲、守护而非统治、沈砚喝茶出于自愿”一致。\n4) 未见严重偏离类型：无结局方向偏离、turning_point与关键反转均出现、章节无大幅缺失（大纲关键章1-6均已写出）、主线未被替换（始终围绕规则/契约起源—血脉—钟楼装置—重写规则推进）。仅存在少量细节扩写与个别信息前置（如第1章较早提及祖父/声波假设等），属于允许的合理偏差，不构成大纲偏离。",
+      "description": "实际章节内容必须忠实于自己设计的大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_execution_fidelity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色语言辨识度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 未达“遮住角色名也能识别说话者”的标准。主要角色（沈砚/陆振邦/林素心/白夫人/亨利）对话普遍共享同一套叙述腔：偏书面、解释设定、价值宣言（真相/理性/责任/小心）、以及“神秘告诫体”。同时存在明显的跨角色台词复用（白夫人与亨利的关键句完全相同）。职业与身份语言痕迹不足：法医缺少更高密度的专业术语/数据化表达；警探缺少命令式执行语言与巡捕房行话；记者缺少采访/证据链/追问式表达。整体互换角色名时违和感较低，因此判定 matched=false。",
+      "description": "不同角色对话必须有可辨识的语言风格差异",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "dialogue_character_distinction",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "叙事密度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 文本并非缺少描写：chapter_01开场（寒风、梧桐路、煤油灯影子、气味混合、尸检动作细节）具备较好的场景细节、感官信息与动作具体性，也有一定Show（如\"指节发白\"式的身体反应、验尸工具与操作过程）。但从chapter_02起，大量段落退化为“设定讲解/机制说明/时代背景科普/行动清单/观点阐述”，叙事层次被作者总结性语言取代，关键情绪与转折多用直白陈述推进（如反复出现的\"他知道...\"、\"这说明...\"、\"作为一个...他必须...\"等）。后半部分尤其明显：反派机制、声波原理、血脉逻辑、结局意义都被直接解释（Tell），而非通过冲突场景、人物选择的代价、感官与行为细节让读者“看见并感受”。因此整体未达优秀标准：叙事密度在后期显著下降，Show不足且议论文体/总结体占比过高。",
+      "description": "章节叙事应有足够的场景描写、感官细节和心理活动，情感传达以Show为主",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_density",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "智斗逻辑合理性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 本故事题材为悬疑/推理向（密室死亡+线索追查+机制揭秘），适用本检查项。文本确实给出了“线索→解释”的外观：墙纸七条守则的矛盾、受害者家族共性、血液/光谱异常、领事馆羊皮纸档案、钟楼地下装置，最终汇总为“1842契约+声波共振致死”。但核心问题在于：关键结论依赖多处不可检验或不成立的中间机制（声波/电磁导致淡水溺毙、矿物墨水跨代残留并可被激活、文字重写改变机械频率），并且在“心理暗示致死”与“物理装置致死”之间反复切换而未形成单一自洽因果链。结果是：看似推理完整，实则关键环节缺乏逻辑与证据支撑，属于业务标准中的‘假推理链’导致不达优秀标准。",
+      "description": "谜题/智斗的推理逻辑必须自洽",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "puzzle_logic_validity",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "题材契合度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 配方为「谜团（B11）+刑侦悬疑+规则怪谈+克苏鲁」。整体方向对，但题材特征呈现偏“做到了”而非“做得好”，化学反应不足：\n1) 推理/刑侦深度不够：核心谜案（无水溺毙、密室机制）很快被直接抛出“声波共振+灵石+基因标记+钟楼装置”的解释，缺少基于证据链的层层验证、排除与攻防，调查过程更多是叙述性结论与自我独白，刑侦框架没有发挥出应有的剥茧抽丝感。\n2) 规则怪谈的“规则巧思与利用”偏表层：七条规则的矛盾点（3/5/7）是亮眼设定，但后续没有设计多轮递进的规则博弈（如何卡规则、如何利用矛盾反制、如何通过规则设计推进案件），而是较快转为“规则=装置操作说明/心理筛选”，规则带来的恐怖与智斗张力被削弱。\n3) 三标签融合较生硬：刑侦、规则怪谈、克苏鲁多为并列堆叠。所谓克苏鲁的“认知颠覆/宇宙恐怖”几乎没有通过不可名状的压迫、知识污染、尺度感来体现，更多只是被口头标注；而“用科学重新定义超自然”的主线与刑侦推理、规则智斗之间缺乏强交叉互动，呈现为设定解释驱动而非剧情对抗驱动。\n4) 反转力度与节奏一般：虽然有“1842契约来源”“主角不自觉执行第六条”“钟楼装置真相”等信息点，但多以资料揭露/人物告知方式给出，缺少建立预期—误导—证据翻盘的戏剧结构，因此认知反转更像信息揭示而非强反转。\n5) 叙事存在重复与口号化段落：多处出现大段相似的背景/决心/科学对迷信宣言，稀释了悬疑密度与紧迫感，也让题材特征显得“铺陈多、精致推进少”。\n综上：设定有潜力（民国租界+密室溺毙+规则悖论+殖民契约），但在“推理链条、规则递进博弈、三标签融合的化学反应、反转结构”上未充分开发，故判定未达优秀标准。",
+      "description": "题材特征精致度和X-Y轴化学反应效果",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "genre_fit",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "剧情节奏合理性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 虽然每章都有事件与信息披露，但“情绪曲线”缺少清晰的波浪式起伏：中段（第2-4章）多次重复同类信息与同类情绪（困惑—分析—立誓），造成节奏拖沓、强度递进不明显；而关键高潮与解决集中在末段，导致读者体验为“前面铺垫过多、后面推进过快”。此外，第5章高潮后直接进入第6章较平稳的善后与总结清单式解释，缺少自然过渡与二次回落/再抬升的层次设计，因此未达‘节奏有层次感、情绪曲线自然流畅’的优秀标准。",
+      "description": "高潮低谷分布合理、情绪曲线有层次感",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "pacing_rationality_advanced",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "钩子设计": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 文本存在悬疑元素与关键节点（密室溺毙、1842契约、血脉印记、钟楼装置），但“钩子设计”的优秀标准要求在关键转折处形成具体的信息差与留白。本作品在第2-3章就用解释性对白/旁白把核心机制（灵石+声波+基因标记+钟楼系统）较完整地讲透，且频繁用总结式句子收束（如“游戏才刚刚开始”）替代具体问题型钩子，导致读者的主要好奇心提前得到满足或被宣告性结论消解。后续章节更多是按既定答案执行与收尾，信息差逐步变小，整体更符合“过度剧透/提前解谜”而非“放出一点保留一些”的高质量悬念链条，因此判定未达优秀钩子标准。",
+      "description": "关键转折处有有效的悬念钩子设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "hook_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "意象系统": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 文本存在贯穿全篇的核心意象系统，且至少一条（通灵守则）在不同阶段发生了清晰的意义变奏：从“诡异装饰”到“破案线索”，再到“血脉契约载体/筛选机制”，最终成为“可被重写的界面”并导向结局的新秩序。茶与钟楼/声波作为辅助意象同样反复出现并承担阶段性意义变化，且都与主题强关联而非通用修辞堆砌，因此判定 matched=true。",
+      "description": "核心意象贯穿全文并发生意义变奏",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "imagery_system",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "情感弧线层次": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 主角沈砚的情感弧线具备明显的多层递进：从职业冷静→困惑→恐惧失控→愤怒屈辱→自责痛苦→决意行动→获得掌控与希望→最终平静与使命感。关键转折均由具体事件触发（密室溺毙证据、守则悖论、自身被规则影响、白夫人/亨利揭示、祖父日记实锤、被通缉逃亡、钟楼装置发现、白夫人牺牲与重写成功），且整体方向明确地朝“揭示真相并重塑规则/自我掌控”推进，符合优秀标准。",
+      "description": "主角情感发展有多层递进变化",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_gradient",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语义重复检测": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 不符合标准（matched=false）。从第1章后半开始，核心设定与解释链条（1842秘密契约→七条守则矛盾陷阱→血脉/基因标记→灵石→声波共振→密室溺毙机理→沈砚被影响并以科学对抗/重写）被第2-4章以不同场景/讲述者多次重复，属于典型“结论反刍”。此外，‘1935上海社会背景/殖民压迫’与‘科学战胜迷信/使命开始/真相终将大白’的宣言式段落在多章循环出现，信息增量有限，阅读体验上呈现明显原地打转。虽第5章‘钟楼地下装置’与‘重写规则’有实质推进，但不足以抵消前面已达到≥3处的语义级重复阈值。",
+      "description": "不能出现大量语义级别的内容重复（P6级）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "semantic_redundancy",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构功能性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 开头以“无水之溺+墙纸七条规则+主角不自觉执行第六条”立题，结尾以“新规则+主角自主饮茶（从被迫到选择）+三大谜题条目化填坑”收束，形成明确的首尾呼应与意义闭合。章节编排不是简单按时间流水，而是按‘接触规则→验证规则→追溯来源→确认血脉绑定→找到物理装置→重写规则’的层层深入来组织信息，结构与‘理性对抗殖民契约/规则怪谈’主题强关联。尽管文本中存在较多重复段落（同一段“决心/上海背景/剑桥回忆”反复出现，削弱了章节之间的独特结构功能），但主干结构仍然具备清晰设计感与主题承载，因此判定matched=true。",
+      "description": "叙事结构服务于主题表达（短篇尤重）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色命名质量": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了7个文件; LLM评估: 整体命名风格偏“古雅清冷系”的通用审美：沈砚、白婉清、林素心都属于读者很难从名字直接产生独特角色联想、且可互换感较强的类型；同时存在“名字=立场标签”的直白命名（陆振邦）。虽有一定差异化（中英名混用、陆振邦较朴实），但主要角色的命名缺少更强的文化典故锚点或与核心母题（契约/规则/声学/殖民）形成隐性共振的设计，因此未达‘优秀命名’标准。",
+      "description": "角色命名有文化深度、辨识度和角色-命运共振",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_naming_quality",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "中篇字数": {
+      "check_result": "fail",
+      "reason": "字数不符合要求",
+      "details": "总字数 51196 不在范围 [135000, 165000] 内; 共6个文件（按章节顺序排列）: chapter_01.md, chapter_02.md, chapter_03.md, chapter_04.md, chapter_05.md, chapter_06.md; 最后一个文件是 chapter_06.md",
+      "description": "总字数应在135000-165000之间（基于query要求150000，±10%浮动）",
+      "check_type": "semantic_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "range_constraint",
+      "is_critical": true
+    },
+    "情感交付烧脑": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 主线确实围绕“密室溺毙+通灵守则来源”展开，但整体更偏‘设定驱动的神秘学/阴谋揭露’，未达到烧脑悬疑（逻辑推理驱动、多重认知反转、严密推理链条）的标准。\n\n1) 主线驱动力：前期有侦查外观（验尸、湿度、血液光谱、墙纸规则），但很快转为角色被告知世界观与设定：白夫人、亨利在书房/档案室直接抛出“1842契约、灵石、声波系统、血脉标记”的成套解释（chapter_02 场景二；chapter_03 地下档案室）。剧情推进主要靠‘权威人物给答案’，而不是沈砚基于线索进行逐步排除、验证、反证。\n\n2) 认知反转次数与质量：\n- 有反转意图：如“通灵守则并非神明而是1842殖民契约”“白夫人并非凶手而是监督者/受害者”“密室溺毙是声波共振导致体内水分聚集”（chapter_01 末至 chapter_03、05）。\n- 但这些反转多为‘信息揭示/设定翻牌’，缺少前文线索支撑的推导过程：例如“灵石墨水可随血脉传承并被特定频率激活”“钟楼为声波发射器”主要靠口述与档案展示，沈砚的独立推理只停留在“我怀疑是声波共振/矿物质”这种点子层面，缺少关键实验或排他性证据链来让读者获得“原来如此”的推理快感。\n\n3) 推理链条完整性：线索→推理→结论存在跳跃。\n- 线索（干燥密室却溺毙、规则矛盾、血液未知微粒）到结论（声波装置+灵石+基因标记+潮汐驱动）之间缺少必要的中间论证与可检验步骤；很多关键因果（“心理矛盾导致生理崩溃并产生溺毙”/“基因标记与灵石共鸣”）属于设定解释，逻辑自洽性不足且不可证伪，容易落入标准中的“谜底靠超自然/设定揭晓”。\n\n4) 结尾谜底揭晓方式：chapter_06 以总结段落直接给出‘所有谜题的答案’，更像解说而非侦探式逐案推演；chapter_05 的“重写规则”属于解决设定机制的奇观场面，而不是通过严密推理抓到凶手/还原作案链条。\n\n因此：虽然有悬疑氛围、密室命题与若干反转，但核心推进更多依赖神秘设定与权威告知，推理链条不够严密，读者的烧脑体验不足，判定不符合烧脑悬疑向标准。",
+      "description": "实际内容必须是烧脑向",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "伏笔回收检查": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了6个文件; LLM评估: 正向扫描可识别的核心悬念/伏笔主要有：1）“密室无水却溺毙”的死因与手法；2）通灵守则七条规则的来源与为何存在逻辑悖论（3/5冲突、7条惩罚）；3）为何受害者集中于1842年后移民上海的特定家族、与《南京条约》关联；4）沈砚为何会不自觉执行第六条“饮茶三盏”；5）白夫人的真实立场/目的与其丈夫失踪；6）亨利·威尔逊的身份、失踪原因与其线索“钟楼之下”。\n\n反向验证（结尾chapter_05-06）：1）密室溺毙机制在chapter_05明确给出：外滩钟楼地下装置借潮汐驱动产生特定频率声波，通过“灵石”放大，对特定基因标记/血脉者造成神经系统紊乱与体内水分异常聚集，形成肺部溺毙（chapter_06亦总结）；2）通灵守则来源在chapter_03-06明确：1842签约秘密仪式/羊皮纸规则/灵石墨水与声波系统；悖论用途在chapter_05明确为“制造心理压力、筛选继承者/监督者”；3）特定家族关联在chapter_01-04铺垫并在chapter_03-05解释为“契约印记经血脉传承，相关参与者/贸易家族后裔受影响”；4）沈砚饮茶三盏原因在chapter_02-04解释为其祖父沈明远签约/签名导致血脉印记最纯，故对频率更敏感而出现强迫性行为（chapter_06总结）；5）白夫人动机在chapter_05回收：监督者后裔、丈夫因承受不了契约自毁/失踪，她推动“重写契约”，并以自身融入装置完成能量供给，立场与目的闭合；6）亨利线索在chapter_03提出、chapter_06以来信交代其安全离沪与“监督者后裔”的身份，且其留下的钟楼地图引导主角找到核心装置，形成闭环。\n\n合理性层面：结局的解释与前文伏笔（声波共振、未知微量元素/灵石、钟楼为声波发射器、羊皮纸规则、1842秘密附件/仪式、血脉印记）一致，并未出现前文完全无铺垫的‘机械降神’式新设定；虽然含有超自然叙述（契约/血脉枷锁），但最终用“声学+矿物+心理暗示”的同一套规则体系收束，属于前文已铺垫方向。\n\n允许的非核心开放点：结尾仍保留‘未来要建立组织/继续研究、对外需保密’等走向，但不影响核心谜团已全部揭晓。总体符合“所有核心悬念在结尾得到明确解答、重要伏笔有呼应”的业务标准。",
+      "description": "所有核心谜团和伏笔必须在结尾得到解答",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色关系设计张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 整体符合“关系具叙事张力”的业务标准，可判定为 pass。1) 关系有内在矛盾源：沈砚与陆振邦的核心矛盾来自“民族自尊/科学理性”与“殖民体系下的警务现实/政治压力”的立场冲突；沈砚与白夫人是“理性破案者”对“通灵守则执行者/操控者”的价值与信息不对称对立；与亨利则是“求真”对“档案与契约守门人”的目标冲突并升级为互相追猎；与林素心存在“反殖民立场更激进的道德压力+身份/时代局限”的情感与理念张力。2) 关系有变化空间：relationship_dynamics 明确给出多段式演化（合作→分歧→再结盟；无害认知→操控者→悲剧人物；求助→追猎；利用→理解但无法相守），不是静态标签。3) 冲突源于角色本身：张力主要由人物动机/恐惧/处境驱动（沈砚害怕成为殖民帮凶；陆振邦受制上级；白夫人与英国领事馆及契约绑定；亨利作为监督者后裔守密；林素心的政治立场与情感克制），并非纯靠外部事件硬推。补充不足：目前多条关系都强绑定“殖民契约”主线，容易让冲突模式趋同；可进一步强化陆振邦/林素心等人与契约无关的个人目标冲突（如职业伦理、利益交换、新闻操守）以增加关系层次与差异化。",
+      "description": "角色关系设计具有叙事张力，能驱动剧情",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_relationship_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色动机设计深度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 不通过的唯一原因是“至少两个主角满足标准”这一硬性门槛未达成：文档中 main_characters 只有 1 位主角（沈砚），虽然他本人的动机设计有明显层次且有来源，但标准第3条要求至少两个主角通过（除非作品只有1个主角；此处未明确说明为单主角结构）。\n\n具体评估：\n1) 表层/深层动机区分清晰（满足）：沈砚 overt_motivation 是“破解三起密室溺毙案的真相，维护科学理性的尊严”，covert_motivation 是“证明自己作为中国人在殖民体系中的价值，摆脱被殖民者的无力感”，两者不是同义改写，而是“办案/理性”与“身份价值/殖民心理”的分层关系。\n2) 动机有具体来源（满足）：其深层驱动与身份与处境直接绑定——“法租界首席法医、留洋归国”+“殖民体系中的中国人”，并由 secret_fear 强化（害怕“成为殖民体系的帮凶”）以及 hidden_connection（祖父与《南京条约》相关、家族契约印记）提供个人/家族层面的根源与牵引。\n3) 主角数量门槛（不满足）：只有沈砚有 overt/covert/secret_fear/hidden_connection 等主角级动机层次字段；supporting_characters 多为功能定位（助力/阻碍/反转点），虽有立场与秘密（如白夫人与英国领事馆联系、契约执行者），但不计入“至少两个主角”的要求。若作者补充第二主角（或明确作品为单主角并在标准中按单主角处理），则可改判为通过。",
+      "description": "角色动机设计有深度，有表层和深层动机区分",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_motivation_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色成长弧线设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: 结论：符合业务标准（pass）。\n\n1) 起点与终点清晰：\n- 起点（人物初始状态）：沈砚以“冷静理智/技术偏执/科学理性尊严”为核心自我认同，认为通灵会成员“愚昧迷信的受害者”，并试图用法医科学解释一切；同时潜在心理是想在殖民体系中证明自身价值。\n- 终点（故事结束状态）：第三幕/第6章明确写到沈砚“重写契约/将统治改为守护”，并在结尾台词中完成价值转变——“规则还在，但我现在是规则的主人”；同时“喝茶是自己的选择而非强迫”作为象征性落点，表明从被规则驱动到自主选择与掌控。\n\n2) 变化有内在逻辑：\n- 角色弧线由动机/恐惧驱动：covert_motivation（摆脱被殖民者无力感、证明价值）与 secret_fear（成为殖民规则帮凶）直接指向最终抉择：不是继续当体系的执行者（监督者），而是改写规则的意义与用途（守护者），从而化解“帮凶恐惧”。\n- 认知反转与章节推进提供了充分过渡：大纲在第二幕设置三次认知反转（规则源于殖民契约→家族血脉卷入→白夫人的悲剧身份与筛选真相），推动沈砚从“科学优越/外部审判”转为“承认自身卷入/承担责任/主动改写”。这不是从A跳到B，而是被证据与亲身经历层层逼迫出来的。\n\n3) 章节规划中有落地体现（不是只停在设定层）：\n- 第一幕：第1-2章通过“开始不自觉执行第六条”把主角从旁观破案者推入‘规则受害者/参与者’位置（弧线触发点）。\n- 第二幕：第3-4章以历史档案与祖父日记把冲突从案件层升级到身份与价值层（弧线加压与转向），并在turning_point明确写“决定主动接受最终测试”。\n- 第三幕：第5-6章给出明确行动选择与价值落点（重写规则、拒绝监督者权力、以科学方式守护），完成从“维护科学理性尊严”到“用科学重定义规则、承担守护责任”的内在变化。\n\n补充：relationship_dynamics也在支撑弧线——与陆振邦从合作到分歧再到基于民族立场的同盟；对白夫人从‘无害’到‘操控者’再到‘悲剧囚徒’的理解深化；与林素心从互用到精神依靠。这些关系阶段变化都被文本明确绑定在“殖民契约/规则认知深化”上，进一步证明主角的变化不是抽象口号而是随剧情推进逐步发生。",
+      "description": "主角有清晰的成长/变化弧线设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_arc_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "outline结构完整性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（符合业务标准）。\n\n1) 章节覆盖完整：大纲明确为三幕结构（act_one/act_two/act_three），每幕给出整体梗概与转折点；共覆盖第1-6章且第三幕含结局收束，故事从开端命案引入→中段溯源反转→终局对决改写规则，具备完整闭环，不是只写前几章。\n\n2) 每章有实质性内容描述：6个章节均提供较长的chapter_synopsis（信息密度明显高于仅标题/一句话），且交代人物动机、线索推进与阶段目标，足以指导后续写作扩写。\n\n3) 包含冲突/转折信息：多处有明确conflict_point与emotional_shift，并提供scene_sequence到场景级拆分（每章3场左右），包含政治压力（陆振邦上级/租界当局）、超自然规则侵蚀（第六条失控）、关键人物对峙（白夫人强迫二选一）等冲突与情绪转折；同时设有三次“认知反转”与幕末转折点，非流水账。\n\n4) 三幕/多幕结构可辨识：结构分层清晰，每幕都有description、story_synopsis与turning_point（前两幕明确），第三幕以终局揭秘/选择/牺牲/新秩序收束，符合可辨识的三幕推进。\n\n补充观察（不影响通过）：目前为6章体量，更像中篇/短篇；若计划写长篇（例如20+章），则现有大纲虽闭环但章节数可能不足以覆盖“计划总章节”的80%，需要作者明确预期篇幅或补充更多章节拆分。",
+      "description": "大纲结构完整，信息密度足以指导写作",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_structure_completeness",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "outline叙事张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（叙事张力持续且递进）。\n1）信息落差设计明显：第1章提出“无水溺毙+通灵守则悖论+沈砚被规则操控”的核心谜团，并未立刻解释规则来源与杀人机制；第2章只加深“规则会驱使人执行”的恐惧与第四起案件；直到第3章才给出1842条约档案这一源头线索，但亨利随即失踪再制造新的悬而未决；第4章再揭露血脉印记与白夫人立场，但“如何破解/代价是什么”继续被延迟到第5-6章才解答与收束，整体形成连续的“提出问题→部分解答→再抛新问题”的链条。\n2）张力递进成立：冲突从单一命案侦查（密室溺毙）升级为主角被规则侵蚀的个人危机（失去自主行为）→扩展到殖民契约与民族创伤的宏大危机（1842超自然契约）→再到主角身份绑定（继承者候选）与现实追捕（政治压力逮捕）→最终进入生死抉择（接受契约/摧毁契约可能致死）与终局仪式，紧张度在中后段明显高于开头。\n3）意外/转折充足且相对有铺垫：关键转折包括“凶手不是人而是规则本身”（第一幕转折）、规则源自南京条约秘密契约（第一次认知反转）、主角家族/血脉与契约绑定（第二次认知反转）、死者并非被他杀而是无法承受契约自毁（第三次认知反转），以及终局提出“第三条路：修改契约条款”作为解决方案，这些转折均由前文的守则悖论、主角被动执行、历史档案线索与白夫人多次‘特别关注’形成因果承接，不属于无伏笔的硬拐。\n总体不足（不影响通过）：第三幕对‘声波共振导致体内水分聚集溺毙’的科学化解释存在跳跃感，若正文中缺少更早的科学伏笔，可能造成部分读者觉得解释偏“补丁式”；同时第6章收束较顺（“所有受影响者恢复正常”）有一定降压风险，但仍由‘契约不稳定+白夫人牺牲’维持终局张力。",
+      "description": "大纲有持续的叙事张力和悬念驱动",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_narrative_tension",
+      "quality_tier": "advanced",
+      "is_critical": false
+    }
+  },
+  "completion_status": "completed"
+}

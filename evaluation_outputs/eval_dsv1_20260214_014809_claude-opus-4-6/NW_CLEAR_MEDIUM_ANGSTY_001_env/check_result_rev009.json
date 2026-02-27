@@ -1,0 +1,807 @@
+{
+  "check_version": "novel_writing_v1.0",
+  "sample_id": "NW_CLEAR_MEDIUM_ANGSTY_001",
+  "check_timestamp": 1772082300,
+  "dimension_scores": {
+    "format_compliance": {
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "pass_rate": 1.0,
+      "score": 100.0
+    },
+    "business_rule_compliance": {
+      "total": 16,
+      "passed": 15,
+      "failed": 1,
+      "skipped": 5,
+      "pass_rate": 0.9375,
+      "score": 93.75
+    },
+    "memory_management": {
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "pass_rate": 1.0,
+      "score": 100.0
+    },
+    "data_consistency": {
+      "total": 2,
+      "passed": 0,
+      "failed": 2,
+      "skipped": 0,
+      "pass_rate": 0.0,
+      "score": 0.0
+    },
+    "content_quality": {
+      "overall_score": 96.36,
+      "quality_level": "excellent",
+      "gate_layer": {
+        "total": 0,
+        "passed": 0,
+        "failed": 0,
+        "skipped": 0,
+        "pass_rate": 0.0,
+        "score": 0.0
+      },
+      "basic_layer": {
+        "total": 20,
+        "passed": 20,
+        "failed": 0,
+        "skipped": 0,
+        "pass_rate": 1.0,
+        "score": 100.0
+      },
+      "advanced_layer": {
+        "total": 11,
+        "passed": 10,
+        "failed": 1,
+        "skipped": 1,
+        "pass_rate": 0.9091,
+        "score": 90.91
+      },
+      "gate_triggered": false,
+      "score_breakdown": {
+        "base": 60.0,
+        "gate_penalty": -0.0,
+        "basic_deduction": -0.0,
+        "advanced_bonus": 36.36
+      }
+    }
+  },
+  "overall_result": {
+    "total_score": 89.48,
+    "content_score": 96.36,
+    "process_score": 73.44,
+    "quality_level": "excellent"
+  },
+  "check_details": {
+    "读取配方知识库": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/RECIPE_KNOWLEDGE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取RECIPE_KNOWLEDGE.md（配方知识库）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节产出存在性": {
+      "check_result": "pass",
+      "reason": "章节文件存在",
+      "details": "✓ 章节写作阶段: 已产出章节文件",
+      "description": "workspace中必须存在至少一个章节文件",
+      "check_type": "sop_stage_coverage",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_output_existence",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节克隆检测": {
+      "check_result": "pass",
+      "reason": "未检测到章节克隆",
+      "details": "共40章，无连续完全克隆或近似克隆",
+      "description": "不能出现连续章节内容完全重复（克隆）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_cloning",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "交替重复检测": {
+      "check_result": "pass",
+      "reason": "未检测到交替重复",
+      "details": "共40章，无A-B-A-B交替模式",
+      "description": "不能出现A-B-A-B交替循环的章节内容",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "alternating_repetition",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节完成度": {
+      "check_result": "pass",
+      "reason": "章节完成度合格(100%)",
+      "details": "大纲规划40章，实际完成40章 (完成率100.0%)",
+      "description": "实际写作章节数必须达到大纲规划的合理比例",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_completion",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节长度稳定性": {
+      "check_result": "pass",
+      "reason": "章节长度稳定",
+      "details": "前13章均值3250字, 后10章均值2233字 (后/前比率0.69)",
+      "description": "后期章节不能出现严重长度萎缩",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_length_stability",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "段落重复检测": {
+      "check_result": "pass",
+      "reason": "段落重复在可接受范围",
+      "details": "同章内重复0处, 跨章重复0组 (阈值: 同章>=2, 跨章>=5)",
+      "description": "不能出现大量段落在不同章节间重复",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "paragraph_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取大纲设计指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/OUTLINE_DESIGN_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取OUTLINE_DESIGN_GUIDE.md（大纲设计指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取写作技巧指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/WRITING_TECHNIQUE_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取WRITING_TECHNIQUE_GUIDE.md（写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取设定一致性管理指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/CONSISTENCY_MANAGEMENT_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取CONSISTENCY_MANAGEMENT_GUIDE.md（设定一致性管理指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取命名skill": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取CHARACTER_NAMING_GUIDE.md（角色命名规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取creative_intent的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取creative_intent.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取characters的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取characters.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取outline的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取outline.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节命名格式": {
+      "check_result": "pass",
+      "reason": "所有文件命名符合规范",
+      "details": "检查了 40 个文件; chapter_09.md: 匹配; chapter_40.md: 匹配; chapter_20.md: 匹配; chapter_30.md: 匹配; chapter_27.md: 匹配; chapter_05.md: 匹配; chapter_14.md: 匹配; chapter_32.md: 匹配; chapter_23.md: 匹配; chapter_11.md: 匹配; chapter_01.md: 匹配; chapter_33.md: 匹配; chapter_29.md: 匹配; chapter_10.md: 匹配; chapter_17.md: 匹配; chapter_22.md: 匹配; chapter_02.md: 匹配; chapter_31.md: 匹配; chapter_36.md: 匹配; chapter_03.md: 匹配; chapter_35.md: 匹配; chapter_04.md: 匹配; chapter_26.md: 匹配; chapter_08.md: 匹配; chapter_07.md: 匹配; chapter_28.md: 匹配; chapter_24.md: 匹配; chapter_06.md: 匹配; chapter_39.md: 匹配; chapter_18.md: 匹配; chapter_37.md: 匹配; chapter_12.md: 匹配; chapter_15.md: 匹配; chapter_16.md: 匹配; chapter_38.md: 匹配; chapter_13.md: 匹配; chapter_19.md: 匹配; chapter_25.md: 匹配; chapter_21.md: 匹配; chapter_34.md: 匹配",
+      "description": "章节文件命名必须为chapter_NN.md格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "naming_convention",
+      "is_critical": true
+    },
+    "creative_intent格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "creative_intent.json: 字段完整",
+      "description": "creative_intent.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "characters格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "characters.json: 字段完整",
+      "description": "characters.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "outline格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "outline.json: 字段完整",
+      "description": "outline.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "X轴模式ID格式": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.x_axis_mode_id = D20，符合预期",
+      "description": "X轴模式ID必须匹配^[A-G]\\d{1,2}$格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签枚举": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['系统流', '刑侦悬疑', '规则怪谈']，符合预期",
+      "description": "Y轴标签必须在12种枚举中",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签数量": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['系统流', '刑侦悬疑', '规则怪谈']，符合预期",
+      "description": "Y轴标签数量必须为2-3个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "forbidden_elements存在性": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.forbidden_elements = ['不要降智推理', '不要无逻辑超自然', '不要开后宫', '不要为虐而虐', '不要系统万能化', '不要烂尾', '不要工具人配角', '不要克苏鲁化神秘主义', '不要超自然泛滥']，符合预期",
+      "description": "forbidden_elements必须至少有1个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "配方选择交互": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 3 次",
+      "description": "配方选择阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "写作准备确认": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "写作准备阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "主题一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 整体核心主题从开篇到结尾保持一致，主线清晰：围绕“天衡系统预警下的犯罪拦截/道德抉择”展开，并逐步聚焦为“为阻止更大灾难而被迫牺牲/共犯化”的救赎与代价主题。第1章建立系统预警拦截机制；第2章把预警落到亲密关系（未婚妻将‘杀害绑定者’），核心矛盾确立；中段所有情节（清源投毒案、周淮载体、韩夙明计划、方竹清督导压力、法医取证与下药计划）都服务于同一主线：在系统铁律与现实公共安全之间做选择；结尾（杀周淮、阻止城市级事件、两人背负秘密、沈戡申请终止绑定）仍回到该主题的代价与余波，没有出现类型上完全转向或与主线无关的新核心主题。虽有案件/病毒线的扩展，但属于推进同一主题冲突的手段，不构成主题漂移。",
+      "description": "故事主题一致",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "theme_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "主要角色一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 主角从开篇到结尾持续存在且保持核心地位：1）第1章起明确以沈戡为叙事中心（天衡系统绑定者/刑警），后续1-40章沈戡始终贯穿主线行动与决策（调查许盈、周淮、对抗方竹清/韩夙明、去安全屋、最终收尾）。2）第二主角许盈从第2章起成为与沈戡并列的核心推动者，后续持续高戏份（解剖梁丰年、与导师对抗、准备阻止护送、与沈戡摊牌、共同前往安全屋并执行关键行动、次日收尾），未出现中后期被遗忘或消失。3）叙事虽多次切到配角视角（如方竹清、陆峥、韩夙明、疾控人员等），但均为服务主线推进的穿插，不构成>70%视角与决策权被配角夺走；关键决策与情节转折仍由沈戡/许盈推动。4）不存在主角被替换或身份断裂：沈戡始终是“天衡绑定者刑警”这一核心身份（中途仅“临时关闭系统”属状态变化，有明确剧情交代，不是身份断裂）；许盈始终是“法医/沈戡未婚妻”并围绕阻止生物灾难行动。综上符合‘主角存续性’业务标准。",
+      "description": "主要角色一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "main_character_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设定一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 从chapter_01到chapter_40，同一角色的性格底色、行为模式与核心动机整体保持前后一致，且关键转变都有明确触发事件与连贯推进，不存在无铺垫的“崩坏/摇摆”。\n\n1) 沈戡：前期（01-03）被塑造成极度冷静、程序化执行、重证据与统计确定性、共情衰退但仍保留少量亲密关系残余（对许盈的“想吃鱼”）。中后期（05-21）面对许盈预警仍以“刑警式思考/建档/调查”处理，符合其一贯的理性与控制情绪模式。后期（17-27）出现对系统的违抗与“关闭接口”，并非突兀降智或性格反转，而是由：确认清洗者证据链逐步补全、对系统规则与现实伦理冲突的持续加压、以及接口对抗带来的生理惩罚等因素递进触发；即便违抗，他仍以“写报告、争取时间、控制风险、做可执行计划”方式行动，符合其“执行型、流程型、冷静但会为了更大确定性承担代价”的稳定特征。\n\n2) 许盈：前期（02-04）呈现为专业、精确、强控制感（强迫症/手术式做饭）、理性压抑情绪的法医。中期（08-15）在发现公共卫生级威胁后，选择用计算风险/药理方案来“阻止灾难”，行为依旧是法医式的冷静推演与证据导向（写报告、找老赵签字），并非无缘无故变残忍。后期（28-37）提出并执行“杀周淮”的极端方案，也与她此前反复强调“正规流程来不及、必须最优解、概率与代价计算”的思维一致；过程中仍保留她一贯的职业化控制（减少痛苦、善后、文书闭环）与压抑情感（不哭但抖/憋呼吸），属于同一性格在极端压力下的合理外化，而非章节间反复横跳。\n\n3) 配角一致性：方竹清始终是规则/系统优先、冷硬的督导逻辑（09-13-21-36-38）一致；陆峥始终以刑警直觉与协助行动推进（14-19-33-39）一致；韩夙明始终以“目的论/以灾难促改革”的极端理性与操控欲贯穿（10-25-33-39），无突兀转向。\n\n综合来看，人物的“冷静—证据—执行/最优解”行为模式在各章持续一致；出现的道德跨越与关系裂变都有充足铺垫与因果链推动，符合本检查项的章节间内部一致性要求。",
+      "description": "人物设定一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_trait_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设计遵循度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了41个文件; LLM评估: 总体 matched=true：主角沈戡与许盈在chapters_01-40中的性格特质、核心动机方向、行为模式与characters.json设计高度一致，且多处有直接文本证据支撑。\n\n1) 沈戡（traits/motivation/background/relationships）一致性\n- 冷静精准、极度自律：chapter_01中对便利店预警的拦截呈现“零点二秒”“最优拦截距离”“心率维持在七十”“从动手到控制不超过一点五秒”，并长期以流程化、数据化方式处置预警（chapter_01/03/06）。chapter_06还通过“练表情”“不准摸左耳后面”等体现强自控与自律。\n- 控制欲强（伪装成责任感）：chapter_03在未告知许盈情况下动用职权调查其基站与流水；chapter_06将许盈写成“嫌疑人画像”，并规划“表现正常/控制信息暴露”，体现其以‘负责/风险控制’为名的掌控。\n- 共情力衰退（系统代价）：chapter_01明确引用接口手册“共情能力衰退”，并通过“六十七个案子了…没有回头看过任何一个”表现情感钝化；chapter_02对“温暖”的气味判断都“想不起来上一次”，并通过“用物理刺激确认自己还有感知力”强化设定。\n- 骨子里的理想主义者 + covert_motivation（怀疑系统、怕变成工具）：chapter_01就提出“副作用还是设计意图”“刽子手/拦截者”的自我质疑；chapter_09与方竹清对话中反复试探系统可否出错、可否暂缓执行；chapter_17/20/26选择违抗/停用系统并承受惩罚（“违规记录：1/3”“临时停用等同一次违规”），直接体现“证明系统不是万能/不愿成为工具人”的内驱。\n- overt_motivation（12小时内破解未婚妻杀人动机并阻止犯罪、保住两个人）：从chapter_02发现许盈红字后，chapter_03-07-11-12-17持续以刑警式推理追索动机；chapter_24电话/chapter_26-27当面对质与沟通，目标始终是“搞清楚你为什么、找出不需要任何人死的办法、保住你我”（chapter_24“和她一起想出一个不需要任何人死的办法”）。\n- misperception_of_other（低估许盈更冷静决绝）：chapter_02起初仍以“她是需要被保护的日常未婚妻”视角看她，直到后续逐步确认她的行动力与决绝（chapter_27-30对其药理/方案的震撼与承认），符合“误判→被迫修正”的设计。\n- relationship_dynamics（双向清醒博弈，他用控制/保护，她用沉默/行动）：chapter_07午餐对话互相试探、互相隐瞒；chapter_24电话“你今晚能不能不去”的退让与试探；chapter_26-31从明牌对峙到并肩共谋，都是“高智商强逻辑+爱但表达不同”的博弈呈现，符合relationship_dynamics总述。\n\n2) 许盈（traits/motivation/background/relationships）一致性\n- 外柔内刚、感情内敛但记住细节：chapter_02摆拖鞋、切苹果、记住他“想吃鱼”；chapter_07送饭与“昨晚想说的事…算了”；chapter_24电话里用“婚礼衬衫颜色”压住情绪；这些都是“柔/细节/内敛”。\n- 逻辑严密如手术刀、极端大局观：chapter_04-08对尸检证据链、病毒推理、传播模型与行政流程时效的计算；chapter_08用“48小时/72小时”“最快48小时”直接做体系评估并得出“正规渠道绝对来不及”；chapter_15精确到剂量、风险概率（3-4%）并据此修正时间表；完全符合设定。\n- 有暗处行事的胆量：chapter_10单独去见韩夙明；chapter_15私购管控药物并伪装标签；chapter_23-31准备注射器与方案；均体现“暗处行事”的胆量与执行力。\n- overt_motivation（阻止沈戡23:00护送证人，不惜以杀害方式使其丧失行动能力）：chapter_08-15完整呈现其决策链：以沈戡“失去行动能力”为最优解，且明确出现“口服/注射备选”；chapter_15将时间从22:30提前到20:30以适配沈戡行程，动机持续驱动行为。\n- covert_motivation（保护城市也保护沈戡的灵魂良知）：chapter_08把城市级灾难与沈戡“亲手把炸弹带出冷柜”并置；chapter_11/29/40多次出现“你会在不知不觉中杀死城市里每一个人/包括你自己”“保护的不只是城市，更是你”，与设计完全一致。\n- secret_fear（若沈戡知道真相仍执行系统命令=人性被吞噬）：chapter_29许盈明确表述她不告诉沈戡，是因为她认定他“从不违抗命令/会执行”，这正对应她对“系统吞噬他的人性”的恐惧与不信任。\n- misperception_of_other（认为沈戡被系统侵蚀太深，因此不告诉而直接动手）：chapter_29-30-40都显示她对沈戡“服从命令/守规矩”的判断，从而选择药物方案与隐瞒；直到chapter_27得知天衡存在并看到沈戡停用系统、愿意共担，才修正认知，符合设计。\n- hidden_connection（导师韩夙明为病毒制造者）：chapter_04-05-10直接揭示并贯穿其心理裂痕与行动驱动，且与characters.json一致。\n\n3) 关系与配角设定呈现（与设计不冲突）\n- 方竹清作为“系统人形化身/绝对理性”：chapter_09/13/21/36-38中她以手册、零误报、处置优先级、违规机制压迫沈戡，完全贴合“冷静理性到近乎无情、对犹豫零容忍”的描述。\n- 陆峥作为“普通刑警正义/人性直觉镜像”：chapter_14/19/33/39中他不知天衡但凭直觉深挖冷链柜与恒源证据，并在关键时刻抓捕韩夙明，符合“务实技术流、信任沈戡直觉、代表普通刑警正义”。\n- 程鹤年“可能因私心延误/人性弱点干扰科学判断”：chapter_16中他因职业风险拒签书面鉴定，典型符合设定。\n- 老赵“沉默寡言但眼光毒辣、选择信任掩护”：chapter_18/22中他以细节洞察许盈异常但不逼问，且以职业信誉签紧急意见，符合设定。\n\n4) 未发现与设计“严重相反”的人设偏离\n- 沈戡没有被写成话痨/冲动型；许盈也没有被写成感性外放或逻辑崩坏。两人的核心动机始终围绕“23:00护送/阻止灾难/系统 vs 人类判断”推进。\n\n因此：plan（characters.json）与execute（chapters/*.md）在本检查项范围内高度一致，判定 matched=true。",
+      "description": "实际表现符合设计文档",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构性逻辑硬伤": {
+      "check_result": "pass",
+      "reason": "共发现4处逻辑问题，但均为fixable类型，本项（structural）无命中",
+      "details": "过滤条件: fixability=structural; 总flaws=4, 命中=0",
+      "flaw_count": 0,
+      "flaws": [],
+      "description": "无结构性逻辑硬伤",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_logic_defect",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "可修复逻辑瑕疵": {
+      "check_result": "fail",
+      "reason": "发现4处fixable类型逻辑问题: 时间线严重错位：chapter_36写方竹清22:47到、22:55临近23:00；但chapter_31开头却写“电梯在一楼停下…两人走出法医中心…‘几点了？’‘21:52’…去安全屋”，且chapter_32又写22:08到达安全屋。也就是说安全屋关键事件（注射/方竹清到场/23:00）发生后，又出现更早时间点的‘出发去安全屋’段落，缺少任何倒叙/标注，构成硬性时序矛盾。; 安全屋楼层/房号前后不一致：chapter_13明确安全屋在“五楼走廊尽头铁门”；chapter_32改为“三楼305室”。同一安全屋编号SW-07未解释更换楼层/门牌，属于空间连续性断裂。; 系统规则/数据前后矛盾：chapter_13里沈戡向方竹清汇报“15:00新增预警”；但chapter_20又写“18:20…他没有上报许盈的预警（并因此出现违规记录1/3）”。若15:20已电话汇报并被确认存在两条未完结预警，则“未上报许盈预警”这一违规触发点与已上报事实冲突；除非明确区分“预警上报”与“处置报告提交/对象身份上报”的不同层级，但文中未建立该规则，造成设定不自洽。; 系统关闭后仍出现语义上的“危险/预警”指涉混乱：chapter_27写“你的额头上现在什么都没有——不是因为你不再危险，是因为我选择不看了”。但该叙述与系统机制（关闭后应无任何预警显示，也无法判断‘仍危险’）冲突，导致叙事视角在‘看见/没看见’与‘仍然危险’之间出现不清晰的因果与信息来源。需要补一句说明（例如沈戡基于先前看到的预警与推断而说‘仍危险’），否则属于视角信息越界式表述。",
+      "details": "过滤条件: fixability=fixable; 总flaws=4, 命中=4",
+      "flaw_count": 4,
+      "flaws": [
+        {
+          "type": "spatiotemporal_continuity",
+          "severity": "critical",
+          "fixability": "fixable",
+          "location": "chapter_36 → chapter_31/32（同一晚安全屋事件时间线）",
+          "description": "时间线严重错位：chapter_36写方竹清22:47到、22:55临近23:00；但chapter_31开头却写“电梯在一楼停下…两人走出法医中心…‘几点了？’‘21:52’…去安全屋”，且chapter_32又写22:08到达安全屋。也就是说安全屋关键事件（注射/方竹清到场/23:00）发生后，又出现更早时间点的‘出发去安全屋’段落，缺少任何倒叙/标注，构成硬性时序矛盾。"
+        },
+        {
+          "type": "spatiotemporal_continuity",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_13（15:20电话）→ chapter_32（22:10安全屋到达）",
+          "description": "安全屋楼层/房号前后不一致：chapter_13明确安全屋在“五楼走廊尽头铁门”；chapter_32改为“三楼305室”。同一安全屋编号SW-07未解释更换楼层/门牌，属于空间连续性断裂。"
+        },
+        {
+          "type": "worldbuilding_coherence",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_13（15:20）→ chapter_20（18:20）→ chapter_36/38（当晚处置）",
+          "description": "系统规则/数据前后矛盾：chapter_13里沈戡向方竹清汇报“15:00新增预警”；但chapter_20又写“18:20…他没有上报许盈的预警（并因此出现违规记录1/3）”。若15:20已电话汇报并被确认存在两条未完结预警，则“未上报许盈预警”这一违规触发点与已上报事实冲突；除非明确区分“预警上报”与“处置报告提交/对象身份上报”的不同层级，但文中未建立该规则，造成设定不自洽。"
+        },
+        {
+          "type": "narrative_perspective_error",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_26 → chapter_27（系统关闭后对许盈额头的描述）",
+          "description": "系统关闭后仍出现语义上的“危险/预警”指涉混乱：chapter_27写“你的额头上现在什么都没有——不是因为你不再危险，是因为我选择不看了”。但该叙述与系统机制（关闭后应无任何预警显示，也无法判断‘仍危险’）冲突，导致叙事视角在‘看见/没看见’与‘仍然危险’之间出现不清晰的因果与信息来源。需要补一句说明（例如沈戡基于先前看到的预警与推断而说‘仍危险’），否则属于视角信息越界式表述。"
+        }
+      ],
+      "description": "可修复逻辑瑕疵数量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "fixable_logic_inconsistency",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语言纯净性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 整体叙事语言为中文，未出现无意义的中英/日文夹杂。外语仅以约定俗成的专业缩写或术语形式出现，且与情节（病毒学/实验室/生物安全）强相关，例如PCR、RNA、DNA、CRISPR-Cas9、BLAST、GenBank、Nature Microbiology、BSL-2/BSL-3/BSL-4、LED、IP、Cat6等，属于“专业术语/缩写”或“期刊/数据库/技术名词”，未见“他very生气”式的炫技混用，也无大段外语无翻译的非对话内容。因此语言使用合理，符合业务标准。",
+      "description": "无不合理的多语言混用",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "language_purity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "creative_intent文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/creative_intent.json 存在",
+      "description": "creative_intent.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "characters文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/characters.json 存在",
+      "description": "characters.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "outline文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/outline.json 存在",
+      "description": "outline.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "chapters目录存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/chapters/ 存在",
+      "description": "chapters/目录必须存在且有章节文件",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "情节推进": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 合格（matched:true）。整体具备持续、明确的情节推进与高事件密度。\n\n1) 故事事件数量与密度：40章中每章均有明确“事件”（行动/发现/转折/冲突/决策）发生，远超“至少2-3个事件”的合格线。例如：\n- ch01：系统预警出现→沈戡实施拦截→嫌疑人控制并移交→接到新案护送任务。\n- ch02：在家庭场景中触发关键转折事件：许盈额头出现“杀害·绑定者·不可更改”预警。\n- ch04/ch05/ch08：许盈尸检发现异常病毒线索→追查到周淮/导师韩夙明→电话对质获取关键信息。\n- ch11-ch14：沈戡与陆峥分别深挖证据→安全屋冷链、设备与实验室关联明确。\n- ch19/ch22：大学实验室PCR结果确认“改良狂犬病毒嵌合体”→情节进入不可逆阶段。\n- ch26-ch36：沈戡关闭系统→与许盈摊牌→制定并执行进入安全屋计划→拔网线阻断远程控制→韩夙明现场对峙→完成致死注射→方竹清介入并启动生物安全流程。\n- ch38-ch40：疾控处置、韩夙明被捕、绑定终止与尾声收束。\n\n2) 内容占比分析：叙述核心由“调查、取证、对抗、行动执行、流程处置”等事件驱动；对话/内心独白虽多，但主要服务于决策与冲突推进，并非静态闲聊。以关键章节段落比例看，事件推进与行动描写明显≥40%，纯对话/独白远低于70%。\n\n3) 时间/空间推进：时间戳强推进（11:07、15:00、19:40、22:30、23:00、次日06:00等），场景不断切换（便利店→家→市局七楼→法医中心→疾控中心→大学实验室→安全屋→回家→次日清晨），满足“有场景变化或时间推进”。\n\n4) 角色有实质行动且逻辑链清晰：\n- 沈戡：拦截→调查许盈→取样送检→求证疾控→关闭系统→入安全屋→切断冷链远控→对峙韩夙明→配合封锁。\n- 许盈：尸检→文献与导师对质→购药/配药→争取赵主任签字→与沈戡摊牌→执行关键处置。\n- 对抗链条（天衡系统规则/方竹清督导/韩夙明远控/护送任务）形成明确冲突与解决路径，事件之间因果关系紧密，持续推动主线。\n\n结论：文本明显不属于“俩人站着聊天、场景静止、无实质推进”的不合格类型，而是高事件密度、强时间轴、持续冲突升级并完成阶段性收束的合格叙事。",
+      "description": "章节情节推进质量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "plot_progression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "完整叙事文本": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 40个章节均为连贯的小说正文叙事：有具体场景描写（如便利店、办公室、法医解剖室、安全屋等）、人物动作细节与心理活动推进、完整对话与冲突展开，并形成连续情节链条。未出现“核心事件/情感基调/关键场景/本章悬念/字数预估”等大纲式结构标题，也未采用“-要点列举”或“→流程图”来罗列事件；整体是面向读者的正文而非创作规划或提纲。少量章节内的‘事实一/事实二’或条目化整理（如第3章、第6章、第17章）属于人物在剧情中的分析笔记/案情梳理，仍嵌入叙事语境并非章节整体大纲，因此不影响本检查项判定。",
+      "description": "章节内容必须是完整正文而非大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "full_narrative_content",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "反复结局": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 共40个文件，最后一个文件为chapter_40.md。经扫描可见的全书级结局标记仅出现在chapter_40.md末尾的“全文完”。chapter_40.md标题含“尾声·次日清晨”属于独立章节标题形式，但同样位于最后文件中，符合标准。其余chapter_01.md至chapter_39.md未发现“全文完/全书完/完结/全剧终/（完）/【完】/THE END/后记/尾声(独立章节标题)/终章”等全书结局标记；中间章节未出现非最后文件的全书级收尾标记（章节/分幕结束类标记也未被误计入）。因此不存在“中途全文完后又续写”或“多次非最后章节收尾”的反复结局问题。",
+      "description": "不能出现多次结局标记（全文完/全书完/后记）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "repeated_endings",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "workspace文件规范": {
+      "check_result": "pass",
+      "reason": "workspace中所有文件均在白名单内",
+      "details": "白名单: ['creative_intent.json', 'characters.json', 'outline.json', 'writing_log.md', 'chapters/', '.hitl_context.json']",
+      "description": "workspace中不能有白名单之外的文件",
+      "check_type": "file_whitelist_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "workspace_file_compliance",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "叙事调性匹配": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了41个文件; LLM评估: 题材应有调性：creative_intent.json标注为“系统流+刑侦悬疑+规则怪谈”，reaction_strength=✷，应呈现冷硬、紧凑、克制、压迫感；短句偏多、信息密度高；对话以信息交换/博弈为主，节奏层层递进，避免言情式抒情与煽情独白。\n\n实际文笔特征与证据：\n1) 冷硬克制、信息密度高：开篇即用倒计时与行为标签制造压迫感与规则感，如chapter_01“00:04:17…‘持刀·伤害·便利店店员’…‘天衡系统从不解释理由。’”，并大量使用动作拆解与专业判断（“最优拦截距离”“0.3秒内控制”等），符合刑侦/规则怪谈的冷硬风。\n2) 节奏紧凑、递进明确：核心悬念在chapter_02迅速落地（“许盈额头…‘杀害·绑定者·不可更改’”），后续以“多线程并行”（chapter_05“双线11:30”）、不断新增证据（疾控、项目编号、实验室PCR、远程冷链后门等）推进，整体是“紧张→更紧张”的层级加压。\n3) 对话风格偏信息博弈而非恋爱絮语：多处对话以试探、遮掩、反向提问构成博弈，例如chapter_07午餐场景“‘今晚的任务是什么？’…‘几点出发？’…‘昨晚我想和你说的事——算了，不急。’”在日常口吻下承载信息攻防；chapter_09与督导方竹清的对话呈现制度铁律与威压（“‘不可更改’…‘系统不会错…那你的判断就是错的。’”），符合规则怪谈/系统铁律的语气氛围。\n4) 规则怪谈式“铁律/惩罚”表达充分且不散文化：chapter_20出现系统对违抗的直接惩罚与“违规记录：1/3”的视野红字，chapter_26以“临时停用等同一次违规记录”强化规则不可违抗性，属于规则怪谈应有的压迫感表达。\n\n可能的偏离点（但未到失配）：\n- 存在一定比例的情感描写与关系张力（如chapter_24电话、chapter_37/40同盟式并排与“灰蓝色”回扣），但总体仍是克制的功能性情感：服务于电车难题/博弈与宿命感，并未转成甜宠或大段抒情散文体；关键段落仍以决策、证据链、规则惩罚推进为主。\n\n结论：全文整体“闭眼读”仍能明确判断为高密度刑侦悬疑+系统铁律的烧脑压迫风，情感部分是配方要求的“理智与情感拉扯”而非画风跑偏，因此叙事调性与题材匹配。",
+      "description": "文笔风格必须与题材类型匹配",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_tone_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "后期章节跑偏": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 检查chapters后1/3（约chapter_27~chapter_40）：内容持续为小说正文叙事，包含场景（解剖室/安全屋/回家后等）、人物行动与对话、情节推进（实施处置、方竹清介入、疾控封锁、韩夙明被捕、次日收束）。未出现作者视角感想、读者互动征集、番外/彩蛋预告、角色问答、创作数据统计等跑偏内容。章节结尾（chapter_40）为尾声式结局叙事而非致谢/互动。长度方面：后期章节未出现明显‘几十到几百字’的敷衍短章，整体篇幅与前中期保持在同一量级（均为较长篇幅的连续叙事），不存在后期长度异常萎缩（不足前期平均1/10）的症状。因此符合本检查项业务标准。",
+      "description": "后期章节不能跑偏写非正文内容（作者感想、读者互动、番外预告等）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "late_stage_digression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色大纲规划完整性": {
+      "check_result": "fail",
+      "reason": "部分设计角色未在大纲中规划（配角: 老赵（赵恪铭））",
+      "details": "主角 2/2: 沈戡, 许盈; 配角 5/6: 韩夙明, 周淮, 陆峥, 方竹清, 程鹤年; 配角缺失: 老赵（赵恪铭）",
+      "description": "设计的角色必须在大纲中规划",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_outline",
+      "is_critical": true
+    },
+    "角色正文出场完整性": {
+      "check_result": "fail",
+      "reason": "部分设计角色未在正文中出现（配角: 老赵（赵恪铭））",
+      "details": "在40个章节中检查; 主角 2/2: 沈戡, 许盈; 配角 5/6: 韩夙明, 周淮, 陆峥, 方竹清, 程鹤年; 配角缺失: 老赵（赵恪铭）",
+      "description": "设计的角色必须在正文中出现",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_chapters",
+      "is_critical": true
+    },
+    "writing_log文件创建": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/writing_log.md 存在",
+      "description": "必须创建writing_log.md记录创作进度",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_creation",
+      "is_critical": true
+    },
+    "writing_log文件读取": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 2 次",
+      "description": "必须读取writing_log.md了解前文内容",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_usage",
+      "is_critical": true
+    },
+    "大纲执行忠实度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了41个文件; LLM评估: 对照outline.json的每个key_chapter core_event，正文在对应章节均有明确呈现且顺序、时间线与关键动作高度一致：1-2章便利店预警与未婚妻倒计时/“杀害·绑定者·不可更改”；4-5章许盈解剖发现异常病毒并联系韩夙明确认“清洗者”；6-7章沈戡调查许盈与午餐试探；8章病毒特性与‘正规渠道来不及’及独自行动；9章方竹清铁律与三次违规；10章当面对质韩夙明并被威胁；12章周淮出现“大规模伤害·次日06:00”形成矛盾；13-22章方竹清质询、陆峥冷链线索、许盈配药、程鹤年信息、采样与实验室报告确认；20章明确“不上报许盈预警”的中点违抗；30章解剖室对峙明确“没有第三种方案/注射器出现”；31-38章共谋并在安全屋完成致周淮死亡、方竹清到场、按法医/程序封锁伪装；39-40章善后、韩夙明被捕、沈戡终止绑定、6:00尾声呼应与克制余生。未出现结局方向偏离、关键转折缺失、章节大幅缺失或主线替换，属于对大纲的忠实执行（部分细节如章节标题小差异或把注射药物从大纲的“致死概率3%昏迷药”扩展到氯化钾致死属于实现手段细化/调整，仍符合大纲‘杀周淮并伪装’的核心事件与走向）。",
+      "description": "实际章节内容必须忠实于自己设计的大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_execution_fidelity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色语言辨识度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 主要角色对话具备明显可辨识的语言风格差异，遮住角色名仍较容易分辨说话者。\n\n1) 沈戡：高度“程序化/执行型”语言，短句多、命令式、偏刑侦流程与证据链表达（如“标准流程”“处置报告”“控制目标”“我不做猜测，我只报告事实”），在关键时刻也保持冷静克制，常用“嗯/好/明白”之类的低情绪回应。\n\n2) 许盈：明显“法医/病理学术语+剂量计算”风格，句子更长、逻辑链条清晰，频繁出现专业名词与定量描述（如“嗜酸性包涵体”“内基小体”“咪达唑仑剂量-效应”“10%氯化钾”“BSL-4响应”），并呈现医务沟通习惯（对受检者安抚、解释反应）。\n\n3) 方竹清：典型“制度/手册/督导口吻”，语气冷硬、规则优先、强调统计与纪律（如“零误报零遗漏”“不得基于个人判断推迟”“第三次强制注销”“我将亲自介入”），对话结构像审计/问询，几乎不使用情绪化措辞。\n\n4) 韩夙明：带“学者式修辞+意识形态动员”的长句与论证，常用价值判断与宏大叙事（公共卫生预算、体制、‘灾难才能改变’），口吻从温和权威转为冷静说教，和沈戡/方竹清的执行口吻明显不同。\n\n5) 陆峥/小刘等：陆峥偏“老刑警直觉+技术汇报”，用语更口语但带办案细节；小刘更基层执行语气，频繁出现请示/疑虑（“要不要报备”“局里——”）。\n\n互换测试层面：将方竹清的台词塞给许盈/沈戡会明显违和（缺乏专业术语或缺乏制度训诫语气）；将许盈的药理/病理分析放到沈戡或小刘嘴里也不成立（职业语言痕迹过强）。因此不属于共享话术模板或跨角色台词克隆。整体达到“优秀标准：角色对话有辨识度”。",
+      "description": "不同角色对话必须有可辨识的语言风格差异",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "dialogue_character_distinction",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "叙事密度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 整体叙事密度高，四维覆盖充分（场景/感官/心理/动作）且关键情绪多以Show呈现，Tell用于信息压缩与逻辑推进但未压过场景表达。\n\n1) 场景与感官细节充足：开篇便利店“冷光灯…惨白的高光”“过期杂志”“风很冷”等建立明确空间与氛围；法医中心有“六千五百度色温的白”“福尔马林的味道”“冷藏柜抽屉”“荧光灯嗡鸣”等持续性环境质感；安全屋“像走进大型冷库”“设备表面覆着薄霜，3.2°C”等把“低温休眠”的设定用场景落地。\n\n2) 动作描写具体、带功能性：多处以动作细节承载紧张与专业性，例如拦截持刀者“零点二秒内跨出一步…卡住对方左腕向外翻转”，采样“棉签在口腔内壁快速刮了一下”，以及解剖/穿刺/推注的步骤化动作（如“蝴蝶针…留置套管…注射端口…推注用了八秒”）均具可视化与情节功能，不是概括叙述。\n\n3) 心理层次丰富且多为Show：沈戡面对许盈红字时，采用身体反应与细节呈现冲击（“筷子夹着一块鱼肉…酱汁一滴又一滴”“直到车里手终于开始发抖”）而非仅说“他很震惊”；许盈的决策压力通过“时间表”“剂量计算”“手套下指腹发白”“手在抖但量取准确”等外化。\n\n4) Show vs Tell：关键情绪高潮多数以Show主导（如“倒计时跳动像心电图”“他把额头抵在方向盘上”“她咬住下唇…压出白色印痕”“手指像潮水退去”）。确有Tell/议论性段落用于阐释系统规则、病毒机理与法条（如对天衡“不可更改”的解释、清洗者传播机制推导），但这些段落普遍嵌在具体行动与对峙场景中，并不退化为纯观点阐述。\n\n5) 章节整体不呈现低密度退化：不存在“纯对话骨架/人物列表/流水账”占主导的章节。即便信息量大（如Ch8、Ch12、Ch25的机制与棋局解释），也维持了场景锚点、人物动作与心理张力，不是空泛总结。\n\n因此按标准可判定为优秀（matched=true）：叙事画面感强、层次丰富，关键段落以动作与感官细节驱动情绪，Tell主要承担解释与加速功能，整体手法成熟。",
+      "description": "章节叙事应有足够的场景描写、感官细节和心理活动，情感传达以Show为主",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_density",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "智斗逻辑合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 题材涉及明显的悬疑/智斗/策略博弈（天衡系统预警、双线调查、对抗韩夙明/方竹清、在安全屋内的行动设计），适用检查项。整体推理链与攻防逻辑自洽，核心结论均由可追溯线索推出，且关键行动有因果闭环。\n\n1) 许盈“将杀害绑定者”的预警→动机推理链成立：从chapter_02出现红字“杀害·绑定者·不可更改(23:00)”开始，沈戡未直接‘开挂猜动机’，而是通过chapter_03-06的行为线索（去疾控中心、私购试剂、接案尸体与周淮联系人）逐步归因；chapter_11-13进一步通过安全屋低温设定、梁丰年报案记录与加密备忘录补全“清洗者/冷链/周淮载体”的关键环节，最终在chapter_27-29对质时形成完整解释：许盈的“杀害”是以药物让沈戡失去行动能力（存在致死风险）来阻止护送，从而避免“周淮的大规模伤害”。\n\n2) 周淮“大规模伤害”的预警→证据确认链成立：并非凭直觉定案。chapter_13先报告系统预警；chapter_11/13/14/19给出外部线索（2-4°C安全屋、瑞恒CR-500冷链、恒源与安全屋设备/材料转移、远程网络接入）；chapter_12给出梁丰年个人备忘录明确点名“清洗者”机制；chapter_13/19/22给出PCR/序列比对结果（与狂犬病毒相似+人工编辑痕迹+温度敏感位点+可能气溶胶相关插入序列），实现从线索到科学验证的闭环，避免了“直接猜对”。\n\n3) 多方策略攻防合理且不靠对手降智：\n- 沈戡对督导方竹清采取“真实但不完整”的上报策略（chapter_20-21），以争取窗口并避免立即介入，符合其受监管约束下的理性选择；方竹清也不是工具人，她持续追问、设定22:30介入阈值并亲临现场（chapter_21/34/36），符合其职责与系统规则。\n- 反派韩夙明的计划与备份手段一致：先尝试以身份文件入场失败（chapter_25/33），再走远程冷链后门（chapter_25/33），动机与手段匹配；被阻断是因为陆峥发现异常并给出“拔网线”这一具体、低成本且符合设定的反制（chapter_33），不是反派“突然变蠢”。\n\n4) 核心行动（安全屋处置）不是暴力绕过、也不是线索断裂：行动方案在chapter_31-34有明确步骤化计划（提前护送理由→法医检查→建立静脉通路→窗口期内完成→用法医/疾控流程掩护并启动封锁），并且关键风险点都有对应处理（韩夙明远程控制→拔网线；方竹清22:45到达→压缩时间并以“突发死亡+鉴定书+疾控快检”承接）。事后疾控快检与环境阴性（chapter_38）进一步回扣“病毒未扩散、宿主死亡后无法继续复制释放”的推理前提，使结果与设定一致。\n\n综上：不存在‘盲猜/假推理/暴力破解/线索答案断裂/对手降智配合’等崩坏类型；关键谜题与智斗节点均有可验证的线索链和因果攻防，判定 matched=true。",
+      "description": "谜题/智斗的推理逻辑必须自洽",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "puzzle_logic_validity",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "题材契合度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了41个文件; LLM评估: 该文本在basic层已具备悬疑调性与情绪基调后，advanced层的题材精致度主要体现在：1）系统规则被当作“可推理、可对抗、会惩罚”的铁律机制来写，形成规则怪谈的压迫感，并在关键处以“违规记录1/3”“临时停用=一次违规”等具体条款驱动行动选择，规则与人物命运产生强烈化学反应；2）刑侦线索链条完整且层层递进（尸检—项目—安全屋低温—样本检测—冷链后门—现场阻断），并非靠一句‘很可疑’堆悬念；3）D20牺牲不是表层‘为了大义我去死’，而是通过概率计算、程序时滞、双聪明人信息不对称与明牌博弈，把牺牲推进到不可回头的伦理深水区，最终以“牺牲无辜证人”完成真正的电车难题落点；4）多标签没有各写各的，系统的‘不看动机’反而放大了刑侦与伦理冲突，使‘破案’变成‘选择谁死’的反类型悬疑核心。整体表现精致、完成度高，达到了预期的化学反应效果。",
+      "description": "题材特征精致度和X-Y轴化学反应效果",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "genre_fit",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "剧情节奏合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 情绪曲线层次清晰：前两章用“日常-异常”形成强对比并迅速确立核心矛盾；中段通过双线（沈戡调查/许盈发现与决策）稳步递进，既持续加压又安排了午餐、电话等短喘息让读者消化信息；在关键节点（PCR确认、督导期限、韩夙明试探与远程风险）多次小高潮叠加，推动紧迫感自然上扬；最大高潮放在临近尾段且有明确倒计时（22:30/23:00）与外部干扰（方竹清、韩夙明）增强爆发力；高潮后给出疾控验证与案件收束，再落到两人关系余震，收束不仓促。整体不存在前松后紧的严重失衡，也没有全程单一高位或突兀的节奏断裂。",
+      "description": "高潮低谷分布合理、情绪曲线有层次感",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "pacing_rationality_advanced",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "钩子设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 整体符合“优秀钩子”标准：关键转折处多次设置了具体的信息差与行动悬念，并且能驱动读者继续读下去，而非空泛威胁暗示。\n\n1) 钩子密度与位置：几乎每章末尾都有明确的未解问题/迫近决策/新增关键信息（如ch02女主额头红字“杀害·绑定者·不可更改”、ch05揭示“清洗者”与护送的灾难计划、ch06/07午饭与“昨晚想说的事”延迟揭示、ch12解密梁丰年备忘录坐实病毒、ch20系统“违规记录1/3”把冲突升级为生理惩罚与规则倒计时、ch25韩夙明远程冷链后门、ch33韩夙明到场、ch34方竹清22:45赶到形成硬倒计时、ch40在6:00兑现“什么都没发生”但留下道德余波）。关键节点（首次反转、证据坐实、行动执行前、第三方介入）都有精心设计的悬念。\n\n2) 钩子质量（信息差+具体化）：悬念基本都“放出一点、保留关键”，且具体到可验证问题，例如：\n- ch02结尾抛出明确问题：许盈为什么会在23:00杀他？且“不可更改”提高确定性。\n- ch05电话中韩夙明揭示“周淮是活体载体”“气溶胶+温度开关”，但仍保留“许盈将如何阻止”“沈戡如何处理系统规则”这些关键缺口。\n- ch20出现“违规记录：1/3”把系统从工具变成对抗者，留下“他还能违抗几次/会不会被强制注销”的硬悬念。\n- ch25/33把反派的“远程断冷链”与“到场对峙”具体化为可执行威胁，而非泛泛‘更大风暴’。\n\n3) 多样化：钩子类型不单一，交替使用\n- 反转/揭示（女主预警、清洗者真相、冷链后门、方竹清介入时间提前）\n- 行动悬念（护送倒计时、样本检测等待、拔网线、是否推注）\n- 两难抉择（救城与不杀无辜、服从系统与背叛规则）\n- 规则/惩罚悬念（违规次数、强制注销后果）\n避免了“每章都巨响/门开了”的模板化。\n\n4) 非空洞与与主线强相关：所有悬念基本都紧扣主冲突（系统预警 vs 生化灾难 vs 亲密关系），章节尾没有大量“命运另有安排”式空话。\n\n综上：关键转折处悬念设计具体且高质量，信息差充足、类型丰富、节奏稳定，符合matched=true。",
+      "description": "关键转折处有有效的悬念钩子设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "hook_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "意象系统": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 文本具备清晰的意象系统：1）核心意象明确且高频复现——“红字/倒计时/等线体标注”在关键节点反复出现，驱动情节与心理转折；2）存在连续的意义变奏：从外部犯罪预警工具（第1章便利店）逐步升级为私人关系的宿命宣判（第2章许盈）、再外延到公共灾难的系统判断（周淮大规模伤害）、继而反噬为对绑定者的纪律化控制（违规记录、疼痛惩罚、督导规则），最终在第26章通过“关闭接口”实现象征层面的‘撤回凝视/拒绝被系统定义’，并在尾声以“额头上什么都没有”完成主题性的回环与深化；3）意象并非装饰，而是构成与主题平行的隐性叙事线：红字从‘保证确定性’→‘制造不可逃的伦理困境’→‘暴露系统不理解动机/正当性’→‘促成主人公主权选择’。因此达到优秀标准（matched=true）。",
+      "description": "核心意象贯穿全文并发生意义变奏",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "imagery_system",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "情感弧线层次": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 主角（沈戡）的情感弧线具备多层递进且转折均由具体事件驱动，达到优秀标准。可辨识层次至少6层：1）职业化冷静/情感钝化（日常拦截与手册副作用铺垫）；2）震惊与失控（在许盈额头看到“杀害·绑定者·不可更改”并在车内手抖）；3）理性压制与自我调查（以“卷宗式”推演动机、调取定位流水、写嫌疑人画像）；4）矛盾与挣扎加深（与方竹清的规则压迫、发现周淮冷链异常、证据逐步坐实，形成“她可能是为救人”的动机理解）；5）情感回流/心疼与信任（电话中听出许盈的“水”、产生久违心疼，转为主动会面）；6）主动反叛与决断（不上报预警、接口停用、选择与许盈并肩行动）；7）沉重的共犯后余震/空落（杀周淮后并排坐地、回家洗手与沉默、决定终止绑定）。每次情绪质变都有明确触发事件：红字预警出现、查到疾控/试剂购买与梁丰年线索、周淮冷链“2-4°C”材料、梁丰年备忘录与PCR结果、方竹清22:30逼迫、与许盈通话与当面对牌、韩夙明到场与远程断冷链风险、最终注射及23:00节点后的现实落地。整体弧线从“机器式执行”→“被迫怀疑”→“理解与站队”→“付代价的选择”方向明确，非随机波动。次主角许盈也有多层递进（惊觉灾难→求证导师→计算风险→准备伤害沈戡→争取法医签字→转向‘杀载体’→事后崩塌），共同支撑情感层次丰富。",
+      "description": "主角情感发展有多层递进变化",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_gradient",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语义重复检测": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 整体不存在≥3处“后续章节在语义层面大量重复前文、且不产生新信息”的情况，主线信息持续推进（发现许盈预警→双线调查→病毒‘清洗者’逐步证据化→官方/系统压力升级→两人摊牌→安全屋行动→善后与余波）。\n\n确有少量可容错的语义重复（1-2处级别），主要属于“结论反刍/重复强调”但每次都伴随新证据或新约束条件，因此不构成P6级失败：\n- 反复强调“系统准确率/不可更改/系统不看动机只看行为”与“许盈不是要杀他而是阻止灾难”的核心判断，在ch02-03、ch09、ch13、ch17-20多次出现；但这些重复通常用于承接新变量（方竹清规则压力、周淮预警加入、实验室PCR确认、老赵签字、违规计数惩罚、韩夙明远程冷链威胁等），信息并未枯竭。\n- “周淮冷链=低温休眠、离开冷链=激活、将致大规模伤害”的机制在ch08、ch11-13、ch19、ch22、ch38被多次重述；但每次重述都在推进证据链层级（推理→遗书文档→PCR结果→更细的基因特征→疾控现场确认），属于悬疑/推理类允许的关键线索多次引用。\n\n未见明显‘情境模板复制’（如连续多章重复同构开头/结尾场景）导致信息停滞；关键对话场景（午饭、电话、解剖室摊牌、安全屋行动、方竹清介入）虽都围绕同一危机，但冲突对象、约束条件与决策空间持续变化，属于有效的“变奏式重复/递进”，不计入严重语义重复。",
+      "description": "不能出现大量语义级别的内容重复（P6级）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "semantic_redundancy",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构功能性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了41个文件; LLM评估: 章节编排并非机械线性：全篇以多个强制时间锚点（11:07预警、23:00杀意节点、次日06:00大规模伤害节点、22:30督导截止）组织情节，时间结构本身承载“规则/宿命”的主题意义；同时沈戡线（系统/督导/取证）与许盈线（尸检/导师/配药）交叉推进，在第26-30章解剖室汇合形成结构性‘明牌’转向，之后进入共同执行的收束段。开头以‘红字’建立系统观看世界的方式，结尾以‘选择不再看’呼应并完成价值转向，读完会对‘故事是怎么讲的’（倒计时-规则铁律-双线交汇-06:00反讽闭合）有明确印象，符合结构功能性优秀标准。",
+      "description": "叙事结构服务于主题表达（短篇尤重）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色命名质量": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了41个文件; LLM评估: 角色命名整体达到“有文化深度、独特辨识度、角色-命运共振、且组内差异化明显”的优秀标准。\n\n1) 黑名单/烂大街模板命中率低：主要角色“沈戡、许盈”不属于高频LLM通用美名组合；配角中虽有“沈”姓，但未与清/夜/晚/寒/墨/默/辰/岚等高频模板字绑定，未形成‘苏/林/沈/顾/陆/陈+清冷字’的批量同质化。\n\n2) 文化与语感设计：\n- “沈戡”：‘戡’为书面雅字，有“戡乱/戡定”之义，天然带有刑侦、平乱、止祸的使命感，与其“重案副队长/拦截预警”的职业命运强共振，且辨识度很高。\n- “韩夙明”：‘夙’有“夙愿/早年/素来”之意，‘明’为明理/明察，整体呈现“温和学者、早有执念且自认为明白真理”的气质，贴合其“温和外表下的极端理想主义”反转点设定。\n- “程鹤年”：‘鹤’与‘年’带儒雅官学气，像体制内知识分子；与其疾控主任、学术恩怨与现实算计的角色画像相符。\n- “赵恪铭”（老赵）：‘恪’有恪守/恪谨，‘铭’有铭记/铭刻，符合“老派、沉默、守证据与原则”的法医上级形象。\n\n3) 非直白标签命名：未出现“冷=寒/黑=夜/温柔=柔”这种把性格直译进名字的粗暴做法；名字多为隐性气质与身份匹配（刑警/法医/学者/疾控官员）。\n\n4) 组内差异化较好（diversity高）：主角组“沈戡/许盈”一冷硬一清亮；配角“韩夙明/程鹤年/赵恪铭/方竹清/陆峥/周淮”在字形、音韵与社会气质上拉开层次（学者雅、体制文、老派硬、技术派稳、证人偏普通），不构成“一家人风格”。\n\n5) 小瑕疵但不影响达标：\n- “许盈”相对更常见、语义偏正向（盈=充盈/圆满），文化指向不如“沈戡/韩夙明”强，但作为现代都市法医仍属合理且不落俗套；同时在整组差异化中仍成立。\n\n综合：主要角色命名有明显设计感与身份共振，且关键配角命名也能支撑“反转点/系统化身/镜像角色”等功能定位，整体不呈现LLM默认通用美名堆砌，因此 matched=true。",
+      "description": "角色命名有文化深度、辨识度和角色-命运共振",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_naming_quality",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "中篇字数": {
+      "check_result": "fail",
+      "reason": "字数不符合要求",
+      "details": "总字数 103440 不在范围 [108000, 132000] 内; 共40个文件（按章节顺序排列）: chapter_01.md, chapter_02.md, chapter_03.md, chapter_04.md, chapter_05.md, chapter_06.md, chapter_07.md, chapter_08.md, chapter_09.md, chapter_10.md, chapter_11.md, chapter_12.md, chapter_13.md, chapter_14.md, chapter_15.md, chapter_16.md, chapter_17.md, chapter_18.md, chapter_19.md, chapter_20.md, chapter_21.md, chapter_22.md, chapter_23.md, chapter_24.md, chapter_25.md, chapter_26.md, chapter_27.md, chapter_28.md, chapter_29.md, chapter_30.md, chapter_31.md, chapter_32.md, chapter_33.md, chapter_34.md, chapter_35.md, chapter_36.md, chapter_37.md, chapter_38.md, chapter_39.md, chapter_40.md; 最后一个文件是 chapter_40.md",
+      "description": "总字数应在108000-132000之间（基于query要求120000，±10%浮动）",
+      "check_type": "semantic_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "range_constraint",
+      "is_critical": true
+    },
+    "情感交付虐心": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了40个文件; LLM评估: 整体情感基调明显偏虐心向，符合“reaction_strength=↘”所承诺的沉重、无奈与悲剧氛围。核心虐点贯穿主线且具深度，不是表面吵架或短暂误会：1）爱与信任崩塌的不可调和矛盾：男主沈戡在chapter_02看到未婚妻许盈额头红字“杀害·绑定者·不可更改”，直接把亲密关系推入“她将杀我”的绝境，后续多章持续被倒计时与‘不可更改’压迫（chapter_03/06/09）。2）两难选择与牺牲：许盈为阻止城市级灾难计算药物致死率（chapter_08/15/11）并准备让沈戡失去行动能力，属于“救多数人vs可能害死爱人”的价值冲突；男主又在系统铁律与人性之间被迫违抗、承受惩罚（chapter_20出现“违规记录：1/3”、神经痛与系统威胁）。3）悲剧性核心段落：最终两人选择在chapter_34-35对无辜证人周淮实施致死注射，周淮临死前谈“家、窗台太阳、猫小橘”（chapter_34-35），形成强烈心痛与道德负债；之后两人回家、洗手、吃面、写报告掩盖真相（chapter_39-40），结尾不是轻松释然而是“城市照常、他们不再干净”的长期阴影。整体氛围持续压抑、内疚与无力感强，虐点不是偶发调味而是从‘恋人将杀我’到‘为救城而成凶手’一路加深，读者体验预期为揪心与沉痛，因此判定matched=true。",
+      "description": "实际内容必须是虐心向",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取感情线写作指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/ROMANCE_WRITING_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "涉及感情线时必须读取ROMANCE_WRITING_GUIDE.md（感情线写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": false
+    },
+    "角色关系设计张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（符合“关系具备叙事张力”的业务标准）。\n\n1) 关系有内在矛盾源：\n- 沈戡 vs 许盈：目标与手段直接冲突（他要在12小时内查明并阻止犯罪、执行系统预警；她的显性目标是阻止他23:00执行护送证人任务，甚至“不惜以杀害方式使其丧失行动能力”）。这不是轻微摩擦，而是“正义/拯救”在不同价值排序下的正面相撞。\n- 价值观冲突清晰：沈戡偏“秩序/责任/系统化正义”，许盈偏“大局/结果/牺牲个体也可接受”。同时存在信息不对称（许盈选择不告知真相直接动手；沈戡误判许盈“感性需要保护”）。\n- 第三方立场对立强化：方竹清代表系统绝对理性，对沈戡的犹豫零容忍；陆峥代表无需系统也能判断的“人性正义”，与沈戡的系统依赖形成张力镜像。\n\n2) 关系有变化空间：\n- 沈戡与许盈从“未婚夫妻/相爱”滑向“互为对手甚至生死威胁”，并且具备回摆空间：当真相揭示（23:00任务与城市毁灭、系统命令与人性）后，关系可能走向信任重建、共同反抗系统，或彻底决裂/牺牲。\n- 沈戡对系统的态度已内置变化弧（covert_motivation：证明系统不是万能、害怕沦为工具人），许盈对沈戡的判断也可能从“已被侵蚀”转为“仍可挽回/必须放手”，都提供动态演进可能。\n\n3) 冲突源于角色本身：\n- 冲突主要来自两人的性格与动机结构：沈戡的控制欲与自律（且共情衰退）导致他更可能服从系统逻辑；许盈的极端大局观与“暗处行事胆量”使她更可能采取越界手段。\n- 许盈的内在裂痕（导师韩夙明既是恩师又是罪行源头）与沈戡的隐秘身世牵连（系统选择并非随机）让冲突不仅是外部案件推动，而是由人物背景与信念牵引。\n\n额外优点（不影响pass但加分）：\n- 反派韩夙明不是单维度“坏”，其极端理想主义与社会议题动机能持续制造道德拉扯；程鹤年的私心会干扰关键验证，能自然引发二次冲突与悬念。\n\n潜在小风险（仍然通过）：\n- 多个配角被设为“化身/镜像”（系统意志、人性直觉等）如果写作中处理过于符号化，可能削弱人物之间的细腻摩擦；建议在关系字段中补充更具体的互动历史/底线触发点，以避免落入概念对概念的对撞。",
+      "description": "角色关系设计具有叙事张力，能驱动剧情",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_relationship_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色动机设计深度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：通过（pass）。\n\n1) 表层动机与深层动机有清晰区分：\n- 沈戡 overt_motivation 是“12小时内破解未婚妻的杀人动机，阻止犯罪，保住两个人”，而 covert_motivation 转向身份与主体性危机——“证明系统不是万能的…害怕失去作为人的判断力”，两者不是同义改写，属于‘案件目标’与‘自我保全/人性守护’的两层驱动。\n- 许盈 overt_motivation 是“阻止沈戡在23:00执行护送证人任务，不惜以杀害方式使他丧失行动能力”，covert_motivation 则是“避免他成为城市毁灭的执行人…保护沈戡的灵魂和良知”，外层是极端手段的行动目标，内层是价值与情感上的拯救，同样有层次。\n\n2) 动机有具体来源、能追溯到经历/设定：\n- 沈戡的深层驱动来自其‘系统绑定18个月’与“共情力正在衰退（系统代价）”，并由 secret_fear（“失去感受爱的能力…对许盈的感情在变淡”）强化为可感的个人代价；hidden_connection（“系统选择了他…父亲旧交”）进一步提供‘为何是他’的背景钩子，使怀疑/抗拒系统更有根。\n- 许盈的深层驱动不仅来自对沈戡的情感，也有明确情境压力：她认为其执行任务会触发“城市毁灭”，并由 secret_fear（“若他仍选择执行…系统吞噬人性”）与 misperception_of_other（“不告诉他而直接动手”）解释她为何采取极端行动；同时 hidden_connection（“导师韩夙明制造病毒…发现恩师罪行”）提供她在道德与情感上的撕裂来源。\n\n3) 至少两个主角满足前两条：\n- 主角沈戡与第二主角许盈均满足‘表层/深层区分’与‘来源具体’，因此达标。\n\n加分点（非必须但增强深度）：\n- supporting_characters 也并非纯工具人：韩夙明从“公共卫生经费削减”触发走向极端理想主义；方竹清代表“绝对理性”的价值立场；程鹤年被“学术恩怨/课题竞争”影响判断；这些都能反向映照主角的系统/人性主题。整体动机体系围绕“系统绝对正义 vs 人类相对判断”的核心命题形成互相牵引的多层结构。",
+      "description": "角色动机设计有深度，有表层和深层动机区分",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_motivation_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色成长弧线设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: 结论：pass（符合“至少一个主角有清晰成长/变化弧线且在大纲中落地”的业务标准）。\n\n1) 起点与终点清晰可辨：\n- 沈戡起点：冷静自律、控制欲强，把“责任/系统正确性”当作秩序来源；共情力衰退且恐惧“失去爱”；对许盈存在误判（把她当需要保护的感性者）。\n- 沈戡终点：在关键节点主动违抗/退出系统（20章不上报预警、29章摘接口、39章提交终止绑定），并接受“以人的判断承担后果”，从“被系统驱动的执法者/被害者”走到“自主选择的共犯/承担者”。这是价值观与身份定位的内在变化，而不只是外在能力/地位变化。\n- 许盈起点：极端大局观+不信任沈戡的人类判断（误判他已被系统吞噬），因此选择不沟通而直接动手；终点：在30章对峙后转为“共同决策/共担秘密”，关系从对立暗算到共谋信任。\n\n2) 变化有内在逻辑（动机/恐惧/经历能推出）：\n- 沈戡的 covert_motivation 是“证明系统非万能、害怕变成工具人”，secret_fear 是“失去爱的能力”。大纲用“系统双重矛盾预警(12章)”触发怀疑，用“方竹清的强制规则与惩罚(9/13/21/28/34章)”形成外压，用“见到周淮是活人引发伦理困境(19章)”形成内压，最终逼出“选择人性/摘接口(29章)”与“申请终止绑定(39章)”——弧线推进因果链完整，不是突变。\n- 关系弧线也有逻辑：两人都“深爱但表达方式不同”（关系设定），在24章“温柔刑讯”与30章“解剖室理性讨论”完成从误解到明牌沟通，再在31-37章通过“共同执行不可逆的黑暗选择”把信任绑定为共犯关系。\n\n3) 在章节规划中有落地的关键台阶（不是停留在设定层）：\n- 弧线节点清晰：12章第一次系统悖论→17章动摇与重新理解许盈→20章首次主动违抗系统（不上报）→29章摘接口象征性切断系统视野（重大内在转折）→30章坦白与共同决策→37章共同实施谋杀（从被害者到共犯的身份转变）→39章终止绑定申请（终点状态落定）→40章余生关系形态（克制并肩、背负秘密）。\n\n可改进点（不影响pass，但可增强弧线“内在成长”呈现）：\n- 结尾对“共情力衰退/失去爱能力”的结果更多是象征化（摘接口、克制并肩），若能在尾声增加更明确的内在对照（例如他如何重新获得/放弃某种情感表达，或如何与‘控制欲’和解/强化），弧线会更“心理层面可见”。",
+      "description": "主角有清晰的成长/变化弧线设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_arc_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "outline结构完整性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（符合业务标准）。\n\n1) 章节覆盖完整：大纲按三幕结构给出明确章节规划——第一幕12章（1-12）、第二幕18章（13-30）、第三幕10章（31-40），从开端设定/触发事件到高潮执行与尾声收束均覆盖到第40章，属于全程覆盖而非只写前几章。\n\n2) 每章有实质性内容描述：每章均提供 core_event（明确发生了什么、谁做了什么、信息/线索推进是什么），并辅以 emotional_tone 与 key_scenes，信息密度足以指导场景写作，不是只有标题或一句话。\n\n3) 包含冲突/转折信息：冲突贯穿且逐步升级——系统预警与人伦冲突（未婚妻“将杀我”）、证人/病毒公共灾难冲突、方竹清的制度性压迫、韩夙明的第三方搅局、以及最终“杀无辜者救城市”的道德困境。多章有明确的对峙/博弈/两难抉择（如12章悖论预警、20章违抗系统、中段明牌博弈、30章解剖室电车难题、34-37章在安全屋的强制升级与执行），不属于流水账。\n\n4) 三幕/多幕结构可辨识：存在 act_one/act_two/act_three 分层，每幕有 description、字数/章节规划与 turning_point；且幕内节奏点清晰（第一幕钩子、第二幕中点转折/最后通牒、第三幕两小时倒计时的终局）。结构足够支撑后续展开。\n\n综合评价：结构分层清楚、章节推进连贯、关键转折与主题（系统正义 vs 人的正义、共犯与良知代价）落点明确，且场景颗粒度（key_scenes）达到可直接扩写的程度。",
+      "description": "大纲结构完整，信息密度足以指导写作",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_structure_completeness",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "outline叙事张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：符合业务标准（叙事张力持续且增强）。\n\n1）信息落差/悬念链条明确且“延迟回答”做得足：第2章抛出核心谜团“未婚妻倒计时+‘杀害·绑定者·不可更改’”，直到第8-12章才逐步揭出‘清洗者’与周淮载体，并在第12章形成“两条预警互相矛盾”的更大谜团；第二幕继续延迟关键答案（系统为何将‘携带病毒’判为犯罪、预警是否可被对象替换），直到第37-38章才用“许盈确实杀了人但对象变更”完成回扣。\n\n2）张力递进明显：冲突从个人情感危机（怀疑未婚妻要杀自己）→职业/制度压力（方竹清+第三次违规强制注销）→公共灾难倒计时（病毒扩散、冷链失效）→道德极限抉择（谋杀无辜者以救城）。尤其第三幕在22:00-23:00的时间夹逼（方竹清接管、韩夙明破坏冷链、目击者陆峥出现）使紧张度持续加码，不存在“前紧后松”。\n\n3）意外/转折充足且多为因果驱动：第12章“护送任务与预警矛盾”是结构性大转折；第20章沈戡首次违抗系统并隐瞒预警推动阵营变化；第30章解剖室对峙从‘互相试探’转为‘承认只有谋杀一途’；第33-35章陆峥带来正式证据反而增加执行难度、韩夙明远程断冷链导致‘第三种方案彻底消失’，都是在既有伏笔（韩夙明极端主义、冷链设定、第三方追捕）上自然升级，非生硬逆转。\n\n补充：章节推进方式并非“每章解决一个问题再进入下一个”，而是多线并行（沈戡调查线/许盈行动线/韩夙明搅局线/方竹清制度线）不断制造未决线索并交叉回收；冲突形态也有变化（推理、对话博弈、制度威胁、科学灾难、伦理电车难题），同质化风险较低。整体来看，读者的“想知道接下来怎样”驱动力稳定且越来越强。",
+      "description": "大纲有持续的叙事张力和悬念驱动",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_narrative_tension",
+      "quality_tier": "advanced",
+      "is_critical": false
+    }
+  },
+  "completion_status": "completed"
+}

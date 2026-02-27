@@ -5,7 +5,7 @@
     python3 fetch_results.py                              # 列出远程所有评测结果
     python3 fetch_results.py --download <目录名>          # 下载指定评测结果
     python3 fetch_results.py --download-all               # 下载所有评测结果
-    python3 fetch_results.py --host 10.25.70.163 --port 9090  # 指定远程地址
+    python3 fetch_results.py --host 10.25.70.163 --port 8080  # 指定远程地址
 """
 
 import argparse
@@ -19,7 +19,7 @@ import urllib.error
 
 # 默认配置
 DEFAULT_HOST = "10.25.70.163"
-DEFAULT_PORT = 9090
+DEFAULT_PORT = 8080
 LOCAL_OUTPUT_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
     "..", "evaluation_outputs"

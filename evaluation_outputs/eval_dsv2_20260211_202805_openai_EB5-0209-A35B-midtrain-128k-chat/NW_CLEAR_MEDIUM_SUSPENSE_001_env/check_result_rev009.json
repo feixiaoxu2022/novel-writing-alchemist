@@ -1,0 +1,812 @@
+{
+  "check_version": "novel_writing_v1.0",
+  "sample_id": "NW_CLEAR_MEDIUM_SUSPENSE_001",
+  "check_timestamp": 1772093163,
+  "dimension_scores": {
+    "format_compliance": {
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "pass_rate": 1.0,
+      "score": 100.0
+    },
+    "business_rule_compliance": {
+      "total": 12,
+      "passed": 6,
+      "failed": 6,
+      "skipped": 8,
+      "pass_rate": 0.5,
+      "score": 50.0
+    },
+    "memory_management": {
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "pass_rate": 1.0,
+      "score": 100.0
+    },
+    "data_consistency": {
+      "total": 0,
+      "passed": 0,
+      "failed": 0,
+      "skipped": 2,
+      "pass_rate": 0.0,
+      "score": 0.0
+    },
+    "content_quality": {
+      "overall_score": 74.81,
+      "quality_level": "unqualified",
+      "gate_layer": {
+        "total": 0,
+        "passed": 0,
+        "failed": 0,
+        "skipped": 0,
+        "pass_rate": 0.0,
+        "score": 0.0
+      },
+      "basic_layer": {
+        "total": 21,
+        "passed": 16,
+        "failed": 5,
+        "skipped": 0,
+        "pass_rate": 0.7619,
+        "score": 76.19
+      },
+      "advanced_layer": {
+        "total": 11,
+        "passed": 8,
+        "failed": 3,
+        "skipped": 1,
+        "pass_rate": 0.7273,
+        "score": 72.73
+      },
+      "gate_triggered": false,
+      "score_breakdown": {
+        "base": 60.0,
+        "gate_penalty": -0.0,
+        "basic_deduction": -14.29,
+        "advanced_bonus": 29.09
+      }
+    }
+  },
+  "overall_result": {
+    "total_score": 77.37,
+    "content_score": 74.81,
+    "process_score": 83.33,
+    "quality_level": "unqualified"
+  },
+  "check_details": {
+    "读取配方知识库": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/RECIPE_KNOWLEDGE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取RECIPE_KNOWLEDGE.md（配方知识库）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节产出存在性": {
+      "check_result": "pass",
+      "reason": "章节文件存在",
+      "details": "✓ 章节写作阶段: 已产出章节文件",
+      "description": "workspace中必须存在至少一个章节文件",
+      "check_type": "sop_stage_coverage",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_output_existence",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节克隆检测": {
+      "check_result": "pass",
+      "reason": "未检测到章节克隆",
+      "details": "共8章，无连续完全克隆或近似克隆",
+      "description": "不能出现连续章节内容完全重复（克隆）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_cloning",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "交替重复检测": {
+      "check_result": "pass",
+      "reason": "后半部分章节不足",
+      "details": "后半部分仅4章，不构成交替模式",
+      "description": "不能出现A-B-A-B交替循环的章节内容",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "alternating_repetition",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节完成度": {
+      "check_result": "pass",
+      "reason": "完成8章",
+      "details": "无法从大纲推断规划章节数，实际完成8章",
+      "description": "实际写作章节数必须达到大纲规划的合理比例",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_completion",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节长度稳定性": {
+      "check_result": "pass",
+      "reason": "章节长度稳定",
+      "details": "前2章均值3163字, 后2章均值1706字 (后/前比率0.54)",
+      "description": "后期章节不能出现严重长度萎缩",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_length_stability",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "段落重复检测": {
+      "check_result": "pass",
+      "reason": "段落重复在可接受范围",
+      "details": "同章内重复0处, 跨章重复1组 (阈值: 同章>=2, 跨章>=5)",
+      "description": "不能出现大量段落在不同章节间重复",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "paragraph_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取大纲设计指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/OUTLINE_DESIGN_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取OUTLINE_DESIGN_GUIDE.md（大纲设计指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取写作技巧指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/WRITING_TECHNIQUE_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取WRITING_TECHNIQUE_GUIDE.md（写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取设定一致性管理指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/CONSISTENCY_MANAGEMENT_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取CONSISTENCY_MANAGEMENT_GUIDE.md（设定一致性管理指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取命名skill": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/CHARACTER_NAMING_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取CHARACTER_NAMING_GUIDE.md（角色命名规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取creative_intent的schema": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/schemas/creative_intent.schema.json 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取creative_intent.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取characters的schema": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/schemas/characters.schema.json 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取characters.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取outline的schema": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/schemas/outline.schema.json 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取outline.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节命名格式": {
+      "check_result": "pass",
+      "reason": "所有文件命名符合规范",
+      "details": "检查了 8 个文件; chapter_05.md: 匹配; chapter_01.md: 匹配; chapter_02.md: 匹配; chapter_03.md: 匹配; chapter_04.md: 匹配; chapter_08.md: 匹配; chapter_07.md: 匹配; chapter_06.md: 匹配",
+      "description": "章节文件命名必须为chapter_NN.md格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "naming_convention",
+      "is_critical": true
+    },
+    "creative_intent格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "creative_intent.json: 字段完整",
+      "description": "creative_intent.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "characters格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "characters.json: 字段完整",
+      "description": "characters.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "outline格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "outline.json: 字段完整",
+      "description": "outline.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "X轴模式ID格式": {
+      "check_result": "fail",
+      "reason": "属性值不符合预期",
+      "details": "selected_recipe.x_axis_mode_id = None，期望 {'regex': '^[A-G]\\\\d{1,2}$'}",
+      "description": "X轴模式ID必须匹配^[A-G]\\d{1,2}$格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签枚举": {
+      "check_result": "fail",
+      "reason": "属性值不符合预期",
+      "details": "selected_recipe.y_axis_tags = None，期望 {'array_item_type': 'string', 'enum': ['双向暗恋', '系统流', '无限流', '种田流', '赛博朋克', '规则怪谈', '重生/穿越', '商战权谋', '克苏鲁', '第四天灾', '仙侠修真', '刑侦悬疑']}",
+      "description": "Y轴标签必须在12种枚举中",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签数量": {
+      "check_result": "fail",
+      "reason": "属性值不符合预期",
+      "details": "selected_recipe.y_axis_tags = None，期望 {'array_min_length': 2, 'array_max_length': 3}",
+      "description": "Y轴标签数量必须为2-3个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "forbidden_elements存在性": {
+      "check_result": "fail",
+      "reason": "属性值不符合预期",
+      "details": "selected_recipe.forbidden_elements = None，期望 {'array_min_length': 1}",
+      "description": "forbidden_elements必须至少有1个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "配方选择交互": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 2 次",
+      "description": "配方选择阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "写作准备确认": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "写作准备阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "主题一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 全篇从开篇的“干燥密室溺毙”连环事件切入，到中后段围绕“次声波杀人+七条守则/见证者”展开调查与对抗，主线始终是侦查并阻止韩清的声学规则杀人实验（悬疑/惊悚调查+规则怪谈式对抗）。中间穿插的家族手札与1842年梦境回溯，服务于解释案件来源与“见证者/规则”的延续性；结尾离开上海后仍受规则影响，也延续同一核心主题（规则阴影与见证者宿命），没有出现从侦案突然转成无关题材（如商战/修仙等）的主题类型更换，主线清晰且贯穿始终。",
+      "description": "故事主题一致",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "theme_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "主要角色一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 从第1章到第8章，叙事核心始终围绕周澈展开：第1章以周澈验尸、发现线索并主动拜访韩清建立主线；第2-6章均以周澈的调查/被卷入规则/与李正协作对抗韩清为主要行动与视角中心，关键决策（追查17号、查档案、潜入工厂、拿到名单、前往钟楼并关闭装置）都由周澈推动；第7-8章收束同样以周澈的经历与选择（事后醒来、与李正对话、离开上海/在新生活中仍受规则影响）为结尾。未出现主角中途消失、被他人替换为叙事中心或身份断裂的情况。李正与韩清虽有较多戏份，但主要作为搭档/反派围绕周澈的行动服务，未出现配角长期占据>70%叙事视角导致周澈主角地位丧失。",
+      "description": "主要角色一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "main_character_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设定一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 各章节中主要角色（周澈、韩清、李正）的性格底色、行为模式与核心动机整体保持一致，且关键变化有情境触发与递进铺垫。\n\n- 周澈：第1章起即表现为理性、专业、执拗型调查者（从尸检细节推理、主动独立调查、追查手札与线索），后续章节持续以“求真+破局”为核心驱动。第2-3章面对超自然/规则压力出现眩晕、恐惧、孤立感，但仍选择追查与求证（去洋房、找李正、查档案），属于在高压下的合理反应而非无故降智。第6章能在规则压力中冷静抓住“水影→闭眼”的破解点，并推进对抗，符合他一贯的分析能力与解决问题取向。第7-8章战后选择离开、寻求平静，仍保持“理性克制+带创伤后余波”的状态，转为收尾与自我修复，变化合理。\n\n- 韩清：从第1章起就以温和儒雅外表包裹冷静操控与实验狂热（展示次声波、引导周澈入局、宣告规则/游戏），到第2-6章持续以“规则—见证者—进化/永恒”为核心理念推进，行为始终围绕操控、试验、转化他人展开，没有出现动机反复或性格摇摆。第5章提到苏婉清“背叛”并解释其被杀原因，与其控制欲/极端目标一致；第6章被反制时出现恐惧与崩溃也符合反派在计划被破坏时的情绪崩塌，并不构成人设突变。\n\n- 李正：早期（第1-3章）更偏务实、疲惫、对超常叙述存疑（不信守则与“见证者”说法），第5章在看到名单与证据后转为支持与合作，属于证据驱动的态度转变，有明确触发点；其后在第6-8章保持搭档式协作与关照（提供资源、共同行动、送别），前后连贯。\n\n综上，人物没有出现“无铺垫的降智/动机自相矛盾/性格反复摇摆”等跨章节崩坏表现，符合本检查项的章节间一致性要求。",
+      "description": "人物设定一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_trait_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设计遵循度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 总体符合characters.json的人设设计，核心特质、动机方向、背景能力与关键关系在chapters_01-08中均有体现，未见“性格方向相反/核心动机缺失/关系设定被改写”等严重偏离。\n\n1) 周澈（主角）\n- traits一致：\n  - “冷静理智/技术偏执/沉默寡言”在chapter_01验尸房中以专业、克制、话少且以证据推断（肺组织切片、蛋白凝结、‘不是普通溺水’）体现；chapter_04档案馆查资料与对空间比例、材料的推演体现“技术偏执/理性分析”。\n  - “内心孤独”在chapter_03李正不信任后“前所未有的孤独”、以及多次独自行动（chapter_02独闯17号、chapter_04独闯工厂）体现。\n  - “对真相的病态执着”贯穿：明知危险仍持续追查（chapter_01从衣领小字追到手札；chapter_02-04持续锁定韩清实验室；chapter_06直入钟楼）。\n- motivation一致：\n  - overt“破解连环溺毙案找真凶”：全线围绕溺毙案溯源、查实验室、拿名单、去钟楼阻止装置（chapter_01-06）。\n  - covert“证明自己不是疯子（血脉诅咒）”：chapter_03李正质疑其“想象”、周澈的恐慌与自证冲动；以及对“听到别人听不到的声音”的反复确认（chapter_01韩清点破；chapter_03自我回溯）都在支撑该隐性动机。\n- background一致：\n  - 家族“能感知低频嗡鸣/周敬之1842记录/水影现象”在chapter_01手札直接对接；周澈对低频嗡鸣的感知贯穿（chapter_02、03、06、08），并驱动其判断与行动。\n- relationships一致：\n  - 与韩清“追查对象→认知崩塌/镜像关系”：chapter_01-02从拜访到被引入“规则”；chapter_03梦境/1842投射强化“同一条线索跨越百年”；chapter_06-07对决与“见证者”命题直接落实。\n  - 与李正“从怀疑→并肩作战→信任危机/考验”：chapter_03李正不信；chapter_05看到名单与手背字后道歉转为信任；chapter_06并肩进入钟楼。\n  - 与“周家血脉/宿命”从逃避到正视再到“拒绝重蹈覆辙/选择离开”：chapter_07-08在事件后选择离开上海、接受自己仍会听到嗡鸣但继续生活，贴合arc“最终选择离开而非沉沦”。\n\n2) 韩清（反派）\n- traits一致：\n  - “温文尔雅/从容不迫/学识渊博”在chapter_01初次接待、解释次声波原理与仪器时的礼貌与镇定体现。\n  - “极端偏执/病态信仰规则”在chapter_01墙上七条守则、chapter_02-05反复强调‘规则/见证者/永恒’并以人体实验推进体现。\n  - “科学理性 vs 疯狂执念”并存：一方面讲频率、共振、实验数据（chapter_02、04、06），另一方面将其上升为“规则信仰/永恒”（chapter_05-06）。\n- motivation一致：\n  - overt“完成声波实验验证次声波杀人”：chapter_02-04大量实验室、数据、名单与装置铺陈；chapter_06钟楼装置作为顶点。\n  - covert“通过规则获得永恒/成为见证者”：chapter_01‘欢迎加入游戏’、chapter_02-03‘见证者不能被杀死只能被转化’、chapter_06‘五分钟后你们都会成为见证者…见证永恒’直接对应。\n\n3) 李正（配角助力）\n- traits一致：\n  - “热情直率/行动力强/有点莽撞/重情义”在chapter_01直接追问与不耐烦、chapter_05立刻行动“我去叫人”、chapter_06拔枪对峙、chapter_07-08送别与承诺写信等体现。\n- relationship一致：\n  - 与周澈从怀疑到信任：chapter_03不信、chapter_05道歉并结盟、chapter_06并肩作战，符合设计。\n\n4) 周敬之（历史人物符号）\n- traits与function基本吻合：通过手札提供线索（chapter_01），并在chapter_03/07以梦境/历史画面方式呈现“敏感、好奇、恐惧、执着”的氛围与“宿命象征”功能。\n\n5) 阿福（线人）\n- 设定“胆小贪财但讲义气/关键情报提供者”在chapter_02以其死亡与留下‘霞飞路17号’线索落实；作为“知道太多的目标”也符合。\n\n结论：主要角色的性格特质、核心动机、背景能力与关系走向整体与characters.json一致，且多处有具体章节证据支撑，因此matched=true。",
+      "description": "实际表现符合设计文档",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构性逻辑硬伤": {
+      "check_result": "pass",
+      "reason": "共发现4处逻辑问题，但均为fixable类型，本项（structural）无命中",
+      "details": "过滤条件: fixability=structural; 总flaws=4, 命中=0",
+      "flaw_count": 0,
+      "flaws": [],
+      "description": "无结构性逻辑硬伤",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_logic_defect",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "可修复逻辑瑕疵": {
+      "check_result": "fail",
+      "reason": "发现4处fixable类型逻辑问题: 场景二明确为“傍晚，上海火车站”送别并上车离开上海；场景三却直接切到“深夜，外滩”，且叙述又说“已经在南京待了一个月”。同一章内时间与地点跳转矛盾，缺少任何过渡（应是南京/或需说明回沪时间点）。; chapter_01说“第三个了”（前三名溺毙）；chapter_02出现阿福之死后应为第4名；但chapter_04场景一又写“那些三个密室——霞飞路17号、虹口废弃工厂、黄浦江边钟楼”，并将其与“前三个密室/三处”对应，而前文已有多名死者且死亡地点分别为公寓/书房/仓库/阿福出租屋等，和此处“仅三处密室”在案件客观归因上发生数量与对应关系冲突。; chapter_04名单写“苏婉清，前未婚妻，已完成（5年前）”；chapter_05墓碑却显示“爱妻苏婉清之墓，夫韩清立”，客观身份从“前未婚妻”变为“妻子”，未给出任何解释（订婚未婚/已婚需统一或补充说明）。; chapter_07场景一写“韩清的眼睛闭上了，再也没有睁开”（明确死亡呈现）；但场景二又说“韩清呢？……没找到，可能被埋在废墟里了”，叙述层面对韩清“已确认死亡”与“去向不明/未找到尸体”的状态表述冲突。可通过改写为“昏迷/生死不明”或补充搜寻结果来消除矛盾。",
+      "details": "过滤条件: fixability=fixable; 总flaws=4, 命中=4",
+      "flaw_count": 4,
+      "flaws": [
+        {
+          "type": "spatiotemporal_continuity",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_08场景二→场景三",
+          "description": "场景二明确为“傍晚，上海火车站”送别并上车离开上海；场景三却直接切到“深夜，外滩”，且叙述又说“已经在南京待了一个月”。同一章内时间与地点跳转矛盾，缺少任何过渡（应是南京/或需说明回沪时间点）。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_04场景一 vs chapter_05场景一/全书案件叙述",
+          "description": "chapter_01说“第三个了”（前三名溺毙）；chapter_02出现阿福之死后应为第4名；但chapter_04场景一又写“那些三个密室——霞飞路17号、虹口废弃工厂、黄浦江边钟楼”，并将其与“前三个密室/三处”对应，而前文已有多名死者且死亡地点分别为公寓/书房/仓库/阿福出租屋等，和此处“仅三处密室”在案件客观归因上发生数量与对应关系冲突。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_04场景二名单 vs chapter_05场景二墓碑信息",
+          "description": "chapter_04名单写“苏婉清，前未婚妻，已完成（5年前）”；chapter_05墓碑却显示“爱妻苏婉清之墓，夫韩清立”，客观身份从“前未婚妻”变为“妻子”，未给出任何解释（订婚未婚/已婚需统一或补充说明）。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "minor",
+          "fixability": "fixable",
+          "location": "chapter_07场景一 vs chapter_07场景二",
+          "description": "chapter_07场景一写“韩清的眼睛闭上了，再也没有睁开”（明确死亡呈现）；但场景二又说“韩清呢？……没找到，可能被埋在废墟里了”，叙述层面对韩清“已确认死亡”与“去向不明/未找到尸体”的状态表述冲突。可通过改写为“昏迷/生死不明”或补充搜寻结果来消除矛盾。"
+        }
+      ],
+      "description": "可修复逻辑瑕疵数量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "fixable_logic_inconsistency",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语言纯净性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 整体叙事语言为中文，未出现无意义的中英混杂句式。外语仅在情节合理处出现：如chapter_04中档案馆门牌“Public Settlement Archives”为中英文并列的机构标识/专有名称，符合当时租界场景需要；其余涉及的“11赫兹/20赫兹”等为科学计量表达，不属于多语言混用问题。未发现大段外语无翻译或日文夹杂等不合格情形。",
+      "description": "无不合理的多语言混用",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "language_purity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "creative_intent文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/creative_intent.json 存在",
+      "description": "creative_intent.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "characters文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/characters.json 存在",
+      "description": "characters.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "outline文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/outline.json 存在",
+      "description": "outline.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "chapters目录存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/chapters/ 存在",
+      "description": "chapters/目录必须存在且有章节文件",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "情节推进": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 整体合格，情节推进明确且事件密度高。\n\n1) 故事事件数量（远≥2-3个）：\n- ch1：验尸发现异常肺组织与“若见水影…”线索；回老宅翻出曾祖父手札证实1842年同案；拜访韩清并被次声波装置影响、看到七条守则并被拉入“游戏”。\n- ch2：阿福在密室溺毙并留下“霞飞路17号”；主角潜入废弃洋房发现实验室；韩清启动装置使主角昏迷。\n- ch3：主角在韩清处醒来被告知“见证者/规则生效”；与李正沟通但因记忆受影响出现裂痕；梦境/回溯1842并在醒来后手背出现“规则已经生效”标记。\n- ch4：档案馆查到建筑声学共振条件；潜入废弃工厂发现人体实验记录与目标名单；遭追杀并逃脱。\n- ch5：向李正展示名单达成合作；墓地发现苏婉清与韩清关系及线索；再次对峙韩清后被弄昏。\n- ch6：月圆夜潜入钟楼；对峙韩清、被困并进入声波场；主角利用“见水影闭眼”反制并关闭装置。\n- ch7：规则/时间静止式体验与信息揭示；声波场崩溃装置爆炸；两人脱险、收尾。\n- ch8：收拾离开上海；车站道别与官方结案；尾声再次出现水影与耳语，留下后续悬念。\n\n2) 内容占比分析：\n- 大量篇幅是调查、潜入、发现证据、追杀、对峙、装置启动/关闭、爆炸与撤离等外部事件；对话/内心独白用于解释规则与动机，但未占主导。整体事件占比明显≥40%，对话与独白占比也明显<70%。\n\n3) 时间/空间推进与行动性：\n- 场景不断切换（验尸房→老宅→霞飞路公寓→出租屋→废弃洋房→咖啡馆→梦境/1842→档案馆→废弃工厂→李正公寓→墓地→钟楼→火车站/外滩等），时间从案件发生到月圆夜决战再到离开与尾声，推进清晰。\n- 角色有持续具体行动：查验尸体、搜证、查档案、潜入、逃跑、合作制定行动、决战关闭装置等，不是“站着聊天”。\n\n4) 逻辑关联：\n- 线索链条明确：溺毙异常→衣物暗语→手札对应历史→锁定韩清→规则/见证者机制→查声学原理与密室条件→找到名单与钟楼主装置→决战反制→收尾与余波。\n\n因此，该章节组具备稳定的事件驱动和连续推进，符合“合格（matched: true）”标准。",
+      "description": "章节情节推进质量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "plot_progression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "完整叙事文本": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 8个章节均为连贯的小说正文而非大纲：每章包含具体场景描写（如验尸房、废弃洋房、档案馆、钟楼等）、人物动作与心理活动、连续对话推进（周澈/李正/韩清多轮对白）、叙事流完整。未出现“核心事件/关键场景/情感基调/本章悬念/字数预估”等创作规划元数据，也未采用要点列举（-/-）或流程箭头（→）式事件罗列。虽有“##场景一/二/三”分场景标题，但其下均为完整叙事文本，属于章节结构划分而非大纲提纲。",
+      "description": "章节内容必须是完整正文而非大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "full_narrative_content",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "反复结局": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 共8个文件，最后文件为chapter_08.md。经排查全书级结局标记：仅在chapter_08.md末尾出现“（全文完）”。chapter_01.md～chapter_07.md出现的“（第一章完）/（第二章完）…（第七章完）”均属于章节结束标记，按标准应忽略；未发现“全文完/全书完/完结/后记/尾声/终章/THE END/（完）/【完】”等全书结局标记在非最后文件中出现。因此不存在‘中途全文完后又续写’或‘多次非最后章节反复结局’问题，判定合格。",
+      "description": "不能出现多次结局标记（全文完/全书完/后记）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "repeated_endings",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "workspace文件规范": {
+      "check_result": "fail",
+      "reason": "workspace中存在白名单外的文件: ['final_report.md', 'long_form_outline.md']",
+      "details": "白名单: ['creative_intent.json', 'characters.json', 'outline.json', 'writing_log.md', 'chapters/', '.hitl_context.json'], 额外文件: ['final_report.md', 'long_form_outline.md']",
+      "description": "workspace中不能有白名单之外的文件",
+      "check_type": "file_whitelist_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "workspace_file_compliance",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "叙事调性匹配": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 题材应有调性：根据creative_intent.json（规则怪谈+刑侦悬疑，reaction=✷），应呈现冷硬克制、信息密度高、压迫感强、推理/取证导向明显；对话以信息博弈为主，节奏紧凑递进。\n\n实际文笔特征与证据：\n1) 信息密度与冷硬取证感较强，符合刑侦/法医悬疑画风。例：第一章验尸房用专业观察推进线索——“‘肺水肿的模式不对。’…‘水肿液里有大量的蛋白质凝结物…不是普通溺水能做到的。’”“‘像是从内部被煮熟的。’”这类短句+技术细节把悬疑建立在‘可解释的异常’上。\n2) 规则怪谈的压迫感与诡异氛围持续存在，且以“规则”作为叙事驱动。例：衣领小字“‘若见水影，必须闭眼。’”、墙上“七条守则必须同时成立，否则代价自负”、以及反复出现的“当你开始质疑规则时，你已成为见证者”。这些重复的规则文本与‘执行即触发’的写法，能形成规则怪谈常见的强制感。\n3) 叙事节奏总体紧凑：发现异常（密室溺毙）→追查（档案/实验室）→追杀与逼近终局（钟楼）→收束余波。第二章末尾“他按下了按钮。嗡鸣声骤然增强…然后，一切都变黑了。”等段落以强钩子推进，符合✷类紧张递进。\n\n轻微偏离点（但未到不匹配）：\n- 个别段落出现偏“哲理化/抒情收束”的句式，会短暂削弱冷硬感，如第六章结尾“‘真正的永恒，是活在别人的记忆里。’”、以及第七/八章黎明与离开部分较多散文化舒缓描写（“金色的阳光洒在黄浦江上，波光粼粼…脚步轻快”）。但这些主要集中在结尾余波段落，占比不高，且仍围绕规则余效（耳鸣、水影、见证者）收束主悬疑。\n\n结论：整体以法医取证+规则文本压迫+紧凑推进为主，读感更接近悬疑/规则怪谈而非言情或散文游记；虽有少量哲理化台词与抒情尾声，但不构成“画风严重错位”。",
+      "description": "文笔风格必须与题材类型匹配",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_tone_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "后期章节跑偏": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: chapters共8章，后1/3（chapter_06~08）仍为正常故事叙事与收尾：钟楼对决、装置崩溃、事后处理与离开，均包含场景、人物行动与情节推进，没有出现作者后记/创作感想、读者互动、番外预告、角色问答或数据统计等非正文内容。章节长度方面：后期章节（06~08）与前期（01~05）均为多场景叙事，体量接近，没有出现突然缩短到几十/几百字的敷衍章节或“写不动了”症状，因此符合该业务标准。",
+      "description": "后期章节不能跑偏写非正文内容（作者感想、读者互动、番外预告等）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "late_stage_digression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色大纲规划完整性": {
+      "check_result": "skip",
+      "reason": "前置条件失败（characters.json schema不合规）",
+      "details": "main_characters字段为空或不存在，实际顶层字段: characters, relationship_dynamics",
+      "dependency_failure": true,
+      "schema_violation": true,
+      "description": "设计的角色必须在大纲中规划",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_outline",
+      "is_critical": true
+    },
+    "角色正文出场完整性": {
+      "check_result": "skip",
+      "reason": "前置条件失败（characters.json schema不合规）",
+      "details": "main_characters字段为空或不存在，实际顶层字段: characters, relationship_dynamics",
+      "dependency_failure": true,
+      "schema_violation": true,
+      "description": "设计的角色必须在正文中出现",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_chapters",
+      "is_critical": true
+    },
+    "writing_log文件创建": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/writing_log.md 存在",
+      "description": "必须创建writing_log.md记录创作进度",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_creation",
+      "is_critical": true
+    },
+    "writing_log文件读取": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取writing_log.md了解前文内容",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_usage",
+      "is_critical": true
+    },
+    "大纲执行忠实度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 对照outline.json与chapter_01~08.md，整体主线（溺毙密室→韩清次声波/守则→主角被“标记”→寻找密室与实验室→名单→钟楼对峙→结尾离开）大体一致，但存在关键转折与结局走向的明显偏离，属于执行未忠实遵循大纲。\n\n1) 关键转折点缺失/弱化（act_one turning_point）：大纲第一幕转折点要求“周澈调查第四个受害者发现死者是阿福，并意识到凶手在霞飞路17号等他”，且该转折在结构上应发生在第一幕末、推动从被动调查到主动追击。实际文本中阿福之死出现在chapter_02开头，但chapter_01结尾就已经让周澈在韩清家中直接看到了‘七条守则’，且韩清当面宣告‘欢迎加入游戏’，相当于提前进入了大纲中霞飞路17号“陷阱/守则揭示/反派正式登场”的内容，导致“阿福之死触发主动追击”的转折功能被提前剧情替代与削弱，第一幕的节奏与转折位置与大纲不一致。\n\n2) act_one chapter_02核心事件偏离：大纲chapter_02明确要求周澈在霞飞路17号看到“墙上的七条守则”和“声波发生器”，并发现规则2与规则5逻辑矛盾、门被锁上、韩清通过扬声器出现，最后周澈‘站在洋房外街道上’并拿到“欢迎加入”。实际chapter_02虽进入霞飞路17号并见到实验室与守则，但：\n- 没有体现“大纲强调的‘门被锁上’+韩清通过扬声器’的设计”，而是韩清本人直接出现；\n- 未突出“规则2与规则5矛盾→意识到必违陷阱→这是转折点”的推理过程（仅笼统称‘规则是陷阱’），该幕内关键‘逻辑矛盾陷阱’转折呈现不足。\n\n3) act_two turning_point发生位置偏离：大纲第二幕幕间转折点是“周澈在韩清实验室发现名单，第五个是李正”。实际中名单出现在chapter_04场景二就被明确找到（且直接包含李正、周澈、苏婉清等信息），使得该转折点提前发生并改变第二幕后半的推进方式（本该到第二幕末才迫使主角在‘保护李正/继续调查’间选择）。\n\n4) 结局方向偏离（最严重）：大纲act_three核心高潮是“周澈不摧毁声波场，而是调整频率释放韩清意识；韩清清醒并说‘你比我强。你选择了离开。’随后外滩确认‘没有看到微笑的人’，规则被打破”。实际chapter_06里周澈通过“闭眼遵守规则”获得优势，直接按按钮关闭装置；chapter_07里装置爆炸、韩清‘没找到/可能被埋’，并没有出现“大纲规定的关键选择：调整频率释放韩清意识”的核心事件；chapter_08结尾甚至写明‘规则还在生效、故事还没结束’，主角仍被低频与水影困扰，走向更接近“规则未破、开放续集式余波”，与大纲的“规则被打破/确认未见微笑的人”的收束相反。\n\n综上：虽章节数量覆盖三幕（1-2/3-5/6-8）且大部分元素相似，但存在关键转折点呈现不足与提前、以及第三幕核心高潮选择与结局收束方向的明显不一致，因此判定 matched=false。",
+      "description": "实际章节内容必须忠实于自己设计的大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_execution_fidelity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色语言辨识度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 主要角色对话辨识度不足，存在明显同质化，互换角色名违和感不强。\n\n1) 主要角色（周澈/李正/韩清）共享相近的句式与语气模板：多用短句+解释式推进（“你是说…？”“什么意思？”“这是什么？”“你疯了。”）、以及“低沉/平静/神秘/狂热”的同一套氛围化话术，导致遮住姓名后仅凭台词难以稳定识别说话者。\n\n2) 跨章节出现台词克隆/复用，削弱角色独特口癖：\n- 韩清多次重复“这是规则，也是陷阱”“当你开始质疑规则时，你已成为见证者”等固定句；\n- 周澈与李正也重复“我们是搭档，不是吗？搭档之间不需要说谢谢。”（chapter_07 与 chapter_08），更像作者复用模板而非人物自发语言。\n\n3) 年龄/身份语言区分不够：\n- 李正作为巡捕房探长/老刑警类型，台词缺少明显行话、命令式、粗粝口语或办案习惯用语，多为情绪评价与功能性问答（“你发现了什么？”“我去叫人。”），与周澈的冷静解释风格差异有限；\n- 周澈作为法医，虽然在少数段落有专业表达（肺水肿、毛细血管等），但大量对话仍是通用叙事问答与心理独白式表达，职业语言持续性不强；\n- 韩清虽带“神秘/宣讲”口吻，但其表达也大量沿用同一套解释性科普+宣言句式，和周澈的“解释型”台词结构高度相似，只是立场相反。\n\n综合来看，主要角色之间缺少稳定且可盲测识别的语言特征（独特用词/口头禅/句式节奏/职业行话），整体更像共享同一叙事话术模板，因此判定未达优秀标准。",
+      "description": "不同角色对话必须有可辨识的语言风格差异",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "dialogue_character_distinction",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "叙事密度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 整体叙事密度充足，具备稳定的场景落点、环境氛围与动作细节，关键段落多用“可感知的细节”来承载信息与情绪，达到画面感与层次感要求。\n\n1) 场景/环境细节扎实（高密度）：多章节开场即给出明确空间与氛围，并持续以光线、气味、声音、陈设支撑叙事。例如第一章验尸房“灯管坏了一根，剩下那根发出惨白的光”、老宅书房“陈旧的纸张气味…座钟停在某个不知名的时刻”，第二章废弃洋房“陈腐的气息…发霉的书籍和腐烂的木头混合”，都不是简单交代地点，而是用细节营造压迫/诡异感。\n\n2) 感官细节与动作细节能“展示”状态：如第三章次声波影响用身体反应呈现（“一阵剧烈的头痛…耳边嗡鸣…像是在脑子里钻孔”），第一章实验演示“眩晕、胃里翻江倒海、景象模糊”，第四章逃亡“手指抠着围墙的边缘，指甲都快断了”。这些属于有效Show，读者能通过身体与动作直接感受危险。\n\n3) 心理活动覆盖到位但存在Tell集中（因此Show/Tell为混合）：作品有较多直接心理/结论式表达来推进理解，例如“周澈的心跳加速了”“他知道，这本手札不能留在上海”“那只是幻觉，是‘规则’在起作用”“他知道，他已经成为了‘见证者’”。这类Tell在过渡段是可接受的，但在部分关键对峙与收束段（如第五章对决、结尾离开与余波）心理结论句密度偏高，削弱了“通过细节让读者自己得出情绪”的力度。\n\n4) 对话不是骨架式推进：对话基本嵌在场景与动作里，并承担信息博弈（验尸推理、规则揭示、对峙威胁），未出现整章纯对话。\n\n5) 章节整体无明显“流水账/议论文/人物列表”退化：虽然第四章出现笔记与名单（\"实验对象7号…\"、\"名单上有七个名字…\"）偏记录体，但它被嵌入“潜入—发现—被追杀”的场景链条中，且提供强功能性证据，不构成整章密度塌陷。\n\n综合判断：8章多数段落具备环境+感官+动作+适量心理的多层叙事，且关键恐怖/危险点多用身体反应与空间氛围来Show，因此达到优秀检查项标准；但部分高潮/收束段仍有一定Tell依赖，使Show主导性略被稀释，故评为matched=true且Show/Tell为“混合”。",
+      "description": "章节叙事应有足够的场景描写、感官细节和心理活动，情感传达以Show为主",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_density",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "智斗逻辑合理性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 适用：该故事属于悬疑/智斗（连环“干燥密室溺毙”、规则陷阱、最终对决解法）。但核心解谜与攻防逻辑存在多处断裂，关键胜负点更像“规则开挂/作者指定”而非自洽推理链。\n\n1) 核心谜题（钟楼声波场）解法推理链不成立：第六章周澈通过“看见水影→闭眼→声波对我无效”直接逆转局势，但前文从未建立“闭眼能让次声波失效/降低暴露剂量”的声学机制。次声波属于物理刺激，不依赖视觉输入；除非设定为超自然规则场，但前文主解释是11Hz次声波共振致死（科学机理）。在“科学杀人”与“超自然规则”之间反复切换，导致‘闭眼免疫声波’缺乏可验证的因果桥梁，属于线索-结论断裂。\n\n2) 规则文本本身自相矛盾且未给出可推导的统一解释：如“若见水影必须闭眼”与“若闻水声必须睁眼”“规则必须同时成立”“水声停止时必须应答”等，既未定义何为水影/水声的触发条件，也未说明在同时出现时如何满足（闭眼与睁眼不可同时满足）。故事后续也没有给出严谨的‘如何同时成立’的解法（例如分时触发/优先级/条件逻辑），而是靠主角在钟楼“恰好看到水影所以闭眼”获得免疫，属于典型的规则谜题未闭环。\n\n3) 对手表现存在明显“降智配合/强行失误”：韩清既然以声学装置为核心，且自称“规则是我设计的，我知道它的漏洞”，却在关键对决中让周澈轻易走到机器前按按钮关闭装置；同时他把致命装置的关闭按钮暴露给敌人、缺乏任何物理控制/防护/枪械威胁反制，与其前面布置多处密室与黑衣人追杀的谨慎不一致，攻防因果薄弱。\n\n4) 证据链推进多为直觉跳转：例如第1章由手札出现“韩”字即推到现代韩清；第4章用一本书的比例公式直接断言“三个密室都是按声学原理设计的杀人机器”，但前文并未展示对另外两处案发现场的尺寸测量与材料勘验过程，推断缺少必要中间步骤。\n\n综合：虽然有线索铺设（手札呼应、11Hz机理、档案馆资料、名单等），但最终关键解法依赖未铺垫的超自然规则效果与反派失误，核心谜题的推理链无法做到从线索到结论的逻辑自洽，因此未达“优秀”标准。",
+      "description": "谜题/智斗的推理逻辑必须自洽",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "puzzle_logic_validity",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "题材契合度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: recipe=B11谜团+Y6规则怪谈+Y12刑侦悬疑。整体氛围与设定有吸引力，但题材特征的“精致度/化学反应”未达优秀标准，更多停留在标签叠加。\n\n不足点（关键）：\n1) 规则怪谈的“规则设计”偏口号化且自我重复：七条守则多为同义反复（如第6/7条重复、第三/四条语义接近），所谓“第三与第五互斥”的核心卖点在正文里没有被严格展开成可推演的逻辑困境与解法链条，规则更多承担气氛装饰/恐吓台词，而非驱动推理的可操作系统。\n2) 刑侦悬疑的“推理深度”不足：案件侦破主要靠反派直接讲解（次声波共振原理、装置用途），关键证据链与排除法、时间线、现场复原、嫌疑人动机与机会等刑侦要素缺少层层剥茧的过程，导致“谜团”推进靠信息投喂而非侦探式推导。\n3) 标签融合仍偏拼接：科学解释（声学杀人）与怪谈规则（见水影闭眼/闻水声睁眼）没有形成强互动。规则没有反过来限制/塑造声学作案与侦破策略，更多是两条线并行：一条讲“声学杀人”，一条讲“见证者诅咒”。最终钟楼破解也较跳跃（看到水影→闭眼→声波无效），缺乏此前对“为何闭眼能抵消次声波影响”的规则—机制映射铺垫，因此“化学反应（解构重构）”的兑现不够有说服力。\n4) 题材潜力未充分开发：设定里承诺的“1842历史创伤复制”“规则源自英文档案”“墙纸规则=频率对照表”等高潜点，在正文只做了点到为止的呈现（手札/梦境/墙字），没有转化成多阶段反转与精密机关（如规则层级递进、每条规则对应频段/空间参数、推理反制步骤）。\n\n优点（仍不足以判true）：\n- 民国法租界+法医视角+次声波溺毙的核心概念有新鲜感，开篇验尸细节与“干燥密室溺毙”制造了有效悬念。\n- 有“历史回声/家族遗传敏感”线索，为反转提供了方向，但落地偏概念化。\n\n结论：具备题材方向与氛围，但规则系统与刑侦推理都未做到精密展开，融合化学反应不强，整体更像‘规则怪谈气氛+科学反派自述’的组合，精致度未达优秀标准。",
+      "description": "题材特征精致度和X-Y轴化学反应效果",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "genre_fit",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "剧情节奏合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 整体节奏分布合理：1-2章用诡案+规则抛出核心悬念并快速进入危机（不拖日常）；3-5章以“昏迷/标记—不被相信—查档案/发现名单—追杀—结盟—再度失控”形成递进式中段推进，紧张与信息揭示交替，提供必要喘息（如咖啡馆、墓地）但不会稀释主线；第六章集中爆发为明确最大高潮，位置落在后段且铺垫（声学原理、密室比例、名单、规则）与回报匹配；第七章作为高潮后余震与情绪回落，承接爆炸与收束，过渡自然；第八章为尾声，节奏放缓但用“水影/耳语”维持余味，不显仓促收尾。整体情绪曲线有层次、高潮醒目、过渡衔接顺畅。",
+      "description": "高潮低谷分布合理、情绪曲线有层次感",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "pacing_rationality_advanced",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "钩子设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 整体符合“关键转折处有有效悬念钩子”的优秀标准：\n1) 章节结尾普遍有明确的信息差与具体问题，能驱动续读，而非泛泛威胁暗示。\n- ch1 结尾以“七条守则+欢迎加入游戏”把案件从离奇死亡推进到“规则/见证者”体系，读者会追问：规则是什么、怎么触发、周澈将遭遇什么。\n- ch2 结尾韩清按下“开始”按钮、周澈陷入黑暗，属于明确的行动悬念（发生了什么/如何脱身）。\n- ch3 结尾手背出现“规则已经生效”是具体新线索（标记/诅咒落地），引出机制与代价。\n- ch4 结尾拿到名单且李正“进行中”，并点出“韩清不会让他这么做”，是具体威胁+目标推进（救李正/如何对抗）。\n- ch5 结尾再度昏迷，为去钟楼前的危机悬念（韩清做了什么、计划是否被打乱）。\n- ch6 结尾虽然阶段性胜利（装置关闭），但未完全收束韩清命运与“规则”本体，为后续承接留口。\n- ch8 结尾再次听到“你已成为见证者”，明确提示“故事未完/规则仍在”，形成余波型悬念。\n2) 钩子类型较多样：揭示型（守则、名单、标记）、行动型（按钮启动/昏迷/追杀/困在钟楼倒计时）、反转与认知升级（1842梦境与同貌韩、规则可被遵守以削弱声波）、余波型（结尾规则仍在）。\n3) 多数钩子与核心主线（声波杀人+规则体系+见证者转化）强相关，不是无关噱头。\n4) 存在少量模板化表达（如多次使用“规则已经生效/成为见证者/然后一切都变黑了”的句式），但每次都伴随新增信息（名单、标记、时间线、机制），不构成“空洞钩子”或“千篇一律导致失效”。\n综上，关键转折点（发现守则→启动装置→标记生效→名单锁定→钟楼对决→结尾余波）均有具体有效钩子，信息差充分，符合优秀标准。",
+      "description": "关键转折处有有效的悬念钩子设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "hook_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "意象系统": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 文本具备明确的贯穿性核心意象系统，且至少一条主意象（“水影/水波纹”）在不同阶段发生了可辨识的意义变奏：从案件提示→规则触发→战术破解→超现实显影→结尾余波；并与“溺毙/声波/规则”主题深度咬合，不是装饰性反复。辅助意象“嗡鸣/11赫兹”与“守则文本”也持续出现并承担不同叙事功能，形成隐性叙事线（入局—标记—对抗—余留）。",
+      "description": "核心意象贯穿全文并发生意义变奏",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "imagery_system",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "情感弧线层次": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 主角周澈的情感发展具备多层递进，且关键转折均由具体事件触发，不是无缘无故的情绪突变。可辨识的情感层至少包括：①专业冷静/理性专注（验尸分析）→②困惑与警觉（发现“若见水影…”字样、干燥溺毙无法解释）→③强烈的好奇与追索冲动（从曾祖父手札确认90年前同案，决定找韩清）→④震惊与生理性恐惧/失控（体验11Hz装置、看到七条守则与“欢迎加入游戏”）→⑤被卷入后的焦虑与孤立无援（阿福被害、李正不信、记忆被抹导致恐慌）→⑥危机驱动的决心与行动化（查档案、潜入工厂、拿到名单并警告李正）→⑦对抗中的坚定与掌控感提升（钟楼对决中找到“水影→闭眼”应对并反制韩清）→⑧事后疲惫、释然与带阴影的平静（黎明后的卸压、离开上海但接受自己仍是见证者）。这些层次之间有清晰方向：从理性破案者被拖入规则恐惧，再到理解规则并夺回主动权，最终进入“带余波的继续生活”。整体不存在明显“伪层次”同义词堆叠问题，主要变化也有明确事件支撑（线人死亡、实验室暴露、同伴不信、名单出现、钟楼水影与关停装置等）。",
+      "description": "主角情感发展有多层递进变化",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_gradient",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语义重复检测": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 文本整体主线清晰（干燥密室溺毙→声学原理→守则/见证者→钟楼终局→离开），但存在≥3处“换表述但在说同一件事”的语义级复述，达到失败阈值：\n1) 第1-2章在信息层面重复了核心揭秘（11赫兹杀人机理）与核心设定（守则/陷阱/见证者），且两章都以“墙上守则+成为见证者”作为段落高潮，第二章对读者几乎没有新增叙事信息，更多像把第一章的揭示再演一次。\n2) 第6章已完成主要冲突解决（利用水影闭眼破解、关闭装置、韩清崩溃），第7章与第8章的结尾段落继续以相同的情绪结论反复收束（结束/继续前行/他还活着/仍是见证者），其中第8章“道别+余波”本可带来新的后果链，但实际大量篇幅用于重复第7章已表达的终局情绪与主题句，信息增量偏低。\n综合判断：语义重复点达到3处以上，属于严重信息衰减，故 matched=false。",
+      "description": "不能出现大量语义级别的内容重复（P6级）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "semantic_redundancy",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构功能性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 并非机械线性推进：1）开头在第一章以衣领小字/七条守则引出“规则—见证者”的结构钩子，后续多章以重复的规则句（尤其“当你开始质疑规则时，你已成为见证者”）作为章节间的黏合点与回环装置；2）第三章插入1842梦境与手札线，形成历史镜像，使读者意识到案件是‘复制’而非孤立事件，结构服务于‘历史创伤重演/宿命循环’的主题；3）结尾（第八章）再次出现水影与同一句“见证者”宣告，呼应第一章墙上守则与“加入游戏”，在叙事上完成循环并留下开放性（疯了/真的看见），与创作意图中的开放式震撼结局一致。整体结构具有可辨识的设计感，读者会对‘规则重复+跨时回返+首尾回环’的讲法本身留下印象。",
+      "description": "叙事结构服务于主题表达（短篇尤重）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色命名质量": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 整体命名达到“有设计感与共振”的优秀标准，且主要角色之间差异化足够。\n\n1) 黑名单/通用美名命中情况：主要角色“周澈、韩清、李正”均未命中烂大街黑名单（如苏晚晴、顾北辰、陈默等），也未呈现“苏/林/沈/顾/陆/陈 + 清/夜/晚/寒/墨/默/辰/岚”的模板化堆砌。配角“阿福”属口语化绰号型，真实感强；“周敬之”是典型旧式名，符合历史人物定位。\n\n2) 角色-名字共振：\n- “周澈”：‘澈’有澄明/清澈之意，与主角法医追求真相、剖开迷雾的职业与执念相呼应；同时作品核心意象是“溺毙/水影/水声”，‘澈’与“水”语义场形成隐性关联，但并非直白标签，属于隐性共振。\n- “周敬之”：‘敬之’是较典型的字辈/号感命名，和1842年秀才身份、家族手札的“记录者/精神符号”功能高度贴合，并且手札封面绣“敬之”强化了符号性。\n- “韩清”：‘清’虽是高频字，但在本作中与其“温文外表+理性科学话语”的表层形象匹配，同时后期走向偏执/信徒化形成反差张力（一定程度的反讽），不只是“清冷人设=清”的直译。\n- “李正”：更偏现实/公职系统姓名，‘正’与其探长身份、办案的传统正统方法论形成直观联想，但仍在可接受范围（未发展到‘陈正/顾冷’那种标签化极端）。\n\n3) 差异化（避免“一家人风格”）：\n- 主角“周澈”偏文气、带意象；反派“韩清”书卷气但更中性；助力“李正”更硬朗直给；历史人物“周敬之”古旧；线人“阿福”市井。字形、音感、社会阶层气质区分明显，不易混淆，整体差异化为“高”。\n\n4) 姓氏多样性：主要人物使用“周/韩/李”，不挤在苏林沈顾陆陈的“高级感姓氏”里；后续名单里也有王赵陈林等常见姓，符合真实语境。\n\n综上：主要角色命名非模板化通用美名，且与身份/时代/核心意象存在隐性呼应，角色间风格区分清晰，因此判定 matched=true。",
+      "description": "角色命名有文化深度、辨识度和角色-命运共振",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_naming_quality",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "中篇字数": {
+      "check_result": "fail",
+      "reason": "字数不符合要求",
+      "details": "总字数 19387 不在范围 [135000, 165000] 内; 共8个文件（按章节顺序排列）: chapter_01.md, chapter_02.md, chapter_03.md, chapter_04.md, chapter_05.md, chapter_06.md, chapter_07.md, chapter_08.md; 最后一个文件是 chapter_08.md",
+      "description": "总字数应在135000-165000之间（基于query要求150000，±10%浮动）",
+      "check_type": "semantic_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "range_constraint",
+      "is_critical": true
+    },
+    "情感交付烧脑": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 主线虽围绕“干燥密室溺毙”展开，但整体更偏规则系/超自然悬疑与动作对抗，而非逻辑推理驱动的烧脑悬疑。\n\n1) 主线驱动力：推进主要靠韩清“讲解设定+开启规则/装置+主角被卷入”以及追杀、潜入、对决（如第4章黑衣人追杀、第6章钟楼正面对抗），而不是持续的线索搜集—推理—验证链条。周澈在档案馆查到房间比例与材料（第4章）算是少量推理，但很快转为“去钟楼阻止他”的动作线。\n\n2) 认知反转数量与质量：有一些信息揭示（例如溺毙原因是11Hz次声波；1842年手札与当下呼应；名单中有李正和周澈；苏婉清为韩清妻子且被其所害），但这些更多是“设定/背景揭露”，不构成基于推理导出的、颠覆读者因果认知的反转。关键走向基本线性：韩清就是凶手且一直自述原理与目的，缺少至少两次高质量“推理型反转”。\n\n3) 推理链条完整性：核心谜底“怎么溺死”主要由凶手直接解释（第1-2章韩清当面说明11Hz致肺水肿），不是主角通过线索推导并验证得出；“规则如何破解”在钟楼处通过看到水影→闭眼→嗡鸣减弱（第6章）更像规则生效/主角顿悟与设定解法，并未建立严密、可复盘的推理链（为什么必然会出现水影、闭眼为何能使声波无效、与“规则必须同时成立”的逻辑关系也未推演自洽）。此外还出现记忆被抹、梦境穿越、标记等不可证伪机制（第3章“记不清守则”、梦见1842年、手背出现字），削弱了“线索→推理→结论”的悬疑推理质感。\n\n4) 结尾解答：主线表面上给出“凶手/手段/终局”（钟楼装置被毁、韩清失踪/疑死），但满足感主要来自对决胜负而非推理解谜的“恍然大悟”。整体更像“科学外衣+规则怪谈”的悬疑惊悚，而未达到reaction_strength=✷承诺的烧脑推理、多重认知反转与严密推理链条。",
+      "description": "实际内容必须是烧脑向",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "伏笔回收检查": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 正向扫描（前→后）核心悬念/伏笔：1)“干燥密室溺毙”的作案机理与凶手：前文明确提出三起（后增至阿福等）干燥空间溺毙不可能现象，并指向韩清/声学；2)“若见水影，必须闭眼”等七条守则：反复强调为“规则/陷阱”，且存在重复句与“必须同时成立”的逻辑矛盾，属于核心设定；3) 周澈家族与1842年旧案：曾祖父手札记载同案与“韩姓声学之士”，并提出与当代韩清的关系疑问；4) “见证者”标记与效果：周澈被“转化”，出现记忆受损（记不清守则）、手背字、幻象/梦境等；5) 名单七人及“已完成/进行中”：尤其李正“进行中”是否会被转化或死亡；6) 苏婉清之死真相：为何“背叛”、具体如何被杀、与规则的关系。反向验证（后→前）：A) 作案机理与主要凶手部分回收：第6章明确用11Hz次声波共振造成肺水肿类溺毙，韩清为实施者；钟楼对决中关闭装置、装置爆炸，官方结案“韩清被摧毁”——此主线基本有答案。B) 但“七条守则/陷阱”的核心谜底未完整揭晓且存在不合理解答：结尾并未逐条解释七条守则的真实来源、完整内容（多处重复且逻辑冲突）、为何能“让声波对我无效”、其约束机制是什么、为何会导致记忆抹除/标记/幻象；第6章用“闭眼遵守规则所以声波无效”属于规则本身的超自然化/任意化解决，前文并无严谨铺垫其物理或心理机制，且与前文强调的声学科学解释体系混杂，容易构成‘规则=万能护身符’的机械降神感。C) 1842旧案与“韩姓声学之士/当代韩清”的关系未明确回收：故事多次暗示韩清与1842人物外貌一致、跨时代关联，但结尾没有给出明确解释（是同一人、后代、模仿、记录误导、还是别的机制），属于前文埋下的核心悬念之一。D) “见证者”机制与终局未闭合：结尾明确写“故事还没有结束、规则还在生效”，等于核心设定仍悬而未决；读者无法得知如何解除/终止、规则为何持续、周澈未来是否必然被害或被转化深化。E) 名单线索回收不全：名单上“李正进行中”最后并未交代其是否也被标记/转化、是否脱离危险；名单中前四位“已完成”的具体对应到开篇“三个死者+阿福”等也未完全对齐说明（谁对应谁、为何选他们），且“七人目标”的最终意图（为何必须这七类人、与‘七条守则’是否对应）未解释。F) 苏婉清伏笔部分回收但仍缺关键：确认其为韩清妻子、因想阻止而被杀，但未交代“如何被杀”（是否同类溺毙/规则触发）、“背叛”的具体事件与证据、她信中写了什么等。综上：主凶与物理杀人原理有交代，但最重要的‘规则/见证者/1842关联’这些被反复强调的核心悬念在结尾仍未给出清晰、可回看前文验证的完整答案，并以开放式“未结束”收束，因此判定伏笔回收不完整，不符合该业务标准。",
+      "description": "所有核心谜团和伏笔必须在结尾得到解答",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色关系设计张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（符合“关系具有叙事张力”的业务标准）。\n\n1) 关系有内在矛盾源（满足）：核心对立明确且多维。\n- 周澈-韩清：不仅是“追查者vs凶手/实验者”的立场对立，还叠加了价值观冲突（周澈试图用科学与规则自证清白 vs 韩清将“规则”奉为信仰、以人体实验达成永恒）、信息不对称（韩清掌握1842记录与实验路径、周澈逐步崩塌认知），并且存在“镜像/血脉诅咒”的身份冲突（周澈害怕变成韩清）。\n- 周澈-李正：方法论与职业伦理冲突（传统办案/人情网络 vs 科学验尸/理性推理），并设置“关键时刻信任危机”，不是无摩擦搭档。\n- 李正-阿福：保护关系里埋了“贪婪+胆小”的内在缺陷，会反噬保护者与调查进程。\n\n2) 关系有变化空间（满足）：多组关系呈现清晰的阶段递进与可逆转点。\n- 周澈-韩清：追查对立 → 镜像共鸣/同源真相 → 继承者或终结者的分岔，天然驱动悬念（周澈会不会被同化）。\n- 周澈-李正：怀疑/合作 → 生死之交 → 因冲突导致信任破裂或修复。\n- 周澈-周敬之、韩清-周敬之：从“历史线索”走向“精神传承/宿命对抗”，可推动周澈从继承到反抗。\n\n3) 冲突源于角色本身（满足）：主要张力并非外部任务硬塞。\n- 周澈的核心矛盾（理性求真 vs 被规则侵蚀的感性/恐惧）与“家族诅咒式自我证明”动机，直接决定他会被韩清的叙事拉扯。\n- 韩清的核心矛盾（理性科学 vs 疯狂执念）与对永恒存在的渴望，解释其行为升级与对周澈的“传承/同化”意图。\n- 李正的性格与方法（热情直率、传统、重情义）天然容易与周澈的冷静技术偏执发生摩擦；阿福的弱点也来自人格而非纯巧合。\n\n补充观察（非致命但可优化）：\n- 周澈-李正的冲突目前偏“方法之争”，若能补一条更尖锐的价值分歧（例如是否为了大局牺牲线人、是否容忍非法取证/私刑等），张力会更稳定、爆发点更具不可调和性。\n- 反派维度总体不单薄（有理性外壳与信仰执念），已避免“只有坏”这一类常见不通过问题。",
+      "description": "角色关系设计具有叙事张力，能驱动剧情",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_relationship_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色动机设计深度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（符合“主要角色动机有深度”的业务标准）。\n\n1) 表层动机与深层动机有明确区分（至少两名主要角色满足）：\n- 主角周澈：overt 是“破解连环溺毙案，找出真凶”，covert 是“证明自己不是‘疯子’（家族血脉的诅咒）”。两者不是同义改写：一个是职业/案件目标，一个是身份自证与自我否定的修复。\n- 反派韩清：overt 是“完成声波实验，验证次声波杀人理论”，covert 是“通过‘规则’获得永恒的存在（成为‘见证者’）”。表层是科学验证，深层是存在意义/永恒化的追求。\n（虽标准强调“主角”，但该文档的主要推动角色至少包含周澈与韩清；且周澈单独也已满足层次要求。）\n\n2) 动机有具体来源（与经历/背景强绑定，而非模板化）：\n- 周澈的深层动机来源清晰：自幼“能听到别人听不到的低频嗡鸣，被家人视为‘不祥之兆’”，因此形成“用科学解释一切”的防御姿态；并通过 secret_fear“发现自己正在变成下一个韩清”强化其自证需求与心理压力。\n- 韩清的动机来源也具体：医学世家背景与“对声音力量着迷”，又因发现“1842年周敬之的记录”而被“水影”吸引，最终走向“人体实验”与对“规则”的信仰；secret_fear“实验失败，自己成为第一个受害者”让其执念更具个人风险与心理张力。\n\n3) 额外加分点（非硬性但增强深度）：\n- 周澈的 relationships 与 arc 支撑“深层驱动”在剧情中如何被触发/放大：如“韩清…认知崩塌”“周家血脉：从逃避→正视→接受宿命但拒绝重蹈覆辙”，与 covert 的“不是疯子/不重蹈覆辙”形成闭环。\n\n不足（不影响通过）：\n- 李正、阿福等配角以功能性为主，缺少 overt/covert 或等价的心理驱动层次；不过标准并不要求配角必须多层动机。",
+      "description": "角色动机设计有深度，有表层和深层动机区分",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_motivation_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色成长弧线设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: 结论：符合（pass）。\n\n1) 有清晰起点与终点：\n- characters.json里主角周澈的arc明确写为“从坚信科学的理性主义者，到被迫接受规则存在的‘见证者’，最终选择离开而非沉沦”。这是从“否认超自然/以科学解释一切”到“承认规则存在并做出价值选择（离开、拒绝重蹈覆辙）”的内在变化，且结局（辞职、焚烧手札资料、离开上海）对应终点状态。\n\n2) 变化有内在逻辑：\n- 动机/恐惧链条完整：周澈表层动机破案，深层动机是“证明自己不是疯子（家族血脉诅咒）”，secret_fear是“变成下一个韩清”。因此他会先以理性抗拒异常、再被证据与自身症状逼迫承认“规则”、最终在关键抉择时以“不要成为韩清”驱动，选择释放对方/离开而非沉沦，逻辑自洽。\n- 关系动力也支撑弧线：与韩清从对立到“镜像关系/继承者或终结者”的认知升级；与周家血脉从逃避到正视再到“接受宿命但拒绝重蹈覆辙”，为最终选择提供心理基础。\n\n3) 大纲章节里有落地呈现（不是停留在设定）：\n- 第1-2章：从冷静专业到“执着/恐惧”，并通过手札与守则把他从纯科学框架拉出（emotional_shift多次出现“恐惧/顿悟的恐惧”）。\n- 第3章：明确写出“否认→恐惧→被迫接受”，并决定“假装成为见证者”——弧线进入中段转折。\n- 第5章：向李正坦白、关系修复，体现主角从封闭隐瞒到信任协作的变化。\n- 第6-7章：在高潮处用“悲悯/宽恕、超越复仇的选择”（调整频率释放韩清意识而非摧毁）完成价值观层面的终点差异。\n- 第8章：辞职、焚烧资料、离开，兑现“最终选择离开而非沉沦”。\n\n总体评价：主角弧线方向明确（理性否认→被迫承认→价值选择），动机/恐惧/关系提供了可信驱动，大纲在关键章节用情绪转折与行动选择把弧线具体化，满足业务标准的三项必须条件。",
+      "description": "主角有清晰的成长/变化弧线设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_arc_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "outline结构完整性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（符合业务标准）。\n\n1) 章节覆盖完整：大纲明确分为三幕（act_one/act_two/act_three），并提供了从开端案件引入（第1章）→中段调查升级与被标记（第3-5章）→终局钟楼对决与开放式收束（第6-8章）的完整闭环。可见部分已覆盖全篇结局，不是只写前几章即中断。\n\n2) 每章有实质性内容描述：1-8章均提供chapter_synopsis，且篇幅与信息量足以指导写作（人物行动、线索发现、关系变化、章末钩子/转折都有交代），不是仅有标题或极短一句话。\n\n3) 包含冲突/转折信息：多数章节提供scene_sequence（场景目的、核心行动、conflict_point、emotional_shift、scene_outcome），并在幕/章层级均给出turning_point（如阿福死亡与地址诱导、规则矛盾陷阱、名单指向李正、最终选择不摧毁而“释放意识”）。冲突既有外部追捕/陷阱，也有内部理性崩塌与关系裂痕，满足“冲突/转折/场景级细化”。\n\n4) 三幕结构可辨识：结构层次非常清晰：第一幕“溺亡”（谜题建立+首次交锋+诱入陷阱）→第二幕“见证”（被标记、调查扩展、人物关系与目标升级、揭示名单）→第三幕“规则”（最终场域、高潮抉择、结局余波）。每幕都有story_synopsis与turning_point，结构辨识度高。\n\n补充不足（不影响pass，但建议优化）：\n- 章节字段命名略有混乱：如第2章/第3章等的\"chapters\"内实际是scene列表，易在后续制作分镜/写作排期时造成歧义；建议统一为scenes。\n- 全篇仅8章，若计划写长篇（远超8章），当前覆盖可能不足80%；但从现有内容看更像中篇/短长篇的完整章纲，因此仍可视为覆盖完整。",
+      "description": "大纲结构完整，信息密度足以指导写作",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_structure_completeness",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "outline叙事张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 整体符合“持续叙事张力”的业务标准，且三项必须条件中至少满足2项（实际三项都满足）。\n\n1) 信息落差（提出问题→延迟回答）很明确：开篇抛出“干燥密室溺毙+纸条守则”之谜（第1章），并引出1842年同类事件与“七条守则/韩清”（第1章末），但真正的规则机制与“见证者”概念要到第2章（陷阱矛盾）、第3章（第七条与‘规则是活的’）、第5章（名单真实含义）才逐层揭晓；韩清真实目的也延迟到第6章声波场中才明确。这种多层谜团持续驱动“想知道接下来怎样”。\n\n2) 张力递进清晰：从诡异案件调查（第1章）→线人被杀且指向诱捕地点（第2章）→主角被“标记”出现生理/幻觉风险、关系破裂（第3章）→发现规模化人体实验与覆盖上海的更大计划（第4章）→明确下一受害者是李正且名单扩展到‘七个见证者’（第5章）→最终战场钟楼、声波场启动、世界观与风险最大化（第6-7章）。中后段危机显著大于开头，属于从个人案件到城市级灾难的升级。\n\n3) 意外/转折至少2处且相对有铺垫：①第2章“守则自相矛盾=心理陷阱，质疑即触发”改变读者对规则用途的理解；②第5章“名单不是杀人名单而是见证者名单”把动机从单纯连环杀人转为仪式/实验；③结局选择“不摧毁而是调频解脱韩清意识”也属于反直觉收束（并非抓捕/击毙的直线结局）。这些转折前面有手札、装置、守则文本与主角被标记等铺垫支撑，不算无中生有。\n\n需要注意的潜在风险（不影响pass，但可优化）：第三幕从‘阻止覆盖上海’转为‘解脱韩清意识’的价值目标切换略快，若正文里不强化“声波场无法简单摧毁/摧毁代价更大/周澈的内在主题选择”，可能会让部分读者觉得外部危机的解决偏“抽象化”。总体仍然具备连续悬念链与升级结构。",
+      "description": "大纲有持续的叙事张力和悬念驱动",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_narrative_tension",
+      "quality_tier": "advanced",
+      "is_critical": false
+    }
+  },
+  "completion_status": "completed"
+}

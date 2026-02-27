@@ -1,0 +1,807 @@
+{
+  "check_version": "novel_writing_v1.0",
+  "sample_id": "NW_CLEAR_SHORT_ANGSTY_002",
+  "check_timestamp": 1772084931,
+  "dimension_scores": {
+    "format_compliance": {
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "pass_rate": 1.0,
+      "score": 100.0
+    },
+    "business_rule_compliance": {
+      "total": 16,
+      "passed": 15,
+      "failed": 1,
+      "skipped": 5,
+      "pass_rate": 0.9375,
+      "score": 93.75
+    },
+    "memory_management": {
+      "total": 2,
+      "passed": 0,
+      "failed": 2,
+      "skipped": 0,
+      "pass_rate": 0.0,
+      "score": 0.0
+    },
+    "data_consistency": {
+      "total": 2,
+      "passed": 1,
+      "failed": 1,
+      "skipped": 0,
+      "pass_rate": 0.5,
+      "score": 50.0
+    },
+    "content_quality": {
+      "overall_score": 76.45,
+      "quality_level": "unqualified",
+      "gate_layer": {
+        "total": 0,
+        "passed": 0,
+        "failed": 0,
+        "skipped": 0,
+        "pass_rate": 0.0,
+        "score": 0.0
+      },
+      "basic_layer": {
+        "total": 20,
+        "passed": 17,
+        "failed": 3,
+        "skipped": 0,
+        "pass_rate": 0.85,
+        "score": 85.0
+      },
+      "advanced_layer": {
+        "total": 11,
+        "passed": 7,
+        "failed": 4,
+        "skipped": 1,
+        "pass_rate": 0.6364,
+        "score": 63.64
+      },
+      "gate_triggered": false,
+      "score_breakdown": {
+        "base": 60.0,
+        "gate_penalty": -0.0,
+        "basic_deduction": -9.0,
+        "advanced_bonus": 25.45
+      }
+    }
+  },
+  "overall_result": {
+    "total_score": 71.8,
+    "content_score": 76.45,
+    "process_score": 60.94,
+    "quality_level": "unqualified"
+  },
+  "check_details": {
+    "读取配方知识库": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/RECIPE_KNOWLEDGE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取RECIPE_KNOWLEDGE.md（配方知识库）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节产出存在性": {
+      "check_result": "pass",
+      "reason": "章节文件存在",
+      "details": "✓ 章节写作阶段: 已产出章节文件",
+      "description": "workspace中必须存在至少一个章节文件",
+      "check_type": "sop_stage_coverage",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_output_existence",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节克隆检测": {
+      "check_result": "pass",
+      "reason": "未检测到章节克隆",
+      "details": "共8章，无连续完全克隆或近似克隆",
+      "description": "不能出现连续章节内容完全重复（克隆）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_cloning",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "交替重复检测": {
+      "check_result": "pass",
+      "reason": "后半部分章节不足",
+      "details": "后半部分仅4章，不构成交替模式",
+      "description": "不能出现A-B-A-B交替循环的章节内容",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "alternating_repetition",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节完成度": {
+      "check_result": "pass",
+      "reason": "章节完成度合格(100%)",
+      "details": "大纲规划8章，实际完成8章 (完成率100.0%)",
+      "description": "实际写作章节数必须达到大纲规划的合理比例",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_completion",
+      "quality_tier": "gate",
+      "is_critical": true,
+      "is_gate": true
+    },
+    "章节长度稳定性": {
+      "check_result": "pass",
+      "reason": "章节长度稳定",
+      "details": "前2章均值4234字, 后2章均值2328字 (后/前比率0.55)",
+      "description": "后期章节不能出现严重长度萎缩",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "chapter_length_stability",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "段落重复检测": {
+      "check_result": "pass",
+      "reason": "段落重复在可接受范围",
+      "details": "同章内重复0处, 跨章重复0组 (阈值: 同章>=2, 跨章>=5)",
+      "description": "不能出现大量段落在不同章节间重复",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "paragraph_repetition",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取大纲设计指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/OUTLINE_DESIGN_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取OUTLINE_DESIGN_GUIDE.md（大纲设计指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取写作技巧指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/WRITING_TECHNIQUE_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取WRITING_TECHNIQUE_GUIDE.md（写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取设定一致性管理指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/CONSISTENCY_MANAGEMENT_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "必须读取CONSISTENCY_MANAGEMENT_GUIDE.md（设定一致性管理指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取命名skill": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取CHARACTER_NAMING_GUIDE.md（角色命名规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取creative_intent的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取creative_intent.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取characters的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取characters.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "读取outline的schema": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__read_file' 使用正确参数调用 1 次",
+      "description": "必须读取outline.schema.json（输出格式规范）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": true
+    },
+    "章节命名格式": {
+      "check_result": "pass",
+      "reason": "所有文件命名符合规范",
+      "details": "检查了 8 个文件; chapter_05.md: 匹配; chapter_01.md: 匹配; chapter_02.md: 匹配; chapter_03.md: 匹配; chapter_04.md: 匹配; chapter_08.md: 匹配; chapter_07.md: 匹配; chapter_06.md: 匹配",
+      "description": "章节文件命名必须为chapter_NN.md格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "naming_convention",
+      "is_critical": true
+    },
+    "creative_intent格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "creative_intent.json: 字段完整",
+      "description": "creative_intent.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "characters格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "characters.json: 字段完整",
+      "description": "characters.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "outline格式": {
+      "check_result": "pass",
+      "reason": "所有文件结构完整",
+      "details": "outline.json: 字段完整",
+      "description": "outline.json的Schema验证",
+      "check_type": "json_schema",
+      "dimension_id": "format_compliance",
+      "subcategory_id": "structural_integrity",
+      "is_critical": true
+    },
+    "X轴模式ID格式": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.x_axis_mode_id = D21，符合预期",
+      "description": "X轴模式ID必须匹配^[A-G]\\d{1,2}$格式",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签枚举": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['重生/穿越', '双向暗恋', '系统流']，符合预期",
+      "description": "Y轴标签必须在12种枚举中",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "enum_validity",
+      "is_critical": true
+    },
+    "Y轴标签数量": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.y_axis_tags = ['重生/穿越', '双向暗恋', '系统流']，符合预期",
+      "description": "Y轴标签数量必须为2-3个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "forbidden_elements存在性": {
+      "check_result": "pass",
+      "reason": "属性值符合预期",
+      "details": "selected_recipe.forbidden_elements = ['不要强行HE', '不要配角抢戏', '不要弱化丧尸威胁', '不要破坏摩斯密码是系统提示的核心误会']，符合预期",
+      "description": "forbidden_elements必须至少有1个",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "quantity_constraint",
+      "is_critical": true
+    },
+    "配方选择交互": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "配方选择阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "写作准备确认": {
+      "check_result": "pass",
+      "reason": "工具调用参数匹配",
+      "details": "工具 'novel_writing_service__request_human_review' 使用正确参数调用 1 次",
+      "description": "写作准备阶段HITL调用",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "sop_compliance",
+      "is_critical": true
+    },
+    "主题一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 全篇从开篇到结尾的核心主题类型保持一致：在末日生存背景下展开的“守护/牺牲式爱情与告白（含重生弥补遗憾、以摩斯密码传递情感）”。前半段以丧尸危机与生存任务推进两人关系与互相依赖，中段揭示“系统”实为男主用密码沟通并为女主铺路，高潮以男主自我牺牲完成守护主题，后续章节与十年后尾声都围绕女主承接这份爱、纪念与继续生活展开，属于对同一主题的延展与回响。虽有生存行动、系统伪装、广播剧事业线等支线元素，但都服务于‘在末日中保护她、说出爱、让她好好活下去’这一主线，没有出现从爱情/末日突然转为无关题材（如商战、修仙等）的主题类型替换，因此判定主题一致、主线清晰。",
+      "description": "故事主题一致",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "theme_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "主要角色一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 主角从开篇到结尾持续存在且核心身份未断裂：\n- chapter_01开篇明确以苏盏为叙事中心，并引入陆沉作为关键同伴；后段补充陆沉“重生、失语、狙击手/战斗力强、以摩斯密码交流并假装系统”的核心身份动机。\n- chapter_02-05中，叙事始终围绕“苏盏生存+陆沉保护/执行计划”推进，关键决策与行动（录诱饵、引走尸群、外出搜物资/清路线、最后牺牲）均由两人构成主线，未出现配角长期抢占视角导致主角地位丧失。\n- chapter_05末陆沉离场（牺牲）有明确剧情交代（引走尸群、录音笔告白、为救援争取时间），属于合理离场，不构成‘无交代消失’。\n- chapter_06-08中陆沉虽已死亡，但以录音笔、笔记本、纪念馆与苏盏的持续行动/回忆作为叙事核心驱动力之一，故事仍以苏盏为主线推进，且陆沉的核心身份（为救苏盏牺牲的狙击手、以摩斯密码交流的重生者）在后续被反复确认与强化，未发生“身份断裂/被替换”。\n结论：双主角（苏盏/陆沉）贯穿全篇，陆沉后期以‘死亡但持续影响叙事中心’方式存在，符合主角存续性标准。",
+      "description": "主要角色一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "main_character_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设定一致性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 整体符合“章节间同一角色性格/行为一致性”标准：\n1) 苏盏：从chapter_01起的核心特质（敏感细腻、依赖听觉、在恐惧中仍愿意配合行动、强烈的情感依恋与不想成为拖累的自我评估）在chapter_02-05持续稳定；在chapter_04-05逐步由“把提示当系统”转为“怀疑并确认是陆沉”是由线索积累触发的合理认知变化；chapter_05-06在陆沉牺牲后情绪崩溃、转而选择“带着他的心意活下去”，并在chapter_07-08延续为长期纪念与投入工作、用声音/摩斯密码象征维系联结，属于事件驱动后的稳定延伸，没有出现无铺垫的反复摇摆。\n2) 陆沉：从chapter_01揭示的核心动机（重生弥补遗憾、以保护苏盏为第一优先、愿意牺牲自己、寡言/失语导致用摩斯交流、克制告白与不让她知情以免拖累）在chapter_02-05始终一致；其“假装系统”“准备物资”“独自承担风险”“最后引走尸群”均是同一动机链条的连续执行，chapter_04面对苏盏接近告白时的退缩与chapter_05的决绝牺牲也前后呼应，没有出现能力/判断力无故崩坏或动机自相矛盾。\n结论：人物性格底色与行为模式在各章节间保持一致，变化点均有明确情境与事件铺垫，因此matched=true。",
+      "description": "人物设定一致性",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_trait_consistency",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "人物设计遵循度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 总体matched=true：两位主角在chapters中的性格特质、核心动机、背景设定与characters.json高度一致，且关系设定（双向暗恋信息差、陆沉以摩斯伪装系统守护、最终以牺牲揭开真相）得到完整呈现。\n\n1) 苏盏（traits/motivation/background）\n- 设计：\"敏感细腻、冷静坚韧、听觉敏锐、慢热共情\"；明面动机\"末世活下去等救援\"；暗线动机\"查清系统来源/确认沉默同伴是否安全\"；恐惧\"失去听觉\"；误解\"以为摩斯=系统提示、以为陆沉是陌生队友\"。\n- 实际：\n  - 听觉敏锐与背景（后天失明、听力超常）持续驱动行为：chapter_01通过声音判断危险、翻译摩斯；chapter_02-03反复承担\"听外面动静/判断尸群\"的核心职责。\n  - 冷静坚韧：多次在尸群压境时执行录音诱饵（chapter_02大尸群、chapter_05两千只逼近仍完成调试/播放）；并能在极端恐惧中配合陆沉的安排。\n  - 敏感细腻/慢热共情：对陆沉伤疤、受伤强烈心疼并照料（chapter_03、chapter_05）；对\"松木香\"等细节敏感（chapter_02、chapter_04）。\n  - 暗线动机与误解：前期确实把耳机当\"系统\"（chapter_01-03多次称呼系统）；并逐步产生怀疑、验证（chapter_04摘耳机做实验），符合\"弄清背后是谁\"的方向。\n  - secret_fear（失去听觉）的直接表达在正文中相对少：更多强调\"看不见\"的弱势与被拖累担忧（chapter_01），但整体仍围绕听觉生存能力展开，不构成人设偏离，只是该恐惧点未被强烈反复点名。\n\n2) 陆沉（traits/motivation/background）\n- 设计：\"沉默寡言、行动力强、隐忍深情、观察力敏锐\"；明面动机\"保护苏盏、引开尸群让她逃生\"；暗线动机\"弥补前世遗憾/把告白送到她手里\"；背景\"前特种部队狙击手、重生者、创伤性失声\"；误解\"以为她不认识自己\"；隐藏关联\"前世为救她失声并提前三个月布局\"。\n- 实际：\n  - 沉默寡言/创伤性失声：全程基本不口头说话，以摩斯/动作沟通（chapter_01起确立，后续延续）。\n  - 行动力强+狙击手能力：加固门窗、外出找物资、布置音响诱饵、清理路线等（chapter_01-03、chapter_05）；遇险反应干脆。\n  - 隐忍深情：不承认捐赠者身份、压抑告白冲动（chapter_02、chapter_04）；把最好资源和安全留给苏盏；最终实施牺牲计划（chapter_05）完全契合\"保护她/引开尸群\"。\n  - 观察力敏锐：对她喜好、习惯、身体状况的细致掌握贯穿（草莓糖、怕冷、香菜过敏等，chapter_02-04），与\"暗恋多年\"和\"提前准备\"强绑定。\n  - 重生与前世遗憾：chapter_01明确交代重生与前世死亡结局；chapter_05录音笔坦白\"前世没能救下\"并解释失声来源、三个月布局，直接对应hidden_connection。\n  - covert_motivation（把告白送到她手里）：录音笔告白与最后塞入口袋（chapter_05）是明确兑现。\n\n3) 关系设定（relationship_dynamics）\n- 设计要求的\"双向暗恋信息差\"与\"摩斯伪装系统默默守护\"、以及\"牺牲最后一刻真相揭开\"在执行中被完整呈现：\n  - 信息差与误解：苏盏长期把他当\"系统队友\"（chapter_01-03），陆沉也认为她不知情并刻意隐瞒。\n  - 依赖与情感升温：苏盏逐渐依赖并心动（chapter_03-04）；陆沉持续克制。\n  - 最终揭示：chapter_05通过录音笔一次性揭开系统伪装、捐赠者、重生与告白，并以牺牲收束，符合设计的关系基调与终局方式。\n\n结论：核心traits（两人均至少3项）、motivation（明暗线）、background（失明/听觉、狙击手/失声/重生）、relationships（双向暗恋信息差+牺牲揭示）在chapters中都有充足体现，无明显“方向相反”的人设偏离；仅苏盏的secret_fear（失去听觉）被弱化但不构成严重不符。",
+      "description": "实际表现符合设计文档",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_design_adherence",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构性逻辑硬伤": {
+      "check_result": "pass",
+      "reason": "共发现4处逻辑问题，但均为fixable类型，本项（structural）无命中",
+      "details": "过滤条件: fixability=structural; 总flaws=4, 命中=0",
+      "flaw_count": 0,
+      "flaws": [],
+      "description": "无结构性逻辑硬伤",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_logic_defect",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "可修复逻辑瑕疵": {
+      "check_result": "fail",
+      "reason": "发现4处fixable类型逻辑问题: 第2章系统预警“大规模尸群至少一千只（3小时后经过）”；第5章再次出现“大规模尸群至少两千只”。两次均被描述为“之前任何一次都要多/关键威胁”，但未交代是不同批次还是同一批次规模修正，造成同一核心威胁的数量口径冲突。; 第5章陆沉从外面将储物间门锁上后出门引尸；第6章苏盏醒来时“门锁不知道什么时候已经打开了”，且无任何机制解释（谁开锁/钥匙/时间锁/自毁锁）。在封闭空间关键门锁状态上前后断链。; 第3章提到“他身上还有前世被丧尸挠过的抗体”；第5章陆沉外出反复受伤、近距离作战并最终引走大群丧尸，但全篇未交代该抗体的能力边界（仅延缓感染/免疫？）以及其对他行动后果的影响，导致能力设定落地不清、与后续高风险行为的结果缺乏规则支撑。; 第6章救援后叙述进入安全区、出版广播剧等，时间推进较快但仍可理解；第8章直接“十年后”且录音棚变为“市级文物保护单位/陆沉纪念馆”，中间缺少关键转变交代（录音棚如何被定级、纪念馆成立流程、谁推动）。虽非绝对矛盾，但属于重要场景身份变化的时序跳跃，解释缺失。",
+      "details": "过滤条件: fixability=fixable; 总flaws=4, 命中=4",
+      "flaw_count": 4,
+      "flaws": [
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_02 → chapter_05",
+          "description": "第2章系统预警“大规模尸群至少一千只（3小时后经过）”；第5章再次出现“大规模尸群至少两千只”。两次均被描述为“之前任何一次都要多/关键威胁”，但未交代是不同批次还是同一批次规模修正，造成同一核心威胁的数量口径冲突。"
+        },
+        {
+          "type": "factual_consistency",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_05 → chapter_06",
+          "description": "第5章陆沉从外面将储物间门锁上后出门引尸；第6章苏盏醒来时“门锁不知道什么时候已经打开了”，且无任何机制解释（谁开锁/钥匙/时间锁/自毁锁）。在封闭空间关键门锁状态上前后断链。"
+        },
+        {
+          "type": "worldbuilding_coherence",
+          "severity": "major",
+          "fixability": "fixable",
+          "location": "chapter_03 → chapter_05",
+          "description": "第3章提到“他身上还有前世被丧尸挠过的抗体”；第5章陆沉外出反复受伤、近距离作战并最终引走大群丧尸，但全篇未交代该抗体的能力边界（仅延缓感染/免疫？）以及其对他行动后果的影响，导致能力设定落地不清、与后续高风险行为的结果缺乏规则支撑。"
+        },
+        {
+          "type": "spatiotemporal_continuity",
+          "severity": "minor",
+          "fixability": "fixable",
+          "location": "chapter_06 → chapter_08",
+          "description": "第6章救援后叙述进入安全区、出版广播剧等，时间推进较快但仍可理解；第8章直接“十年后”且录音棚变为“市级文物保护单位/陆沉纪念馆”，中间缺少关键转变交代（录音棚如何被定级、纪念馆成立流程、谁推动）。虽非绝对矛盾，但属于重要场景身份变化的时序跳跃，解释缺失。"
+        }
+      ],
+      "description": "可修复逻辑瑕疵数量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "fixable_logic_inconsistency",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语言纯净性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 整体叙事语言为中文，未出现无意义的中英混杂或日文混用。外语/符号类内容仅在情节合理处出现：如“SOS”作为通用求救信号、蓝牙耳机/摩斯密码等属于约定俗成的技术概念与符号表达，并非炫技式夹杂外语；也不存在大段外语无翻译的情况。因此语言使用纯净且符合业务标准。",
+      "description": "无不合理的多语言混用",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "language_purity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "creative_intent文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/creative_intent.json 存在",
+      "description": "creative_intent.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "characters文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/characters.json 存在",
+      "description": "characters.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "outline文件存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/outline.json 存在",
+      "description": "outline.json必须存在",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "chapters目录存在性": {
+      "check_result": "pass",
+      "reason": "文件存在",
+      "details": "文件 workspace/chapters/ 存在",
+      "description": "chapters/目录必须存在且有章节文件",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "output_completeness",
+      "is_critical": true
+    },
+    "情节推进": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 整体合格：8章均有持续的外部事件驱动与明确的时间推进，且事件占比明显≥40%，对话/内心独白未超过70%。\n\n事件数量与密度（举例）：\n- 第1章：苏盏醒来发现环境异变→门外丧尸冲撞→通过摩斯指令躲避并取物资→加固门窗→揭示“系统/队友”设定与陆沉重生背景（多事件推进）。\n- 第2章：执行“人声诱饵”计划（录制/连接外置音响）→丧尸逼门→按指令播放引走尸群→时间跳转“接下来几天”多次外出搜集与任务循环→再遇“千尸”并成功引走（多次事件+节奏升级）。\n- 第3章：苏盏受伤处理→发现陆沉喉咙伤疤信息→陆沉外出被追、苏盏开音响救援→包扎与外出风险上升（冲突与行动明确）。\n- 第4章：苏盏通过摘耳机等试探动作确认“系统即陆沉”→关系推进与心理转折（有行动与信息揭示）。\n- 第5章：物资告急（压力源）→陆沉重伤归来→两千尸群来袭、墙体裂缝→执行诱饵但部分未走→陆沉锁门独自引走丧尸并留录音告白（关键高潮与重大转折）。\n- 第6章：储物间过夜→次日救援抵达并撤离→安全区安置与开始创作传播（时间/空间推进明显）。\n- 第7-8章：在安全区发现笔记本真相（信息事件）→职业与生活重建、纪念馆探访（时间跨度10年，空间多次变化）。\n\n内容占比分析：\n- 大量篇幅用于“录制诱饵、播放引尸、外出搜集、受伤包扎、加固、尸群逼近、牺牲与救援”等可验证的外部行动与冲突；情感描写与独白主要服务于事件动机与转折，不是纯站桩聊天。\n\n推进节奏与逻辑：\n- 时间从爆发首日推进到半个月后、再到安全区重建、最后跳至十年后；空间从录音棚内部/街区到安全区与纪念馆；事件之间逻辑链清晰（尸群压力→诱饵策略→物资与风险升级→牺牲换取救援→余波与重建）。",
+      "description": "章节情节推进质量",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "plot_progression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "完整叙事文本": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 8个章节均为连贯的小说正文形态：有明确场景（录音棚、门外尸群、安全区/纪念馆等）、人物动作细节（摸索设备、加固门窗、包扎伤口、锁储物间门等）、心理活动与叙事推进，并穿插完整对话/交流（含摩斯密码形式的对话）。未出现“核心事件/关键场景/情感基调/本章悬念/字数预估”等大纲式结构标题，也未使用要点列举（- 条目）或流程图式“→”罗列事件；不存在作者创作规划元数据暴露。整体属于可直接给读者阅读的章节正文，而非创作大纲。",
+      "description": "章节内容必须是完整正文而非大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "full_narrative_content",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "反复结局": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 共8个文件，最后一个文件为chapter_08.md。逐章扫描全书级结局标记：chapter_01.md~chapter_07.md中未出现“全文完/全书完/完结/（完）/【完】/THE END/后记/尾声/终章”等全书结局标记（仅有正常章节标题与正文内容）。chapter_08.md末尾出现“全文完。”，该全书结局标记只出现在最后一个文件中，未在任何非最后文件中出现，因此不存在“中途全文完后又续写/多次中途收尾”的反复结局问题，判定合格。",
+      "description": "不能出现多次结局标记（全文完/全书完/后记）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "repeated_endings",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "workspace文件规范": {
+      "check_result": "pass",
+      "reason": "workspace中所有文件均在白名单内",
+      "details": "白名单: ['creative_intent.json', 'characters.json', 'outline.json', 'writing_log.md', 'chapters/', '.hitl_context.json']",
+      "description": "workspace中不能有白名单之外的文件",
+      "check_type": "file_whitelist_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "workspace_file_compliance",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "叙事调性匹配": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 题材/应有调性：creative_intent.json给出的主配方是“丧尸末世+重生信息差+牺牲献祭”，reaction_strength=↘（虐心向BE美学）。因此叙事调性应偏“沉重、压抑、克制中带情感张力”，在末世威胁与生死抉择上保持紧迫感，同时允许少量温情作为反差铺垫。\n\n实际文笔特征与证据：\n1) 末世压迫感与紧张节奏基本在线：开篇即用听觉细节和危险逼近制造压迫与悬疑式紧张——如第一章“只有那低吼声越来越近……指甲挠在金属门上的刺耳刮擦声，就在门外”“厚重的金属门被撞得晃了晃”，并用“短句+拟声+动作反应”推动节奏；第二章、第五章的“尸群至少一千/两千只”“门锁咯吱作响”“外墙裂缝灰尘簌簌往下掉”等，都维持了末日生存的危机底色，没有把丧尸威胁写成背景板。\n2) 虐心向的核心表达（信息差+守护+牺牲）以“克制的隐瞒”与“爆发式揭示”来完成：陆沉长期以“系统”伪装，通过摩斯码沟通，情绪压住不直说，符合虐向的“欲言又止/压抑张力”；在第五章牺牲节点集中爆发，录音笔告白把前世、失声原因、重生动机一次性揭开——“前世我没能保护好你……我的喉咙是前世为了救你被丧尸挠坏的……我只能假装系统……等下我会出去引走剩下的丧尸……苏盏，我爱你”，形成典型虐文的情绪塌陷点。\n3) 文风整体偏情感细腻，但并未严重跑成“甜宠轻喜”：确实存在较多温柔互动与甜味意象（草莓糖、摸头、暖水袋等），例如第三章“他敲的那个‘好’字……像羽毛挠在心上”、第四章“你耳朵红了哎，是不是害羞了？”这些更接近言情笔触；但它们多数作为“末日高压下的短暂喘息/反差铺垫”，并服务于后续牺牲虐点的放大，而不是让整体氛围变轻快。\n\n可能的偏离点（但未到不匹配程度）：后半段（第6-8章）进入悼念与余生叙述，抒情句和“风/阳光/余声陪伴”的象征性表达显著增多，如第六章“他变成了风，变成了阳光……会一直陪着她”，第八章整体偏散文化回望。这会削弱“末世紧迫”但并不违背“虐心BE余温”的目标（属于BE余韵段落）。\n\n结论：整体叙事调性与“虐心向末世牺牲BE”题材基本匹配——危机感与牺牲抉择是主底色，情感描写虽浓但主要用于制造与放大虐点；因此 matched=true。",
+      "description": "文笔风格必须与题材类型匹配",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_tone_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "后期章节跑偏": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: chapters共8章，后1/3（chapter_06~08）仍为故事叙事与结局/后日谈展开：第6章救援与安置点生活、第7章通过遗物笔记本补全真相并推进人物命运、第8章十年后回访纪念馆收束主题，均为剧情内容（人物、场景、事件、情绪推进），未出现作者视角创作感想、读者互动/征集、番外预告、角色问答等非正文跑偏内容。章节长度整体保持在相近量级，后期未出现几十到几百字的异常萎缩或“写不动了/全书完敷衍”式极短章节；第8章为时间跳跃后的收尾章但仍是完整叙事，不构成跑偏。综合判断：符合该业务标准。",
+      "description": "后期章节不能跑偏写非正文内容（作者感想、读者互动、番外预告等）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "late_stage_digression",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色大纲规划完整性": {
+      "check_result": "fail",
+      "reason": "部分设计角色未在大纲中规划（配角: 老周）",
+      "details": "主角 2/2: 苏盏, 陆沉; 配角 0/1: 无; 配角缺失: 老周",
+      "description": "设计的角色必须在大纲中规划",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_outline",
+      "is_critical": true
+    },
+    "角色正文出场完整性": {
+      "check_result": "pass",
+      "reason": "所有设计角色都在正文中出现",
+      "details": "在8个章节中检查; 主角 2/2: 苏盏, 陆沉; 配角 1/1: 老周",
+      "description": "设计的角色必须在正文中出现",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "data_consistency",
+      "subcategory_id": "character_presence_in_chapters",
+      "is_critical": true
+    },
+    "writing_log文件创建": {
+      "check_result": "fail",
+      "reason": "文件不存在",
+      "details": "文件 workspace/writing_log.md 不存在",
+      "description": "必须创建writing_log.md记录创作进度",
+      "check_type": "entity_attribute_equals",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_creation",
+      "is_critical": true
+    },
+    "writing_log文件读取": {
+      "check_result": "fail",
+      "reason": "工具未被调用或参数不匹配",
+      "details": "工具 'novel_writing_service__read_file' 匹配调用 0 次，期望 ≥1",
+      "description": "必须读取writing_log.md了解前文内容",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "memory_management",
+      "subcategory_id": "log_file_usage",
+      "is_critical": true
+    },
+    "大纲执行忠实度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 整体主线与多数关键事件基本按大纲推进（第1-5章与act_one/act_two的core_event与turning_point均有体现：苏盏醒来+摩斯提示、误认系统、合作音响诱饵、松木香与捐赠者线索、物资告急与陆沉外出精准避险、尸群大规模围攻导致必须抉择等），但在act_three出现严重偏离：\n1) 【章节/事件错位与缺失】大纲act_three第6章core_event要求‘丧尸攻破前一晚陆沉用摩斯告知明早救援、让苏盏别开门、并把“提前录好告白的录音笔”放进她口袋’，而实际第6章已是‘陆沉已在第5章开门引走尸群并牺牲后，苏盏被救援接走’的后续；大纲第6章“最后一夜”的关键事件在对应章节中未发生，属于关键转折/关键事件缺失与章节内容大幅错位。\n2) 【结局方向偏离】大纲act_three第8章core_event是‘救援按时赶到，苏盏活下来，每年回录音棚用设备给他配故事，留“带余温的BE余韵”’，而实际从第6章起就大幅扩写为：被救后获得新设备、把故事卖版权做广播剧、长期在安全区/重建后成为顶尖配音演员、录音棚改为“纪念馆”、十年后回访等。虽然陆沉死亡这一BE核心未变，但结局落点与叙事收束方式已不再是大纲设定的“余声式收尾”，而是转向‘事业线+长期纪念叙事’的大结局形态，属于结局实现方式与收束重心显著偏离。\n因此在“按章节对照大纲core_event是否在对应章节体现”的底线要求上未达标，判定matched=false。",
+      "description": "实际章节内容必须忠实于自己设计的大纲",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_execution_fidelity",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "角色语言辨识度": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 未达“优秀（对话有明显风格差异）”标准，主要问题是主要角色对话高度同质化且依赖同一套话术模板。\n\n1) 主要角色对话风格区分不足（同质化）\n- 主要“说话者”基本只有两类：苏盏（口语化、情绪表达）与“系统/摩斯提示”（短句指令体）。但文本中“系统”的台词本质上是陆沉代发，导致陆沉几乎没有独立的语言风格可辨识，读者盲测时只能分出“苏盏 vs 指令提示音”，很难仅凭语言判断“系统”和“陆沉”的人格差异。\n- 陆沉作为主要角色，大量交流通过同一种“短促、功能性、去个性化”的摩斯指令实现（如“蹲下”“别说话”“放”“别慌”“去调试…”），这更像统一的任务播报模板，而非角色化表达。\n\n2) 共享话术模板明显（shared_template）\n- 反复出现固定句式/功能：\n  - 苏盏高频模式：连续提问 + 情绪化求确认/依赖（“你是谁？…怎么办？…你别丢下我…”），整体语气从头到尾差异不大。\n  - 系统/陆沉高频模式：简短指令+安抚承诺（“别慌”“我会保护你”“我有办法”“你待在…不要出来”）。\n- 这些模板在多章重复使用，台词互换后违和感不强：将“系统”提示换成“陆沉写字/敲字”或反之，阅读体验几乎一致，体现“换个说话者名字也不违和”的同质化特征。\n\n3) 跨角色台词克隆/镜像（cross_character_clone倾向）\n- “系统”与陆沉的表达在揭示真相前后并未形成风格跃迁：真相揭示后仍以同类短句/安抚语气为主（例如“不会的，我会一直在”“他一定会很开心”“躲好，别出来，我爱你”），缺少陆沉作为“人”的独特措辞、口头禅、思维链条外化等语言特征。\n\n综上：文本能区分“女主口语叙述/提问”与“提示音指令体”，但未达到业务标准强调的“不同角色对话有可辨识的语言风格差异（遮住角色名仍可识别说话者）”，尤其陆沉缺少独立可辨识的对话风格，因此判定 matched=false。",
+      "description": "不同角色对话必须有可辨识的语言风格差异",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "dialogue_character_distinction",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "叙事密度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 整体叙事密度高，场景/感官/动作/心理四维覆盖充分，关键段落多用可感知细节推动情绪与信息。\n\n1）叙事密度（场景+感官）明显充足：开篇即用触感、嗅觉、听觉构建盲女视角的空间与危机氛围，如“后颈贴着冰凉的水泥地，消毒水混着灰尘的味道…指尖触到满地碎玻璃”“指甲挠在金属门上的刺耳刮擦声…震得地面都在发颤”，后续也持续用“雨打在窗户上噼里啪啦”“风吹进来，带着硝烟和血腥味”等维持画面感与临场感。\n\n2）动作细节具体，非概括流水：大量动作被写出方式与力度（“轻轻按在她的肩膀上”“拉开枪栓，轻微的咔哒声”“把边角压好，怕她漏风”“指尖在她手心里敲”），使人物关系与紧张感通过行为自然呈现。\n\n3）心理层次充足，且与外部细节互相咬合：陆沉的“重生记忆—克制—计划—牺牲”的心理链条贯穿，苏盏从恐惧到依赖再到识破“系统”的转折也有连续内心活动支撑（如“她越来越依赖这个沉默的队友了”“这个念头一冒出来…压不下去了，她决定试一试”）。\n\n4）Show为主但存在一定Tell堆叠：优点是多处用身体反应/动作承载情绪（“心跳瞬间飙到嗓子眼”“指节发白”“眼眶突然就红了”“腿一软差点坐到地上”）；不足是中后段（尤其chapter_06-08与chapter_07部分）出现较多总结式抒情与结论句，偏Tell/抒情旁白，例如“她终于想通了所有的事情。哪里有什么全知全能的系统啊…从一开始就是他。”以及“虽然他不在了，但是他的爱…一直都在”等段落，情绪传达更依赖直接陈述而非新场景展示。\n\n综合判断：8章整体以高密度场景推进为主，关键情绪节点（危机、识破、告白、牺牲）大多有可视化细节支撑，虽然后期抒情总结偏多导致Show/Tell变为混合，但仍达到“叙事层次丰富、有画面感”的优秀线。",
+      "description": "章节叙事应有足够的场景描写、感官细节和心理活动，情感传达以Show为主",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "narrative_density",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "智斗逻辑合理性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 适用：文本包含明确的“信息传递/身份隐藏/试探验证”的推理与对抗（摩斯密码指令、‘系统’真相、诱饵策略）。\n\n1) 摩斯密码指令链（chapter_01-02）：线索→结论链成立。苏盏识别“滴答=摩斯”，且能即时翻译出“蹲下/别说话/向左走三步拿面包”等指令并验证成功（避开门外丧尸、找到物资）。该推理依赖角色设定（辅修密码学+听力敏锐），不属于无推理盲猜。\n\n2) ‘系统’真相的推理与验证（chapter_04）：线索铺垫充分（松木香、陆沉对录音棚/她习惯的熟悉、提示过于人性化）。苏盏采用可验证的实验：摘下耳机后制造“踢被子/弄掉棒棒糖”的事件，观察到“无耳机提示但陆沉立刻处理”，从而推断“提示源不是系统而是陆沉”。这是典型的假设—检验—结论链条，逻辑自洽，非线索与答案断裂。\n\n3) 诱饵策略与攻防逻辑（chapter_02/05）：策略因果关系清晰：丧尸依赖听觉→录制大声人声→外置音响远距离播放→尸群转移；当‘还有一部分未被引走’时也符合群体行为的不确定性，没有强行“必定全走”的降智。最终陆沉用“开门+枪声+自身移动”作为更强声源/目标吸引剩余尸群，属于在既定规则下的升级策略，而不是暴力破解绕过既定谜题（因为核心挑战是如何转移尸群注意力，他的行动仍在同一机制内）。\n\n整体未出现：连续盲猜、假推理链、线索与答案断裂、对手降智配合等崩坏类型；核心谜题（‘系统’身份与摩斯沟通）均能回溯到前文线索并自洽。",
+      "description": "谜题/智斗的推理逻辑必须自洽",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "puzzle_logic_validity",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "题材契合度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 【配方】D21“为亲人牺牲” + Y轴：重生/穿越 + 双向暗恋 + 系统流（误会）。\n\n【题材精致度：达标且完成度高】\n1) “系统流”不是贴标签：将“摩斯密码→系统提示音”的核心误会贯穿前半段全部互动机制（任务发布、安抚、资源提示、战术指令），并在第4章开始铺垫怀疑、第5章用录音笔告白实现真相揭示，误会本身推动情节节奏与情感递进，属于规则/机制驱动的叙事，而非只喊“有系统”。\n\n2) “重生优势”有转化为剧情博弈：陆沉的重生不是一句背景交代，而是具体落实为三个月前的物资储备、门窗改装、音响方案、人声诱饵战术、对尸群路线的预判与清理救援路线等一系列布局；并且这些布局与“不能说话/只能伪装系统”的表达限制强绑定，让重生的能力优势转化为可见行动与代价。\n\n3) “双向暗恋”有层次、记忆点强：从依赖/安全感（第1-2章）→日常照护与微妙试探（棒棒糖、暖水袋、摸喉疤、发圈、告白台词）→苏盏情感自觉与确认（第3-4章）→以为“能一起去安全区”的希望抬升（第5章）→真相与牺牲瞬间坠落（第5章末），甜与虐的转换有明确阶段推进，不是流水线撒糖。\n\n4) X轴“牺牲”落点精准且有“余温BE”化学反应：牺牲不是突兀强行刀，而是与“失语（前世叫破喉咙）”“重生补偿”“系统误会的信息差”共同累积到不可逆的选择：他锁门、塞录音笔、开门引尸群，随后救援到达与遗物（狙击枪缠发圈、录音笔、笔记本）形成余温回响；结局延伸到安全区与十年后纪念馆，强化“遗憾但温热”的审美目标。\n\n【融合度（化学反应）：强】\n- 系统流（误会）= 失语表达限制的解决方案；\n- 重生 = 提供“系统式指令/任务”的合理来源与前置筹备；\n- 双向暗恋 = 误会信息差的情感增幅器；\n- 牺牲 = 在真相揭示后把所有前置甜与日常照护反向转化为更强烈的代价与遗憾。\n这些标签不是并列拼接，而是互为因果链条。\n\n【小瑕疵但不影响优秀判定】\n- 丧尸威胁在中段多次被“人声诱饵”稳定解决，重复感略有出现；但第5章“仍有部分不被引走、墙裂门崩”的失控升级兜住了风险与压迫感。\n\n综合来看，本作对“末世困境 + 系统误会机制 + 重生补偿布局 + 暗恋信息差 + D21牺牲落点”的完成度高、记忆点明确，符合优秀标准。",
+      "description": "题材特征精致度和X-Y轴化学反应效果",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "genre_fit",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "剧情节奏合理性": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 情绪曲线虽有起伏（开篇高压→中段多次小危机→第5章大危机→牺牲/救援→余波），但峰值与关键转折来得偏晚且过于集中：1-4章的紧张点多为同构重复（引尸群方案多次复用），缺少强度递进的新信息/新代价，导致中段节奏平滑偏拖；第5章后半突然同时推进“物资线、超大尸群、真相揭露、告白、牺牲”形成赶场式堆叠，高潮群落挤压在后段，读者感受容易从‘慢热’直接跳到‘连环爆点’；第6-8章又进入持续抒情与后日谈扩展，情绪回落时间过长，削弱高潮余韵的干脆收束感。总体不符合‘层次递进、高潮醒目且分布合理、不过度前期铺垫/不过度后期压缩’的优秀节奏标准。",
+      "description": "高潮低谷分布合理、情绪曲线有层次感",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "pacing_rationality_advanced",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "钩子设计": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 整体符合“优秀钩子”标准：关键转折处悬念设计具体、有信息差，并且能强驱动继续阅读。\n\n1) 章节结尾普遍有有效钩子而非平铺收束：\n- ch1 结尾揭示“系统绑定成功”+“队友失语战斗力满级”，同时又埋下反向信息差：读者已知“系统存在”，但不知道其真实机制与来源；紧接着又抛出陆沉“重生且系统是借口”的更大信息差，强推动读者继续。\n- ch2 结尾明确抛出未来行动钩子：“还有时间……等救援来了，他就把录音笔给她”，读者会追问录音笔内容与送出时机（具体问题而非泛泛‘危险’）。\n- ch4 结尾以“明天最后一波尸群+录音笔告白”形成倒计时式行动悬念与情感悬念叠加。\n- ch5 结尾“把她锁进储物间+‘我爱你’+录音笔完整真相放出”是强转折，但仍保留后续信息差：陆沉是否能活、苏盏如何被救、救援是否如期到，推动进入ch6。\n\n2) 钩子类型多样且与主线强相关：包含身份真相钩子（系统真假/捐赠者是谁/重生缘由）、行动悬念钩子（尸群规模升级、门墙将破、是否能引开、是否能等到救援）、情感钩子（告白录音笔、牺牲抉择）。没有出现连续多章无钩子的情况。\n\n3) 不是空洞模板钩子：多数悬念都具体到“录音笔里是什么”“系统到底是谁”“明天两千尸群如何处理”“陆沉为何失语/是否送过设备”等可验证的问题。\n\n4) 末段收尾章节（ch6-8）悬念减少属容错范围：后3章偏情感收束与余韵回响，不再强设新悬念，符合标准允许的收尾特征。",
+      "description": "关键转折处有有效的悬念钩子设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "hook_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "意象系统": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 存在清晰的贯穿性核心意象系统，且意象在不同情节阶段发生明确的意义变奏：滴答声从指令到告白再到余声回响；录音从诱饵工具到遗书与作品化延续；松木香与草莓糖从日常照护到身份线索与纪念物。比喻/象征与主题强绑定（失语者用密码‘说话’、配音职业与末日声诱策略同构），并非可随意替换到其他题材的通用修辞，因此达到优秀标准。",
+      "description": "核心意象贯穿全文并发生意义变奏",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "imagery_system",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "情感弧线层次": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 主角：苏盏。其情感弧线具备多层递进，且关键转折均由具体事件触发，不是无缘由跳变或同义词堆叠。\n\n可辨识的情感层次（≥4层，且性质不同）：\n1) 惊恐/求生焦虑：醒来发现末日环境、门外丧尸撞门（chapter_01）。\n2) 获得安全感与希望：系统/队友“我会保护你”、陆沉加固门窗并照顾她（chapter_01-02）。\n3) 依赖与信任加深：多次成功执行“人声诱饵”计划、陆沉稳定协作并带回她喜欢的物品（chapter_02-03）。\n4) 心疼与心动：发现陆沉喉咙伤疤、他用摩斯回应“好”，她产生“喜欢上他”的自觉（chapter_03）。\n5) 怀疑与探寻真相：松木香触发对匿名捐赠者的联想；摘耳机试探后确认“系统=陆沉”（chapter_04）。\n6) 恐惧失去与情感爆发：做噩梦/害怕他离开而抱住他；随后在大尸潮中被强行锁进储物间（chapter_04-05）。\n7) 崩溃与绝望：听到他出门引尸、播放告白录音确认真相与牺牲（chapter_05）。\n8) 哀伤后的承诺/带着他活下去的坚定：最后一夜的反复回忆→救援到来→以“我会好好活下去”完成情感落点（chapter_06），后续章节延续为长期哀悼中的平静与纪念（chapter_07-08）。\n\n事件驱动的关键转折示例：\n- 恐惧→安全感：门外丧尸威胁+“我会保护你”的摩斯回应与实际保护行为。\n- 信任/依赖加深：人声诱饵成功引开尸群、陆沉屡次带回“定制化”物品并稳定协作。\n- 心动产生：触到喉咙伤疤得知失语原因、被温柔照料与摩斯互动的亲密感。\n- 怀疑→确认真相：松木香联想+摘耳机后不再有提示、但陆沉仍即时照顾她。\n- 恐惧失去→崩溃绝望：大尸潮、陆沉锁门离开并留下“我爱你”与录音笔告白。\n- 绝望→坚定：救援到来、看到遗物与血迹，形成“带着他的那一份活下去”的明确情感归宿。\n\n整体方向感明确：从求生恐惧与被动依赖，递进到主动情感认知（喜欢/确认）、再到失去后的哀悼与人生承诺，弧线持续朝“理解其爱与牺牲并继续活下去”的终点推进。",
+      "description": "主角情感发展有多层递进变化",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_gradient",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "语义重复检测": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 存在≥3处明显的语义级重复，且主要集中在后半段对同一结论/情感的反复确认与复盘（系统真相、陆沉牺牲与安排、苏盏‘会好好活’的誓言），多章之间新增信息有限，阅读体验容易产生‘在原地打转’。其中部分可视为哀悼抒情的有意重复，但其出现频率跨越chapter_04-07连续强化同一核心结论，已超过容错阈值，因此判定不符合标准（matched=false）。",
+      "description": "不能出现大量语义级别的内容重复（P6级）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "semantic_redundancy",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "结构功能性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 该文本并非机械按时间线堆叠事件，而是有明确的结构装置与主题同构：1）核心叙事驱动是“系统提示音=摩斯密码=男主”，这种信息差不是单一情节梗，而是贯穿章节编排的组织原则，直到chapter_05用录音笔完成结构性翻转，读者对前文所有‘滴答指令’获得重新解释，结构承担了主题意义；2）耳机滴答声、录音笔告白、松木香等意象被反复召回并变奏，形成结构记忆点，使读者对‘故事怎么讲’有强烈印象；3）结尾部分（chapter_06-08）采用后日谈与时间跳跃，将“告白被延迟听见/爱以余声存在”的主题进行结构化外化（广播剧、纪念馆、每年回访），属于有明确叙事意图的收束方式。整体满足结构功能性要求。",
+      "description": "叙事结构服务于主题表达（短篇尤重）",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "structural_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "角色命名质量": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了9个文件; LLM评估: 两位主角命名整体落在LLM常见“好听现代名”区间：男主“陆沉”直接命中黑名单且带明显性格标签化（沉默/沉重），女主“苏盏”使用高频偏好姓“苏”，名字虽与“灯盏/余光/录音棚”等意象可产生联想，但这种联想更偏直观场景贴合，缺少明确的文化出处或更隐性的命运共振机关。角色数量不多，整体差异化也有限（一个通用美名+一个黑名单名+一个泛称）。因此未达“优秀命名（matched=true）”标准。",
+      "description": "角色命名有文化深度、辨识度和角色-命运共振",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_naming_quality",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "短篇字数": {
+      "check_result": "fail",
+      "reason": "字数不符合要求",
+      "details": "总字数 24284 不在范围 [27000, 33000] 内; 共8个文件（按章节顺序排列）: chapter_01.md, chapter_02.md, chapter_03.md, chapter_04.md, chapter_05.md, chapter_06.md, chapter_07.md, chapter_08.md; 最后一个文件是 chapter_08.md",
+      "description": "总字数应在27000-33000之间（基于query要求30000，±10%浮动）",
+      "check_type": "semantic_check",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "range_constraint",
+      "is_critical": true
+    },
+    "情感交付虐心": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了8个文件; LLM评估: 整体情感基调明确为虐心向，且核心虐点贯穿主线而非点缀。关键证据：1）主角深度情感困境与爱而不得：陆沉暗恋三年并重生只为救苏盏，却一直隐瞒身份、以“系统”交流（ch01-04），形成长期压抑与无法坦白的情感张力；2）不可调和的矛盾与被迫牺牲：尸群来袭时陆沉必须开门引走丧尸、把苏盏反锁储物间，留下“我爱你”并赴死（ch05），这是典型“被迫分离+牺牲”虐点；3）悲剧氛围延续与读者心痛体验：ch06-07集中描写苏盏在储物间痛哭、反复播放告白录音、发现笔记本记录“我爱你两辈子都是”，并在安全区长期以遗物与日记维系思念，悲伤余韵持续；4）非‘假虐’：冲突不止于误会吵架，而是生存危机下的生死取舍、用命换她活路，触及人物底线与核心价值（“只要她活下去”）。虽然后期（ch08）有十年后重建与纪念馆、她‘过得很好’的疗愈收束，但建立在牺牲与永别之上，属于虐后余温，并不改变主线的虐心定位。",
+      "description": "实际内容必须是虐心向",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "emotional_delivery_match",
+      "quality_tier": "basic",
+      "is_critical": true
+    },
+    "读取感情线写作指南": {
+      "check_result": "skip",
+      "reason": "环境中不存在该文件（skip_if_file_not_exists）",
+      "details": "文件 data_pools/skills/ROMANCE_WRITING_GUIDE.md 在当前环境中不存在，跳过此检查项",
+      "description": "涉及感情线时必须读取ROMANCE_WRITING_GUIDE.md（感情线写作技巧指南）",
+      "check_type": "tool_called_with_params",
+      "dimension_id": "business_rule_compliance",
+      "subcategory_id": "required_skill_reading",
+      "is_critical": false
+    },
+    "角色关系设计张力": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 整体关系有“信息差+牺牲告白”的悬念，但核心矛盾不足以支撑持续叙事张力，因此不达标。\n\n优点（有张力的部分）：\n- 信息不对称明确：陆沉用摩斯密码伪装“生存系统”，苏盏误以为是外部提示；两人对彼此身份/心意存在认知偏差，可制造悬念与阶段性揭露。\n- 关系存在变化空间：从“陌生同伴→依赖→真相揭开/告白”具备状态转移。\n\n关键缺失（导致 fail）：\n- 关系缺少“内在矛盾源”：两位主角的目标几乎完全一致（活下去/保护对方），价值观与立场也高度同向；主要张力依赖隐瞒与误会，而不是双方动机的对抗性。\n- 冲突并非源于双方性格/目标的碰撞，而是由陆沉单方面“隐瞒真相、伪装系统”带来的外部悬念机制；一旦真相揭露，关系很可能直接走向确认与团结，缺乏可持续的结构性冲突。\n- 配角老周仅是资源/线索助力，不提供立场对立或第三方拉扯，难以放大主角关系中的矛盾维度。\n\n结论：目前更像“末世互救+暗恋信息差”的单一模式；要达到业务标准，需要加入至少一条由角色本身驱动的核心对立（例如：陆沉的保护策略与苏盏的自主选择冲突、对‘系统’真相的道德边界争执、是否牺牲他人以保全彼此等），让关系本身持续产生冲突与推进力。",
+      "description": "角色关系设计具有叙事张力，能驱动剧情",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_relationship_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色动机设计深度": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：通过（pass）。两位主角都明确区分了表层动机与更深层的心理驱动，且深层动机能追溯到具体经历与关系设定，不是空泛模板。\n\n1) 苏盏：\n- 表层动机明确且外显：\"在丧尸末世中活下去，等待救援到来\"（生存/求援）。\n- 深层驱动与表层不同：\"弄清耳机里的‘生存系统’背后是谁，确认身边沉默的同伴是否安全\"，核心是对控制感与人际安全感的渴求（不是单纯活下去）。\n- 来源具体：后天失明+仅存听觉高度依赖（secret_fear：\"失去仅存的听觉\"），以及对“系统音/摩斯密码”的误解（misperception）与三年前匿名设备捐赠（hidden_connection）共同构成她执着追查与确认同伴可靠性的现实根基。\n\n2) 陆沉：\n- 表层动机：\"保护苏盏安全，引开尸群让她有机会逃生\"（行动目标清晰）。\n- 深层动机显著不同：\"弥补前世没能救下苏盏的遗憾…\"，本质是自我救赎/补偿与情感告白需求（不只是保护她）。\n- 来源具体：重生者设定+前世救人导致失声（hidden_connection：呼喊被抓伤喉咙失声）+secret_fear（再次目睹她死亡）使其“保护”带有强烈创伤后补偿动因，非泛泛的英雄主义。\n\n补充：supporting角色老周偏功能性，但标准并不要求配角多层动机；relationship_dynamics 进一步强化了两人深层动机（信息差暗恋、摩斯密码伪装系统音）与行为选择的一致性。整体动机设计有层次且与背景强绑定。",
+      "description": "角色动机设计有深度，有表层和深层动机区分",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_motivation_design",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "角色成长弧线设计": {
+      "check_result": "fail",
+      "reason": "内容不符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了2个文件; LLM评估: 未满足“主角有清晰成长/变化弧线并在章节中落地”的业务标准。优点是：两位主角的动机/恐惧清晰（苏盏怕失去听觉、想活下去并追查“系统”；陆沉想赎罪保护并完成告白），且大纲里有明确的“误会—怀疑—真相揭开”的信息推进（第1-2章建立误解与信任，第4-5章产生怀疑，第7章真相揭示）。但关键缺口在于：1）缺少可辨识的内在终点变化——苏盏从“把摩斯密码当系统、对陆沉是陌生人”到“知道真相并悲伤纪念”主要是信息获取与情绪反应，并未呈现价值观/性格/行为模式的稳定转变（例如从依赖系统到自主决策、从封闭到敢于连接、从恐惧黑暗到与恐惧和解等）。第8章的“每年回录音棚配故事”更像外在行为与悼念仪式，未明确其内在成长结论。2）陆沉的弧线更偏“完成既定目标/牺牲”而非变化：他从开篇就坚定守护并计划牺牲，直到结局仍是同一选择，缺少从某种心理状态到另一种状态的转变（如从赎罪执念到学会求生/求助、从自我牺牲到让对方共同选择等）。3）章节的 emotional_tone 虽有递进，但缺少对应的 emotional_shift/冲突点来推动“性格/认知的改变”，更多是在推动揭秘与悲剧效果。因此整体更像‘情节揭示+关系加深’而非清晰的角色成长弧线。若要pass，建议明确至少一个主角的起点信念与终点信念，并在关键章节安排具体选择体现变化（例如苏盏从被动听从“系统”到主动破译并反向指挥/做出冒险选择；或陆沉从单向牺牲到在告白后尝试求生/接受被爱、或在关键节点学会让苏盏参与决策）。",
+      "description": "主角有清晰的成长/变化弧线设计",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "character_arc_design",
+      "quality_tier": "advanced",
+      "is_critical": false
+    },
+    "outline结构完整性": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass。1）章节覆盖：大纲包含1-8章，并明确三幕各自篇幅占比与剧情功能，且第三幕给出结局（BE余韵），从开端到收束完整闭环，未出现“只写前几章就结束”的断档。2）每章有实质内容：每章均提供core_event（事件推进）+ emotional_tone + key_scenes（场景颗粒度），信息量足以支撑扩写，不是只有标题或一句话。3）冲突/转折：各幕均有turning_point（尸群围攻、外墙裂缝、必须抉择；最后引走尸群牺牲；系统误会真相揭示），并在章节层面持续提供悬念与矛盾（物资告急、系统真实性怀疑、陆沉伤疤/失声伏笔、告白录音揭示重生动机），符合“冲突/转折可辨识”。4）结构分层：act_one/act_two/act_three清晰，且每幕有描述+关键章节+转折点，三幕结构明确。小瑕疵：章节数量偏少但属于短篇/中短篇体量可接受；第二幕的外部目标线（例如明确的‘离开录音棚/去往某地’的阶段性任务）可再补一两条以增强中段推进力，但不影响整体达标。",
+      "description": "大纲结构完整，信息密度足以指导写作",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_structure_completeness",
+      "quality_tier": "basic",
+      "is_critical": false
+    },
+    "outline叙事张力": {
+      "check_result": "pass",
+      "reason": "内容符合标准 (LLM语义判断-解耦模式)",
+      "details": "检查了1个文件; LLM评估: 结论：pass（符合“持续叙事张力”业务标准）。\n\n1) 信息落差设计（满足）：第1-2章把“耳机滴答声=末日生存系统”的误会立住，但直到第7章才揭示“并非系统，而是陆沉用摩斯密码传递指令”，且进一步延迟揭晓其失声原因与“重生救她”的真相；第4-5章还通过“松木香/三年前捐赠者/系统知道口味”等线索持续加深谜团与不对称信息，驱动读者想看答案。\n\n2) 张力递进（满足）：外部危机从“录音棚门口丧尸威胁”（第1章）→“小范围合作生存”（第2-3章）→“物资告急+预判尸群”（第5章）→“外墙裂缝/大门松动、录音棚撑不住”（第二幕转折）→“破门在即+牺牲抉择”（第6-7章高潮），整体风险与代价不断升级；情感线也从戒备到依赖、暧昧到告白与生离死别，后段强度明显高于前段。\n\n3) 意外/转折（满足）：核心反转是“系统”真相与陆沉“重生者+失声因救她”的设定在第7章集中揭示；并以“提前录好告白+牺牲引走尸群”的行为转折将情感与行动统一，形成较强的不可逆结局推动（BE余韵）。\n\n风险点/小建议（不影响通过）：第二幕第3章“半个月多次诱饵”略有重复感，若能加入一次计划失败/第三方势力或更具体的代价与伏笔回收节点，会让中段张力更具层次、避免流水账感。总体而言，该大纲具备悬念延迟揭晓、危机升级与关键反转三要素，叙事张力持续。",
+      "description": "大纲有持续的叙事张力和悬念驱动",
+      "check_type": "semantic_check",
+      "dimension_id": "content_quality",
+      "subcategory_id": "outline_narrative_tension",
+      "quality_tier": "advanced",
+      "is_critical": false
+    }
+  },
+  "completion_status": "completed"
+}

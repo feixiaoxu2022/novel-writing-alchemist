@@ -492,6 +492,46 @@ class NWStatisticsAnalyzer:
 
         return result
 
+    def analyze_per_check(self) -> Dict:
+        """逐检查项统计 pass/fail/skip 计数和通过率"""
+        check_stats = defaultdict(lambda: {
+            "check_id": "",
+            "check_name": "",
+            "dimension_id": "",
+            "subcategory_id": "",
+            "quality_tier": "",
+            "pass": 0,
+            "fail": 0,
+            "skip": 0,
+        })
+
+        for sample_id, cr in self.check_results.items():
+            check_details = cr.get("check_details", {})
+            for check_id, detail in check_details.items():
+                s = check_stats[check_id]
+                s["check_id"] = check_id
+                s["check_name"] = detail.get("check_name", detail.get("description", ""))
+                s["dimension_id"] = detail.get("dimension_id", "unknown")
+                s["subcategory_id"] = detail.get("subcategory_id", "unknown")
+                s["quality_tier"] = detail.get("quality_tier", "")
+
+                result = detail.get("check_result", "skip")
+                if result == "pass":
+                    s["pass"] += 1
+                elif result == "fail":
+                    s["fail"] += 1
+                else:
+                    s["skip"] += 1
+
+        result = {}
+        for check_id, s in sorted(check_stats.items()):
+            effective = s["pass"] + s["fail"]
+            s["total"] = effective
+            s["pass_rate"] = round(s["pass"] / effective, 4) if effective > 0 else None
+            result[check_id] = s
+
+        return result
+
     def analyze_by_writing_params(self) -> Dict:
         """按写作参数维度（模式/篇幅/基调）聚合统计"""
         # 按创作模式
@@ -625,6 +665,7 @@ class NWStatisticsAnalyzer:
         overview = self.analyze_overview()
         dimensions = self.analyze_dimensions()
         subcategories = self.analyze_subcategories()
+        per_check = self.analyze_per_check()
         by_writing_params = self.analyze_by_writing_params()
         failure_details = self.extract_failure_details()
 
@@ -643,6 +684,7 @@ class NWStatisticsAnalyzer:
             "overview": overview,
             "dimensions": dimensions,
             "subcategories": subcategories,
+            "per_check": per_check,
             "by_writing_params": by_writing_params,
             "failure_details": failure_details
         }
@@ -762,6 +804,31 @@ class NWStatisticsAnalyzer:
                 for sub_id, stats in sorted(dim_subs.items(), key=lambda x: x[1].get("pass_rate", 0)):
                     pr = stats.get("pass_rate", 0) * 100
                     lines.append(f"| {sub_id} | {stats['total']} | {stats['passed']} | {stats['failed']} | {stats['skipped']} | {pr:.1f}% |")
+                lines.append(f"")
+
+        # -- 逐检查项统计 --
+        per_check = report.get("per_check", {})
+        if per_check:
+            lines.append(f"## 3b. 逐检查项通过率")
+            lines.append(f"")
+            by_dim = defaultdict(list)
+            for check_id, stats in per_check.items():
+                by_dim[stats["dimension_id"]].append((check_id, stats))
+
+            for dim_id in self.DIMENSIONS:
+                checks = by_dim.get(dim_id, [])
+                if not checks:
+                    continue
+                dim_name = self.DIMENSION_NAMES.get(dim_id, dim_id)
+                lines.append(f"### {dim_name}")
+                lines.append(f"")
+                lines.append(f"| 检查项 | 子类 | 层级 | 通过 | 失败 | 跳过 | 通过率 |")
+                lines.append(f"|--------|------|------|------|------|------|--------|")
+                for check_id, s in sorted(checks, key=lambda x: (x[1].get("subcategory_id", ""), x[0])):
+                    pr_str = f"{s['pass_rate']*100:.0f}%" if s['pass_rate'] is not None else "-"
+                    total = s['pass'] + s['fail']
+                    cell = f"{pr_str} ({s['pass']}/{total})" if total > 0 else f"skip({s['skip']})"
+                    lines.append(f"| {check_id} | {s['subcategory_id']} | {s['quality_tier'] or '-'} | {s['pass']} | {s['fail']} | {s['skip']} | {cell} |")
                 lines.append(f"")
 
         # -- 按写作参数统计 --
