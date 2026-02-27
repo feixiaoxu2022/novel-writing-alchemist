@@ -694,6 +694,76 @@ class FileSystemChecker:
                 f"当前仅支持 main_characters_in_outline 和 main_characters_in_chapters"
             )
 
+    @staticmethod
+    def _extract_name_candidates(name: str) -> List[str]:
+        """从角色 name 字段提取所有候选搜索名。
+        
+        策略：按括号（中英文）和斜杠拆分，每个片段 strip 后作为候选。
+        例如：
+          "白礼逊（Edward Pearson）" → ["白礼逊（Edward Pearson）", "白礼逊", "Edward Pearson"]
+          "张麻子 / 约翰·马斯顿 (John Marston)" → [原名, "张麻子", "约翰·马斯顿 (John Marston)", "约翰·马斯顿", "John Marston"]
+          "117（游戏内名：沈夜）" → [原名, "117", "游戏内名：沈夜", "沈夜"]
+          "温既白的母亲（温母）" → [原名, "温既白的母亲", "温母"]
+        任一候选命中即认为该角色出现。
+        """
+        import re
+        candidates = set()
+        candidates.add(name)  # 原始全名始终作为候选
+        
+        # 第一轮：按斜杠拆分
+        slash_parts = re.split(r'\s*/\s*', name)
+        for part in slash_parts:
+            part = part.strip().strip("'\"")
+            if len(part) >= 1:
+                candidates.add(part)
+        
+        # 第二轮：对每个候选，提取括号外和括号内的内容
+        current = list(candidates)
+        for c in current:
+            # 中文括号
+            m = re.match(r'^(.+?)（(.+?)）$', c)
+            if m:
+                outside = m.group(1).strip()
+                inside = m.group(2).strip()
+                if len(outside) >= 1:
+                    candidates.add(outside)
+                if len(inside) >= 1:
+                    candidates.add(inside)
+            # 英文括号
+            m = re.match(r'^(.+?)\((.+?)\)$', c)
+            if m:
+                outside = m.group(1).strip()
+                inside = m.group(2).strip()
+                if len(outside) >= 1:
+                    candidates.add(outside)
+                if len(inside) >= 1:
+                    candidates.add(inside)
+        
+        # 第三轮：处理冒号后的部分（如 "游戏内名：沈夜" → "沈夜"）
+        current = list(candidates)
+        for c in current:
+            if '：' in c:
+                after_colon = c.split('：', 1)[1].strip().rstrip('）)')
+                if len(after_colon) >= 1:
+                    candidates.add(after_colon)
+            if ':' in c:
+                after_colon = c.split(':', 1)[1].strip().rstrip('）)')
+                if len(after_colon) >= 1:
+                    candidates.add(after_colon)
+        
+        # 过滤：去除空字符串和过短候选（单个字符容易误匹配）
+        candidates = [c for c in candidates if len(c) >= 2]
+        
+        return candidates
+
+    @staticmethod
+    def _name_found_in_text(name: str, text: str, extract_fn=None) -> bool:
+        """检查角色名是否在文本中出现（使用候选名匹配）"""
+        if extract_fn is None:
+            extract_fn = FileSystemChecker._extract_name_candidates
+        candidates = extract_fn(name)
+        return any(c in text for c in candidates)
+
     def _check_main_characters_in_outline(self, paths: List[str]) -> Dict:
         """检查设计的角色是否在大纲中规划（包括主角和配角）"""
         # 第一个路径应该是characters.json
@@ -793,11 +863,11 @@ class FileSystemChecker:
             import json
             outline_text = json.dumps(outline_data, ensure_ascii=False)
 
-        # 检查主角是否在大纲中出现
+        # 检查主角是否在大纲中出现（使用候选名匹配）
         main_found = []
         main_missing = []
         for name in main_names:
-            if name in outline_text:
+            if self._name_found_in_text(name, outline_text):
                 main_found.append(name)
             else:
                 main_missing.append(name)
@@ -806,7 +876,7 @@ class FileSystemChecker:
         supporting_found = []
         supporting_missing = []
         for name in supporting_names:
-            if name in outline_text:
+            if self._name_found_in_text(name, outline_text):
                 supporting_found.append(name)
             else:
                 supporting_missing.append(name)
@@ -938,11 +1008,11 @@ class FileSystemChecker:
             result["dependency_failure"] = True
             return result
 
-        # 检查主角是否在章节中出现
+        # 检查主角是否在章节中出现（使用候选名匹配）
         main_found = []
         main_missing = []
         for name in main_names:
-            if name in all_chapters_text:
+            if self._name_found_in_text(name, all_chapters_text):
                 main_found.append(name)
             else:
                 main_missing.append(name)
@@ -951,7 +1021,7 @@ class FileSystemChecker:
         supporting_found = []
         supporting_missing = []
         for name in supporting_names:
-            if name in all_chapters_text:
+            if self._name_found_in_text(name, all_chapters_text):
                 supporting_found.append(name)
             else:
                 supporting_missing.append(name)
