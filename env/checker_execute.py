@@ -2628,6 +2628,17 @@ class SemanticChecker:
             if matched_files:
                 all_matched_files.extend(matched_files)
 
+        # 支持 additional_files 参数：追加额外文件到匹配列表
+        # 用于需要跨多个输出物综合判断的检查项
+        additional_files = params.get("additional_files", [])
+        if additional_files and isinstance(additional_files, list):
+            for af_pattern in additional_files:
+                if af_pattern.endswith('/'):
+                    af_pattern = af_pattern + '*'
+                af_matched = self._glob_files_flexible(af_pattern)
+                if af_matched:
+                    all_matched_files.extend(af_matched)
+
         # word_count_range和P1-P5程序化检查不需要LLM
         if not is_word_count_check and not is_programmatic_check and (not use_llm or not llm_judge_criteria):
             return create_check_item_result(
