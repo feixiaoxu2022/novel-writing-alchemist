@@ -249,9 +249,36 @@ SCRIPT_DIR="${SCRIPT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}"
 SCENARIO_ROOT="${SCENARIO_ROOT:-$SCRIPT_DIR/..}"
 
 # 遍历agent执行结果
-for result_json in "$AGENT_RESULTS_DIR"/*.json; do
+# 优先用 *.json 遍历；如果没有 json 文件，fallback 到 *_env 目录遍历
+shopt -s nullglob
+json_files=("$AGENT_RESULTS_DIR"/*.json)
+shopt -u nullglob
+
+if [ ${#json_files[@]} -gt 0 ]; then
+    # 有 json 文件：从 json 文件名推导 basename 和 env_dir
+    ITERATE_SOURCE="json"
+else
+    # 没有 json 文件：从 _env 目录名推导 basename
+    ITERATE_SOURCE="env_dir"
+    json_files=()
+    shopt -s nullglob
+    for env_d in "$AGENT_RESULTS_DIR"/*_env; do
+        json_files+=("$env_d")
+    done
+    shopt -u nullglob
+fi
+
+for item in "${json_files[@]}"; do
+    if [ "$ITERATE_SOURCE" = "json" ]; then
+        basename=$(basename "$item" .json)
+        result_json="$item"
+    else
+        # 从 _env 目录名去掉 _env 后缀得到 basename
+        basename=$(basename "$item" | sed 's/_env$//')
+        result_json=""
+    fi
+
     # 跳过非agent结果文件
-    basename=$(basename "$result_json" .json)
     if [[ "$basename" == summary_* ]] || [[ "$basename" == temp_* ]] || [[ "$basename" == execution_report ]]; then
         continue
     fi
@@ -364,9 +391,16 @@ for result_json in "$AGENT_RESULTS_DIR"/*.json; do
     CHECKER_DIR="$SCRIPT_DIR/../env"
     cd "$CHECKER_DIR"
 
+    # 确定 python 路径：优先使用 venv（远程需要 litellm 等依赖）
+    PYTHON_BIN="python3"
+    VENV_PYTHON="/home/work/novel_eval/.venv/bin/python3"
+    if [ -x "$VENV_PYTHON" ]; then
+        PYTHON_BIN="$VENV_PYTHON"
+    fi
+
     # 构建checker.py调用命令
     CHECKER_CMD=(
-        python3 checker.py
+        "$PYTHON_BIN" checker.py
         --bench "$temp_bench"
         --result "$result_json_abs"
         --model "$MODEL"
