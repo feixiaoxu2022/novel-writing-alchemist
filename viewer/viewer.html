@@ -1762,9 +1762,52 @@
 
             const messagesHtml = messages.map((msg, index) => {
                 const role = msg.role;
-                const content = msg.content !== undefined ? msg.content : JSON.stringify(msg, null, 2);
-                const preview = getMessagePreview(content);
-                const formattedContent = formatMessageContent(content);
+                const content = msg.content !== undefined ? msg.content : '';
+                const toolCalls = msg.tool_calls || [];
+
+                // Generate preview text
+                let previewText = '';
+                if (content) {
+                    previewText = typeof content === 'string' ? content : JSON.stringify(content);
+                } else if (toolCalls.length > 0) {
+                    const toolNames = toolCalls.map(tc => tc.function?.name || 'unknown').join(', ');
+                    previewText = `🔧 ${toolCalls.length} tool call(s): ${toolNames}`;
+                } else {
+                    previewText = JSON.stringify(msg);
+                }
+                const preview = getMessagePreview(previewText);
+
+                // Format content
+                let contentHtml = '';
+                if (content) {
+                    contentHtml = `<div class="message-text">${formatMessageContent(content)}</div>`;
+                }
+
+                // Format tool calls
+                if (toolCalls.length > 0) {
+                    const toolCallsHtml = toolCalls.map((tc, tcIndex) => {
+                        const functionName = tc.function?.name || 'unknown';
+                        const functionArgs = tc.function?.arguments || '{}';
+                        const toolCallId = tc.id || '';
+                        return `
+                            <div class="tool-call" style="margin-top: 10px; padding: 10px; background: #f8f9fa; border-left: 3px solid #667eea; border-radius: 4px;">
+                                <div style="font-weight: 600; color: #667eea; margin-bottom: 5px;">
+                                    🔧 Tool Call ${tcIndex + 1}: ${escapeHtml(functionName)}
+                                    ${toolCallId ? `<span style="font-size: 11px; color: #999; margin-left: 8px;">(${escapeHtml(toolCallId)})</span>` : ''}
+                                </div>
+                                <div style="font-size: 12px; color: #555;">
+                                    ${highlightJSON(functionArgs)}
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                    contentHtml += toolCallsHtml;
+                }
+
+                // Fallback: if no content and no tool_calls, show full message
+                if (!contentHtml) {
+                    contentHtml = `<div class="message-text">${formatMessageContent(JSON.stringify(msg, null, 2))}</div>`;
+                }
 
                 return `
                     <div class="message ${role}">
@@ -1777,7 +1820,7 @@
                         </div>
                         <div class="message-content" data-index="${index}">
                             <div class="message-content-inner">
-                                <div class="message-text">${formattedContent}</div>
+                                ${contentHtml}
                             </div>
                         </div>
                     </div>
