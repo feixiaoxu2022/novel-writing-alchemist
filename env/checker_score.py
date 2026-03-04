@@ -7,12 +7,15 @@
 输入：execution_result.json（checker_execute的输出）
 输出：check_result.json（含维度分数、质量等级和overall统计）
 
-v3.0变更（基准60分公式）：
-- 内容分 = clamp(0, 100, 60 - gate惩罚 - basic扣分 + advanced加分)
-- Gate fail: 每项 -20分（3项 gate，最多扣60分）
-- Basic fail: 每项 -(60/basic_total)分（basic全fail → 扣60分 → 到0分）
+v3.1变更（修正分层扣分逻辑）：
+- 剩余分 = 60 - gate惩罚
+- 内容分 = clamp(0, 100, 剩余分 - basic扣分 + advanced加分)
+- Gate fail: 每项 -20分（最多扣60分到0）
+- Basic fail: 每项 -(剩余分/basic_total)（从剩余分中按比例扣）
 - Advanced pass: 每项 +(40/adv_total)分（adv全过 → +40分 → 到100分）
 - 总分 = 内容分×0.7 + 流程规范分×0.3
+
+v3.0→v3.1改进：Basic不再从独立的60分池扣分，而是从"Gate扣完后的剩余分"中按比例扣，避免负分
 """
 
 import json
@@ -157,11 +160,15 @@ def calculate_content_quality_score(basic_checks: List[Dict],
     """
     计算content_quality维度的分数（基准60分公式）
 
-    评分逻辑：
-    内容分 = clamp(0, 100, 60 - gate惩罚 - basic扣分 + advanced加分)
-    - Gate fail: 每项 -20分（3项 gate，最多扣60分）
-    - Basic fail: 每项 -(60/basic_total)分（basic全fail → 扣60分 → 到0分）
+    评分逻辑（v3.1 - 修正后的分层扣分）：
+    剩余分 = 60 - gate惩罚
+    内容分 = clamp(0, 100, 剩余分 - basic扣分 + advanced加分)
+
+    - Gate fail: 每项 -20分（最多扣60分到0）
+    - Basic fail: 每项 -(剩余分/basic_total)（从剩余分中扣，不会负分）
     - Advanced pass: 每项 +(40/adv_total)分（adv全过 → +40分 → 到100分）
+
+    改进点：Basic从"Gate扣完后的剩余分"中按比例扣分，而非独立的60分池
 
     Args:
         basic_checks: basic层检查项（含Gate层）
@@ -190,20 +197,25 @@ def calculate_content_quality_score(basic_checks: List[Dict],
     basic_score_info = calculate_dimension_score(non_gate_basic_checks)
     advanced_score_info = calculate_dimension_score(advanced_checks)
 
-    # 计算各层扣分/加分
+    # 计算各层扣分/加分（v3.1: Basic从剩余分中按比例扣）
     gate_penalty = gate_score_info["failed"] * GATE_PENALTY_PER_ITEM
     gate_triggered = gate_score_info["failed"] > 0
 
+    # 剩余分 = 基准分 - Gate惩罚（最低为0）
+    remaining_score = max(0.0, BASE_SCORE - gate_penalty)
+
+    # Basic从剩余分中按比例扣分
     basic_total = basic_score_info["total"]
-    basic_deduction_per_item = BASIC_POOL / basic_total if basic_total > 0 else 0
+    basic_deduction_per_item = remaining_score / basic_total if basic_total > 0 else 0
     basic_deduction = basic_score_info["failed"] * basic_deduction_per_item
 
+    # Advanced加分池仍为固定40分
     adv_total = advanced_score_info["total"]
     adv_bonus_per_item = ADVANCED_POOL / adv_total if adv_total > 0 else 0
     advanced_bonus = advanced_score_info["passed"] * adv_bonus_per_item
 
-    # 总分 = 基准 - gate惩罚 - basic扣分 + advanced加分
-    overall_score = BASE_SCORE - gate_penalty - basic_deduction + advanced_bonus
+    # 总分 = 剩余分 - basic扣分 + advanced加分
+    overall_score = remaining_score - basic_deduction + advanced_bonus
     overall_score = max(0.0, min(100.0, overall_score))
 
     # 确定质量等级
@@ -226,6 +238,7 @@ def calculate_content_quality_score(basic_checks: List[Dict],
         "score_breakdown": {
             "base": BASE_SCORE,
             "gate_penalty": round(-gate_penalty, 2),
+            "remaining_after_gate": round(remaining_score, 2),  # 新增：Gate扣完后剩余分
             "basic_deduction": round(-basic_deduction, 2),
             "advanced_bonus": round(advanced_bonus, 2),
         }
