@@ -69,16 +69,24 @@ elif [[ "$AGENT_MODEL" == ernie5-midtrain ]]; then
     export OPENAI_API_KEY="dummy"
     export OPENAI_BASE_URL="http://10.95.226.225:8466/v1"
     AGENT_MODEL="EB5-0209-A35B-midtrain-128k-chat"
+elif [[ "$AGENT_MODEL" == eb5-flagship-midtrain ]]; then
+    # EB5 旗舰版 Mid-training（8实例，并发256）
+    export OPENAI_API_KEY="dummy"
+    export OPENAI_BASE_URL="http://10.95.240.153:8433/v1"
+    AGENT_MODEL="/root/paddlejob/workspace/eb5_A35B_ckpt_step0"
+    unset https_proxy; unset HTTPS_PROXY
 elif [[ "$AGENT_MODEL" == eb5-full-midtrain ]]; then
-    # EB5 满血版 Mid-training（16实例，选1211端口）
+    # EB5 满血版 Mid-training（16实例，master 10.95.246.228:1211）
     export OPENAI_API_KEY="dummy"
     export OPENAI_BASE_URL="http://10.95.246.17:1211/v1"
+    AGENT_MODEL="/root/paddlejob/workspace/env_run/output/onekey-eb5/onekey_eb5_a67b/safetensor_ckpt_step20520_ema"
     # 内网直连，不走代理
     unset https_proxy; unset HTTPS_PROXY
 elif [[ "$AGENT_MODEL" == eb5-lite-midtrain ]]; then
     # EB5 高效版 Mid-training（8实例，选3211端口）
     export OPENAI_API_KEY="dummy"
     export OPENAI_BASE_URL="http://10.95.240.42:3211/v1"
+    AGENT_MODEL="/root/paddlejob/tmpspace/eb5_A35B_ckpt"
     unset https_proxy; unset HTTPS_PROXY
 elif [[ "$AGENT_MODEL" == glm-creative-midtrain ]]; then
     # GLM 创作增强版 Mid-training（并发100）
