@@ -68,7 +68,40 @@ if [[ "$AGENT_MODEL" == ernie-* ]]; then
 elif [[ "$AGENT_MODEL" == ernie5-midtrain ]]; then
     export OPENAI_API_KEY="dummy"
     export OPENAI_BASE_URL="http://10.95.226.225:8466/v1"
-    AGENT_MODEL="openai/EB5-0209-A35B-midtrain-128k-chat"
+    AGENT_MODEL="EB5-0209-A35B-midtrain-128k-chat"
+elif [[ "$AGENT_MODEL" == eb5-full-midtrain ]]; then
+    # EB5 满血版 Mid-training（16实例，选1211端口）
+    export OPENAI_API_KEY="dummy"
+    export OPENAI_BASE_URL="http://10.95.246.17:1211/v1"
+    # 内网直连，不走代理
+    unset https_proxy; unset HTTPS_PROXY
+elif [[ "$AGENT_MODEL" == eb5-lite-midtrain ]]; then
+    # EB5 高效版 Mid-training（8实例，选3211端口）
+    export OPENAI_API_KEY="dummy"
+    export OPENAI_BASE_URL="http://10.95.240.42:3211/v1"
+    unset https_proxy; unset HTTPS_PROXY
+elif [[ "$AGENT_MODEL" == glm-creative-midtrain ]]; then
+    # GLM 创作增强版 Mid-training（并发100）
+    export OPENAI_API_KEY="dummy"
+    export OPENAI_BASE_URL="http://10.95.232.21:8000/v1"
+    AGENT_MODEL="cw_glm45air_midt2601_decay_step2762"
+    unset https_proxy; unset HTTPS_PROXY
+elif [[ "$AGENT_MODEL" == glm-general-midtrain ]]; then
+    # GLM 综合版 Mid-training（并发100）
+    export OPENAI_API_KEY="dummy"
+    export OPENAI_BASE_URL="http://10.95.235.233:8000/v1"
+    AGENT_MODEL="cw_glm45air_midt2602_decay_step2000"
+    unset https_proxy; unset HTTPS_PROXY
+elif [[ "$AGENT_MODEL" == glm-agent-midtrain ]]; then
+    # GLM Agent Mid-training
+    export OPENAI_API_KEY="dummy"
+    export OPENAI_BASE_URL="http://10.52.97.139:8902/v1"
+    AGENT_MODEL="/root/paddlejob/workspace/env_run/RLHF/GLM_decay_0124/"
+    unset https_proxy; unset HTTPS_PROXY
+elif [[ "$AGENT_MODEL" == infer-ckpt ]]; then
+    export OPENAI_API_KEY="dummy"
+    export OPENAI_BASE_URL="http://10.11.153.127:8091/v1"
+    AGENT_MODEL="infer-abfa7a98a29c4df3"
 elif [[ "$AGENT_MODEL" == glm-* ]]; then
     export OPENAI_API_KEY="fc0dc81d18124abea8da832af681401b.QsiurjETpUArzi4C"
     export OPENAI_BASE_URL="https://open.bigmodel.cn/api/paas/v4"
