@@ -71,43 +71,43 @@ elif [[ "$AGENT_MODEL" == ernie5-midtrain ]]; then
     export OPENAI_BASE_URL="http://10.95.226.225:8466/v1"
     AGENT_MODEL="EB5-0209-A35B-midtrain-128k-chat"
 elif [[ "$AGENT_MODEL" == eb5-flagship-midtrain ]]; then
-    # EB5 旗舰版 Mid-training（8实例，总并发256，4进程均分）
+    # EB5 旗舰版 Mid-training（8实例，MCP服务器并发受限，设4）
     export OPENAI_API_KEY="dummy"
     export OPENAI_BASE_URL="http://10.95.240.153:8433/v1"
-    MAX_CONCURRENCY=64
+    MAX_CONCURRENCY=4
     unset https_proxy; unset HTTPS_PROXY
 elif [[ "$AGENT_MODEL" == eb5-full-midtrain ]]; then
-    # EB5 满血版 Mid-training（16实例，总并发32，4进程均分）
+    # EB5 满血版 Mid-training（16实例，MCP服务器并发受限，设4）
     export OPENAI_API_KEY="dummy"
     export OPENAI_BASE_URL="http://10.95.246.17:1211/v1"
-    MAX_CONCURRENCY=8
+    MAX_CONCURRENCY=4
     unset https_proxy; unset HTTPS_PROXY
 elif [[ "$AGENT_MODEL" == eb5-lite-midtrain ]]; then
-    # EB5 高效版 Mid-training（8实例，总并发256，4进程均分）
+    # EB5 高效版 Mid-training（8实例，MCP服务器并发受限，设4）
     export OPENAI_API_KEY="dummy"
     export OPENAI_BASE_URL="http://10.95.240.42:3211/v1"
-    MAX_CONCURRENCY=64
+    MAX_CONCURRENCY=4
     unset https_proxy; unset HTTPS_PROXY
 elif [[ "$AGENT_MODEL" == glm-creative-midtrain ]]; then
-    # GLM 创作增强版 Mid-training（总并发100，4进程均分）
+    # GLM 创作增强版 Mid-training（MCP服务器并发受限，设4）
     export OPENAI_API_KEY="dummy"
     export OPENAI_BASE_URL="http://10.95.232.21:8000/v1"
     AGENT_MODEL="cw_glm45air_midt2601_decay_step2762"
-    MAX_CONCURRENCY=25
+    MAX_CONCURRENCY=4
     unset https_proxy; unset HTTPS_PROXY
 elif [[ "$AGENT_MODEL" == glm-general-midtrain ]]; then
-    # GLM 综合版 Mid-training（总并发100，4进程均分）
+    # GLM 综合版 Mid-training（MCP服务器并发受限，设4）
     export OPENAI_API_KEY="dummy"
     export OPENAI_BASE_URL="http://10.95.235.233:8000/v1"
     AGENT_MODEL="cw_glm45air_midt2602_decay_step2000"
-    MAX_CONCURRENCY=25
+    MAX_CONCURRENCY=4
     unset https_proxy; unset HTTPS_PROXY
 elif [[ "$AGENT_MODEL" == glm-agent-midtrain ]]; then
-    # GLM Agent Mid-training（总并发128，4进程均分）
+    # GLM Agent Mid-training（MCP服务器并发受限，设4）
     export OPENAI_API_KEY="dummy"
     export OPENAI_BASE_URL="http://10.52.97.139:8902/v1"
     AGENT_MODEL="/root/paddlejob/workspace/env_run/RLHF/GLM_decay_0124/"
-    MAX_CONCURRENCY=32
+    MAX_CONCURRENCY=4
     unset https_proxy; unset HTTPS_PROXY
 elif [[ "$AGENT_MODEL" == infer-ckpt ]]; then
     export OPENAI_API_KEY="dummy"
