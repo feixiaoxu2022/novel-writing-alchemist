@@ -2033,6 +2033,11 @@
                         const imgPath = content.slice('__image__:'.length);
                         const imgUrl = `/api/v3/${state.currentScenario}/sample/${state.currentSample}/image?batch_name=${encodeURIComponent(state.currentBatch)}&model=${encodeURIComponent(state.currentModel)}&file_path=${encodeURIComponent(imgPath)}`;
                         fileViewer.innerHTML = `<img src="${imgUrl}" style="max-width:100%; display:block; margin:0 auto;" alt="${path}">`;
+                    } else if (typeof content === 'string' && content.startsWith('__video__:')) {
+                        // 视频文件：通过媒体 API 展示
+                        const videoPath = content.slice('__video__:'.length);
+                        const videoUrl = `/api/v3/${state.currentScenario}/sample/${state.currentSample}/image?batch_name=${encodeURIComponent(state.currentBatch)}&model=${encodeURIComponent(state.currentModel)}&file_path=${encodeURIComponent(videoPath)}`;
+                        fileViewer.innerHTML = `<video controls style="max-width:100%; display:block; margin:0 auto;" preload="metadata"><source src="${videoUrl}" type="video/mp4">浏览器不支持视频播放</video>`;
                     } else {
                         fileViewer.textContent = content;
                     }

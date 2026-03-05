@@ -396,7 +396,7 @@ class UnifiedViewerHandler(SimpleHTTPRequestHandler):
         })
 
     def handle_get_image(self, scenario_id, batch_name, data_id, model, file_path):
-        """返回图片二进制内容（用于 slides_png 等图片文件）"""
+        """返回图片/视频二进制内容，支持 HTTP Range（视频拖进度条需要）"""
         sc = self._get_scenario(scenario_id)
         if not sc:
             return self.send_json_response({'error': f'Unknown scenario: {scenario_id}'}, 404)
@@ -424,23 +424,49 @@ class UnifiedViewerHandler(SimpleHTTPRequestHandler):
         file_full_path = workspace_dir / file_path
 
         if not file_full_path.exists():
-            return self.send_json_response({'error': 'Image not found'}, 404)
+            return self.send_json_response({'error': 'File not found'}, 404)
 
         suffix = file_full_path.suffix.lower()
-        content_type_map = {'.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.gif': 'image/gif', '.webp': 'image/webp'}
+        content_type_map = {
+            '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg',
+            '.gif': 'image/gif', '.webp': 'image/webp',
+            '.mp4': 'video/mp4', '.webm': 'video/webm',
+        }
         content_type = content_type_map.get(suffix, 'application/octet-stream')
+        file_size = file_full_path.stat().st_size
 
+        # 解析 Range 请求头（浏览器 <video> 需要）
+        range_header = self.headers.get('Range')
         try:
-            with open(file_full_path, 'rb') as f:
-                data = f.read()
-            self.send_response(200)
-            self.send_header('Content-Type', content_type)
-            self.send_header('Content-Length', str(len(data)))
-            self.send_header('Access-Control-Allow-Origin', '*')
-            self.end_headers()
-            self.wfile.write(data)
+            if range_header and range_header.startswith('bytes='):
+                start_str, _, end_str = range_header[6:].partition('-')
+                start = int(start_str) if start_str else 0
+                end = int(end_str) if end_str else file_size - 1
+                end = min(end, file_size - 1)
+                length = end - start + 1
+                with open(file_full_path, 'rb') as f:
+                    f.seek(start)
+                    data = f.read(length)
+                self.send_response(206)
+                self.send_header('Content-Type', content_type)
+                self.send_header('Content-Range', f'bytes {start}-{end}/{file_size}')
+                self.send_header('Content-Length', str(length))
+                self.send_header('Accept-Ranges', 'bytes')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                self.wfile.write(data)
+            else:
+                with open(file_full_path, 'rb') as f:
+                    data = f.read()
+                self.send_response(200)
+                self.send_header('Content-Type', content_type)
+                self.send_header('Content-Length', str(file_size))
+                self.send_header('Accept-Ranges', 'bytes')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                self.wfile.write(data)
         except Exception as e:
-            return self.send_json_response({'error': f'Failed to read image: {str(e)}'}, 500)
+            return self.send_json_response({'error': f'Failed to read file: {str(e)}'}, 500)
 
     # ==================== 分析报告 ====================
 
@@ -624,11 +650,13 @@ class UnifiedViewerHandler(SimpleHTTPRequestHandler):
 
         return check_result, revision
 
-    # 跳过二进制文件的扩展名（图片单独处理，见 IMAGE_EXTENSIONS）
-    BINARY_EXTENSIONS = {'.mp4', '.mp3', '.wav', '.pptx', '.xlsx', '.docx', '.pdf',
+    # 跳过二进制文件的扩展名（图片和视频单独处理）
+    BINARY_EXTENSIONS = {'.mp3', '.wav', '.pptx', '.xlsx', '.docx', '.pdf',
                          '.zip', '.tar', '.gz'}
-    # 图片扩展名：slides_png/ 下的图片用特殊标记返回，其余目录跳过
+    # 图片扩展名：slides_png/ 下用 __image__: 标记返回，其余跳过
     IMAGE_EXTENSIONS = {'.png', '.jpg', '.jpeg', '.gif', '.webp'}
+    # 视频扩展名：output.mp4 和 segments/*.mp4 用 __video__: 标记返回，其余跳过
+    VIDEO_EXTENSIONS = {'.mp4', '.webm'}
 
     def _read_workspace_files(self, workspace_dir):
         """递归读取workspace文件"""
@@ -642,11 +670,17 @@ class UnifiedViewerHandler(SimpleHTTPRequestHandler):
                     continue
                 file_path = os.path.join(root, filename)
                 relative_path = os.path.relpath(file_path, workspace_dir)
-                # 图片文件：slides_png/ 下保留（用特殊标记），其他目录跳过
+                rel_normalized = relative_path.replace(os.sep, '/')
+                # 图片：slides_png/ 下保留，其他跳过
                 if suffix in self.IMAGE_EXTENSIONS:
-                    rel_normalized = relative_path.replace(os.sep, '/')
                     if rel_normalized.startswith('videos/slides_png/'):
                         files[relative_path] = f'__image__:{relative_path}'
+                    continue
+                # 视频：output.mp4 和 segments/*.mp4 保留，其他跳过
+                if suffix in self.VIDEO_EXTENSIONS:
+                    if rel_normalized == 'videos/output.mp4' or \
+                       rel_normalized.startswith('videos/segments/'):
+                        files[relative_path] = f'__video__:{relative_path}'
                     continue
                 try:
                     with open(file_path, 'r', encoding='utf-8') as f:
