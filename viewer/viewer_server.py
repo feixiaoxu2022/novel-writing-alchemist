@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-三场景评测结果统一查看器 v3.0
-支持 NWA / NTS / SD 三个场景的评测结果浏览、多模型对比、标注
+四场景评测结果统一查看器 v3.1
+支持 NWA / NTS / SD / KVC 四个场景的评测结果浏览、多模型对比、标注
 """
 
 import os
@@ -544,12 +544,19 @@ class UnifiedViewerHandler(SimpleHTTPRequestHandler):
 
         return check_result, revision
 
+    # 跳过二进制文件的扩展名
+    BINARY_EXTENSIONS = {'.mp4', '.mp3', '.wav', '.pptx', '.xlsx', '.docx', '.pdf',
+                         '.png', '.jpg', '.jpeg', '.gif', '.webp', '.zip', '.tar', '.gz'}
+
     def _read_workspace_files(self, workspace_dir):
         """递归读取workspace文件"""
         files = {}
         for root, dirs, filenames in os.walk(workspace_dir):
             for filename in filenames:
                 if filename.startswith('.') or filename == 'servers.json':
+                    continue
+                suffix = os.path.splitext(filename)[1].lower()
+                if suffix in self.BINARY_EXTENSIONS:
                     continue
                 file_path = os.path.join(root, filename)
                 relative_path = os.path.relpath(file_path, workspace_dir)
@@ -563,6 +570,7 @@ class UnifiedViewerHandler(SimpleHTTPRequestHandler):
         # 排序: 结构化文件优先，章节/剧本按编号排序
         def sort_key(path):
             p = path.lower()
+            # NWA / NTS / SD 场景
             if 'creative_intent' in p:
                 return (1, 0, path)
             elif p == 'novel_analysis.json':
@@ -575,12 +583,30 @@ class UnifiedViewerHandler(SimpleHTTPRequestHandler):
                 return (2, 0, path)
             elif 'outline' in p and p.endswith('.json'):
                 return (3, 0, path)
-            elif 'chapter' in p or 'episode' in p or 'script' in p:
+            elif 'chapter' in p or 'episode' in p:
                 m = re.search(r'(\d+)', path)
                 num = int(m.group(1)) if m else 999
                 return (4, num, path)
             elif 'writing_log' in p:
                 return (99, 0, path)
+            # KVC 场景
+            elif p == 'knowledge_analysis.json':
+                return (1, 0, path)
+            elif p == 'video_script.json':
+                return (1, 1, path)
+            elif p == 'ppt_design.json':
+                return (1, 2, path)
+            elif p.startswith('source_materials' + os.sep) or p.startswith('source_materials/'):
+                return (2, 0, path)
+            elif p.startswith('videos' + os.sep) or p.startswith('videos/'):
+                m = re.search(r'(\d+)', path)
+                num = int(m.group(1)) if m else 999
+                return (5, num, path)
+            # script 通用（NTS/SD/KVC 均可能有）
+            elif 'script' in p:
+                m = re.search(r'(\d+)', path)
+                num = int(m.group(1)) if m else 999
+                return (4, num, path)
             else:
                 return (50, 0, path)
 
@@ -619,7 +645,7 @@ def main():
     local_ip = get_local_ip()
 
     print("=" * 50)
-    print("  三场景评测结果统一查看器 v3.0")
+    print("  四场景评测结果统一查看器 v3.1")
     print("=" * 50)
     print()
     print(f"本机访问: http://localhost:{port}/viewer.html")
