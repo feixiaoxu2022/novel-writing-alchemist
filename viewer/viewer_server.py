@@ -551,19 +551,27 @@ class UnifiedViewerHandler(SimpleHTTPRequestHandler):
         return None
 
     def _find_batch_eval_dirs(self, sc, batch_name):
-        """查找批次的所有评测结果目录"""
-        eval_dirs = []
+        """查找批次的所有评测结果目录，同一模型只保留时间戳最新的目录"""
         if not sc.eval_outputs_dir.exists():
-            return eval_dirs
+            return []
 
+        # model -> (timestamp, dir_name)
+        latest = {}
         for eval_dir in sc.eval_outputs_dir.iterdir():
             if not eval_dir.is_dir():
                 continue
-            if eval_dir.name.startswith(f'eval_{batch_name}_') or \
-               (eval_dir.name.startswith(f'{batch_name}_') and not eval_dir.name.startswith('eval_')):
-                eval_dirs.append(eval_dir.name)
+            name = eval_dir.name
+            if not (name.startswith(f'eval_{batch_name}_') or
+                    (name.startswith(f'{batch_name}_') and not name.startswith('eval_'))):
+                continue
+            m = re.match(r'(?:eval_)?(.+?)_(\d{8}_\d{6})_(.+)', name)
+            if not m:
+                continue
+            _, timestamp, model = m.groups()
+            if model not in latest or timestamp > latest[model][0]:
+                latest[model] = (timestamp, name)
 
-        return sorted(eval_dirs)
+        return sorted(v[1] for v in latest.values())
 
     def _find_model_result_file(self, sc, batch_name, data_id, model):
         """找到特定模型的结果文件路径"""
