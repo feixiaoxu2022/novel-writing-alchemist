@@ -2027,7 +2027,15 @@
                     state.currentFile = path;
 
                     // 更新文件内容
-                    document.getElementById('fileViewer').textContent = content;
+                    const fileViewer = document.getElementById('fileViewer');
+                    if (typeof content === 'string' && content.startsWith('__image__:')) {
+                        // 图片文件：通过图片 API 展示
+                        const imgPath = content.slice('__image__:'.length);
+                        const imgUrl = `/api/v3/${state.currentScenario}/sample/${state.currentSample}/image?batch_name=${encodeURIComponent(state.currentBatch)}&model=${encodeURIComponent(state.currentModel)}&file_path=${encodeURIComponent(imgPath)}`;
+                        fileViewer.innerHTML = `<img src="${imgUrl}" style="max-width:100%; display:block; margin:0 auto;" alt="${path}">`;
+                    } else {
+                        fileViewer.textContent = content;
+                    }
 
                     // 显示文件标注面板
                     const fileAnnotationPanel = document.getElementById('fileAnnotationPanel');

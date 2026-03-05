@@ -95,6 +95,15 @@ class UnifiedViewerHandler(SimpleHTTPRequestHandler):
             file_path = params.get('file_path', [''])[0]
             return self.handle_get_file(m.group(1), batch_name, m.group(2), model, file_path)
 
+        # === 图片内容（二进制）===
+        # /api/v3/{scenario}/sample/{data_id}/image
+        m = re.match(r'^/api/v3/(\w+)/sample/([^/]+)/image$', path)
+        if m:
+            batch_name = params.get('batch_name', [''])[0]
+            model = params.get('model', [''])[0]
+            file_path = params.get('file_path', [''])[0]
+            return self.handle_get_image(m.group(1), batch_name, m.group(2), model, file_path)
+
         # === 分析报告 ===
         # /api/v3/{scenario}/reports
         m = re.match(r'^/api/v3/(\w+)/reports$', path)
@@ -386,6 +395,53 @@ class UnifiedViewerHandler(SimpleHTTPRequestHandler):
             'annotation': annotation
         })
 
+    def handle_get_image(self, scenario_id, batch_name, data_id, model, file_path):
+        """返回图片二进制内容（用于 slides_png 等图片文件）"""
+        sc = self._get_scenario(scenario_id)
+        if not sc:
+            return self.send_json_response({'error': f'Unknown scenario: {scenario_id}'}, 404)
+
+        eval_dirs = self._find_batch_eval_dirs(sc, batch_name)
+        target_eval_dir = None
+
+        for eval_dir_name in eval_dirs:
+            eval_dir = sc.eval_outputs_dir / eval_dir_name
+            result_file = eval_dir / f'{data_id}.json'
+            if result_file.exists():
+                try:
+                    with open(result_file, 'r', encoding='utf-8') as f:
+                        result_data = json.load(f)
+                    if result_data.get('model') == model:
+                        target_eval_dir = eval_dir
+                        break
+                except Exception:
+                    pass
+
+        if not target_eval_dir:
+            return self.send_json_response({'error': 'Model result not found'}, 404)
+
+        workspace_dir = target_eval_dir / f'{data_id}_env' / 'workspace'
+        file_full_path = workspace_dir / file_path
+
+        if not file_full_path.exists():
+            return self.send_json_response({'error': 'Image not found'}, 404)
+
+        suffix = file_full_path.suffix.lower()
+        content_type_map = {'.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.gif': 'image/gif', '.webp': 'image/webp'}
+        content_type = content_type_map.get(suffix, 'application/octet-stream')
+
+        try:
+            with open(file_full_path, 'rb') as f:
+                data = f.read()
+            self.send_response(200)
+            self.send_header('Content-Type', content_type)
+            self.send_header('Content-Length', str(len(data)))
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.end_headers()
+            self.wfile.write(data)
+        except Exception as e:
+            return self.send_json_response({'error': f'Failed to read image: {str(e)}'}, 500)
+
     # ==================== 分析报告 ====================
 
     def handle_get_reports(self, scenario_id):
@@ -560,9 +616,11 @@ class UnifiedViewerHandler(SimpleHTTPRequestHandler):
 
         return check_result, revision
 
-    # 跳过二进制文件的扩展名
+    # 跳过二进制文件的扩展名（图片单独处理，见 IMAGE_EXTENSIONS）
     BINARY_EXTENSIONS = {'.mp4', '.mp3', '.wav', '.pptx', '.xlsx', '.docx', '.pdf',
-                         '.png', '.jpg', '.jpeg', '.gif', '.webp', '.zip', '.tar', '.gz'}
+                         '.zip', '.tar', '.gz'}
+    # 图片扩展名：slides_png/ 下的图片用特殊标记返回，其余目录跳过
+    IMAGE_EXTENSIONS = {'.png', '.jpg', '.jpeg', '.gif', '.webp'}
 
     def _read_workspace_files(self, workspace_dir):
         """递归读取workspace文件"""
@@ -576,6 +634,12 @@ class UnifiedViewerHandler(SimpleHTTPRequestHandler):
                     continue
                 file_path = os.path.join(root, filename)
                 relative_path = os.path.relpath(file_path, workspace_dir)
+                # 图片文件：slides_png/ 下保留（用特殊标记），其他目录跳过
+                if suffix in self.IMAGE_EXTENSIONS:
+                    rel_normalized = relative_path.replace(os.sep, '/')
+                    if rel_normalized.startswith('videos/slides_png/'):
+                        files[relative_path] = f'__image__:{relative_path}'
+                    continue
                 try:
                     with open(file_path, 'r', encoding='utf-8') as f:
                         content = f.read()
