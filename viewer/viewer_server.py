@@ -27,16 +27,32 @@ class ScenarioConfig:
         self.description = config_dict.get('description', '')
 
 
-def load_scenarios():
-    """加载场景配置"""
-    config_path = Path(__file__).parent / 'scenarios.json'
+def load_scenarios(config_file=None):
+    """加载场景配置
+
+    优先级：
+    1. 命令行 --config 指定的文件
+    2. 同目录下的 scenarios.local.json（本地开发覆盖）
+    3. 同目录下的 scenarios.json（默认）
+    """
+    viewer_dir = Path(__file__).parent
+    if config_file:
+        config_path = Path(config_file)
+        if not config_path.is_absolute():
+            config_path = viewer_dir / config_path
+    elif (viewer_dir / 'scenarios.local.json').exists():
+        config_path = viewer_dir / 'scenarios.local.json'
+    else:
+        config_path = viewer_dir / 'scenarios.json'
+
+    print(f"加载配置: {config_path}")
     with open(config_path, 'r', encoding='utf-8') as f:
         config = json.load(f)
     return {s['id']: ScenarioConfig(s) for s in config['scenarios']}
 
 
-# 全局场景配置
-SCENARIOS = load_scenarios()
+# 全局场景配置（main() 中初始化，此处占位）
+SCENARIOS = {}
 
 
 class UnifiedViewerHandler(SimpleHTTPRequestHandler):
@@ -640,8 +656,16 @@ def get_local_ip():
 
 
 def main():
-    port = int(sys.argv[1]) if len(sys.argv) > 1 else 8889
+    import argparse
+    parser = argparse.ArgumentParser(description='四场景评测结果统一查看器')
+    parser.add_argument('port', nargs='?', type=int, default=8889, help='监听端口（默认 8889）')
+    parser.add_argument('--config', default=None, help='指定场景配置文件（默认自动检测 scenarios.local.json 或 scenarios.json）')
+    args = parser.parse_args()
 
+    global SCENARIOS
+    SCENARIOS = load_scenarios(args.config)
+
+    port = args.port
     local_ip = get_local_ip()
 
     print("=" * 50)
