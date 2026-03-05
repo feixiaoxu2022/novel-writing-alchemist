@@ -85,7 +85,7 @@ elif [[ "$AGENT_MODEL" == eb5-full-midtrain ]]; then
 elif [[ "$AGENT_MODEL" == eb5-lite-midtrain ]]; then
     # EB5 高效版 Mid-training（8实例，MCP服务器并发受限，设4）
     export OPENAI_API_KEY="dummy"
-    export OPENAI_BASE_URL="http://10.95.240.42:3211/v1"
+    export OPENAI_BASE_URL="http://10.95.240.42:3226/v1"
     MAX_CONCURRENCY=4
     unset https_proxy; unset HTTPS_PROXY
 elif [[ "$AGENT_MODEL" == glm-creative-midtrain ]]; then
