@@ -71,21 +71,21 @@ elif [[ "$AGENT_MODEL" == ernie5-midtrain ]]; then
     export OPENAI_BASE_URL="http://10.95.226.225:8466/v1"
     AGENT_MODEL="EB5-0209-A35B-midtrain-128k-chat"
 elif [[ "$AGENT_MODEL" == eb5-flagship-midtrain ]]; then
-    # EB5 旗舰版 Mid-training（8实例，MCP服务器并发受限，设4）
+    # EB5 旗舰版 Mid-training（8实例，通过本地LB代理 localhost:9002 轮询）
     export OPENAI_API_KEY="dummy"
-    export OPENAI_BASE_URL="http://10.95.240.153:8433/v1"
+    export OPENAI_BASE_URL="http://localhost:9002/v1"
     MAX_CONCURRENCY=4
     unset https_proxy; unset HTTPS_PROXY
 elif [[ "$AGENT_MODEL" == eb5-full-midtrain ]]; then
-    # EB5 满血版 Mid-training（16实例，MCP服务器并发受限，设4）
+    # EB5 满血版 Mid-training（16实例，通过本地LB代理 localhost:9001 轮询）
     export OPENAI_API_KEY="dummy"
-    export OPENAI_BASE_URL="http://10.95.246.17:1211/v1"
+    export OPENAI_BASE_URL="http://localhost:9001/v1"
     MAX_CONCURRENCY=4
     unset https_proxy; unset HTTPS_PROXY
 elif [[ "$AGENT_MODEL" == eb5-lite-midtrain ]]; then
-    # EB5 高效版 Mid-training（8实例，MCP服务器并发受限，设4）
+    # EB5 高效版 Mid-training（8实例，通过本地LB代理 localhost:9003 轮询）
     export OPENAI_API_KEY="dummy"
-    export OPENAI_BASE_URL="http://10.95.240.42:3226/v1"
+    export OPENAI_BASE_URL="http://localhost:9003/v1"
     MAX_CONCURRENCY=4
     unset https_proxy; unset HTTPS_PROXY
 elif [[ "$AGENT_MODEL" == glm-creative-midtrain ]]; then
