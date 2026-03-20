@@ -132,7 +132,8 @@ def separate_gate_checks(basic_checks: List[Dict]) -> Tuple[List[Dict], List[Dic
     """
     从basic检查项中分离出Gate层检查项。
 
-    Gate层检查项通过 is_gate=True 或 subcategory_id 在 GATE_SUBCATEGORIES 中识别。
+    Gate层由 quality_tier=gate 或 is_gate=True 唯一决定；
+    GATE_SUBCATEGORIES 保留仅用于向后兼容已有 check_result 数据。
 
     Args:
         basic_checks: basic层所有检查项
@@ -153,6 +154,37 @@ def separate_gate_checks(basic_checks: List[Dict]) -> Tuple[List[Dict], List[Dic
             non_gate_checks.append(check)
 
     return gate_checks, non_gate_checks
+
+
+def load_tier_map_from_checklist(checklist_path: str) -> Dict:
+    """
+    从 common_check_list.yaml 加载 check_id -> {quality_tier, is_gate} 映射。
+    这是 quality_tier 的唯一权威来源，不依赖 check_details 里存的旧值。
+    支持 'common_checks' 和 'checks' 两种顶层列表键名。
+    """
+    import yaml
+    with open(checklist_path, "r", encoding="utf-8") as f:
+        cl = yaml.safe_load(f)
+    items = cl.get("common_checks") or cl.get("checks") or []
+    return {
+        item["check_id"]: {
+            "quality_tier": item.get("quality_tier"),
+            "is_gate": item.get("is_gate", False),
+        }
+        for item in items
+        if isinstance(item, dict) and "check_id" in item
+    }
+
+
+def apply_tier_map(check_details: Dict, tier_map: Dict) -> None:
+    """
+    用 checklist yaml 的 tier_map 覆盖 check_details 里每条记录的
+    quality_tier / is_gate，确保评分逻辑始终以 yaml 定义为准。
+    """
+    for check_id, detail in check_details.items():
+        if check_id in tier_map:
+            detail["quality_tier"] = tier_map[check_id]["quality_tier"]
+            detail["is_gate"] = tier_map[check_id]["is_gate"]
 
 
 def calculate_content_quality_score(basic_checks: List[Dict],
@@ -273,7 +305,7 @@ def determine_status(total_score: float) -> str:
 # 3. 主计算逻辑
 # =========================================
 
-def calculate_dimension_scores(check_details: Dict, capability_taxonomy: Dict = None) -> Dict:
+def calculate_dimension_scores(check_details: Dict, capability_taxonomy: Dict = None) -> Dict:  # type: ignore[assignment]
     """
     按能力维度聚合统计（v2.0：内容70%+流程30%+Gate一票否决）
 
@@ -426,13 +458,16 @@ def calculate_dimension_scores(check_details: Dict, capability_taxonomy: Dict = 
     }
 
 
-def calculate_scores(execution_result: Dict, capability_taxonomy: Dict = None) -> Dict:
+def calculate_scores(execution_result: Dict, capability_taxonomy: Dict = None,  # type: ignore[assignment]
+                     checklist_path: str = None) -> Dict:  # type: ignore[assignment]
     """
     计算分层分数
 
     Args:
         execution_result: checker_execute的输出
         capability_taxonomy: 能力体系配置（可选）
+        checklist_path: common_check_list.yaml 路径（可选）；
+                        若提供，用 yaml 定义覆盖 check_details 里的 quality_tier/is_gate
 
     Returns:
         完整的check_result
@@ -440,6 +475,11 @@ def calculate_scores(execution_result: Dict, capability_taxonomy: Dict = None) -
     sample_id = execution_result.get("sample_id", "unknown")
     check_timestamp = execution_result.get("check_timestamp")
     check_details = execution_result.get("check_details", {})
+
+    # 用 checklist yaml 覆盖 quality_tier / is_gate（yaml 是唯一权威来源）
+    if checklist_path and Path(checklist_path).exists():
+        tier_map = load_tier_map_from_checklist(checklist_path)
+        apply_tier_map(check_details, tier_map)
 
     # 计算维度分数
     dimension_scores_result = calculate_dimension_scores(
@@ -584,6 +624,8 @@ def main():
                        help="execution_result文件路径（checker_execute的输出）")
     parser.add_argument("--capability-taxonomy", default=None,
                        help="能力体系配置文件路径（check_capability_taxonomy.yaml，可选）")
+    parser.add_argument("--checklist", default=None,
+                       help="common_check_list.yaml 路径；提供后用 yaml 定义覆盖 quality_tier/is_gate（可选）")
     parser.add_argument("--output", required=True,
                        help="输出文件路径（check_result.json）")
     args = parser.parse_args()
@@ -603,7 +645,7 @@ def main():
 
     # 计算分数
     print(f"\n[计算] 开始计算维度分数...")
-    result = calculate_scores(execution_result, capability_taxonomy)
+    result = calculate_scores(execution_result, capability_taxonomy, args.checklist)  # type: ignore[arg-type]
 
     # 保存结果
     output_path = Path(args.output)
